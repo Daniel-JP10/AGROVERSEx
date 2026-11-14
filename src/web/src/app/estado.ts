@@ -24,6 +24,13 @@ interface Estado {
   aviso: string | null
   setAviso: (a: string | null) => void
   setMes: (m: number) => void
+  /** Herramienta activa del riel ('' = ninguna); 'comparar' es el comparador A/B */
+  herramienta: string
+  setHerramienta: (h: string) => void
+  activarComparador: (activo: boolean) => void
+  /** Pestaña abierta del panel de unidad */
+  pestana: string
+  abrirPestana: (nombre: string) => void
   setReproduciendo: (r: boolean) => void
   setProyeccion: (p: 'globe' | 'mercator') => void
   /** Selecciona una unidad; el globo reacciona (resalta y hace fly-to). */
@@ -46,6 +53,11 @@ export const useEstado = create<Estado>((set) => ({
   seleccion: null,
   aviso: null,
   setAviso: (aviso) => set({ aviso }),
+  herramienta: '',
+  setHerramienta: (herramienta) => set({ herramienta }),
+  activarComparador: (activo) => set((s) => ({ herramienta: activo ? 'comparar' : s.herramienta === 'comparar' ? '' : s.herramienta })),
+  pestana: 'Resumen',
+  abrirPestana: (pestana) => set({ pestana }),
   setMes: (mes) => set({ mes: Math.min(N_MESES - 1, Math.max(0, mes)) }),
   setReproduciendo: (reproduciendo) => set({ reproduciendo }),
   setProyeccion: (proyeccion) => set({ proyeccion }),

@@ -19,7 +19,8 @@ export function PanelRegion() {
   const sel = useEstado((s) => s.seleccion)
   const seleccionar = useEstado((s) => s.seleccionar)
   const aviso = useEstado((s) => s.aviso)
-  const [tab, setTab] = useState<Pestana>('Resumen')
+  const tab = useEstado((s) => s.pestana) as Pestana
+  const setTab = useEstado((s) => s.abrirPestana)
   const [rot, setRot] = useState<Awaited<ReturnType<typeof pedirRotaciones>> | null>(null)
   const [errRot, setErrRot] = useState(false)
   const idSel = sel ? String(sel.id) : ''
