@@ -47,4 +47,10 @@ describe('fondos', () => {
     expect(FONDOS.some((f) => f.id === 'gibs-modis-terra' && f.maxzoom === 9)).toBe(true)
     expect(fondoDetalle(true)!.id).not.toBe('gibs-modis-terra')
   })
+  it('la atribución de límites es geoBoundaries (D-015) y no GADM', () => {
+    expect(ATRIBUCION).toContain('geoBoundaries')
+    expect(ATRIBUCION).toContain('Runfola et al. 2020')
+    expect(ATRIBUCION).toMatch(/CC BY 4\.0/)
+    expect(ATRIBUCION).not.toMatch(/GADM/i)
+  })
 })
