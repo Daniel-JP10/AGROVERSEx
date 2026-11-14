@@ -1,0 +1,98 @@
+# Demostración RED en copia temporal de Resumen.tsx y Series.tsx (sin conversión paraMostrar, mostrando valor crudo)
+# Comando: npx vitest run pruebas/paneles_unidad.test.ts
+
+
+ RUN  v5.0.5 C:/NASA/wt/empalme-imerg/src/web
+
+ ❯ pruebas/paneles_unidad.test.ts (3 tests | 2 failed) 1024ms
+   ❯ paneles ante una unidad sin conversión (3)
+     × Resumen con unidad null muestra el estado de error y no el valor 21ms
+     ✓ Resumen con unidad válida sí muestra el valor 2ms
+     × Series: unidad null da null (el panel muestra el error) y una válida convierte 4ms
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 1 passed (3)
+   Start at  17:35:31
+   Duration  1.42s (tests 89%, transform 6%, import 5%, worker 1%)
+
+
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./server/api" without a file extension (vite.config.ts:4:26). Add the file extension
+  - import "./server/teselas" without a file extension (vite.config.ts:5:31). Add the file extension
+  - import "./sqlite" without a file extension (server/api.ts:6:25). Add the file extension
+  - import "./rutas_serie" without a file extension (server/api.ts:7:62). Add the file extension
+  - import "./rutas_rotaciones" without a file extension (server/api.ts:8:48). Add the file extension
+  - import "./rutas_atributos" without a file extension (server/api.ts:9:27). Add the file extension
+  - import "./rutas_lotes" without a file extension (server/api.ts:10:29). Add the file extension
+  - import "./validar" without a file extension (server/api.ts:11:84). Add the file extension
+  - import "./validar" without a file extension (server/rutas_serie.ts:3:70). Add the file extension
+  - import "./validar" without a file extension (server/rutas_atributos.ts:3:30). Add the file extension
+  - import "./validar" without a file extension (server/rutas_rotaciones.ts:3:41). Add the file extension
+  - import "./validar" without a file extension (server/rutas_lotes.ts:3:41). Add the file extension
+  - import "./rutas_serie" without a file extension (server/rutas_atributos.ts:4:27). Add the file extension
+  - import "./rutas_serie" without a file extension (server/rutas_rotaciones.ts:4:27). Add the file extension
+  - import "./rutas_serie" without a file extension (server/rutas_lotes.ts:4:27). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[api] No existe la base C:/NASA/wt/empalme-imerg/datos/procesados/agroversex.sqlite. Define AGROVERSEX_SQLITE con su ruta.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  pruebas/paneles_unidad.test.ts > paneles ante una unidad sin conversión > Resumen con unidad null muestra el estado de error y no el valor
+AssertionError: expected '<div class="dato"><span>Lluvia <span …' to contain 'unidad sin conversión: precip/null'
+
+Expected: [32m"unidad sin conversión: precip/null"[39m
+Received: [31m"<div class="dato"><span>Lluvia <span class="chip">SIMULADO</span></span><strong>123,46 <small></small></strong><small>rango 100–150</small></div>"[39m
+
+ ❯ pruebas/paneles_unidad.test.ts:20:15
+     18|   it('Resumen con unidad null muestra el estado de error y no el valor…
+     19|     const h = renderToString(createElement(FilaDato, { v: 'precip', s:…
+     20|     expect(h).toContain('unidad sin conversión: precip/null')
+       |               ^
+     21|     expect(h).not.toContain('123')
+     22|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  pruebas/paneles_unidad.test.ts > paneles ante una unidad sin conversión > Series: unidad null da null (el panel muestra el error) y una válida convierte
+AssertionError: expected { valor: [ 123.456 ], …(3) } to be null
+
+[32m- Expected:[39m
+null
+
+[31m+ Received:[39m
+{
+  "p10": [
+    100,
+  ],
+  "p90": [
+    150,
+  ],
+  "unidad": "",
+  "valor": [
+    123.456,
+  ],
+}
+
+ ❯ pruebas/paneles_unidad.test.ts:27:51
+     25|   })
+     26|   it('Series: unidad null da null (el panel muestra el error) y una vá…
+     27|     expect(convertirSerie('precip', serie(null))).toBeNull()
+       |                                                   ^
+     28|     expect(convertirSerie('precip', serie('mm/day'))?.unidad).toBe('mm…
+     29|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+# Verificación GREEN tras restaurar Resumen.tsx y Series.tsx
+
+
+ RUN  v5.0.5 C:/NASA/wt/empalme-imerg/src/web
+
+ ✓ pruebas/paneles_unidad.test.ts (3 tests) 701ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  17:35:35
+   Duration  1.05s (tests 91%, import 6%, transform 2%, worker 1%)
+
