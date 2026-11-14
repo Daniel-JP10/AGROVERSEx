@@ -35,4 +35,16 @@ describe('fondos', () => {
     expect(todo).not.toMatch(/eox|cloudless/)
     for (const f of FONDOS) for (const u of f.tiles) expect(u).toContain('gibs.earthdata.nasa.gov')
   })
+  it('el fondo por defecto es un mosaico sin fecha y la fuente usa el zoom nativo', () => {
+    const det = fondoDetalle(true)!
+    for (const u of [...det.tiles, ...fondoBase().tiles]) expect(u).not.toMatch(/\d{4}-\d{2}-\d{2}/)
+    const fuentes = (construirEstilo('http://x', true) as any).sources
+    expect(fuentes.detalle.maxzoom).toBe(det.maxzoom)
+    expect(det.maxzoom).toBe(8)
+    expect(fuentes.bluemarble.maxzoom).toBe(fondoBase().maxzoom)
+  })
+  it('la capa MODIS de un día existe solo como opción, no por defecto', () => {
+    expect(FONDOS.some((f) => f.id === 'gibs-modis-terra' && f.maxzoom === 9)).toBe(true)
+    expect(fondoDetalle(true)!.id).not.toBe('gibs-modis-terra')
+  })
 })

@@ -17,3 +17,10 @@ Consultado 2026-11-14 ~15:16.
 ## Limitaciones
 - PENDIENTE: no se leyó una cláusula de licencia específica por capa; se aplica la política general de Earthdata.
 - Imagen diaria de un solo día: puede tener nubes o huecos de franja; zoom máximo 9 (aprox. 250 m), por debajo del detalle de EOX (14).
+
+## Actualización: fondo por defecto = mosaico sin nubes (decisión del director)
+- Capa elegida por defecto: BlueMarble_ShadedRelief (VERIFICADO en GetCapabilities 2026-11-14): sin dimensión Time (se pide con `default/default`), TileMatrixSet GoogleMapsCompatible_Level8, image/jpeg. Justificación: render sin nubes, fecha-independiente. BlueMarble_NextGeneration queda como opción (id gibs-bluemarble-ng). DESFASE VERIFICADO en captura: en Nariño z7.5 se ven manchas blancas (restos de nubes del compuesto Blue Marble) con NextGeneration y con ShadedRelief; son pocas y no franjas de un día, pero el mosaico no está 100% libre de nubes en la cordillera.
+- Zoom máximo NATIVO: 8. Prueba: tesela z8/100/80 responde 200 image/jpeg; z9/200/160 responde 400 (BlueMarble_NextGeneration, igual Level8; ver salida de curl del PR).
+- Sobrezoom: la fuente MapLibre declara maxzoom 8 (igual al nativo); el mapa sigue ampliando reutilizando teselas z8, sin pedir z9 o más.
+- MODIS Terra de un día (nativo 9, 2024-08-01) queda solo como opción (id gibs-modis-terra).
+- Limitación: sobre zoom 8 la imagen se ve pixelada (INFERENCIA por el nivel de la matriz).

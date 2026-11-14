@@ -20,7 +20,21 @@ export const FONDOS: FondoConfig[] = [
     atribucion: 'Imágenes NASA GIBS', licencia: 'Dominio público (NASA)',
   },
   {
-    // VERIFICADO 2026-11-14 en GetCapabilities: MODIS Terra TrueColor, GoogleMapsCompatible_Level9, jpeg; fecha fija (SUPUESTO: sin nubes aceptables)
+    // VERIFICADO 2026-11-14: BlueMarble_ShadedRelief (relieve con color de tierra), sin Time, Level8, sin nubes; z9 da 400, nativo 8
+    id: 'gibs-relieve', nombre: 'Blue Marble relieve sombreado (NASA GIBS)', maxzoom: 8, requiereToken: false,
+    tiles: [`${GIBS}/BlueMarble_ShadedRelief/default/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg`],
+    atribucion: "We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS).",
+    licencia: 'Datos abiertos de NASA (uso libre con reconocimiento)',
+  },
+  {
+    // Opción seleccionable: Blue Marble Next Generation (compuesto de 2004, con restos de nubes en trópico)
+    id: 'gibs-bluemarble-ng', nombre: 'Blue Marble Next Generation (NASA GIBS)', maxzoom: 8, requiereToken: false,
+    tiles: [`${GIBS}/BlueMarble_NextGeneration/default/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg`],
+    atribucion: "We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS).",
+    licencia: 'Datos abiertos de NASA (uso libre con reconocimiento)',
+  },
+  {
+    // Opción seleccionable, no por defecto: imagen de un solo día, con nubes y franjas. MODIS Terra TrueColor, GoogleMapsCompatible_Level9, jpeg; fecha fija (SUPUESTO: sin nubes aceptables)
     id: 'gibs-modis-terra', nombre: 'MODIS Terra color verdadero (NASA GIBS)', maxzoom: 9, requiereToken: false,
     tiles: [`${GIBS}/MODIS_Terra_CorrectedReflectance_TrueColor/default/2024-08-01/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg`],
     atribucion: "We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS).",
@@ -28,7 +42,7 @@ export const FONDOS: FondoConfig[] = [
   },
 ]
 
-export const FONDO_DETALLE = 'gibs-modis-terra'
+export const FONDO_DETALLE = 'gibs-relieve'
 export const avisoSinRed = () => t('globo.fondoSinRed')
 /** Zoom en que el fondo de detalle empieza a verse y en que está a pleno. */
 export const ZOOM_DETALLE: [number, number] = [3.5, 5]
