@@ -40,7 +40,7 @@ Z95 = 1.645
 COEF_LLUVIA_DOS_FUENTES = 0.10
 # Colombia Caribe y Andina, dos fuentes (EV-ENS-008 IDEAM/PNUD 2014, Bogotá-Cund.: lluvia hasta -60 % y T hasta
 # +0,5 °C con El Niño; EV-ENS-015). Las fichas dan el máximo, no el coeficiente: -0,25/°C y +0,20 °C/°C son SUPUESTO
-# (RONI máximo ~2,3). Es la única rama con coeficiente propio; el resto usa COEF_LLUVIA_DOS_FUENTES o Cai 2025.
+# (RONI máximo ~2,3). Es la única rama con coeficiente propio; el resto usa COEF_LLUVIA_DOS_FUENTES.
 COLOMBIA = "Colombia (Caribe y Andina)"
 COEF_COLOMBIA = (-0.25, 0.20)
 

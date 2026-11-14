@@ -1,0 +1,10 @@
+RED 2026-11-14T15:40:44-05:00
+--- pytest
+pruebas\sim\test_referencias.py:329: AssertionError
+=========================== short test summary info ===========================
+FAILED pruebas/sim/test_referencias.py::test_africa_enso_sin_cai_2025_y_con_cita_cpc
+1 failed, 23 deselected in 1.27s
+--- vitest
+     × server\rutas_rotaciones.ts 8ms
+ Test Files  1 failed (1)
+      Tests  1 failed | 24 passed (25)

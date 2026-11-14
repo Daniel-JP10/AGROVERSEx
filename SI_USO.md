@@ -216,3 +216,4 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `pruebas/geo/test_colombia.py` | Pruebas de la comparación de Colombia con DIVIPOLA (T-D1) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/colombia.py` | Comparación de municipios de CGAZ con DIVIPOLA del DANE (T-D1) | 2026-11-14 |
 | Claude Code (Anthropic) | `contratos/unidades.md` | Redacción del contrato de unidades a partir de los datos de CGAZ (T-D1) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/sin_procedencia_china.test.ts`, `datos/evidencia/CPC-ASSESS97-AFRICA.yaml` | Prueba de procedencia en server y paneles; ficha de CPC que reemplaza a Cai 2025 (D-024) | 2026-11-14 |
