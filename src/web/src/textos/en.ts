@@ -52,6 +52,7 @@ export const en: Record<ClaveTexto, string> = {
   'comun.cargando': 'Loading…',
   'comun.simulado': 'SIMULATED',
   'comun.sinDato': 'no data',
+  'unidad.sinConversion': 'unit without conversion',
   'enso.nota': '· events from the event table (marker at the start year) · grey: no data for',
   'enso.real': 'RONI (°C) real',
   'enso.sinDato': 'RONI: no data',

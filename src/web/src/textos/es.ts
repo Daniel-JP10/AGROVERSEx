@@ -50,6 +50,7 @@ export const es = {
   'comun.cargando': 'Cargando…',
   'comun.simulado': 'SIMULADO',
   'comun.sinDato': 'sin dato',
+  'unidad.sinConversion': 'unidad sin conversión',
   'enso.nota': '· eventos de la tabla evento (marcador en el año de inicio) · gris: sin dato de',
   'enso.real': 'RONI (°C) real',
   'enso.sinDato': 'RONI: sin dato',
