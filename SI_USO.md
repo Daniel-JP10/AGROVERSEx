@@ -211,3 +211,8 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `pruebas/geo/test_colombia.py` | Pruebas de la comparación de Colombia con DIVIPOLA (T-D1) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/colombia.py` | Comparación de municipios de CGAZ con DIVIPOLA del DANE (T-D1) | 2026-11-14 |
 | Claude Code (Anthropic) | `contratos/unidades.md` | Redacción del contrato de unidades a partir de los datos de CGAZ (T-D1) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/descargas_nasa.py` | Descarga con subconjunto por variable vía OPeNDAP de Earthdata (T-D3) | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_descargas_nasa.py` | Pruebas de la descarga con subconjunto (T-D3) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/imerg_late.py` | Regla de días válidos de IMERG Late por celda (D-011) | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_imerg_late.py` | Pruebas de la regla de IMERG Late | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/sensibilidad_late.py` | Sensibilidad 70/80/90 de IMERG Late en Colombia | 2026-11-14 |

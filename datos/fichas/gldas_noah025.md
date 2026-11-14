@@ -1,0 +1,22 @@
+# Ficha de dataset
+
+- Nombre corto: gldas_noah025
+- Producto oficial y versión: GLDAS_NOAH025_M versión 2.1 (Noah, 0,25 grados, mensual). Colección C1342986036-GES_DISC. **MODELO** (sistema de asimilación de datos terrestres con modelo de superficie Noah), no observación satelital. Nombre VERIFICADO en CMR
+- Agencia y centro de datos: NASA, GES DISC
+- Página oficial: PENDIENTE; https://cmr.earthdata.nasa.gov/search/concepts/C1342986036-GES_DISC.umm_json
+- DOI: 10.5067/SXAVCZFAQLNO. Cita: Beaudoing, H., Rodell, M., & Hydrological Sciences Laboratory (HSL). (2020). GLDAS Noah Land Surface Model L4 monthly 0.25 x 0.25 degree, Version 2.1 [Dataset]. NASA Goddard Earth Sciences Data and Information Services Center. https://doi.org/10.5067/SXAVCZFAQLNO Colección C1342986036-GES_DISC. Licencia (use_constraints de CMR, textual): The Earth Observing System Data and Information System (EOSDIS) data use and citation guidance for NASA data can be accessed at https://earthdata.nasa.gov/engage/open-data-services-software-policies/data-use-guidance. For information on how to properly cite and acknowledge data from the NASA GES DISC, refer to https://disc.gsfc.nasa.gov/data-guidelines.. VERIFICADO (CMR y doi.org coinciden; `Docu/datos/citas_cmr.json`).
+- Variable y unidades: `RootMoist_inst` (kg m-2, humedad radicular), `SoilMoi0_10cm_inst` (kg m-2), `Evap_tavg` (kg m-2 s-1, evapotranspiración); fill -9999. Nombres y unidades VERIFICADOS en la lista de CMR; valores no leídos. Componentes alternos en W m-2: `ESoil_tavg`, `Tveg_tavg`, `ECanop_tavg`
+- Resolución espacial nominal: 0,25 grados
+- Resolución temporal: mensual
+- CRS nativo: PENDIENTE
+- Periodo descargado: Descargado: 2000-01 a 2026-07, 319 archivos, 0,761 GB
+- Área descargada: global previsto
+- Herramienta y consulta exacta de descarga: `python -m simulacion.geo.descargas_nasa gldas_noah025 6`; consulta por granulo en `datos/manifiesto_gldas_noah025.yaml`, hashes en `datos/hashes_gldas_noah025.jsonl`. Forma: `dap4.ce=/RootMoist_inst;/SoilMoi0_10cm_inst;/Evap_tavg` sobre `https://opendap.earthdata.nasa.gov/collections/C1342986036-GES_DISC/granules/GLDAS_NOAH025_M.2.1%3AGLDAS_NOAH025_M.A<AAAAMM>.021.nc4`
+- Fecha de descarga: 2026-11-14, 13:29 a 13:55 hora de Colombia
+- Banderas de calidad aplicadas: PENDIENTE
+- Fracción de datos válidos en el área: Valores revisados en 2000-01: RootMoist_inst 2,0 a 897,4 kg m-2; SoilMoi0_10cm_inst 2,0 a 100,0 kg m-2; Evap_tavg -2,9e-6 a 7,9e-5 kg m-2 s-1; relleno -9999 en el 72 % de la malla (océano, sin hielo continental); malla 600 x 1440, esquina SO (-59,875, -179,875) del archivo. VERIFICADO
+- Transformaciones a la grilla común y método de remuestreo: Ninguna en la descarga
+- Limitaciones conocidas: Salida de modelo, no medición: se rotula siempre como modelo. Latencia de unos 3,5 meses (termina 2026-07). No se empalma con SMAP sin rótulo. Revisado un granulo con valores reales (ver Fracción de datos válidos)
+- Requisito del reto y pregunta que atiende: N2, D1, D2, F4; PI-D1 y PI-D4. Compuerta G2
+- Responsable: constructor de datos (subagente), orquestador de datos Daniel
+- Verificador y fecha: PENDIENTE

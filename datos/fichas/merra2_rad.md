@@ -1,0 +1,22 @@
+# Ficha de dataset
+
+- Nombre corto: merra2_rad
+- Producto oficial y versión: MERRA-2 M2TMNXRAD 5.12.4 (tavgM_2d_rad_Nx). Colección C1276812858-GES_DISC. VERIFICADO (CMR)
+- Agencia y centro de datos: NASA, GES DISC (GMAO). Reanálisis, no observación directa
+- Página oficial: PENDIENTE; https://cmr.earthdata.nasa.gov/search/concepts/C1276812858-GES_DISC.umm_json
+- DOI: 10.5067/OU3HJDS973O0. Cita: Global Modeling and Assimilation Office, & Pawson, S. (2015). MERRA-2 tavgM_2d_rad_Nx: 2d,Monthly mean,Time-Averaged,Single-Level,Assimilation,Radiation Diagnostics V5.12.4 [Dataset]. NASA Goddard Earth Sciences Data and Information Services Center. https://doi.org/10.5067/OU3HJDS973O0 Colección C1276812858-GES_DISC. Licencia (use_constraints de CMR, textual): The Earth Observing System Data and Information System (EOSDIS) data use and citation guidance for NASA data can be accessed at https://earthdata.nasa.gov/engage/open-data-services-software-policies/data-use-guidance. For information on how to properly cite and acknowledge data from the NASA GES DISC, refer to https://disc.gsfc.nasa.gov/data-guidelines.. VERIFICADO (CMR y doi.org coinciden; `Docu/datos/citas_cmr.json`).
+- Variable y unidades: `SWGDN` (W m-2, fill 9.99999987e14), onda corta incidente en superficie. VERIFICADO en la lista de CMR; valores no leídos
+- Resolución espacial nominal: 0,625 x 0,5 grados
+- Resolución temporal: mensual
+- CRS nativo: PENDIENTE
+- Periodo descargado: Descargado: 2000-01 a 2026-09, 321 archivos, 0,198 GB
+- Área descargada: global previsto
+- Herramienta y consulta exacta de descarga: `python -m simulacion.geo.descargas_nasa merra2_rad 6`; consulta por granulo en `datos/manifiesto_merra2_rad.yaml`, hashes en `datos/hashes_merra2_rad.jsonl`. Forma: `dap4.ce=/SWGDN` sobre `https://opendap.earthdata.nasa.gov/collections/C1276812858-GES_DISC/granules/M2TMNXRAD.5.12.4%3AMERRA2_400.tavgM_2d_rad_Nx.<AAAAMM>.nc4`
+- Fecha de descarga: 2026-11-14, 13:29 a 13:55 hora de Colombia
+- Banderas de calidad aplicadas: PENDIENTE
+- Fracción de datos válidos en el área: Valor revisado en 2000-01: SWGDN 0 a 423,5 W m-2, relleno 9.99999987e14 sin ocurrencias; malla 361 x 576. VERIFICADO
+- Transformaciones a la grilla común y método de remuestreo: Ninguna en la descarga
+- Limitaciones conocidas: Reanálisis. Revisado un granulo con valores reales (ver Fracción de datos válidos)
+- Requisito del reto y pregunta que atiende: N2, D1, D2, F4; PI-D1 y PI-D4. Compuerta G2
+- Responsable: constructor de datos (subagente), orquestador de datos Daniel
+- Verificador y fecha: PENDIENTE
