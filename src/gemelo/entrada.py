@@ -66,11 +66,13 @@ def _clima(d: dict, base: Path, semilla: int) -> ClimaDiario:
     if fuente == "power_csv":
         return cargar_power(_ruta(d["archivo"], base))
     if fuente == "sqlite_mensual":
-        mensual, anios, lat = mensual_desde_sqlite(_ruta(d["ruta"], base), d["unidad_id"])
         if "elevacion_m" not in d:
             raise ValueError("clima sqlite_mensual: falta elevacion_m (la necesita Penman-Monteith)")
-        return desagregar_mensual(mensual, anios, float(d.get("lat", lat)), float(d["elevacion_m"]), semilla,
-                                  fuente=f"agroversex.sqlite tabla mensual ({d['unidad_id']}), desagregado a diario")
+        mensual, anios, lat, avisos = mensual_desde_sqlite(_ruta(d["ruta"], base), d["unidad_id"])
+        clima = desagregar_mensual(mensual, anios, float(d.get("lat", lat)), float(d["elevacion_m"]), semilla,
+                                   fuente=f"agroversex.sqlite clima mensual ({d['unidad_id']}), desagregado a diario")
+        clima.avisos = avisos
+        return clima
     if fuente == "forzantes_diarios":
         faltan = [k for k in ("archivo", "lat", "elevacion_m") if k not in d]
         if faltan:

@@ -20,7 +20,7 @@ Errores: la biblioteca lanza `ValueError`, `KeyError` o `gemelo.procedencia.Para
 
 ## Entrada: escenario
 
-Ejemplos completos: `ejemplos/escenario_ames.yaml` y `ejemplos/escenario_ipiales.yaml`.
+Ejemplos completos: `ejemplos/escenario_mead.yaml` (lote `DEMO-USA-01`), `ejemplos/escenario_ipiales.yaml` (`DEMO-COL-01`) y `ejemplos/escenario_ames.yaml` (ejemplo).
 
 | Clave | Obligatoria | Contenido |
 |-|-|-|
@@ -162,7 +162,14 @@ La app pública no tiene servidor: lee archivos precalculados. Carpeta fija: `da
 
 - La grilla y las calibraciones simulan el **conjunto comparable** del lote (`indice.json` → `conjunto_comparable`): las estrategias del escenario más el frente de la optimización histórica. Así los deslizadores reordenan siempre las mismas candidatas.
 - `indice.json` → `personalizados.n_parametros` dice cuántas muestras de parámetros usa la grilla (4 en lugar de 8, para que el paquete se genere en minutos).
-- Se regenera con `python -m gemelo paquete <yaml> --lote-id <id>`. Mientras los lotes DEMO no estén elegidos, los ids son provisionales (`provisional: true`): Ames = `DEMO-USA-01`, Ipiales = `DEMO-COL-01`.
+- Se regenera con `python -m gemelo paquete <yaml> --lote-id <id> --definitivo`. Lotes DEMO elegidos (`provisional: false`):
+
+| `lote_id` | YAML | Punto | `unidad_id` | `clima_tipo` |
+|-|-|-|-|-|
+| `DEMO-USA-01` | `ejemplos/escenario_mead.yaml` (Mead, Nebraska) | 41,165, −96,477 | `USA-ADM2-52423323B480079355264` | templado |
+| `DEMO-COL-01` | `ejemplos/escenario_ipiales.yaml` (Ipiales, Nariño) | 0,842, −77,661 | `COL-ADM2-7082276B52108893597118` | tropical |
+
+  Hasta que lleguen los forzantes de Datos, el clima es NASA POWER del mismo punto y el suelo SoilGrids del punto; se regenera al recibirlos.
 - **Rótulo**. `metadatos.naturaleza = "simulado"` significa salida del modelo, no SIMULADO (dato ficticio) en el sentido del proyecto. Web muestra `metadatos.rotulo`: `{clave: "label.model_simulation", parametros: {fuentes: [claves source.*]}, en, es}`, p. ej. «Model simulation with NASA POWER and SoilGrids 2.0 data».
 
 ### 2. Tarjeta de cinco secciones
@@ -243,8 +250,10 @@ Casos de prueba (`prioridades.casos_prueba` y `pruebas/gemelo/test_prioridades.p
 | `forzantes_diarios` | `archivo`, `lat`, `elevacion_m` | CSV o Parquet con `fecha` (AAAA-MM-DD) y `precip` mm/día, `t2m` (o `t2m_max` y `t2m_min`) °C, `rad_sw` MJ/m²/día; opcionales `rh2m` %, `ws2m` m/s. Naturaleza `estimado` |
 | `parametros_suelo_json` | `archivo` | JSON con `arena`, `arcilla` (kg/kg), `mo_pct` (%), `cos_t_ha` (t C/ha, 0-30 cm); opcionales `cn_suelo`, `profundidad_m`, `fuente`. Naturaleza `estimado` |
 
+- Datos entrega los forzantes diarios en formato **`power_csv`** (CSV de NASA POWER, comunidad AG): el lote usa `clima.fuente: power_csv` con `archivo` apuntando al CSV de Datos; no hace falta otro adaptador. `forzantes_diarios` queda para CSV o Parquet con columnas ya en unidades del gemelo.
 - Formato «esperado»: si `forzantes_gemelo.md` fija otros nombres o unidades, el adaptador se ajusta a ese contrato sin cambiar estas claves.
 - `sqlite_mensual` queda solo como contexto: el documento lleva el aviso `warning.monthly_context_only`, porque desagregar lluvia mensual a diaria borra las tormentas y la lluvia intensa pierde sentido.
+- Tabla `serie_mensual` (si existe, se prefiere a `mensual`): una fila por `unidad_id`, `variable`, mes (`mes_id`, o `anio` y `mes`, o `periodo`), con `valor`, `unidad`, `nivel` y `motivo`. Cada valor se convierte con **su** `unidad`; no se supone ninguna. La lluvia de IMERG Final viene en mm/hr y la de Late en mm/day: ambas pasan a mm/mes (mm/hr × 24 × días del mes; mm/day × días del mes). Temperatura en °C o K; radiación en MJ/m²/día o W/m². Una unidad desconocida es error. Si un mes tiene varias filas de la misma variable, gana la que no trae `motivo`. Los valores con `motivo` y los niveles leídos salen como avisos (`warning.monthly_flagged`, `warning.monthly_levels`).
 
 ### 8. ENSO
 

@@ -143,6 +143,8 @@
  "warning.initial_moisture": "Initial soil moisture SUPUESTO (20-80 % of available water); SMAP L4 or a local measurement reduces the uncertainty of the first cycle",
  "warning.initial_n": "Initial mineral N without soil analysis (SUPUESTO 10-60 kg N/ha): the N balance is indicative",
  "warning.monthly_context_only": "Monthly climate disaggregated to daily: context only. Splitting monthly rain into days erases storms, so heavy-rain and erosion indicators lose meaning.",
+ "warning.monthly_flagged": "serie_mensual table: {n} monthly values carry a reason flag ({motivos})",
+ "warning.monthly_levels": "serie_mensual table: levels {niveles}; rain read in {unidades}",
  "warning.saxton_rawls_domain": "Saxton and Rawls out of domain ({excede}); inputs clipped to the limit. Soils with high organic matter or volcanic soils (Andisols) usually hold more water than estimated: measure field capacity in a laboratory.",
  "warning.scenario_historical": "Real historical climate in multi-year windows: it describes the past variability of the site, it does not guarantee the future one.",
  "warning.scenario_hypothetical": "Hypothetical scenario built from real historical years; it is not a forecast or an official climate projection.",

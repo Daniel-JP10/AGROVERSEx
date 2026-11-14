@@ -1,8 +1,8 @@
 {
  "version_contrato": 1,
  "version_contrato_completa": "1.1",
- "generado_utc": "2026-11-14T21:01:22+00:00",
- "commit": "557663a",
+ "generado_utc": "2026-11-14T21:15:35+00:00",
+ "commit": "aab40ea",
  "nota_naturaleza": "metadatos.naturaleza = 'simulado' indica que el valor sale del modelo; no es SIMULADO (dato ficticio) en el sentido del proyecto. El rótulo para mostrar es metadatos.rotulo.",
  "textos": {
   "en": "textos/en.json",
@@ -22,7 +22,7 @@
  "lotes": [
   {
    "lote_id": "DEMO-COL-01",
-   "provisional": true,
+   "provisional": false,
    "escenario_origen": "ejemplos/escenario_ipiales.yaml",
    "escenarios": {
     "historico": {
@@ -81,10 +81,10 @@
    },
    "nombre": "Lote demostrativo Ipiales (Nariño)",
    "unidad_id": "COL-ADM2-7082276B52108893597118",
-   "lat": 0.8302,
-   "lon": -77.6444,
+   "lat": 0.842,
+   "lon": -77.661,
    "clima_tipo": "tropical",
-   "huella_parametros": "08e9e4fa190a88f4",
+   "huella_parametros": "50d4824b96141342",
    "rotulo": {
     "clave": "label.model_simulation",
     "parametros": {
@@ -332,7 +332,7 @@
      "archivo": "DEMO-COL-01/calibracion/suelo_humedo_al_inicio.json"
     }
    ],
-   "generado_utc": "2026-11-14T21:01:22+00:00"
+   "generado_utc": "2026-11-14T21:15:35+00:00"
   },
   {
    "lote_id": "DEMO-USA-01",

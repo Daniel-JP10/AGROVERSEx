@@ -33,6 +33,7 @@ class ClimaDiario:
     fuente: str
     huecos_rellenos: dict[str, int] = field(default_factory=dict)
     naturaleza: str = "observado"
+    avisos: list[str] = field(default_factory=list)
 
     @property
     def n_anios(self) -> int:
@@ -220,19 +221,106 @@ def desagregar_mensual(mensual: dict[str, np.ndarray], anios, lat: float, elevac
     return ClimaDiario(np.asarray(anios), datos, lat, elevacion_m, fuente, naturaleza="derivado")
 
 
-def mensual_desde_sqlite(ruta: str | Path, unidad_id: str) -> tuple[dict[str, np.ndarray], np.ndarray, float]:
-    """Lee la tabla `mensual` de agroversex.sqlite (rama datos) y desescala con la tabla `variable`.
+COLUMNAS_MENSUALES = ("precip", "t2m", "t2m_max", "t2m_min", "rh2m", "rad_sw")
 
-    precip se guarda como tasa media en mm/h: se convierte a mm/mes. Devuelve (mensual, años, lat).
-    Solo años con los 12 meses de precipitación y temperatura.
+
+def _norm_unidad(u: str) -> str:
+    return re.sub(r"\s+", "", str(u or "")).lower().replace("í", "i").replace("°", "").replace("^", "")
+
+
+def precip_a_mm_mes(valor, unidad: str, dias_mes):
+    """Lluvia a mm/mes según la unidad declarada (IMERG Final: mm/hr; Late: mm/day). Sin unidad conocida, error."""
+    u = _norm_unidad(unidad)
+    if u in ("mm/hr", "mm/h", "mmhr-1", "mmh-1"):
+        return valor * 24 * dias_mes
+    if u in ("mm/day", "mm/dia", "mm/d", "mmday-1", "mmd-1"):
+        return valor * dias_mes
+    if u in ("mm/month", "mm/mes", "mm"):
+        return valor
+    raise ValueError(f"unidad de precipitación desconocida: {unidad!r}")
+
+
+def _a_unidad_gemelo(var: str, valor, unidad: str):
+    u = _norm_unidad(unidad)
+    if var.startswith("t2m"):
+        if u in ("c", "degc", "celsius"):
+            return valor
+        if u in ("k", "kelvin"):
+            return valor - 273.15
+    elif var == "rh2m" and u in ("%", "percent", "porcentaje"):
+        return valor
+    elif var == "rad_sw":
+        if u in ("mj/m2/day", "mj/m2/dia", "mj/m²/day", "mj/m²/dia", "mjm-2day-1", "mjm-2d-1"):
+            return valor
+        if u in ("w/m2", "w/m²", "wm-2"):
+            return valor * 0.0864
+    raise ValueError(f"unidad desconocida para {var}: {unidad!r}")
+
+
+def _serie_mensual(con, unidad_id: str) -> tuple[pd.DataFrame, list[str]]:
+    """Tabla larga `serie_mensual` (una fila por unidad, variable y mes) con columnas valor, unidad, nivel y motivo.
+
+    Cada fila se convierte con su propia `unidad`. Si un mes tiene varias filas para la misma variable, gana la que
+    no trae `motivo`. Devuelve un DataFrame ancho (mes_id + variables en unidades del gemelo, precip en mm/mes).
+    """
+    cols = [r[1] for r in con.execute("PRAGMA table_info(serie_mensual)")]
+    var = next(c for c in ("variable", "variable_id") if c in cols)
+    tiempo = ["mes_id"] if "mes_id" in cols else ["anio", "mes"] if {"anio", "mes"} <= set(cols) else ["periodo"]
+    extra = [c for c in ("nivel", "motivo") if c in cols]
+    q = f"SELECT {', '.join(tiempo)}, {var}, valor, unidad{''.join(', ' + c for c in extra)} " \
+        f"FROM serie_mensual WHERE unidad_id = ?"
+    df = pd.DataFrame(con.execute(q, (unidad_id,)).fetchall(), columns=[*tiempo, "variable", "valor", "unidad", *extra])
+    if df.empty:
+        return df, []
+    if tiempo == ["anio", "mes"]:
+        df["mes_id"] = (df.anio.astype(int) - 2000) * 12 + df.mes.astype(int) - 1
+    elif tiempo == ["periodo"]:
+        p = pd.to_datetime(df.periodo.astype(str))
+        df["mes_id"] = (p.dt.year - 2000) * 12 + p.dt.month - 1
+    df = df[df.variable.isin(COLUMNAS_MENSUALES) & df.valor.notna()].copy()
+    for c in ("nivel", "motivo"):
+        if c not in df:
+            df[c] = None
+    df["con_motivo"] = df.motivo.notna() & (df.motivo.astype(str).str.strip() != "")
+    df = df.sort_values(["mes_id", "variable", "con_motivo"], kind="stable").drop_duplicates(["mes_id", "variable"])
+    dias = DIAS_MES[(df.mes_id % 12).to_numpy()]
+    df["valor"] = [precip_a_mm_mes(v, u, d) if x == "precip" else _a_unidad_gemelo(x, v, u)
+                   for x, v, u, d in zip(df.variable, df.valor.astype(float), df.unidad, dias)]
+    avisos = []
+    marcados = df[df.con_motivo]
+    if len(marcados):
+        motivos = ", ".join(sorted(set(marcados.motivo.astype(str))))
+        avisos.append(f"Tabla serie_mensual: {len(marcados)} valores mensuales con motivo ({motivos})")
+    niveles = sorted(set(df.nivel.dropna().astype(str)))
+    if niveles:
+        unidades = ", ".join(sorted(set(df[df.variable == "precip"].unidad.astype(str))))
+        avisos.append(f"Tabla serie_mensual: niveles {', '.join(niveles)}; lluvia leída en {unidades or '-'}")
+    ancho = df.pivot(index="mes_id", columns="variable", values="valor").reset_index()
+    return ancho, avisos
+
+
+def mensual_desde_sqlite(ruta: str | Path, unidad_id: str
+                         ) -> tuple[dict[str, np.ndarray], np.ndarray, float, list[str]]:
+    """Lee el clima mensual de agroversex.sqlite (rama datos).
+
+    Con la tabla `serie_mensual` cada valor se convierte con su columna `unidad` (no se supone ninguna). Sin ella, se
+    usa la tabla `mensual`, desescalada con `variable`, con precip en mm/h. La lluvia sale en mm/mes.
+    Devuelve (mensual, años, lat, avisos). Solo años con los 12 meses de precipitación y temperatura.
     """
     con = sqlite3.connect(str(ruta))
     try:
+        tablas = {r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type = 'table'")}
+        lat = con.execute("SELECT punto_lat FROM unidad WHERE id = ?", (unidad_id,)).fetchone() \
+            if "unidad" in tablas else None
+        if "serie_mensual" in tablas:
+            df, avisos = _serie_mensual(con, unidad_id)
+            if not df.empty:
+                return (*_completar_anios(df, [c for c in COLUMNAS_MENSUALES if c in df]),
+                        float(lat[0]) if lat else 0.0, avisos)
         escalas = {r[0]: (r[1], r[2] or 0.0) for r in con.execute("SELECT id, escala, desplazamiento FROM variable")}
-        cols = ["precip", "t2m", "t2m_max", "t2m_min", "rh2m", "rad_sw"]
+        cols = list(COLUMNAS_MENSUALES)
         filas = con.execute(f"SELECT mes_id, {', '.join(cols)} FROM mensual WHERE unidad_id = ? ORDER BY mes_id",
                             (unidad_id,)).fetchall()
-        lat = con.execute("SELECT punto_lat FROM unidad WHERE id = ?", (unidad_id,)).fetchone()
     finally:
         con.close()
     if not filas:
@@ -241,10 +329,19 @@ def mensual_desde_sqlite(ruta: str | Path, unidad_id: str) -> tuple[dict[str, np
     for c in cols:
         e, d = escalas.get(c, (1.0, 0.0))
         df[c] = df[c].astype(float) * e + d
+    df["precip"] = precip_a_mm_mes(df.precip, "mm/hr", DIAS_MES[(df.mes_id % 12).to_numpy()])
+    return (*_completar_anios(df, cols), float(lat[0]) if lat else 0.0, [])
+
+
+def _completar_anios(df: pd.DataFrame, cols: list[str]) -> tuple[dict[str, np.ndarray], np.ndarray]:
+    df = df.copy()
     df["anio"] = 2000 + df.mes_id // 12
-    df["mes"] = df.mes_id % 12
-    df["precip"] = df.precip * 24 * DIAS_MES[df.mes.to_numpy()]
-    completos = [a for a, g in df.groupby("anio") if len(g) == 12 and g[["precip", "t2m_max", "t2m_min"]].notna().all().all()]
-    df = df[df.anio.isin(completos)]
-    mensual = {c: df[c].to_numpy().reshape(len(completos), 12) for c in cols if df[c].notna().all()}
-    return mensual, np.array(completos), float(lat[0]) if lat else 0.0
+    req = [c for c in ("precip", "t2m_max", "t2m_min") if c in df]
+    if len(req) < 3:
+        raise ValueError("clima mensual: faltan precip, t2m_max o t2m_min")
+    completos = [a for a, g in df.groupby("anio") if len(g) == 12 and g[req].notna().all().all()]
+    df = df[df.anio.isin(completos)].sort_values("mes_id")
+    if not completos:
+        raise ValueError("clima mensual: ningún año con los 12 meses completos")
+    return {c: df[c].to_numpy(float).reshape(len(completos), 12) for c in cols if df[c].notna().all()}, \
+        np.array(completos)

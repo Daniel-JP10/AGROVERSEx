@@ -5,14 +5,15 @@
 version_contrato: 1
 
 lote:
-  id: DEMO-COL-01                 # provisional hasta que se elijan los lotes DEMO (formato DEMO-{iso3}-{nn})
+  id: DEMO-COL-01
   nombre: Lote demostrativo Ipiales (Nariño)
-  lat: 0.8302
-  lon: -77.6444
+  lat: 0.842
+  lon: -77.661
   unidad_id: COL-ADM2-7082276B52108893597118
   clima_tipo: tropical            # trópico: sin reglas de sucesión con intervalo numérico (INV-ROT §5.2)
 
 clima:
+  # NASA POWER del punto hasta que lleguen los forzantes de Datos (power_csv, mismo lector): cambiar solo `archivo`.
   fuente: power_csv
   archivo: ../datos/referencia/clima/power_ipiales_diario.csv
   # Alternativa con la base de la rama datos (mensual desagregado a diario):

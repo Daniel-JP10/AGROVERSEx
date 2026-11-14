@@ -1,0 +1,101 @@
+# asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# Lote DEMO-USA-01: Mead, Nebraska (Corn Belt occidental, secano). Esquema: contratos/gemelo_api.md.
+# Paquete:   python -m gemelo paquete ejemplos/escenario_mead.yaml --lote-id DEMO-USA-01
+version_contrato: 1
+
+lote:
+  id: DEMO-USA-01
+  nombre: Lote demostrativo Mead (Nebraska)
+  lat: 41.165
+  lon: -96.477
+  unidad_id: USA-ADM2-52423323B480079355264
+  clima_tipo: templado            # activa las reglas de sucesión de clima templado
+
+clima:
+  # NASA POWER del punto hasta que lleguen los forzantes de Datos (power_csv, mismo lector): cambiar solo `archivo`.
+  fuente: power_csv
+  archivo: ../datos/referencia/clima/power_mead_diario.csv
+
+suelo:
+  fuente: soilgrids_json
+  archivo: ../datos/referencia/suelo/soilgrids_mead.json
+
+escenario:
+  tipo: historico                 # historico | seco | normal | humedo | personalizado
+  anios: 3
+  max_miembros: 8                 # ventanas de 3 años repartidas en 2005-2024
+
+simulacion:
+  n_parametros: 8                 # muestras LHS de theta (la 0 es la central)
+  semilla: 42
+  n_sub: 1
+  equilibrio: completo
+  referencia: A                   # manejo actual: el carbono se equilibra con él
+
+calibracion: {}
+
+# Fertilización: dosis SUPUESTO para el ejemplo, no recomendación agronómica.
+estrategias:
+  - id: A
+    nombre: Maíz-soya (habitual)
+    etiqueta: "FUENTE EV-ROT-017 (rotación habitual del Corn Belt)"
+    temporadas:
+      - {cultivo: maiz, siembra: A1-05-01, fertilizacion: [{dia: 0, kg_n: 150}]}
+      - {cultivo: soya, siembra: A2-05-15, etapas_variante: "centro EE. UU."}
+      - {cultivo: maiz, siembra: A3-05-01, fertilizacion: [{dia: 0, kg_n: 150}]}
+  - id: B
+    nombre: Maíz continuo
+    etiqueta: ilustrativa
+    temporadas:
+      - {cultivo: maiz, siembra: A1-05-01, fertilizacion: [{dia: 0, kg_n: 150}]}
+      - {cultivo: maiz, siembra: A2-05-01, fertilizacion: [{dia: 0, kg_n: 150}]}
+      - {cultivo: maiz, siembra: A3-05-01, fertilizacion: [{dia: 0, kg_n: 150}]}
+  - id: C
+    nombre: Maíz-soya-avena
+    etiqueta: "FUENTE EV-ROT-017 (alternativa de 3 años; sin trébol rojo, que no está en el catálogo)"
+    temporadas:
+      - {cultivo: maiz, siembra: A1-05-01, fertilizacion: [{dia: 0, kg_n: 150}]}
+      - {cultivo: soya, siembra: A2-05-15, etapas_variante: "centro EE. UU."}
+      - {cultivo: avena, siembra: A3-04-01, fertilizacion: [{dia: 0, kg_n: 60}]}
+  - id: D
+    nombre: Maíz-soya-maíz con avena de cobertura
+    etiqueta: ilustrativa
+    descripcion: Avena sembrada tras cada cosecha y dejada en superficie (no se cosecha)
+    temporadas:
+      - {cultivo: maiz, siembra: A1-05-01, fertilizacion: [{dia: 0, kg_n: 150}]}
+      - {cultivo: avena, siembra: A1-10-05, cosechar: false}
+      - {cultivo: soya, siembra: A2-05-15, etapas_variante: "centro EE. UU."}
+      - {cultivo: avena, siembra: A2-10-10, cosechar: false}
+      - {cultivo: maiz, siembra: A3-05-01, fertilizacion: [{dia: 0, kg_n: 150}]}
+
+optimizacion:
+  linea_base: A
+  campanias:
+    - {nombre: principal, fecha: "05-01", opciones: [maiz, soya, avena_grano]}
+    - {nombre: otono, fecha: "10-10", opciones: [avena_cobertura]}
+  opciones:
+    maiz: {cultivo: maiz, fertilizacion: [{dia: 0, kg_n: 150}]}
+    soya: {cultivo: soya, etapas_variante: "centro EE. UU."}
+    avena_grano: {cultivo: avena, fertilizacion: [{dia: 0, kg_n: 60}]}
+    avena_cobertura: {cultivo: avena, cosechar: false}
+  desfases_dias: [0, 14]
+  riego: {permitido: false}
+  # El gemelo no representa plagas ni enfermedades del monocultivo de soya (sin regla de sucesión en la base):
+  # sin esta exigencia el frente tiende a soya continua.
+  exigidos: [maiz]
+  min_cosechas_por_anio: 1
+  objetivos: [produccion, riesgo_produccion, carbono, lluvia_intensa_suelo_desnudo, lixiviacion]
+  busqueda: {poblacion: 24, generaciones: 12, miembros_clima: 4, muestras_parametros: 3, miembros_final: 8,
+             muestras_final: 6, max_soluciones: 8}
+
+# Paquete estático (python -m gemelo paquete): grilla de deslizadores y calibraciones típicas del lote
+paquete:
+  n_parametros_grilla: 4
+  calibraciones_tipicas:
+    mo_laboratorio: {descripcion: "Materia orgánica medida en laboratorio (3,0 %)", valores: {suelo.mo_pct: 3.0}}
+    n_inicial_bajo: {descripcion: "Análisis de suelo con poco N mineral inicial", valores: {cn.n_mineral_inicial_kg_ha: 15}}
+    n_inicial_alto: {descripcion: "Análisis de suelo con mucho N mineral inicial", valores: {cn.n_mineral_inicial_kg_ha: 50}}
+    suelo_seco_al_inicio: {descripcion: "Humedad inicial medida baja (30 % del agua disponible)",
+                           valores: {agua.fraccion_humedad_inicial: 0.3}}
+    suelo_humedo_al_inicio: {descripcion: "Humedad inicial medida alta (80 % del agua disponible)",
+                             valores: {agua.fraccion_humedad_inicial: 0.8}}

@@ -410,8 +410,8 @@ Las reglas de sucesión salen de la tabla `regla_sucesion` (FUENTE EV-ROT-016, 0
   - `enso.py` clasifica los años por fase ENSO.
 
 ```powershell
-python -m gemelo paquete ejemplos/escenario_ames.yaml --lote-id DEMO-USA-01
-python -m gemelo paquete ejemplos/escenario_ipiales.yaml --lote-id DEMO-COL-01
+python -m gemelo paquete ejemplos/escenario_mead.yaml --lote-id DEMO-USA-01 --definitivo
+python -m gemelo paquete ejemplos/escenario_ipiales.yaml --lote-id DEMO-COL-01 --definitivo
 ```
 
 El esquema completo está en [`contratos/gemelo_api.md`](../../contratos/gemelo_api.md).
@@ -514,4 +514,31 @@ El núcleo se construyó de abajo hacia arriba, validando cada proceso contra un
 - Saxton, K. E., y Rawls, W. J. (2006). Soil water characteristic estimates by texture and organic matter for hydrologic solutions. *Soil Science Society of America Journal*, 70, 1569-1578.
 - USDA NRCS (1986). *Urban hydrology for small watersheds*, TR-55; y NEH Part 630, cap. 7 (grupos hidrológicos).
 - Yan, W., y Hunt, L. A. (1999). An equation for modelling the temperature response of plants using only the cardinal temperatures. *Annals of Botany*, 84, 607-614.
+- Salvagiotti, F., Cassman, K. G., Specht, J. E., Walters, D. T., Weiss, A., y Dobermann, A. (2008). Nitrogen uptake, fixation and response to fertilizer N in soybeans: A review. *Field Crops Research*, 108, 1-13.
+- Sinclair, T. R., y Muchow, R. C. (1999). Radiation use efficiency. *Advances in Agronomy*, 65, 215-265.
 - Fichas del equipo (rama datos): EV-ROT-010 y 011 (FAO-56), EV-ROT-016 y 030 a 033 (sucesión), EV-ROT-017 (Corn Belt, Marsden) y EV-ROT-022 (Andes de Colombia, Agrosavia).
+
+### Procedencia de las fuentes
+
+Regla del equipo: no se usan datos, coeficientes, servicios ni modelos de entidades afiliadas o de propiedad de China. Se mira la entidad que produce el recurso, no la región estudiada ni la nacionalidad de un autor. `pruebas/gemelo/test_procedencia.py` falla si una referencia del gemelo trae una marca de procedencia china.
+
+| Recurso | Uso en el gemelo | Entidad que lo produce |
+|---|---|---|
+| NASA POWER | clima diario | NASA Langley Research Center (EE. UU.) |
+| SoilGrids 2.0 | textura, COS y N del suelo | ISRIC World Soil Information (Países Bajos) |
+| FAO-56, AquaCrop | Kc, etapas, balance hídrico, drenaje τ | FAO (Naciones Unidas) |
+| Saxton y Rawls (2006) | hidráulica del suelo | USDA Agricultural Research Service (EE. UU.) |
+| TR-55, NEH 630 | número de curva, grupo hidrológico | USDA NRCS (EE. UU.) |
+| ICBM (Andrén y Kätterer) | carbono del suelo | Swedish University of Agricultural Sciences (Suecia) |
+| IPCC 2006/2019 | volatilización, profundidad de COS | IPCC (Naciones Unidas) |
+| NOAA CPC (ONI, RONI) | fases ENSO | NOAA Climate Prediction Center (EE. UU.) |
+| Yan y Hunt (1999) | función beta de temperatura | University of Guelph (Canadá) |
+| Sinclair y Muchow (1999) | orden de magnitud de RUE | USDA ARS (EE. UU.) y CSIRO (Australia) |
+| Salvagiotti et al. (2008) | fijación de N de la soya | University of Nebraska-Lincoln (EE. UU.) |
+| Gregory (1982) | cobertura por residuos | ASAE (EE. UU.) |
+| Hargreaves y Samani (1985) | ET0 de respaldo | ASAE (EE. UU.) |
+| McKay et al. (1979) | muestreo LHS | Los Alamos National Laboratory (EE. UU.) |
+| pymoo, NSGA-II | optimización | Michigan State University (EE. UU.); IIT Kanpur (India) |
+| Reglas de sucesión (EV-ROT-016, 030 a 033) | intervalos entre cultivos | fichas de la rama datos (Cornell y fuentes de Dinamarca); `sucesion.yaml` es copia sin cambios de la rama datos, que la mantuvo en su revisión de procedencia (`datos-procedencia-fuentes`) |
+
+De lo que Datos quitó por esta regla (filas de China de Kluger, coeficientes de Cai 2025, greening de Chen 2019, zona North China Plain), el gemelo no usa nada.

@@ -5,7 +5,7 @@
 version_contrato: 1
 
 lote:
-  id: DEMO-USA-01                 # provisional hasta que se elijan los lotes DEMO (formato DEMO-{iso3}-{nn})
+  id: ejemplo-ames                # ejemplo; el lote DEMO-USA-01 está en escenario_mead.yaml
   nombre: Lote demostrativo Ames (Iowa)
   lat: 42.0308
   lon: -93.6319

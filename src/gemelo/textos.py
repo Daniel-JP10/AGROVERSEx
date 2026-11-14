@@ -71,6 +71,10 @@ _BASE: dict[str, tuple[str, str]] = {
                                 "succession does not restrict the search; review with the local agronomist",
                                 "Clima del lote sin reglas de sucesión con intervalo numérico (INV-ROT §5.2): la "
                                 "sucesión no restringe la búsqueda; revisar con el agrónomo local"),
+    "warning.monthly_flagged": ("serie_mensual table: {n} monthly values carry a reason flag ({motivos})",
+                                "Tabla serie_mensual: {n} valores mensuales con motivo ({motivos})"),
+    "warning.monthly_levels": ("serie_mensual table: levels {niveles}; rain read in {unidades}",
+                               "Tabla serie_mensual: niveles {niveles}; lluvia leída en {unidades}"),
     "warning.monthly_context_only": ("Monthly climate disaggregated to daily: context only. Splitting monthly rain "
                                      "into days erases storms, so heavy-rain and erosion indicators lose meaning.",
                                      "Clima mensual desagregado a diario: solo contexto. Al partir la lluvia mensual "
@@ -317,6 +321,10 @@ _PATRONES = [
     (r"^Familia '?(?P<familia>[^']+)'? sin correspondencia", "warning.succession_family", ("familia",)),
     (r"^Clima del lote sin reglas de sucesión", "warning.succession_none", ()),
     (r"^Clima mensual desagregado a diario: solo contexto", "warning.monthly_context_only", ()),
+    (r"^Tabla serie_mensual: (?P<n>\d+) valores mensuales con motivo \((?P<motivos>.*)\)$",
+     "warning.monthly_flagged", ("n", "motivos")),
+    (r"^Tabla serie_mensual: niveles (?P<niveles>.*); lluvia leída en (?P<unidades>.*)$",
+     "warning.monthly_levels", ("niveles", "unidades")),
     (r"^Fase ENSO derivada del ONI", "warning.enso_interim", ()),
 ]
 

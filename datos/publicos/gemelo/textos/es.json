@@ -143,6 +143,8 @@
  "warning.initial_moisture": "Humedad inicial del suelo SUPUESTO (20-80 % del agua disponible); con SMAP L4 o medición local se reduce la incertidumbre del primer ciclo",
  "warning.initial_n": "N mineral inicial sin análisis de suelo (SUPUESTO 10-60 kg N/ha): el balance de N es orientativo",
  "warning.monthly_context_only": "Clima mensual desagregado a diario: solo contexto. Al partir la lluvia mensual en días se borran las tormentas, y los indicadores de lluvia intensa y erosión pierden sentido.",
+ "warning.monthly_flagged": "Tabla serie_mensual: {n} valores mensuales con motivo ({motivos})",
+ "warning.monthly_levels": "Tabla serie_mensual: niveles {niveles}; lluvia leída en {unidades}",
  "warning.saxton_rawls_domain": "Saxton y Rawls fuera de dominio ({excede}); entradas recortadas al límite. Los suelos con mucha materia orgánica o volcánicos (Andisoles) suelen retener más agua de la estimada: medir capacidad de campo en laboratorio.",
  "warning.scenario_historical": "Clima histórico real en ventanas de varios años: describe la variabilidad pasada del lugar, no garantiza la futura.",
  "warning.scenario_hypothetical": "Escenario hipotético construido con años históricos reales; no es un pronóstico ni una proyección climática oficial.",

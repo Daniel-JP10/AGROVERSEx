@@ -122,6 +122,7 @@ def _avisos(entrada: Entrada, ens: Ensamble, extra: list[str] | None = None) -> 
         avisos.append(f"Clima de naturaleza '{entrada.clima.naturaleza}' ({entrada.clima.fuente})")
     if "desagregado a diario" in entrada.clima.fuente:
         avisos.append(AVISO_MENSUAL)
+    avisos += entrada.clima.avisos
     avisos += entrada.escenario.detalle.get("avisos", [])
     return list(dict.fromkeys(a for a in avisos + (extra or []) if a))
 

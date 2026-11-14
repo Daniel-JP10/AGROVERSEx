@@ -1,13 +1,16 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
 """Entradas de Datos (forzantes diarios y parametros_suelo.json) y escenarios por fase ENSO (v1.1)."""
 import json
+import sqlite3
 
+import numpy as np
 import pandas as pd
 import pytest
 
 from conftest import RAIZ
 from gemelo.api import simular
-from gemelo.clima import leer_power_csv
+from gemelo.clima import DIAS_MES, leer_power_csv, mensual_desde_sqlite
+from gemelo.textos import clave_de_aviso
 from gemelo.enso import FASES, clasificar_oni, fases_por_anio
 from gemelo.entrada import leer_entrada
 from gemelo.escenarios import construir
@@ -77,8 +80,8 @@ def test_sqlite_mensual_avisa_que_es_solo_contexto():
     from gemelo.salida import AVISO_MENSUAL, _avisos
 
     class _C:
-        huecos_rellenos, naturaleza = {}, "derivado"
-        fuente = "agroversex.sqlite tabla mensual (X), desagregado a diario"
+        huecos_rellenos, naturaleza, avisos = {}, "derivado", []
+        fuente = "agroversex.sqlite clima mensual (X), desagregado a diario"
 
     class _E:
         clima, escenario = _C(), type("e", (), {"aviso": "", "detalle": {}})()
@@ -89,3 +92,43 @@ def test_sqlite_mensual_avisa_que_es_solo_contexto():
     class _Ens:
         theta, equilibrio = _T(), "ninguno"
     assert AVISO_MENSUAL in _avisos(_E(), _Ens())
+
+
+def _sqlite_serie(ruta, filas):
+    con = sqlite3.connect(ruta)
+    con.execute("CREATE TABLE unidad (id TEXT, punto_lat REAL)")
+    con.execute("INSERT INTO unidad VALUES ('U', 0.84)")
+    con.execute("CREATE TABLE serie_mensual (unidad_id TEXT, variable TEXT, mes_id INTEGER, valor REAL, "
+                "nivel TEXT, unidad TEXT, motivo TEXT)")
+    con.executemany("INSERT INTO serie_mensual VALUES ('U', ?, ?, ?, ?, ?, ?)", filas)
+    con.commit()
+    con.close()
+
+
+def test_serie_mensual_usa_la_columna_unidad(tmp_path):
+    filas = []
+    for m in range(24):
+        dias = DIAS_MES[m % 12]
+        # 2000: IMERG Final en mm/hr; 2001: Late en mm/day. Ambos equivalen a 3 mm/día.
+        lluvia = ("final", "mm/hr", 3 / 24) if m < 12 else ("late", "mm/day", 3.0)
+        filas.append(("precip", m, lluvia[2], lluvia[0], lluvia[1], "IMERG Late, Final no disponible" if m == 13
+                      else None))
+        filas += [("t2m_max", m, 295.15, "power", "K", None), ("t2m_min", m, 10.0, "power", "°C", None),
+                  ("rad_sw", m, 200.0, "power", "W/m^2", None)]
+    filas.append(("precip", 13, 99.0, "final", "mm/hr", "duplicado con motivo"))
+    ruta = tmp_path / "a.sqlite"
+    _sqlite_serie(ruta, filas)
+    mensual, anios, lat, avisos = mensual_desde_sqlite(ruta, "U")
+    assert list(anios) == [2000, 2001] and lat == pytest.approx(0.84)
+    np.testing.assert_allclose(mensual["precip"], 3.0 * np.tile(DIAS_MES, (2, 1)))
+    np.testing.assert_allclose(mensual["t2m_max"], 22.0)
+    np.testing.assert_allclose(mensual["rad_sw"], 17.28)
+    assert any("motivo" in a for a in avisos) and any("mm/day, mm/hr" in a for a in avisos)
+    assert all(clave_de_aviso(a)["clave"] != "warning.untranslated" for a in avisos)
+
+
+def test_serie_mensual_unidad_desconocida_es_error(tmp_path):
+    ruta = tmp_path / "b.sqlite"
+    _sqlite_serie(ruta, [("precip", 0, 1.0, "final", "in/hr", None)])
+    with pytest.raises(ValueError, match="unidad de precipitación desconocida"):
+        mensual_desde_sqlite(ruta, "U")
