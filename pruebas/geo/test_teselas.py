@@ -1,4 +1,5 @@
 # asistido por SI: Claude Code (Anthropic), pruebas de teselas con unidad_id de CGAZ (T-D1)
+import os
 import subprocess
 from pathlib import Path
 
@@ -9,6 +10,7 @@ from simulacion.geo.teselas import (comando_mapshaper, comando_tippecanoe, conta
                                     ruta_wsl, partir_por_pais, simplificado_vigente, unir_geojson, completar_perdidos, SIMPLIFICADOS, TESELAS, HERRAMIENTAS)
 
 
+@pytest.mark.skipif(os.name != "nt", reason="la ruta de entrada es de Windows; en Linux Path no la interpreta como unidad")
 def test_ruta_wsl():
     p = Path(r"C:\Proyectos personales\AGROVERSERx\x.geojson")
     assert ruta_wsl(p) == "/mnt/c/Proyectos personales/AGROVERSERx/x.geojson"
