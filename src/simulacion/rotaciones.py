@@ -17,8 +17,6 @@ DECISION_15_2_H = None
 FICHA_AGUA_FAO = "EV-ROT-011"
 # Hernia de las crucíferas: R1 da 7 años y R2 da 4 para colza; EV-ROT-016 recoge ambas cifras
 FICHA_HERNIA = "EV-ROT-016"
-REGION_CHINA = "Llanura del Norte de China"
-ROTULO_CHINA = "[procedencia china, D-009]"
 CLIMA_SUCESION = "templado; trópico: intervalo PENDIENTE, revisión local"
 CONTRASTE = "contraste, no rotación"
 
@@ -58,10 +56,6 @@ def filas_sistema_rotacion():
     filas = []
     for r in cargar_sistemas_rotacion().to_dict("records"):
         region = r["region"]
-        if region == REGION_CHINA:
-            if not config.INCLUIR_PROCEDENCIA_CHINA:
-                continue
-            region = f"{region} {ROTULO_CHINA}"
         fid = r["fuente_id"]
         # FUENTE o INFERENCIA solo con ficha; lo demás queda PENDIENTE
         etiqueta = r["etiqueta"] if r["etiqueta"] in ("FUENTE", "INFERENCIA") and _ficha_existe(fid) else "PENDIENTE"
@@ -80,7 +74,7 @@ def filas_sistema_rotacion():
 def filas_efecto_antecesor():
     filas = []
     for f in cargar_kluger().to_dict("records"):
-        pais = f["pais"] + f" {ROTULO_CHINA}" if f["procedencia_china"] else f["pais"]
+        pais = f["pais"]
         fid = f["fuente_id"]
         filas.append((pais, f["antecesor"], f["cultivo"],
                       _con_ficha(fid, f["efecto2"]), _con_ficha(fid, f["eff_div"]),

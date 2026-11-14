@@ -159,7 +159,7 @@ def tendencia_unidad(iso3: str) -> float:
 
 def forzante_enso(macroregion: str, roni: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """(anomalía fraccional de lluvia, anomalía de T en °C). Ceros fuera de las regiones con dos fuentes. Si la
-    fuente solo cubre El Niño (nina_aplica falso), La Niña no tiene efecto. La magnitud de Cai 2025 va aparte."""
+    fuente solo cubre El Niño (nina_aplica falso), La Niña no tiene efecto."""
     r = np.nan_to_num(np.asarray(roni, float))
     tc = ref.cargar_teleconexiones()
     fila = tc[tc.macroregion == macroregion]
@@ -174,19 +174,6 @@ def forzante_enso(macroregion: str, roni: np.ndarray) -> tuple[np.ndarray, np.nd
     if fila.temporada == "DJF":  # solo dic-ene-feb, como dice la fuente
         r = r * np.isin(_MES[:len(r)] + 1, (12, 1, 2))
     return signo * COEF_LLUVIA_DOS_FUENTES * r, np.zeros_like(r)
-
-
-def _enso_cai(reg, roni, p_cl, a_p) -> None:  # SUPUESTO: tope de la anomalía en [-0,9, 3,0] (rev. 2026-11-13)
-    """Sustituye en a_p (fracción, n x N) la magnitud SUPUESTO por la de Cai 2025 (mm/día por °C, procedencia china,
-    D-009) en los meses de su temporada: anomalía = coef * RONI(Niño) * días del mes / lluvia normal del mes."""
-    tc = ref.cargar_teleconexiones()
-    for fila in tc[tc.coef_mm_dia.notna()].itertuples():
-        f = reg == fila.macroregion
-        if not f.any():
-            continue
-        en = np.isin(_MES + 1, fila.meses_coef)
-        mm = fila.coef_mm_dia * np.maximum(roni, 0.0) * _DIAS
-        a_p[f] = np.where(en[None, :], np.clip(mm[None, :] / np.maximum(p_cl[f][:, _MES], 1.0), -0.9, 3.0), a_p[f])
 
 
 _ADM1_ENSO = yaml.safe_load((AQUI / "iso3_a_region.yaml").read_text(encoding="utf-8"))
@@ -373,7 +360,6 @@ def generar_clima(unidad_ids: list[str], bloque: slice, geo: pd.DataFrame | None
         p_cl[tiene] = mat["prec"][tiene]
         dtr[tiene] = (mat["tmax"] - mat["tmin"])[tiene]
         srad = mat["srad"] / 1000.0  # kJ/m²/día a MJ/m²/día
-    _enso_cai(reg, roni, p_cl, a_p)  # con la lluvia normal ya definitiva
     clim_t = t_cl[:, _MES]
     t2m =clim_t + tend[:, None] * (np.arange(N) / 120.0)[None, :] + a_t + ar
     precip = p_cl[:, _MES] * np.exp(SIGMA_P * z[:, 1] - SIGMA_P**2 / 2) * np.maximum(1 + a_p, 0.05)

@@ -48,10 +48,7 @@ ETIQ_HELADA = "contexto de ~0,5°, no del lote"
 
 
 def cargar_zonas() -> dict:
-    z = yaml.safe_load(ZONAS_YAML.read_text(encoding="utf-8"))
-    if not config.INCLUIR_PROCEDENCIA_CHINA:
-        z = {k: v for k, v in z.items() if v.get("procedencia") != "china"}
-    return z
+    return yaml.safe_load(ZONAS_YAML.read_text(encoding="utf-8"))
 
 
 def geometrias_unidades(ids) -> dict:

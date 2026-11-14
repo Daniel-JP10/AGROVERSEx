@@ -20,9 +20,9 @@ def _por_region(filas, prefijo):
     return [f for f in filas if f[1].startswith(prefijo)]
 
 
-def test_once_regiones_y_estados():
+def test_diez_regiones_y_estados():
     filas = _sistemas()
-    assert len({f[1] for f in filas}) == 11
+    assert len({f[1] for f in filas}) == 10
     # R-4: Llanos y Andina pasan a FUENTE con alternativa; Pampa sigue PENDIENTE
     for prefijo in ("Llanos", "Andina Colombia"):
         (fila,) = _por_region(filas, prefijo)
@@ -49,20 +49,13 @@ def test_ninguna_estrategia_inventada():
             assert (EVIDENCIA / f"{f[5]}.yaml").exists()
 
 
-def test_china_sale_con_bandera_y_se_omite_sin_ella(monkeypatch):
-    assert any("procedencia china" in f[1] for f in _sistemas())
-    monkeypatch.setattr(config, "INCLUIR_PROCEDENCIA_CHINA", False)
-    assert not any("China" in f[1] for f in _sistemas())
-
-
-def test_kluger_conteo_con_procedencia(monkeypatch):
-    con = rotaciones.filas_efecto_antecesor()
-    assert len(con) == 36
-    china = int(cargar_kluger()["procedencia_china"].sum())
-    monkeypatch.setattr(config, "INCLUIR_PROCEDENCIA_CHINA", False)
-    sin = rotaciones.filas_efecto_antecesor()
-    assert len(con) - len(sin) == china
-    assert china == 2
+def test_sin_sistemas_ni_filas_de_procedencia_china():
+    assert not any("china" in f[0].lower() or "china" in f[1].lower() for f in _sistemas())
+    ante = rotaciones.filas_efecto_antecesor()
+    assert len(ante) == 34
+    assert not any("china" in f[0].lower() for f in ante)
+    assert "procedencia_china" not in cargar_kluger().columns
+    assert not hasattr(rotaciones, "REGION_CHINA") and not hasattr(rotaciones, "ROTULO_CHINA")
 
 
 def test_kluger_significativo_es_mascara_de_cuatro_banderas():

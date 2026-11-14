@@ -1,0 +1,15 @@
+
+    def test_sin_greening_de_china():
+        # Chen 2019 en China se quitó (§5.1): CHN queda neutro, sin pendiente de greening
+>       assert not hasattr(config, "INCLUIR_PROCEDENCIA_CHINA")
+E       AssertionError: assert not True
+E        +  where True = hasattr(config, 'INCLUIR_PROCEDENCIA_CHINA')
+
+pruebas\sim\test_vegetacion.py:90: AssertionError
+=========================== short test summary info ===========================
+FAILED pruebas/sim/test_lotes.py::test_10_zonas_50_lotes_sin_procedencia_china
+FAILED pruebas/sim/test_referencias.py::test_kluger_sin_filas_ni_columna_de_procedencia_china
+FAILED pruebas/sim/test_referencias.py::test_teleconexiones_sin_coeficiente_de_procedencia_china
+FAILED pruebas/sim/test_rotaciones.py::test_sin_sistemas_ni_filas_de_procedencia_china
+FAILED pruebas/sim/test_vegetacion.py::test_sin_greening_de_china - Assertion...
+5 failed, 33 passed, 13 skipped, 2 deselected in 4.26s

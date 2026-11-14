@@ -2,7 +2,6 @@
 # Regla de elección (SUPUESTO del orquestador, revisión 2026-11-13): unidades ADM1 de geo.sqlite que cubren
 # el núcleo agrícola de la región de INICIAR §11.2, tomadas por nombre de ADM1 sin mapa de cultivo a escala de lote.
 # `cultivos`: cultivo habitual de §11.2 (FUENTE en esa sección); los lotes se reparten entre ellos.
-# North China Plain solo entra con INCLUIR_PROCEDENCIA_CHINA (D-009) y lleva su procedencia.
 corn_belt:
   nombre: Corn Belt
   cultivos: [maiz, soya]
@@ -43,8 +42,3 @@ australia:
   nombre: Australia
   cultivos: [trigo]
   unidades: [AUS.11_1, AUS.5_1, AUS.10_1, AUS.8_1]   # Australia Occidental, Nueva Gales del Sur, Victoria, Australia Meridional
-north_china_plain:
-  nombre: North China Plain
-  procedencia: china        # D-009, desviación explícita de AGENTS §5.1; volver a False la bandera para la entrega
-  cultivos: [trigo, maiz]
-  unidades: [CHN.10_1, CHN.12_1, CHN.23_1]   # Hebei, Henan, Shandong
