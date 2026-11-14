@@ -1,0 +1,27 @@
+# Ficha de dataset
+
+- Nombre corto: soilgrids2
+- Producto oficial y versión: SoilGrids 2.0, agregado a 1000 m, carpeta `latest` de ISRIC. Etiquetas del GeoTIFF: `Code_version v2.0.0`, `Outputs_version RUN05`, `WoSIS_version Data stream 7`. VERIFICADO por lectura del archivo `phh2o_0-5cm_mean_1000.tif`
+- Agencia y centro de datos: ISRIC World Soil Information
+- Página oficial: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/ (listado leído el 2026-11-14)
+- DOI: 10.5194/soil-7-217-2021, Poggio et al. 2021. FUENTE: código del prototipo; PENDIENTE confirmar en la página de ISRIC
+- Variable y unidades: soc, phh2o, clay, sand, silt, bdod, cec, nitrogen, wv0033 y wv1500, media (`mean`), en 0-5, 5-15 y 15-30 cm. Enteros escalados: factor y unidades por propiedad PENDIENTE de confirmar en la documentación de ISRIC; el prototipo usa `PROPIEDADES` en `src/simulacion/geo/estaticos.py`
+- Resolución espacial nominal: 1000 m (`res (1000.0, 1000.0)`, 39812 × 14509 celdas). VERIFICADO por lectura
+- Resolución temporal: estática
+- CRS nativo: Homolosine interrumpida sobre WGS 84 (WKT `PROJCS["Homolosine",...]`). VERIFICADO por lectura. El prototipo lo rotula ESRI:54052
+- Periodo descargado: no aplica
+- Área descargada: global
+- Herramienta y consulta exacta de descarga: `datos/manifiesto_descargas.yaml`, ids `soilgrids_*`, 30 archivos, 5.091.050.525 bytes esperados según HEAD; `simulacion.geo.descargas.descargar` con 8 conexiones en paralelo y hasta 12 reintentos con reanudación por `Range`
+- Fecha de descarga: 2026-11-14, de 12:36:53 a 13:23:21 hora de Colombia; 30 de 30 archivos, 5.091.050.525 bytes, sha256 en el manifiesto
+- Banderas de calidad aplicadas: NoData `-32768` excluido de toda agregación. SoilGrids no publica bandera de calidad por celda en el agregado
+- Fracción de datos válidos en el área: PENDIENTE, sale de T-D4 por unidad
+- Transformaciones a la grilla común y método de remuestreo: estadística zonal ponderada por cobertura de celda con el motor de T-D2, en la Homolosine nativa, cortando los polígonos por los meridianos de interrupción y densificando antes de reproyectar (docu.md §1.9). Sin remuestreo del raster
+- Requisito del reto y pregunta que atiende: N3, D3; PI-D1
+- Limitaciones conocidas:
+  - **Rango, plan B aprobado por el director el 2026-11-14:** el agregado a 1000 m solo publica la media, no los cuantiles 5, 50 y 95. El rango por unidad es la dispersión espacial de la media dentro de la unidad, con `tipo_rango = espacial`. No es incertidumbre del producto y nunca se mezcla con ella.
+  - Etiqueta del archivo: "no WISE, March 2020 snapshot, NZ and Siberia gaps".
+  - Un dato de 1 km no describe un lote: en los lotes DEMO se usa como contexto y así se dice.
+  - Entre las covariables del modelo de ISRIC figuran capas `clm_wcl_*`, que por el nombre parecen de WorldClim. Es insumo interno de ISRIC; el producto se publica con la licencia de ISRIC. INFERENCIA
+- Licencia: CC BY 4.0 según el prototipo. PENDIENTE confirmar en la página de ISRIC
+- Responsable: orquestador de datos (Daniel)
+- Verificador y fecha: PENDIENTE
