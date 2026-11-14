@@ -28,8 +28,14 @@ describe('paraMostrar', () => {
     expect(paraMostrar('precip', null, 'mm/h', '2024-01').valor).toBeNull()
   })
   it('mmHoraAMmMes, mmPorMes y valoresCapa usan la misma conversión', () => {
-    expect(mmHoraAMmMes(1, '2024-02')).toBe(696)
-    expect(mmPorMes(1, 24 * 12 + 1)).toBe(696)
-    expect(valoresCapa(capaPorId('precip'), new Float32Array([1]), 23 * 12 + 1)[0]).toBe(672)
+    expect(mmHoraAMmMes(1, '2024-02', 'mm/h')).toBe(696)
+    expect(mmPorMes(1, 24 * 12 + 1, 'mm/h')).toBe(696)
+    expect(valoresCapa(capaPorId('precip'), new Float32Array([1]), 23 * 12 + 1, 'mm/h')[0]).toBe(672)
+  })
+  it('mm/day pasa a mm/mes con los días reales del mes', () => {
+    expect(paraMostrar('precip', 2, 'mm/day', '2024-02')).toEqual({ valor: 58, unidad: 'mm/mes' })
+    expect(paraMostrar('precip', 2, 'mm/day', '2025-10')).toEqual({ valor: 62, unidad: 'mm/mes' })
+    expect(paraMostrar('precip', 2, 'mm/d', '2025-09').valor).toBe(60)
+    expect(paraMostrar('precip', null, 'mm/day', '2025-10').valor).toBeNull()
   })
 })

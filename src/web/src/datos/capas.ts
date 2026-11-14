@@ -9,6 +9,8 @@ export interface Capa {
   tema: Tema
   nombre: string
   unidad: string
+  /** Unidad en que la base entrega la capa (solo las que se convierten para mostrar) */
+  unidadProducto?: string
   /** Escala de color; SUPUESTO visual, lo que se salga se pinta en el extremo */
   rango: [number, number]
   fraccion?: string
@@ -17,7 +19,8 @@ export interface Capa {
 }
 
 export const CAPAS: Capa[] = [
-  { id: 'precip', tema: 'Agua', get nombre() { return t('capa.precip') }, unidad: 'mm/mes', rango: [0, 500], fraccion: 'precip_frac', calendario: 'imerg' },
+  { id: 'precip', tema: 'Agua', get nombre() { return t('capa.precip') }, unidad: 'mm/mes', unidadProducto: 'mm/h', // shortcut: unidad fija de la base del prototipo; T-D9 debe leer la unidad por fila del dato estático
+    rango: [0, 500], fraccion: 'precip_frac', calendario: 'imerg' },
   { id: 'sm_sup', tema: 'Agua', get nombre() { return t('capa.sm_sup') }, unidad: 'm³/m³', rango: [0, 0.6], fraccion: 'sm_frac', calendario: 'smap_l3' },
   { id: 'sm_raiz', tema: 'Agua', get nombre() { return t('capa.sm_raiz') }, unidad: 'm³/m³', rango: [0, 0.6], fraccion: 'sm_frac', calendario: 'smap_l3' },
   { id: 'tws', tema: 'Agua', get nombre() { return t('capa.tws') }, unidad: 'cm', rango: [-30, 30], fraccion: 'tws_frac', calendario: 'grace' },
@@ -34,8 +37,8 @@ export const capaPorId = (id: string): Capa => CAPAS.find((c) => c.id === id) ??
 export const TEMAS: Tema[] = ['Agua', 'Clima', 'Vegetación']
 export const TEMA_CLAVE: Record<Tema, ClaveTexto> = { Agua: 'tema.Agua', Clima: 'tema.Clima', Vegetación: 'tema.Vegetación' }
 
-// La base guarda la lluvia en mm/h, como IMERG; se muestra en mm/mes con los días reales del mes
-export function valoresCapa(c: Capa, valores: Float32Array, mes: number): Float32Array {
+// La unidad la pone quien llama (Final mm/hr, Late mm/day); sin valor por omisión; se muestra en mm/mes con los días reales del mes
+export function valoresCapa(c: Capa, valores: Float32Array, mes: number, unidad: string): Float32Array {
   if (c.id !== 'precip') return valores
-  return valores.map((x) => paraMostrar('precip', x, 'mm/h', mes).valor as number)
+  return valores.map((x) => paraMostrar('precip', x, unidad, mes).valor as number)
 }

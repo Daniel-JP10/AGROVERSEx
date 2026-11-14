@@ -240,3 +240,6 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/web/pruebas/textos_tierra.test.ts` | Pruebas de textos por clave de la sección Tierra | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/zona_disputa.test.ts` y cambios de disputa en `globo/`, `datos/`, `paneles/` | Zonas en disputa con es_disputa = 1 en las tres capas y clave de texto en vez de país (decisión 3) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/globo/fondos.ts`, `src/web/pruebas/fondos.test.ts`, `src/web/pruebas/e2e/captura.mjs` | Cambio del fondo EOX a NASA GIBS y pruebas de atribución | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/comun/unidades.ts`, `src/web/pruebas/empalme_imerg.test.ts` | Conversión mm/day de IMERG Late en paraMostrar y prueba del empalme 2025-09 a 2025-10 (D-023) | 2026-11-14 |
+| Claude Code (Anthropic) | `datos/extraer_pares_variable_unidad.py` | Extrae los pares (variable, unidad) de serie_mensual para la prueba de paraMostrar | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/paneles_unidad.test.ts` | Prueba de que los paneles muestran error ante una unidad sin conversión | 2026-11-14 |
