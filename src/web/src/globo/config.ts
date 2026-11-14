@@ -3,7 +3,7 @@ import { fondoBase, fondoDetalle, ZOOM_DETALLE } from './fondos'
 import { t } from '../textos/i18n'
 // Configuración centralizada de capas del globo.
 // Teselas reales de GADM (adm0/adm1/adm2), generadas en la fase 1. Propiedades: id (texto),
-// nivel, iso3, padre_id, nombre. El nivel 9 (zonas en disputa) viene dentro de la capa adm0.
+// nivel, iso3, padre_id, nombre, es_disputa. Las zonas en disputa (es_disputa = 1) están en las tres capas.
 
 export interface NivelConfig {
   /** Posición en la jerarquía: 0 = país, 1 = departamento, 2 = municipio */
@@ -36,8 +36,14 @@ export const NIVELES: NivelConfig[] = [
   { nivel: 2, fuente: 'adm2', archivo: '/teselas/adm2.pmtiles', capaFuente: 'adm2', propId: 'id', zoomDesde: 6, zoomHasta: 12, fundido: 1, sinHijo: [] },
 ]
 
-/** Zona en disputa: va dentro de adm0 con nivel = 9. */
-export const NIVEL_DISPUTA = 9
+/** Zona en disputa: es_disputa = 1 en adm0, adm1 y adm2 (nivel normal, iso3 111..129 o ESH). */
+// Las teselas aún no llevan es_disputa (contratos/unidades.md): se deriva de iso3 (111..129 o ESH) hasta que D-016 lo agregue
+export const ISO3_DISPUTA = [...Array.from({ length: 19 }, (_, i) => String(111 + i)), 'ESH']
+export const esDisputa = (p?: { es_disputa?: unknown; iso3?: unknown } | null) =>
+  Number(p?.es_disputa) === 1 || ISO3_DISPUTA.includes(String(p?.iso3))
+const exprDisputa = ['any', ['==', ['get', 'es_disputa'], 1], ['in', ['get', 'iso3'], ['literal', ISO3_DISPUTA]]]
+/** Nombre que ve el usuario: una zona en disputa nunca sale como país ni con su código. */
+export const nombreUnidad = (nombre: string, disputa: boolean) => (disputa ? t('unidad.disputa') : nombre)
 export const avisoDisputa = () => t('globo.disputa')
 
 export const INDICE_BUSQUEDA = '/teselas/indice_busqueda.json.gz'
@@ -66,7 +72,7 @@ export const ATRIBUCION = `Imágenes NASA GIBS · ${fondoDetalle(true)!.atribuci
 /** Capas con las que se interactúa en un nivel: su relleno y los respaldos de los niveles superiores. */
 export function capasInteractivas(nivel: number): string[] {
   return NIVELES.filter((c) => c.nivel <= nivel).flatMap((c) =>
-    [...(c.nivel === nivel ? [`${c.fuente}-relleno`] : []), ...(c.sinHijo.length ? [`${c.fuente}-respaldo`] : [])])
+    [...(c.nivel === nivel ? [`${c.fuente}-relleno`, `${c.fuente}-disputa`] : []), ...(c.sinHijo.length ? [`${c.fuente}-respaldo`] : [])])
 }
 
 // Paleta de la coropleta de prueba (tierra seca -> agua), valores 0..1.
@@ -108,9 +114,9 @@ export function capasNivel(c: NivelConfig) {
   const rango = { ...base, minzoom: c.zoomDesde, maxzoom: sig ? sig.zoomDesde + sig.fundido + 1 : 24 }
   const rl = { ...base, minzoom: c.zoomDesde, maxzoom: 24 } // los contornos no desaparecen al acercar
   const en = estadoBool
-  const sinNivel9 = ['!=', ['get', 'nivel'], NIVEL_DISPUTA]
+  const sinDisputa = ['!', exprDisputa]
   const enRespaldo = ['in', ['get', 'iso3'], ['literal', c.sinHijo]]
-  const relFiltro = c.sinHijo.length ? ['all', sinNivel9, ['!', enRespaldo]] : (c.nivel === 0 ? sinNivel9 : ['all'])
+  const relFiltro = c.sinHijo.length ? ['all', sinDisputa, ['!', enRespaldo]] : sinDisputa
   const relleno = (id: string, filter: unknown, ext: object, respaldo: boolean) => ({
     id, type: 'fill', ...ext, filter, paint: { 'fill-color': COLOR_VALOR, 'fill-opacity': opacidadRelleno(c, OPACIDAD, respaldo) },
   })
@@ -124,13 +130,13 @@ export function capasNivel(c: NivelConfig) {
     relleno(`${c.fuente}-relleno`, relFiltro, rango, false),
     huecos(`${c.fuente}-huecos`, relFiltro, rango, false),
     ...(c.sinHijo.length ? [
-      relleno(`${c.fuente}-respaldo`, ['all', sinNivel9, enRespaldo], rl, true),
-      huecos(`${c.fuente}-huecos-respaldo`, ['all', sinNivel9, enRespaldo], rl, true),
+      relleno(`${c.fuente}-respaldo`, ['all', sinDisputa, enRespaldo], rl, true),
+      huecos(`${c.fuente}-huecos-respaldo`, ['all', sinDisputa, enRespaldo], rl, true),
     ] : []),
-    ...(c.nivel === 0 ? [{
-      id: 'adm0-disputa', type: 'fill', ...rl, filter: ['==', ['get', 'nivel'], NIVEL_DISPUTA],
+    {
+      id: `${c.fuente}-disputa`, type: 'fill', ...rango, filter: exprDisputa,
       paint: { 'fill-pattern': 'trama', 'fill-opacity': 0.8 },
-    }] : []),
+    },
     {
       id: `${c.fuente}-linea`, type: 'line', ...rl,
       // Al acercar el contorno se aclara y engrosa: sobre el satélite el color casi no se percibe

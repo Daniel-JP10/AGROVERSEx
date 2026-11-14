@@ -193,4 +193,5 @@ export const en: Record<ClaveTexto, string> = {
   'tiempo.sinDato': 'no data',
   'globo.rangoEscala': 'scale range',
   'globo.fueraFiltro': 'outside the filter',
+  'unidad.disputa': 'Disputed area',
 }

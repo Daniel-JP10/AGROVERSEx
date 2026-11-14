@@ -13,7 +13,7 @@ const BASE = ['Resumen', 'Series', 'Suelo', 'Rotaciones'] as const
 type Pestana = (typeof BASE)[number] | 'Lotes' | 'Fuentes'
 import { Miga } from './Miga'
 import { useEstado } from '../app/estado'
-import { NOMBRE_NIVEL } from '../globo/config'
+import { NOMBRE_NIVEL, nombreUnidad } from '../globo/config'
 import { t } from '../textos/i18n'
 
 export function PanelRegion() {
@@ -44,8 +44,8 @@ export function PanelRegion() {
       <button className="cerrar" aria-label={t('panel.cerrar')} onClick={() => seleccionar(null)}>×</button>
       <Miga />
       {aviso && <p role="status" className="etiqueta">{aviso}</p>}
-      <h2>{sel.nombre}</h2>
-      <p className="etiqueta">{NOMBRE_NIVEL[sel.nivel]} · {sel.nivel === 0 ? '' : `${sel.pais} · `}datos SIMULADOS</p>
+      <h2>{nombreUnidad(sel.nombre, !!sel.disputa)}</h2>
+      <p className="etiqueta">{sel.disputa ? t('unidad.disputa') : NOMBRE_NIVEL[sel.nivel]} · {sel.nivel === 0 || sel.disputa ? '' : `${sel.pais} · `}datos SIMULADOS</p>
       <div role="tablist" className="pestanas" onKeyDown={(e) => {
         const i = PESTANAS.indexOf(activa), d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0
         if (d) setTab(PESTANAS[(i + d + PESTANAS.length) % PESTANAS.length])

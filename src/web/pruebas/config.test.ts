@@ -25,11 +25,11 @@ describe('tres niveles reales', () => {
     expect(nivelParaZoom(6.9)).toBe(1)
     expect(nivelParaZoom(7)).toBe(2)
   })
-  it('adm0 separa las zonas en disputa (nivel 9) con trama', () => {
+  it('adm0 separa las zonas en disputa (es_disputa = 1) con trama', () => {
     const ids = capasNivel(NIVELES[0]).map((l) => l.id)
     expect(ids).toContain('adm0-disputa')
     const rel = capasNivel(NIVELES[0]).find((l) => l.id === 'adm0-relleno') as { filter: unknown[] }
-    expect(JSON.stringify(rel.filter)).toContain('9')
+    expect(JSON.stringify(rel.filter)).toContain('es_disputa')
   })
   it('respaldo de ADM1 sin ADM2 (Liechtenstein) y estilo coherente', () => {
     expect(SIN_ADM2).toContain('LIE')

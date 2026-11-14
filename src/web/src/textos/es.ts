@@ -191,5 +191,6 @@ export const es = {
   'tiempo.sinDato': 'sin dato',
   'globo.rangoEscala': 'rango de la escala',
   'globo.fueraFiltro': 'fuera del filtro',
+  'unidad.disputa': 'Zona en disputa',
 } as const
 export type ClaveTexto = keyof typeof es

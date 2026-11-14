@@ -53,7 +53,7 @@ export function Busqueda() {
         <ul role="listbox" id="res-busqueda">
           {res.map((f, i) => (
             <li key={f.id} id={`res-${i}`} role="option" aria-selected={i === activo} className={i === activo ? 'activo' : ''} onMouseDown={() => elegir(f)}>
-              {(lengua === 'en' ? f.en : f.es) ?? f.n} <small>{f.nivel === 0 ? NOMBRE_NIVEL[0] : f.ctx}</small>
+              {f.d === 1 ? t('unidad.disputa') : (lengua === 'en' ? f.en : f.es) ?? f.n} <small>{f.d === 1 ? '' : f.nivel === 0 ? NOMBRE_NIVEL[0] : f.ctx}</small>
             </li>
           ))}
         </ul>
