@@ -1,5 +1,6 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import type { Fetcher } from './cliente'
+import { paraMostrar, type Mes } from '../comun/unidades'
 
 export type Num = number | null
 
@@ -21,8 +22,8 @@ export async function pedirSerie(id: string, vars: string[], desde = 0, hasta = 
   }
 }
 
-// Lluvia: la base guarda mm/h; para mostrar, mm/mes (730,5 h por mes medio).
-export const mmPorMes = (mmh: number, mes?: number) => mmh * (mes === undefined ? 730.5 : new Date(Date.UTC(2000, mes + 1, 0)).getUTCDate() * 24)
+// Lluvia mm/h -> mm/mes del mes dado (la conversión vive en comun/unidades.ts)
+export const mmPorMes = (mmh: number, mes: Mes) => paraMostrar('precip', mmh, 'mm/h', mes).valor as number
 
 // Resta la media de la base [baseDesde, baseHasta] (índices incluidos), ignorando null.
 export function anomalia(s: Num[], baseDesde: number, baseHasta: number): Num[] {
@@ -63,9 +64,3 @@ export const NOMBRE_VAR: Record<string, string> = {
 }
 export const nombreVar = (v: string) => NOMBRE_VAR[v] ?? v
 
-// Valor y unidad para mostrar, según la variable real: lluvia mm/h -> mm/mes; el resto conserva su unidad.
-export function paraMostrar(v: string, x: number | null | undefined, unidadApi: string | null, mes?: number): { valor: number | null; unidad: string } {
-  const u = unidadApi === 'C' ? '°C' : unidadApi === 'adim' || !unidadApi ? (v === 'ndvi' || unidadApi === 'adim' ? 'adimensional' : '') : unidadApi
-  if (v === 'precip') return { valor: x == null ? null : mmPorMes(x, mes), unidad: 'mm/mes' }
-  return { valor: x == null ? null : x, unidad: u }
-}

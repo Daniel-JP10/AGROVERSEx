@@ -1,7 +1,8 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import { useEffect, useState } from 'react'
 import { clienteDefecto } from '../datos/consultas'
-import { pedirSerie, paraMostrar, nombreVar, type RespSerie } from '../datos/series'
+import { pedirSerie, nombreVar, type RespSerie } from '../datos/series'
+import { paraMostrar } from '../comun/unidades'
 import { rotulosDeVariable } from '../datos/banderas'
 import { useEstado } from '../app/estado'
 import type { DetalleUnidad } from '../datos/tipos'

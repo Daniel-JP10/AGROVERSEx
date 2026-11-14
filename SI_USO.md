@@ -214,3 +214,5 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/web/src/secciones/tierra/interfaz.ts` | Interfaz del globo para Web, contrato web_componentes §4 | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/tierra/Tierra.tsx` | Sección Tierra: compone el globo que montaba App.tsx | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/interfaz.test.ts` | Pruebas de la interfaz del globo | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/comun/unidades.ts` | Conversión única paraMostrar con días reales del mes, contrato web_componentes §5 | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/unidades.test.ts` | Pruebas de paraMostrar y sus tres llamadores | 2026-11-14 |

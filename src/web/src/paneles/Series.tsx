@@ -1,7 +1,8 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import { useEffect, useState } from 'react'
 import { BandaSerie } from '../graficos/BandaSerie'
-import { anomalia, paraMostrar, nombreVar, pedirSerie, tendencia, type RespSerie, type Num } from '../datos/series'
+import { anomalia, nombreVar, pedirSerie, tendencia, type RespSerie, type Num } from '../datos/series'
+import { paraMostrar } from '../comun/unidades'
 import { Chip } from './Chip'
 import { CAPAS } from '../datos/capas'
 import { useEstado } from '../app/estado'
@@ -21,7 +22,7 @@ export function Series({ id }: { id: string }) {
   if (!s) return <p role="status">Cargando serie…</p>
   const cv = (a?: Num[]) => a?.map((x, i) => paraMostrar(v, x, s.unidad_medida, i).valor)
   let valor = cv(s.valor)!, p10 = cv(s.p10), p90 = cv(s.p90)
-  const unidad = paraMostrar(v, null, s.unidad_medida).unidad
+  const unidad = paraMostrar(v, null, s.unidad_medida, 0).unidad
   if (anom) { valor = anomalia(valor, 0, 191); p10 = undefined; p90 = undefined }
   const t = tendencia(valor)
   const ok = valor.filter((x) => x !== null).length

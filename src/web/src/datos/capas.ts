@@ -1,5 +1,5 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
-import { mmHoraAMmMes } from './desescalar'
+import { paraMostrar } from '../comun/unidades'
 
 export type Tema = 'Agua' | 'Clima' | 'Vegetación'
 export interface Capa {
@@ -34,6 +34,5 @@ export const TEMAS: Tema[] = ['Agua', 'Clima', 'Vegetación']
 // La base guarda la lluvia en mm/h, como IMERG; se muestra en mm/mes con los días reales del mes
 export function valoresCapa(c: Capa, valores: Float32Array, mes: number): Float32Array {
   if (c.id !== 'precip') return valores
-  const dias = new Date(Date.UTC(2000, mes + 1, 0)).getUTCDate()
-  return valores.map((x) => mmHoraAMmMes(x, dias))
+  return valores.map((x) => paraMostrar('precip', x, 'mm/h', mes).valor as number)
 }
