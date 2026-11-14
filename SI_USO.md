@@ -9,8 +9,8 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `pruebas/geo/test_estaticos_reales.py` | Pruebas del backend del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_indice_busqueda.py` | Pruebas del índice de búsqueda sobre unidades CGAZ (T-D1) | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_normalizar.py` | Pruebas del backend del prototipo | 2026-11-14 |
-| Claude Code (Anthropic) | `pruebas/geo/test_teselas.py` | Pruebas de teselas con unidad_id de CGAZ (T-D1) | 2026-11-14 |
-| Claude Code (Anthropic) | `pruebas/geo/test_unidades.py` | Pruebas de unidades CGAZ: ids, padres, áreas, GPKG (T-D1) | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_teselas.py` | Pruebas de teselas con unidad_id de CGAZ, reducción < 100 MB y es_disputa (T-D1, D-016, D-017) | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_unidades.py` | Pruebas de unidades CGAZ: ids, padres, áreas, GPKG y es_disputa en GeoJSON (T-D1, D-017) | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_unidades_reales.py` | Pruebas del backend del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_zonal.py` | Pruebas del backend del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/sim/test_agua.py` | Pruebas del backend del prototipo | 2026-11-14 |
@@ -53,8 +53,8 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/simulacion/geo/gmted_tierra.py` | Pipeline geoespacial del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/indice_busqueda.py` | Índice de búsqueda sobre unidades CGAZ y nombres de Natural Earth (T-D1) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/normalizar.py` | Pipeline geoespacial del prototipo | 2026-11-14 |
-| Claude Code (Anthropic) | `src/simulacion/geo/teselas.py` | Teselas y simplificación sobre unidad_id de CGAZ (T-D1) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/simulacion/geo/unidades.py` | Migración de límites GADM a CGAZ: lectura, ids, jerarquía, áreas y GPKG (T-D1) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/teselas.py` | Teselas y simplificación sobre unidad_id de CGAZ, reducción < 100 MB y es_disputa (T-D1, D-016, D-017) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/unidades.py` | Migración de límites GADM a CGAZ: lectura, ids, jerarquía, áreas, GPKG y es_disputa en GeoJSON (T-D1, D-017) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/zonal.py` | Pipeline geoespacial del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/incertidumbre.py` | Generador y utilidades del prototipo; lo simulado se migra a datos reales | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/lotes.py` | Generador y utilidades del prototipo; lo simulado se migra a datos reales | 2026-11-14 |
