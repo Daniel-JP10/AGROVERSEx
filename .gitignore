@@ -16,3 +16,5 @@ dist/
 .pytest_cache/
 src/web/test-results/
 herramientas/bin/
+.dodsrc
+.urs_cookies
