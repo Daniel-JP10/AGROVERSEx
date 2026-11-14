@@ -1,0 +1,772 @@
+[
+{
+"unidad_id": "COL-ADM0",
+"mes": "2015-09",
+"valor": 0.294345,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2015-09",
+"valor": 0.246849,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2015-09",
+"valor": 0.399559,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2015-09",
+"valor": 0.314807,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2015-09",
+"valor": 0.302053,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2015-10",
+"valor": 0.276844,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2015-10",
+"valor": 0.373873,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2015-10",
+"valor": 0.422915,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2015-10",
+"valor": 0.32328,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2015-10",
+"valor": 0.42377,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2016-09",
+"valor": 0.338686,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2016-09",
+"valor": 0.384919,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2016-09",
+"valor": 0.495197,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2016-09",
+"valor": 0.29296,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2016-09",
+"valor": 0.403824,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2016-10",
+"valor": 0.351317,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2016-10",
+"valor": 0.456493,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2016-10",
+"valor": 0.472764,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2016-10",
+"valor": 0.327559,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2016-10",
+"valor": 0.431483,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2017-09",
+"valor": 0.371532,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2017-09",
+"valor": 0.376146,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2017-09",
+"valor": 0.54727,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2017-09",
+"valor": 0.386862,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2017-09",
+"valor": 0.409408,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2017-10",
+"valor": 0.361431,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2017-10",
+"valor": 0.412009,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2017-10",
+"valor": 0.380208,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2017-10",
+"valor": 0.242451,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2017-10",
+"valor": 0.445256,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2018-09",
+"valor": 0.362046,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2018-09",
+"valor": 0.393064,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2018-09",
+"valor": 0.575763,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2018-09",
+"valor": 0.4073,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2018-09",
+"valor": 0.420605,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2018-10",
+"valor": 0.391267,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2018-10",
+"valor": 0.487328,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2018-10",
+"valor": 0.465434,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2018-10",
+"valor": 0.369794,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2018-10",
+"valor": 0.447177,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2019-09",
+"valor": 0.333647,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2019-09",
+"valor": 0.338927,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2019-09",
+"valor": 0.424739,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2019-09",
+"valor": 0.390994,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2019-09",
+"valor": 0.386026,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2019-10",
+"valor": 0.413257,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2019-10",
+"valor": 0.46532,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2019-10",
+"valor": 0.49683,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2019-10",
+"valor": 0.459993,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2019-10",
+"valor": 0.520166,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2020-09",
+"valor": 0.34905,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2020-09",
+"valor": 0.398274,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2020-09",
+"valor": 0.543865,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2020-09",
+"valor": 0.413659,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2020-09",
+"valor": 0.406408,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2020-10",
+"valor": 0.311368,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2020-10",
+"valor": 0.323621,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2020-10",
+"valor": 0.44768,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2020-10",
+"valor": 0.297503,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2020-10",
+"valor": 0.374744,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2021-09",
+"valor": 0.341338,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2021-09",
+"valor": 0.31253,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2021-09",
+"valor": 0.430178,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2021-09",
+"valor": 0.433305,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2021-09",
+"valor": 0.332209,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2021-10",
+"valor": 0.373769,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2021-10",
+"valor": 0.502663,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2021-10",
+"valor": 0.50647,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2021-10",
+"valor": 0.484813,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2021-10",
+"valor": 0.529525,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2022-09",
+"valor": 0.374062,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2022-09",
+"valor": 0.34459,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2022-09",
+"valor": 0.510979,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2022-09",
+"valor": 0.470613,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2022-09",
+"valor": 0.359009,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2022-10",
+"valor": 0.392166,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2022-10",
+"valor": 0.521655,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2022-10",
+"valor": 0.444739,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2022-10",
+"valor": 0.405811,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2022-10",
+"valor": 0.52672,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2023-09",
+"valor": 0.315344,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2023-09",
+"valor": 0.230048,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2023-09",
+"valor": 0.360101,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2023-09",
+"valor": 0.365557,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2023-09",
+"valor": 0.267743,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2023-10",
+"valor": 0.336158,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2023-10",
+"valor": 0.406624,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2023-10",
+"valor": 0.436462,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2023-10",
+"valor": 0.356452,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2023-10",
+"valor": 0.448131,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2024-09",
+"valor": 0.283699,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2024-09",
+"valor": 0.246171,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2024-09",
+"valor": 0.370088,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2024-09",
+"valor": 0.296242,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2024-09",
+"valor": 0.264632,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2024-10",
+"valor": 0.317051,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2024-10",
+"valor": 0.350806,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2024-10",
+"valor": 0.426073,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2024-10",
+"valor": 0.392749,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2024-10",
+"valor": 0.367334,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2025-09",
+"valor": 0.353783,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2025-09",
+"valor": 0.33215,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2025-09",
+"valor": 0.447562,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2025-09",
+"valor": 0.394922,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2025-09",
+"valor": 0.389031,
+"estado": "final",
+"unidad": "mm/hr"
+},
+{
+"unidad_id": "COL-ADM0",
+"mes": "2025-10",
+"valor": 10.8734,
+"estado": "provisional",
+"unidad": "mm/day"
+},
+{
+"unidad_id": "COL-ADM1-13589884B36646919284035",
+"mes": "2025-10",
+"valor": 14.9886,
+"estado": "provisional",
+"unidad": "mm/day"
+},
+{
+"unidad_id": "COL-ADM1-13589884B3780741375954",
+"mes": "2025-10",
+"valor": 16.3906,
+"estado": "provisional",
+"unidad": "mm/day"
+},
+{
+"unidad_id": "COL-ADM1-13589884B67390718500375",
+"mes": "2025-10",
+"valor": 9.9166,
+"estado": "provisional",
+"unidad": "mm/day"
+},
+{
+"unidad_id": "COL-ADM1-13589884B85526028135750",
+"mes": "2025-10",
+"valor": 13.1202,
+"estado": "provisional",
+"unidad": "mm/day"
+}
+]
