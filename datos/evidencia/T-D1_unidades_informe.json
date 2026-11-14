@@ -1,0 +1,70 @@
+{
+ "reparadas": 1276,
+ "tiempos_s": {
+  "adm0": 117.2,
+  "adm1": 84.7,
+  "adm2": 54.1
+ },
+ "sin_nombre_adm0": 0,
+ "sin_nombre_adm1": 0,
+ "padres_adm1": {
+  "distinto_pais": 0,
+  "sin_padre": 1
+ },
+ "sin_nombre_adm2": 37,
+ "padres_adm2": {
+  "distinto_pais": 25,
+  "sin_padre": 119
+ },
+ "paises_sin_nivel2": [
+  "111",
+  "112",
+  "113",
+  "114",
+  "115",
+  "116",
+  "117",
+  "118",
+  "119",
+  "120",
+  "121",
+  "122",
+  "123",
+  "124",
+  "125",
+  "126",
+  "127",
+  "128",
+  "129",
+  "AND",
+  "ARE",
+  "ATA",
+  "ATG",
+  "BHR",
+  "BRB",
+  "DMA",
+  "ESH",
+  "GRD",
+  "GRL",
+  "KNA",
+  "LBY",
+  "LIE",
+  "MDA",
+  "MHL",
+  "MLT",
+  "MNE",
+  "MUS",
+  "NRU",
+  "SMR",
+  "TTO",
+  "VAT",
+  "VCT"
+ ],
+ "conteos": {
+  "0": 218,
+  "1": 3224,
+  "2": 49349
+ },
+ "huerfanos": [],
+ "commit_codigo": null
+}

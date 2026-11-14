@@ -7,10 +7,10 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `pruebas/geo/test_descargas.py` | Pruebas del backend del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_estaticos.py` | Pruebas del backend del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_estaticos_reales.py` | Pruebas del backend del prototipo | 2026-11-14 |
-| Claude Code (Anthropic) | `pruebas/geo/test_indice_busqueda.py` | Pruebas del backend del prototipo | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_indice_busqueda.py` | Pruebas del índice de búsqueda sobre unidades CGAZ (T-D1) | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_normalizar.py` | Pruebas del backend del prototipo | 2026-11-14 |
-| Claude Code (Anthropic) | `pruebas/geo/test_teselas.py` | Pruebas del backend del prototipo | 2026-11-14 |
-| Claude Code (Anthropic) | `pruebas/geo/test_unidades.py` | Pruebas del backend del prototipo | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_teselas.py` | Pruebas de teselas con unidad_id de CGAZ (T-D1) | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_unidades.py` | Pruebas de unidades CGAZ: ids, padres, áreas, GPKG (T-D1) | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_unidades_reales.py` | Pruebas del backend del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_zonal.py` | Pruebas del backend del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/sim/test_agua.py` | Pruebas del backend del prototipo | 2026-11-14 |
@@ -41,7 +41,7 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/simulacion/clima.py` | Generador y utilidades del prototipo; lo simulado se migra a datos reales | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/cobertura.py` | Generador y utilidades del prototipo; lo simulado se migra a datos reales | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/condicion.py` | Generador y utilidades del prototipo; lo simulado se migra a datos reales | 2026-11-14 |
-| Claude Code (Anthropic) | `src/simulacion/config.py` | Generador y utilidades del prototipo; lo simulado se migra a datos reales | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/config.py` | Variable AGRO_DATOS para ubicar datos fuera del repo (T-D1) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/escribir_sqlite.py` | Generador y utilidades del prototipo; lo simulado se migra a datos reales | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/esquema_agroversex.sql` | Generador y utilidades del prototipo; lo simulado se migra a datos reales | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/__init__.py` | Pipeline geoespacial del prototipo | 2026-11-14 |
@@ -51,10 +51,10 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/simulacion/geo/estaticos.py` | Pipeline geoespacial del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/extraer.py` | Pipeline geoespacial del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/gmted_tierra.py` | Pipeline geoespacial del prototipo | 2026-11-14 |
-| Claude Code (Anthropic) | `src/simulacion/geo/indice_busqueda.py` | Pipeline geoespacial del prototipo | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/indice_busqueda.py` | Índice de búsqueda sobre unidades CGAZ y nombres de Natural Earth (T-D1) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/normalizar.py` | Pipeline geoespacial del prototipo | 2026-11-14 |
-| Claude Code (Anthropic) | `src/simulacion/geo/teselas.py` | Pipeline geoespacial del prototipo | 2026-11-14 |
-| Claude Code (Anthropic) | `src/simulacion/geo/unidades.py` | Pipeline geoespacial del prototipo | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/teselas.py` | Teselas y simplificación sobre unidad_id de CGAZ (T-D1) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/unidades.py` | Migración de límites GADM a CGAZ: lectura, ids, jerarquía, áreas y GPKG (T-D1) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/zonal.py` | Pipeline geoespacial del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/incertidumbre.py` | Generador y utilidades del prototipo; lo simulado se migra a datos reales | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/lotes.py` | Generador y utilidades del prototipo; lo simulado se migra a datos reales | 2026-11-14 |
@@ -211,3 +211,8 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/simulacion/geo/imerg_late.py` | Regla de días válidos de IMERG Late por celda (D-011) | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_imerg_late.py` | Pruebas de la regla de IMERG Late | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/sensibilidad_late.py` | Sensibilidad 70/80/90 de IMERG Late en Colombia | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_config_datos.py` | Prueba de la variable AGRO_DATOS (T-D1) | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_cgaz_lectura.py` | Pruebas de lectura de CGAZ y verificación de hash (T-D1) | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_colombia.py` | Pruebas de la comparación de Colombia con DIVIPOLA (T-D1) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/colombia.py` | Comparación de municipios de CGAZ con DIVIPOLA del DANE (T-D1) | 2026-11-14 |
+| Claude Code (Anthropic) | `contratos/unidades.md` | Redacción del contrato de unidades a partir de los datos de CGAZ (T-D1) | 2026-11-14 |

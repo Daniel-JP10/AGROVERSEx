@@ -1,264 +1,253 @@
-# asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+# asistido por SI: Claude Code (Anthropic), migración de límites GADM a CGAZ (T-D1): lectura, ids, jerarquía y GPKG
 import json
-import re
-from dataclasses import replace
 import sqlite3
 import subprocess
-import zipfile
-from datetime import datetime, timezone
+import time
 from pathlib import Path
 
 import geopandas as gpd
+import numpy as np
 import pandas as pd
 import pyogrio
-import requests
 import shapely
+from pyproj import Geod
+from shapely.geometry.polygon import orient
 
-from simulacion.config import CRUDOS, CRS_AREA, CRS_SALIDA, GEO_SQLITE, PROCESADOS
-from simulacion.geo.descargas import (MANIFIESTO, Recurso, cargar_manifiesto,
-                                      registrar_hash, sha256_archivo, _descargar)
+from simulacion.config import CRS_AREA, CRS_SALIDA, CRUDOS, PROCESADOS
+from simulacion.geo.descargas import sha256_archivo
 from simulacion.geo.normalizar import normalizar_nombre
 
-COLUMNAS = ["id", "nivel", "iso3", "padre_id", "nombre", "nombre_ascii", "nombre_es",
-            "nombre_en", "area_km2", "punto_lat", "punto_lon", "fuente_limite",
-            "licencia_limite", "cruce_ambiguo", "bbox_oeste", "bbox_sur", "bbox_este", "bbox_norte"]
-# gbOpen usa XKX para Kosovo y GADM XKO: sin alias, gbOpen volvería a rellenar Kosovo
-ALIAS_ISO = {"XKX": "XKO"}
+# CGAZ de geoBoundaries, fijado por commit del repositorio oficial wmgeolab/geoBoundaries
+CGAZ_COMMIT = "4004e96433a2bdc54cac2b88d7d2e694c89cb818"
+CGAZ_URL = ("https://media.githubusercontent.com/media/wmgeolab/geoBoundaries/"
+            f"{CGAZ_COMMIT}/releaseData/CGAZ/geoBoundariesCGAZ_ADM{{n}}.gpkg")
+# sha256 que el propio repositorio publica en el puntero Git LFS de cada archivo
+CGAZ_SHA256 = {
+    0: "6bdeb27072cf3759edfe9d31e037ebaf2481d9e0fa5ad18c1036346e42b4c41a",
+    1: "d2f2f7854e887c99a23f2ad1c9e7627c05db15ecc4d9f94972c0d193d255a63d",
+    2: "6bc948cdd84575b733573d7983cf2503e1c71d66d2434db04502ae5fba60eec1",
+}
+# tolerancia de area_proyectada / area_geodesica por unidad (0,5 %); medido: 99,996 % de las unidades dentro de 0,1 %
+TOLERANCIA_AREA = 0.005
+# separación máxima (grados) entre vértices al calcular áreas: sin ella los bordes largos difieren hasta 4,5 %
+SEGMENTO_GRADOS = 0.1
+# WGS 84 / NSIDC EASE-Grid 2.0 Global: cilíndrica de igual área sobre el elipsoide
+CRS_AREA_UNIDADES = "EPSG:6933"
+# ancho (grados, ~1 m) del polígono mínimo que reemplaza a un degenerado de área cero
+DEGENERADO_GRADOS = 1e-5
 INVALIDOS = {"", "na", "n.a.", "?"}
+COLUMNAS = ["unidad_id", "nivel", "nivel_real", "iso3", "padre_id", "nombre", "nombre_ascii", "area_km2",
+            "es_disputa", "punto_lat", "punto_lon", "cruce_ambiguo", "bbox_oeste", "bbox_sur", "bbox_este",
+            "bbox_norte", "fuente"]
 
 
 def nombre_valido(s: str | None) -> bool:
     return isinstance(s, str) and s.strip().lower() not in INVALIDOS
 
 
-def leer_gadm_nivel(ruta_zip: Path, nivel: int) -> gpd.GeoDataFrame:
-    # vsizip sobre el zip completo es lentísimo; con el .gpkg extraído se lee directo
-    ruta = Path(ruta_zip).as_posix()
-    if not ruta.endswith(".gpkg"):
-        ruta = f"/vsizip/{ruta}/gadm_410-levels.gpkg"
-    return pyogrio.read_dataframe(ruta, layer=f"ADM_{nivel}")
+def verificar_hash(ruta: Path, esperado: str) -> str:
+    h = sha256_archivo(ruta)
+    if h != esperado:
+        raise ValueError(f"hash distinto en {ruta}: {h} != {esperado}")
+    return h
+
+
+def descargar_cgaz(destino: Path) -> dict[int, Path]:
+    # descarga una sola vez a .parcial, verifica el hash del repositorio y renombra
+    import requests
+    destino = Path(destino)
+    destino.mkdir(parents=True, exist_ok=True)
+    rutas = {}
+    for n, esperado in CGAZ_SHA256.items():
+        ruta = destino / f"geoBoundariesCGAZ_ADM{n}.gpkg"
+        if not ruta.exists():
+            tmp = ruta.with_name(ruta.name + ".parcial")
+            with requests.get(CGAZ_URL.format(n=n), stream=True, timeout=60) as r, open(tmp, "wb") as f:
+                r.raise_for_status()
+                for bloque in r.iter_content(1 << 20):
+                    f.write(bloque)
+            verificar_hash(tmp, esperado)
+            tmp.replace(ruta)
+        rutas[n] = ruta
+    return rutas
+
+
+def construir_ids(iso3, nivel, shape_id) -> pd.Series:
+    # nivel 0: {iso3}-ADM0 (CGAZ ADM0 no trae shapeID); niveles 1 y 2: {iso3}-ADM{n}-{shapeID}
+    iso3, nivel, sid = (pd.Series(x).reset_index(drop=True) for x in (iso3, nivel, shape_id))
+    base = iso3.astype(str) + "-ADM" + nivel.astype(str)
+    return base.where(nivel == 0, base + "-" + sid.astype(str))
+
+
+def duplicados(t: pd.DataFrame) -> int:
+    # un id repetido en cualquier nivel cuenta: el id es único en todo el conjunto
+    return int(t["unidad_id"].duplicated().sum())
+
+
+def leer_cgaz(ruta: Path, nivel: int) -> gpd.GeoDataFrame:
+    g = pyogrio.read_dataframe(ruta)
+    # el GPKG trae un SRS sin nombre con elipsoide WGS84: se declara EPSG:4326
+    g = g.set_crs(CRS_SALIDA, allow_override=True)
+    sid = g["shapeID"] if "shapeID" in g else pd.Series(None, index=g.index, dtype=object)
+    return gpd.GeoDataFrame({"iso3": g["shapeGroup"], "nivel_real": g["shapeType"], "shape_id": sid,
+                             "nombre": g["shapeName"], "nivel": nivel}, geometry=g.geometry, crs=CRS_SALIDA)
 
 
 def asignar_padre_espacial(hijos: gpd.GeoDataFrame, padres: gpd.GeoDataFrame) -> pd.DataFrame:
     puntos = gpd.GeoDataFrame(geometry=hijos.geometry.representative_point(), crs=hijos.crs)
     puntos["i"] = range(len(puntos))
-    union = gpd.sjoin(puntos, padres[["id", "geometry"]], how="left", predicate="within")
-    por_hijo = union.groupby("i")["id"].agg(lambda s: list(s.dropna()))
+    union = gpd.sjoin(puntos, padres[["unidad_id", "geometry"]], how="left", predicate="within")
+    por_hijo = union.groupby("i")["unidad_id"].agg(lambda s: list(s.dropna()))
     padre = [p[0] if len(p) == 1 else None for p in por_hijo.reindex(range(len(puntos)))]
     return pd.DataFrame({"padre_id": padre,
-                         "cruce_ambiguo": [0 if p is not None else 1 for p in padre]},
-                        index=hijos.index)
+                         "cruce_ambiguo": [0 if p is not None else 1 for p in padre]}, index=hijos.index)
+
+
+def corregir_padres(hijos: gpd.GeoDataFrame, padres: gpd.GeoDataFrame):
+    # sin padre o con padre de otro país: se pasa al padre más cercano del mismo país (en Mollweide)
+    iso_padre = padres.set_index("unidad_id")["iso3"]
+    sin = hijos["padre_id"].isna()
+    distinto = ~sin & (hijos["padre_id"].map(iso_padre).to_numpy() != hijos["iso3"].to_numpy())
+    mal = (sin | distinto).to_numpy()
+    out = hijos.copy()
+    for iso in hijos.loc[mal, "iso3"].unique():  # un bucle por país con casos, no por fila
+        cand = padres[padres["iso3"] == iso]
+        idx = hijos.index[mal & (hijos["iso3"] == iso).to_numpy()]
+        if cand.empty:
+            continue
+        pts = gpd.GeoDataFrame(geometry=hijos.loc[idx].geometry.representative_point(),
+                               crs=hijos.crs).to_crs(CRS_AREA)
+        j = gpd.sjoin_nearest(pts, cand.to_crs(CRS_AREA)[["unidad_id", "geometry"]], how="left")
+        out.loc[idx, "padre_id"] = j[~j.index.duplicated()]["unidad_id"]
+    return out, {"distinto_pais": int(distinto.sum()), "sin_padre": int(sin.sum())}
 
 
 def _geometria_derivada(gdf: gpd.GeoDataFrame):
-    # punto interior en EPSG:4326 y área en Mollweide (igual área)
+    # punto interior en EPSG:4326 y área en EPSG:6933 (igual área)
     pts = gdf.geometry.representative_point()
-    area = gdf.geometry.to_crs(CRS_AREA).area / 1e6
+    densa = gdf.geometry.segmentize(SEGMENTO_GRADOS)
+    area = densa.to_crs(CRS_AREA_UNIDADES).area / 1e6
     return (pd.Series(pts.y.values, index=gdf.index), pd.Series(pts.x.values, index=gdf.index),
             pd.Series(area.values, index=gdf.index))
 
 
+def area_geodesica_km2(geoms) -> np.ndarray:
+    # control independiente del área proyectada: área sobre el elipsoide WGS84, por polígono orientado
+    geod = Geod(ellps="WGS84")
+    return np.array([sum(geod.geometry_area_perimeter(orient(p))[0] for p in shapely.get_parts(g))
+                     for g in shapely.segmentize(np.asarray(geoms, dtype=object), SEGMENTO_GRADOS)]) / 1e6
+
+
+def _solo_poligonos(geoms: np.ndarray) -> np.ndarray:
+    # make_valid puede devolver colecciones con líneas: se conservan solo las partes poligonales.
+    # Lo que queda sin polígono (degenerado de área cero) pasa a un polígono mínimo, para no perder la unidad.
+    sin_linea = geoms.copy()
+    col = np.flatnonzero(~np.isin(shapely.get_type_id(geoms), (3, 6)))
+    if len(col) == 0:
+        return sin_linea
+    partes, idx = shapely.get_parts(geoms[col], return_index=True)
+    partes, sub = shapely.get_parts(partes, return_index=True)  # MultiPolygon dentro de la colección
+    idx = idx[sub]
+    es_pol = shapely.get_type_id(partes) == 3
+    for k, i in enumerate(col):
+        pol = partes[(idx == k) & es_pol]
+        sin_linea[i] = shapely.multipolygons(pol) if len(pol) else shapely.buffer(geoms[i], DEGENERADO_GRADOS)
+    return sin_linea
+
+
 def _reparar(gdf: gpd.GeoDataFrame) -> int:
-    # vectorizado con shapely 2: solo se repara lo inválido
+    # vectorizado con shapely 2: solo se repara lo inválido y se dejan solo polígonos
     geoms = gdf.geometry.values.copy()
     malas = ~shapely.is_valid(geoms)
     if malas.any():
-        geoms[malas] = shapely.make_valid(geoms[malas])
+        geoms[malas] = _solo_poligonos(shapely.make_valid(geoms[malas]))
         gdf["geometry"] = geoms
     return int(malas.sum())
 
 
-def _gid_padre(gid1, gid2, iso3):
-    # GADM trae GID_1 = "NA" en 2 ADM2 de GBR; el padre sale del propio GID_2 ("GBR.1.6_1" -> "GBR.1_1")
-    if nombre_valido(gid1):
-        return gid1
-    p = gid2.split(".") if nombre_valido(gid2) else []
-    return f"{p[0]}.{p[1].split('_')[0]}_1" if len(p) >= 3 else _gid(gid1, iso3, 1)
-
-
 def _gid(gid, iso3, nivel):
-    # GADM trae un GID "?" en una astilla de UKR; se le da un id propio y único por país y nivel
+    # heredado de GADM; estaticos.py lo usa hasta que T-D4 lo migre
     return gid if nombre_valido(gid) else f"{iso3}.sin_gid_{nivel}"
 
 
-def _nombre(s, tipo, id_):
-    return s if nombre_valido(s) else f"{tipo if nombre_valido(tipo) else 'Unidad'} {id_}"
-
-
-def marcar_disputadas(t: pd.DataFrame) -> int:
-    # zonas en disputa de GADM (GID_0 = Z01..Z09): nivel 9 según INICIAR 8.3
-    m = t["id"].str.match(r"^Z\d{2}$")
-    t.loc[m, "nivel"] = 9
-    if "nombre" in t:  # nombre neutro: el original de GADM no se muestra
-        t.loc[m, "nombre"] = "Zona en disputa (" + t.loc[m, "id"] + ")"
-        t.loc[m, "nombre_ascii"] = t.loc[m, "nombre"].map(normalizar_nombre)
-    return int(m.sum())
-
-
-def filtrar_hijas_validas(g: pd.DataFrame, ids_paises: set):
-    # descarta filas cuyo GID_0 no es un país de nivel 0: las de GID_0 "NA" (sin país en ADM0)
-    # y las hijas de zonas en disputa (nivel 9 no puede ser padre). Devuelve (filas, n_na, n_disputa)
-    huerfanas = ~g["GID_0"].isin(ids_paises)
-    disputa = huerfanas & g["GID_0"].str.match(r"^Z\d{2}$")
-    return g[~huerfanas].reset_index(drop=True), int((huerfanas & ~disputa).sum()), int(disputa.sum())
-
-
-def asegurar_gpkg(ruta_zip: Path, ruta_gpkg: Path) -> Path:
-    # extrae una sola vez el .gpkg del zip; /vsizip/ sobre 2,7 GB es órdenes de magnitud más lento
-    ruta_gpkg = Path(ruta_gpkg)
-    if not ruta_gpkg.exists():
-        ruta_gpkg.parent.mkdir(parents=True, exist_ok=True)
-        tmp = ruta_gpkg.with_name(ruta_gpkg.name + ".parcial")
-        with zipfile.ZipFile(ruta_zip) as z, z.open(ruta_gpkg.name) as src, open(tmp, "wb") as dst:
-            while b := src.read(1 << 24):
-                dst.write(b)
-        tmp.replace(ruta_gpkg)
-    return ruta_gpkg
-
-
-def _tabla(gdf, nivel, ids, padre, nombres, iso3, fuente, licencia) -> gpd.GeoDataFrame:
-    lat, lon, area = _geometria_derivada(gdf)
-    # EPSG:4326; las unidades que cruzan el antimeridiano dan -180..180
-    b = gdf.geometry.bounds
-    return gpd.GeoDataFrame({
-        "id": list(ids), "nivel": nivel, "iso3": list(iso3), "padre_id": padre,
-        "nombre": nombres, "nombre_ascii": [normalizar_nombre(n) for n in nombres],
-        "nombre_es": None, "nombre_en": None, "area_km2": area.values,
-        "punto_lat": lat.values, "punto_lon": lon.values, "fuente_limite": fuente,
-        "licencia_limite": licencia, "cruce_ambiguo": 0,
-        "bbox_oeste": b.minx.values, "bbox_sur": b.miny.values,
-        "bbox_este": b.maxx.values, "bbox_norte": b.maxy.values,
-    }, geometry=gdf.geometry.values, crs=CRS_SALIDA)
-
-
-def _nombres_ne(ruta_ne1: Path) -> dict:
-    ne = pyogrio.read_dataframe(f"/vsizip/{Path(ruta_ne1).as_posix()}",
-                                columns=["adm0_a3", "name", "name_es", "name_en"],
-                                read_geometry=False)
-    claves = {}
-    for r in ne.itertuples():
-        claves.setdefault((r.adm0_a3, normalizar_nombre(r.name)), (r.name_es, r.name_en))
-    return claves
-
-
-def _registrar_gb(meta: dict) -> Recurso:
-    id_ = f"gbopen_{meta['boundaryISO']}_adm2"
-    lic = f"gbOpen {meta['boundaryLicense']}"
-    texto = MANIFIESTO.read_text(encoding="utf-8")
-    if f"- id: {id_}\n" not in texto:
-        bloque = (f"- id: {id_}\n  url: {meta['gjDownloadURL']}\n  archivo: {id_}.geojson\n"
-                  f"  licencia: {lic}\n  ficha: datos/fichas/gbopen_adm2.md\n"
-                  f"  sha256: null\n  bytes_esperados: null\n")
-        MANIFIESTO.write_text(texto.rstrip("\n") + "\n" + bloque, encoding="utf-8")
-    return next(r for r in cargar_manifiesto(MANIFIESTO) if r.id == id_)
-
-
-def descargar_con_alterna(r: Recurso, dir_gb: Path, alt: str | None = None, esquemas=("https",)) -> Path:
-    # github.com/raw da 5xx persistente en archivos grandes; media.githubusercontent.com sirve el mismo commit.
-    # Solo se reintenta ante 5xx (un 404 se propaga) y el manifiesto conserva la URL original.
+def codigos_huerfanos(t: pd.DataFrame) -> set[str]:
+    # países de nivel 1 o 2 que no existen en el nivel 0 (el caso Kosovo XKO/XKX de la fase previa)
+    con = sqlite3.connect(":memory:")
     try:
-        return _descargar(r, dir_gb, esquemas)
-    except requests.HTTPError as e:
-        if e.response is None or e.response.status_code < 500:
-            raise
-        alt = alt or r.url.replace("https://github.com/", "https://media.githubusercontent.com/media/").replace("/raw/", "/")
-        return _descargar(replace(r, url=alt), dir_gb, esquemas)
+        t[["unidad_id", "nivel", "iso3"]].to_sql("unidad", con, index=False)
+        filas = con.execute("SELECT DISTINCT iso3 FROM unidad WHERE nivel > 0 AND iso3 NOT IN "
+                            "(SELECT iso3 FROM unidad WHERE nivel = 0)").fetchall()
+    finally:
+        con.close()
+    return {f[0] for f in filas}
 
 
-def _relleno_gb(meta: dict, adm1: gpd.GeoDataFrame, dir_gb: Path):
-    iso = meta["boundaryISO"]
-    r = _registrar_gb(meta)
-    ruta = descargar_con_alterna(r, dir_gb)
-    if r.sha256 is None:
-        registrar_hash(MANIFIESTO, r.id, sha256_archivo(ruta))
-    g = pyogrio.read_dataframe(ruta).to_crs(CRS_SALIDA)
-    n = _reparar(g)
-    ids = ["gb:" + s for s in g["shapeID"]]
-    t = _tabla(g, 2, ids, None, [_nombre(s, None, i) for s, i in zip(g["shapeName"], ids)],
-               [iso] * len(g), "geoBoundaries gbOpen ADM2", meta["boundaryLicense"])
-    padres = adm1[adm1.iso3 == iso]
-    if len(padres):
-        p = asignar_padre_espacial(t, padres)
-        t["padre_id"], t["cruce_ambiguo"] = p.padre_id, p.cruce_ambiguo
-    else:
-        t["cruce_ambiguo"] = 1
-    return t, n
+def paises_sin_nivel2(adm2: pd.DataFrame) -> list[str]:
+    # países de la capa ADM2 sin ningún polígono que sea ADM2 de verdad (repiten el nivel 1 o el 0)
+    return sorted(set(adm2["iso3"]) - set(adm2.loc[adm2["nivel_real"] == "ADM2", "iso3"]))
 
 
-def construir_unidades(ruta_gadm: Path, ruta_ne1: Path, ruta_gb_meta: Path, dir_gb: Path) -> gpd.GeoDataFrame:
-    reparadas, descartadas, descartadas_disputa, partes, stats = 0, 0, 0, [], {}
+def construir_unidades(dir_cgaz: Path) -> gpd.GeoDataFrame:
+    stats = {"reparadas": 0, "tiempos_s": {}}
+    partes = []
     for nivel in (0, 1, 2):
-        g = leer_gadm_nivel(ruta_gadm, nivel).to_crs(CRS_SALIDA)
-        reparadas += _reparar(g)
-        gid = f"GID_{nivel}"
+        t0 = time.time()
+        ruta = Path(dir_cgaz) / f"geoBoundariesCGAZ_ADM{nivel}.gpkg"
+        g = leer_cgaz(ruta, nivel)
+        stats["reparadas"] += _reparar(g)
+        g["unidad_id"] = construir_ids(g.iso3, g.nivel, g.shape_id).to_numpy()
+        sin_nombre = ~g["nombre"].map(nombre_valido)
+        g.loc[sin_nombre, "nombre"] = "Sin nombre " + g.loc[sin_nombre, "shape_id"].astype(str)
+        stats[f"sin_nombre_adm{nivel}"] = int(sin_nombre.sum())
+        lat, lon, area = _geometria_derivada(g)
+        b = g.geometry.bounds
+        g = g.assign(nombre_ascii=[normalizar_nombre(n) for n in g["nombre"]], area_km2=area.values,
+                     punto_lat=lat.values, punto_lon=lon.values, es_disputa=(g.nivel_real == "DISP").astype(int),
+                     bbox_oeste=b.minx.values, bbox_sur=b.miny.values, bbox_este=b.maxx.values,
+                     bbox_norte=b.maxy.values, padre_id=None, cruce_ambiguo=0,
+                     fuente=f"{ruta.name} (geoBoundaries, commit {CGAZ_COMMIT[:7]})")
         if nivel > 0:
-            # se descartan filas sin país en ADM0 y las hijas de zonas en disputa (ver filtrar_hijas_validas)
-            g, n_na, n_disp = filtrar_hijas_validas(g, set(partes[0].id[partes[0].nivel == 0]))
-            descartadas += n_na
-            descartadas_disputa += n_disp
-            if nivel == 2:
-                g["GID_1"] = [_gid_padre(a, b, i) for a, b, i in zip(g.GID_1, g.GID_2, g.GID_0)]
-                g[gid] = [_gid(a, i, 2) for a, i in zip(g[gid], g.GID_0)]
-            else:
-                g[gid] = [_gid(a, i, 1) for a, i in zip(g[gid], g.GID_0)]
-        if nivel == 0:
-            t = _tabla(g, 0, g[gid], None,
-                       [_nombre(s, None, i) for s, i in zip(g["COUNTRY"], g[gid])],
-                       g[gid], "GADM 4.1", "GADM, no comercial")
-            stats["disputadas"] = marcar_disputadas(t)
-        else:
-            t = _tabla(g, nivel, g[gid], list(g["GID_0" if nivel == 1 else "GID_1"]),
-                       [_nombre(s, ty, i) for s, ty, i in zip(g[f"NAME_{nivel}"], g[f"TYPE_{nivel}"], g[gid])],
-                       g["GID_0"], "GADM 4.1", "GADM, no comercial")
-        if nivel == 1:
-            ne = _nombres_ne(ruta_ne1)
-            pares = [ne.get((i, normalizar_nombre(n))) for i, n in zip(t.iso3, g["NAME_1"])]
-            t["nombre_es"] = [p[0] if p else None for p in pares]
-            t["nombre_en"] = [p[1] if p else None for p in pares]
-            stats["ne_coinciden"] = sum(p is not None for p in pares)
-            stats["ne_total"] = len(pares)
-        partes.append(t)
-        del g
-    adm1 = partes[1]
-    metas = json.loads(Path(ruta_gb_meta).read_text(encoding="utf-8"))
-    con_gadm = set(partes[2].iso3)
-    rellenados = []
-    for m in metas:
-        if ALIAS_ISO.get(m["boundaryISO"], m["boundaryISO"]) not in con_gadm:
-            t, n = _relleno_gb(m, adm1, dir_gb)
-            partes.append(t)
-            reparadas += n
-            rellenados.append(m["boundaryISO"])
+            padres = partes[nivel - 1]
+            p = asignar_padre_espacial(g, padres)
+            g["padre_id"], g["cruce_ambiguo"] = p.padre_id, p.cruce_ambiguo
+            g, stats[f"padres_adm{nivel}"] = corregir_padres(g, padres)
+        stats["tiempos_s"][f"adm{nivel}"] = round(time.time() - t0, 1)
+        partes.append(g)
     out = pd.concat(partes, ignore_index=True)
+    stats["paises_sin_nivel2"] = paises_sin_nivel2(partes[2])
     out = gpd.GeoDataFrame(out[COLUMNAS + ["geometry"]], geometry="geometry", crs=CRS_SALIDA)
-    out.attrs.update(stats, rellenados=rellenados, reparadas=reparadas, descartadas=descartadas, descartadas_disputa=descartadas_disputa)
+    out.attrs.update(stats)
     return out
 
 
-def escribir_geo_sqlite(unidades: gpd.GeoDataFrame, ruta: Path) -> None:
-    Path(ruta).parent.mkdir(parents=True, exist_ok=True)
-    con = sqlite3.connect(ruta)
+def escribir_gpkg(unidades: gpd.GeoDataFrame, ruta: Path) -> Path:
+    # una sola vez, a .parcial y renombrando al final; capa adm{n} con índice espacial (rtree) y de unidad_id
+    ruta = Path(ruta)
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    tmp = ruta.with_name(ruta.stem + ".parcial.gpkg")
+    tmp.unlink(missing_ok=True)
+    for n in (0, 1, 2):
+        unidades[unidades["nivel"] == n].to_file(tmp, driver="GPKG", layer=f"adm{n}")
+    con = sqlite3.connect(tmp)
     try:
-        con.executescript((Path(__file__).parent / "esquema_geo.sql").read_text(encoding="utf-8"))
-        pd.DataFrame(unidades[COLUMNAS]).to_sql("unidad", con, if_exists="append", index=False)
+        for n in (0, 1, 2):
+            con.execute(f"CREATE INDEX idx_adm{n}_unidad_id ON adm{n}(unidad_id)")
         con.commit()
     finally:
         con.close()
+    tmp.replace(ruta)
+    return ruta
 
 
 def exportar_niveles(unidades: gpd.GeoDataFrame, dir_salida: Path) -> dict[int, Path]:
+    # GeoJSON de entrada para mapshaper y tippecanoe; solo los atributos que van a las teselas
     dir_salida = Path(dir_salida)
     dir_salida.mkdir(parents=True, exist_ok=True)
     rutas = {}
-    gpkg = dir_salida.parent / "unidades.gpkg"  # lecturas filtradas rápidas; una capa por nivel
-    gpkg.unlink(missing_ok=True)
     for nivel in (0, 1, 2):
         ruta = dir_salida / f"adm{nivel}.geojson"
-        # las zonas en disputa (nivel 9) van dentro de adm0 para que el globo no tenga huecos
-        niveles = (0, 9) if nivel == 0 else (nivel,)
-        sub = unidades[unidades.nivel.isin(niveles)][["id", "nivel", "iso3", "padre_id", "nombre", "geometry"]]
+        sub = unidades[unidades["nivel"] == nivel][["unidad_id", "nombre", "nivel", "iso3", "padre_id", "geometry"]]
         sub.to_file(ruta, driver="GeoJSON")
-        sub.to_file(gpkg, driver="GPKG", layer=f"adm{nivel}")
         rutas[nivel] = ruta
     return rutas
 
@@ -282,24 +271,13 @@ def commit_actual() -> str | None:
 
 
 if __name__ == "__main__":
-    gpkg = asegurar_gpkg(CRUDOS / "gadm_410-levels.zip", CRUDOS / "gadm_extraido/gadm_410-levels.gpkg")
-    u = construir_unidades(gpkg, CRUDOS / "ne_10m_admin_1_states_provinces.zip",
-                           CRUDOS / "gbopen_meta_adm2.json", CRUDOS / "gbopen")
-    GEO_SQLITE.unlink(missing_ok=True)
-    escribir_geo_sqlite(u, GEO_SQLITE)
+    descargar_cgaz(CRUDOS / "cgaz")
+    for n, h in CGAZ_SHA256.items():
+        verificar_hash(CRUDOS / f"cgaz/geoBoundariesCGAZ_ADM{n}.gpkg", h)
+    u = construir_unidades(CRUDOS / "cgaz")
+    escribir_gpkg(u, PROCESADOS / "unidades.gpkg")
     exportar_niveles(u, PROCESADOS / "limites_crudos")
-    a = u.attrs
-    usados = {"gadm41_levels", "ne_admin1_10m", "gbopen_meta_adm2", *(f"gbopen_{i}_adm2" for i in a["rellenados"])}
-    escribir_metadatos(GEO_SQLITE, {
-        "unidades_gadm_version": "4.1", "unidades_commit": commit_actual(),
-        "unidades_fecha": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "unidades_sha256_insumos": {r.id: r.sha256 for r in cargar_manifiesto(MANIFIESTO) if r.id in usados},
-        "unidades_conteos": {str(k): v for k, v in u.groupby("nivel").size().to_dict().items()}})
-    print("conteo por nivel:", u.groupby("nivel").size().to_dict())
-    print(f"coincidencia NE ADM1: {a['ne_coinciden']}/{a['ne_total']} = {a['ne_coinciden'] / a['ne_total']:.1%}")
-    print("cruce_ambiguo:", int(u.cruce_ambiguo.sum()))
-    print("rellenados con gbOpen:", a["rellenados"])
-    print("geometrías reparadas:", a["reparadas"])
-    print("zonas en disputa (nivel 9):", a["disputadas"])
-    print("filas GADM con GID_0 'NA' descartadas:", a["descartadas"])
-    print("filas hijas de zonas en disputa descartadas:", a["descartadas_disputa"])
+    informe = {**u.attrs, "conteos": {str(k): int(v) for k, v in u.groupby("nivel").size().items()},
+               "huerfanos": sorted(codigos_huerfanos(u)), "commit_codigo": commit_actual()}
+    (PROCESADOS / "unidades_informe.json").write_text(json.dumps(informe, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(json.dumps(informe, ensure_ascii=False, indent=1))

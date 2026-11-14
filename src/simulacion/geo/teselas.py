@@ -1,4 +1,5 @@
-# asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+# asistido por SI: Claude Code (Anthropic), teselas y simplificación sobre unidad_id de CGAZ (T-D1)
+import os
 import re
 import subprocess
 import sys
@@ -7,19 +8,20 @@ from pathlib import Path
 
 from simulacion.config import PROCESADOS, RAIZ
 
-HERRAMIENTAS = RAIZ / "herramientas"
+# AGRO_HERRAMIENTAS apunta a node_modules de mapshaper cuando no está junto al repo
+HERRAMIENTAS = Path(os.environ.get("AGRO_HERRAMIENTAS", RAIZ / "herramientas"))
 CRUDOS_GEOJSON = PROCESADOS / "limites_crudos"
 SIMPLIFICADOS = PROCESADOS / "limites_simplificados"
 TESELAS = PROCESADOS / "teselas"
 # SUPUESTO: medidos en la tarea 3, paso 8
 PORCENTAJE = 10
 ZOOMS = {0: (0, 6), 1: (2, 9), 2: (5, 12)}
-WSL_TMP = "~/tmp"
+WSL_TMP = "~/tmp/agroversex/t-d1"
 # por encima de este tamaño mapshaper necesita ~5x en RAM (medido con ADM0): se parte por país
 MAX_ENTRADA = 1_400_000_000
 MAX_PARTE = 1_000_000_000
 _ISO = re.compile(rb'"iso3"\s*:\s*"([^"]+)"')
-_ID = re.compile(rb'"id"\s*:\s*"([^"]+)"')
+_ID = re.compile(rb'"unidad_id"\s*:\s*"([^"]+)"')
 
 
 def comando_mapshaper(entradas: list[Path], dir_salida: Path, porcentaje: float) -> list[str]:
@@ -30,7 +32,7 @@ def comando_mapshaper(entradas: list[Path], dir_salida: Path, porcentaje: float)
 
 
 def comando_tippecanoe(entrada_wsl: str, salida_wsl: str, capa: str, zmin: int, zmax: int) -> list[str]:
-    return ["wsl", "-d", "Ubuntu-24.04", "--", "tippecanoe", "-o", salida_wsl, "--force",
+    return ["wsl", "-d", "Ubuntu-24.04", "--", "/usr/bin/time", "-v", "tippecanoe", "-o", salida_wsl, "--force",
             "-l", capa, "-Z", str(zmin), "-z", str(zmax),
             "--no-simplification-of-shared-nodes", "--no-tiny-polygon-reduction",
             "--no-feature-limit", "--no-tile-size-limit", entrada_wsl]
@@ -109,9 +111,13 @@ def completar_perdidos(crudo: Path, simple: Path) -> int:
                 lineas.append(linea.rstrip().rstrip(b","))
     with open(simple, "r+b") as f:
         f.seek(-4, 2)
-        assert f.read(4) == b"\n]}\n"
-        f.seek(-4, 2)
+        cola = f.read(4)
+        # mapshaper cierra con "\n]}" y GDAL con "\n]}\n"
+        corte = 4 if cola == b"\n]}\n" else 3
+        assert cola.endswith(b"\n]}") or corte == 4
+        f.seek(-corte, 2)
         f.write(b",\n" + b",\n".join(lineas) + b"\n]}\n")
+        f.truncate()
     return len(lineas)
 
 
