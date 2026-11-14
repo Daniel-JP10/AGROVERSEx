@@ -93,7 +93,7 @@ def test_simplificacion_conserva_ids(nivel):
 @pytest.mark.datos_reales
 @pytest.mark.skipif(not (TESELAS / "adm2.pmtiles").exists(), reason="falta construir")
 def test_pmtiles_adm2_capa_y_zoom():
-    cmd = f"tippecanoe-decode '{ruta_wsl(TESELAS / 'adm2.pmtiles')}' 12 0 0 2>&1 | grep -a -o '\"generator_options\": *\"[^\"]*\"'"
+    cmd = f"tippecanoe-decode '{ruta_wsl(TESELAS / 'adm2.pmtiles')}' 2>&1 | head -c 3000 | grep -a -o 'generator_options[^,]*'"
     out = subprocess.run(["wsl", "-d", "Ubuntu-24.04", "--", "bash", "-c", cmd], capture_output=True, text=True,
                          encoding="utf-8").stdout
     assert "-l adm2" in out and "-z 12" in out and "-Z 5" in out
@@ -142,10 +142,10 @@ def test_ids_de_teselas_son_los_ids_de_las_unidades(nivel):
 
 
 @pytest.mark.datos_reales
-@pytest.mark.skipif(not (TESELAS / "adm0.pmtiles").exists(), reason="falta construir")
+@pytest.mark.skipif(not (TESELAS / "adm1.pmtiles").exists(), reason="falta construir")
 def test_teselas_llevan_solo_cinco_propiedades():
-    cmd = (f"tippecanoe-decode '{ruta_wsl(TESELAS / 'adm0.pmtiles')}' | "
-           "grep -a -m1 -o '\"properties\": { \"[^}]*\"unidad_id\"[^}]*}'")
+    cmd = (f"tippecanoe-decode '{ruta_wsl(TESELAS / 'adm1.pmtiles')}' 3 2 4 2>/dev/null | "
+           "grep -a -m1 -o '\"properties\": { \"unidad_id\"[^}]*}'")
     linea = subprocess.run(["wsl", "-d", "Ubuntu-24.04", "--", "bash", "-c", cmd], capture_output=True, text=True,
                            encoding="utf-8").stdout
     import re
