@@ -18,6 +18,7 @@ def _caja(x0, y0, x1, y1):
 
 
 def test_raster_constante_da_la_constante_y_fraccion_uno():
+    pytest.importorskip("exactextract")  # se salta sin exactextract (Windows)
     g = _grilla()
     p = zm.calcular_pesos(g, [_caja(0.3, -1.6, 3.4, 1.2)])
     r = zm.agregar(p, g, np.full(g.alto * g.ancho, 7.5, "float64"), umbral=0.5)
@@ -26,6 +27,7 @@ def test_raster_constante_da_la_constante_y_fraccion_uno():
 
 
 def test_mitad_nan_da_frac_valida_exacta():
+    pytest.importorskip("exactextract")  # se salta sin exactextract (Windows)
     g = _grilla()
     x = np.full((4, 4), 1.0)
     x[:, :2] = np.nan  # la unidad cubre las 4 filas y 4 columnas: la mitad oeste sin dato
@@ -35,6 +37,7 @@ def test_mitad_nan_da_frac_valida_exacta():
 
 
 def test_unidad_igual_a_una_celda_da_el_valor_de_la_celda():
+    pytest.importorskip("exactextract")  # se salta sin exactextract (Windows)
     g = _grilla()
     x = np.arange(16, dtype="float64").reshape(4, 4)
     p = zm.calcular_pesos(g, [_caja(2, 0, 3, 1)])  # fila 1 (de 0 al norte), columna 2
@@ -43,6 +46,7 @@ def test_unidad_igual_a_una_celda_da_el_valor_de_la_celda():
 
 
 def test_gradiente_de_latitud_coincide_con_el_calculo_analitico_por_area():
+    pytest.importorskip("exactextract")  # se salta sin exactextract (Windows)
     lat_c = np.arange(0.5, 60, 1.0)
     g = zm.grilla_desde_centros(np.array([0.5, 1.5]), lat_c)
     x = np.repeat(lat_c[::-1, None], 2, axis=1)  # norte arriba: cada celda vale su latitud
@@ -55,6 +59,7 @@ def test_gradiente_de_latitud_coincide_con_el_calculo_analitico_por_area():
 
 
 def test_percentiles_ponderados_inferiores():
+    pytest.importorskip("exactextract")  # se salta sin exactextract (Windows)
     g = _grilla(2, 4, lat_norte=1.0)  # filas simétricas respecto del ecuador: misma área
     x = np.tile([1.0, 2.0, 3.0, 4.0], 2)
     p = zm.calcular_pesos(g, [_caja(0, -1, 4, 1)])
@@ -69,6 +74,7 @@ def test_percentiles_ponderados_inferiores():
 
 
 def test_bajo_el_umbral_sale_nan_con_motivo_y_sin_cobertura_tambien():
+    pytest.importorskip("exactextract")  # se salta sin exactextract (Windows)
     g = _grilla()
     x = np.full((4, 4), np.nan)
     x[0, 0] = 2.0
@@ -81,6 +87,7 @@ def test_bajo_el_umbral_sale_nan_con_motivo_y_sin_cobertura_tambien():
 
 
 def test_unidad_diminuta_y_antimeridiano_tienen_pesos():
+    pytest.importorskip("exactextract")  # se salta sin exactextract (Windows)
     lon = np.arange(-179.5, 180, 1.0)
     lat = np.arange(-89.5, 90, 1.0)
     g = zm.grilla_desde_centros(lon, lat)
@@ -104,6 +111,7 @@ def test_alineacion_origen_tamano_y_firma():
 
 
 def test_cache_se_invalida_al_cambiar_firma_o_unidades(tmp_path, monkeypatch):
+    pytest.importorskip("exactextract")  # se salta sin exactextract (Windows)
     g = _grilla()
     ids, geoms = ["a"], [_caja(0, -1, 2, 1)]
     llamadas = []
@@ -127,6 +135,7 @@ def test_fraccion_de_cultivo_desde_clases_no_interpola():
 
 
 def test_fraccion_de_cultivo_exacta_sobre_malla_gruesa_desalineada():
+    pytest.importorskip("exactextract")  # se salta sin exactextract (Windows)
     # fino de 0,25 grados con clases 3 y 9; gruesa de 1 grado desplazada 0,5: cuenta por área, sin interpolar
     fino = zm.grilla_desde_centros(np.arange(0.125, 4, 0.25), np.arange(0.125, 4, 0.25))
     clases = np.full((16, 16), 9)
