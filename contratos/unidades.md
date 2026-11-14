@@ -49,6 +49,19 @@ Las teselas llevan solo `unidad_id`, `nombre`, `nivel`, `iso3` y `padre_id`. Web
 
 Son 42 unidades de país o zona. Códigos de país (23): AND, ARE, ATA, ATG, BHR, BRB, DMA, ESH, GRD, GRL, KNA, LBY, LIE, MDA, MHL, MLT, MNE, MUS, NRU, SMR, TTO, VAT, VCT. Códigos de zona en disputa (19): 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129. En todos la capa ADM2 repite la geometría de nivel 1 (o de nivel 0 en ATA y VAT; `nivel_real` lo dice): Web no debe mostrar "municipio" ahí. ESH figura aquí como zona en disputa de CGAZ (`es_disputa = 1`). La lista sale de `paises_sin_nivel2` sobre la capa ADM2 y una prueba comprueba que cada código esté en este párrafo; no se escribe a mano.
 
+## Teselas e índice de búsqueda (generados el 2026-11-14)
+
+| Archivo | Capa | Zoom de las teselas | Tamaño | Unidades |
+|-|-|-|-|-|
+| `adm0.pmtiles` | `adm0` | 0 a 6 | 4,3 MB | 218 (incluye las 20 zonas en disputa) |
+| `adm1.pmtiles` | `adm1` | 2 a 9 | 26,3 MB | 3.224 |
+| `adm2.pmtiles` | `adm2` | 5 a 12 | 399 MB | 49.349 |
+
+- Propiedades de cada polígono: `unidad_id`, `nombre`, `nivel`, `iso3`, `padre_id` y nada más. Web usa `promoteId: 'unidad_id'`.
+- Los ids de las teselas son exactamente los de las unidades de la capa del mismo nivel (prueba con `tippecanoe-decode`).
+- `adm2.pmtiles` pesa 399 MB: es demasiado para un alojamiento con tope de 100 MB por archivo. Decisión pendiente del director (opciones en el traspaso).
+- `indice_busqueda.json.gz`: lista de `{id, nivel, n, a, ctx}` con `es` y `en` solo en el nivel 0 (nombres de Natural Earth) y `d: 1` en las zonas en disputa. `id` es el `unidad_id`. No incluye las filas de la capa ADM2 que repiten el nivel 1 ni las disputas de ADM1 y ADM2. Es reproducible: dos corridas dan el mismo sha256.
+
 ## Avisos para Web
 
 - Los límites son ilustrativos. Las zonas en disputa siguen el criterio de CGAZ (Departamento de Estado de EE. UU.); el aviso se mantiene.
