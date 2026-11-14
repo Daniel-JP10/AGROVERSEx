@@ -6,7 +6,6 @@ export const AVISO_N7 = AVISO_PIE
 // Licencias no comerciales (LICENCIAS_TERCEROS.md); visibles en la ayuda, sección de fuentes
 export const LICENCIAS_NC = [
   'GADM: uso académico y no comercial',
-  'EOX Sentinel-2 cloudless: CC BY-NC-SA 4.0',
   'WorldClim: uso no comercial',
   'Köppen-Geiger (Beck et al.): clasificación de contexto, con su cita',
 ]

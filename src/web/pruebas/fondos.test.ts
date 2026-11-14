@@ -26,7 +26,13 @@ describe('fondos', () => {
     expect(on.indexOf('detalle')).toBeLessThan(on.indexOf('adm0-relleno'))
     expect(ids(construirEstilo('http://x', false))).not.toContain('detalle')
   })
-  it('la atribución visible incluye a EOX', () => {
-    expect(ATRIBUCION).toContain('EOxCloudless')
+  it('la atribución visible exige el texto de NASA GIBS (ESDIS)', () => {
+    expect(ATRIBUCION).toContain("NASA's Global Imagery Browse Services (GIBS)")
+    expect(ATRIBUCION).toContain('ESDIS')
+  })
+  it('ninguna URL ni texto de fondo menciona EOX ni cloudless', () => {
+    const todo = JSON.stringify(FONDOS).toLowerCase() + ATRIBUCION.toLowerCase()
+    expect(todo).not.toMatch(/eox|cloudless/)
+    for (const f of FONDOS) for (const u of f.tiles) expect(u).toContain('gibs.earthdata.nasa.gov')
   })
 })

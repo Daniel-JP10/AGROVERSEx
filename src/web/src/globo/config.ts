@@ -61,7 +61,7 @@ export function urlTrueColor(fecha: string): string {
 export const TRUECOLOR_ACTIVO = false
 export const FECHA_TRUECOLOR = '2024-06-15'
 
-export const ATRIBUCION = `Imágenes NASA GIBS · ${fondoDetalle(true)!.atribucion} · Límites GADM 4.1 (uso no comercial)`
+export const ATRIBUCION = `${fondoDetalle(true)!.atribucion} · Límites GADM 4.1 (uso no comercial)`
 
 /** Capas con las que se interactúa en un nivel: su relleno y los respaldos de los niveles superiores. */
 export function capasInteractivas(nivel: number): string[] {
