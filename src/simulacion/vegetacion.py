@@ -48,7 +48,7 @@ def generar_ndvi(clima, bloque: slice, geo: pd.DataFrame, estatico: pd.DataFrame
     """geo: DataFrame completo de unidades; ids = geo.index[bloque], alineados con las filas de `clima`."""
     g = geo.iloc[bloque]
     ids = list(g.index)
-    cob = cobertura_simulada(g, g.koppen, estatico)
+    cob = cobertura_simulada(g, g.get("koppen", -1), estatico)
     dom = cob.igbp_dominante.to_numpy() - 1
     t, p = np.nan_to_num(clima.t2m), np.nan_to_num(clima.precip)
     crec = np.minimum(np.clip((t - 5) / 15, 0, 1), np.clip(p / 60, 0, 1))

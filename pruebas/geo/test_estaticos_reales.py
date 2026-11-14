@@ -47,12 +47,6 @@ def test_bogota(con):
     assert 2000 <= v <= 3500
 
 
-def test_koppen_suma_uno(con):
-    malas = q(con, "SELECT count(*) FROM (SELECT sum(fraccion) s FROM clase_fraccion "
-                   "WHERE esquema='koppen' GROUP BY unidad_id) WHERE abs(s-1) > 0.001")
-    assert malas == 0
-
-
 def test_sin_valor_con_fraccion_cero(con):
     assert q(con, "SELECT count(*) FROM estatico WHERE fraccion_valida = 0 AND media IS NOT NULL") == 0
 

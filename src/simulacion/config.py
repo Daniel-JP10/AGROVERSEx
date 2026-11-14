@@ -16,7 +16,7 @@ CRS_SALIDA = "EPSG:4326"
 
 SEMILLA = 20261108
 GEO_SQLITE = PROCESADOS / "geo.sqlite"
-# Respaldo mientras geo.sqlite se reconstruye (Köppen y latitudes no cambian)
+# Respaldo mientras geo.sqlite se reconstruye (las latitudes no cambian)
 GEO_SQLITE_RESPALDO = PROCESADOS / "geo.sqlite.bak_prereconstruccion"
 AGROVERSEX_SQLITE = PROCESADOS / "agroversex.sqlite"
 

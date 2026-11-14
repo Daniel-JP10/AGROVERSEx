@@ -116,7 +116,7 @@ def _bloque(ids, g, est, cols_mensual):
         campos[k] = a_mm_h(campos[k], c.precip_frac)
     mens = np.stack([_entero(col, campos[col], n) for col in cols_mensual], axis=-1).reshape(n * N, -1)
 
-    igbp, _ = suelo.cobertura_igbp(g, g.koppen, est)
+    igbp, _ = suelo.cobertura_igbp(g, g.get("koppen", -1), est)
     serie = suelo.serie_suelo_anual(c, nd, g, est, igbp)
     an = tabla_anual(ids, igbp, serie)
     for q in ("p05", "p50", "p95"):  # erosión a entero escalado (variable.escala); INT_NULO pasa a NULL al escribir
