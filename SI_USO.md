@@ -216,3 +216,8 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/simulacion/geo/imerg_late.py` | Regla de días válidos de IMERG Late por celda (D-011) | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_imerg_late.py` | Pruebas de la regla de IMERG Late | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/sensibilidad_late.py` | Sensibilidad 70/80/90 de IMERG Late en Colombia | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/zonal_mensual.py` | Motor zonal con pesos por firma de grilla (T-D2) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/lectura_nasa.py` | Lectura orientada de netCDF con puntos de control (T-D2) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/serie_mensual.py` | Corrida de series mensuales por país (T-D2) | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_zonal_mensual.py` | Pruebas del motor zonal (T-D2) | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_lectura_nasa.py` | Pruebas de la orientación de lecturas (T-D2) | 2026-11-14 |
