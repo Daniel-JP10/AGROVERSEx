@@ -78,4 +78,6 @@ Se dejan como vienen en CGAZ, sin corrección a mano. Fuente: `datos/evidencia/T
 | Mompós | SANTA CRUZ DE MOMPOX (13468) | por exclusión en el departamento |
 | Ricaurte (Coloso) | COLOSÓ | por nombre, INFERENCIA |
 | Tolú Viejo | SAN JOSÉ DE TOLUVIEJO | por nombre, INFERENCIA |
-| Mapiripana | NUEVO BELÉN DE BAJIRÁ | sin emparejar: no parece variante de nombre sino territorio distinto, PENDIENTE de revisión |
+| Mapiripana | NUEVO BELÉN DE BAJIRÁ | sin emparejar |
+
+Limitación declarada (D-018): el conteo de municipios de Colombia coincide con DIVIPOLA (1122), pero no la composición. CGAZ trae Mapiripana, que en DIVIPOLA no es municipio, y no trae Nuevo Belén de Bajirá, municipio de DIVIPOLA. No es una variante de nombre y no se corrige a mano.
