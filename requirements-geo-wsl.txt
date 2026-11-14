@@ -1,0 +1,6 @@
+# asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+-r requirements-geo.txt
+rasterio==1.4.4
+exactextract==0.3.0
+# Entorno solo WSL (rasterio y exactextract no cargan en Windows por Control de aplicaciones):
+
