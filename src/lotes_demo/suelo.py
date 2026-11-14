@@ -1,7 +1,9 @@
-# asistido por SI: Claude Code, parámetros de suelo por lote desde la respuesta REST de SoilGrids 2.0 (T-D5 Parte B)
+# asistido por SI: Claude Code y Antigravity, parámetros de suelo por lote desde SoilGrids 2.0 con claves en raíz para el Gemelo (T-D5 B / D-027)
 import json
 import sys
 from pathlib import Path
+
+from lotes_demo.erosion import factor_erodabilidad_williams
 
 FRACCION_C_MO = 0.58  # MO = COS / 0,58, igual que el Gemelo (INFERENCIA)
 
@@ -34,6 +36,9 @@ def parametros_desde_rest(rest, lote_id, hasta_cm=100, hasta_cos=30):
                       profundidad_cm=[0, hasta_cm])
     P["arcilla"] = dict(_tri(capas, "clay", 0.001, hasta_cm), unidad="kg/kg", etiqueta="FUENTE",
                         profundidad_cm=[0, hasta_cm])
+    if "silt" in capas:
+        P["limo"] = dict(_tri(capas, "silt", 0.001, hasta_cm), unidad="kg/kg", etiqueta="FUENTE",
+                         profundidad_cm=[0, hasta_cm])
     # cg/cm3 -> kg/dm3
     P["densidad_aparente"] = dict(_tri(capas, "bdod", 0.01, hasta_cm), unidad="kg/dm3", etiqueta="FUENTE",
                                   profundidad_cm=[0, hasta_cm])
@@ -62,17 +67,39 @@ def parametros_desde_rest(rest, lote_id, hasta_cm=100, hasta_cos=30):
                                      etiqueta="INFERENCIA", profundidad_cm=[0, hasta_cm],
                                      metodo="media(wv0033) - media(wv1500) de SoilGrids; rango = cota amplia "
                                             "Q0.05-Q0.95 cruzados, no son cuantiles de la diferencia")
+    # erodabilidad K de Williams (1995) en 0-30 cm si hay limo
+    k_williams = None
+    if "silt" in capas:
+        a30 = media_ponderada(capas["sand"], "mean", hasta_cos) * 0.001
+        l30 = media_ponderada(capas["silt"], "mean", hasta_cos) * 0.001
+        c30 = media_ponderada(capas["clay"], "mean", hasta_cos) * 0.001
+        soc30 = media_ponderada(capas["soc"], "mean", hasta_cos) * 0.1
+        k_williams = factor_erodabilidad_williams(a30, l30, c30, soc30)
     return dict(
-        lote_id=lote_id, lat=round(lat, 3), lon=round(lon, 3), etiqueta="DEMO",
+        lote_id=lote_id,
+        lat=round(lat, 3),
+        lon=round(lon, 3),
+        etiqueta="DEMO",
         fuente="SoilGrids 2.0 (ISRIC), API REST rest.isric.org/soilgrids/v2.0/properties/query, no rasters locales",
-        licencia="CC BY 4.0 (FUENTE: Gemelo cita CC BY 4.0; verificar en ficha)", naturaleza="estimado",
+        licencia="CC BY 4.0 (FUENTE: ISRIC SoilGrids 2.0)",
+        naturaleza="estimado",
         tipo_rango="Q0.05-Q0.95 de SoilGrids en el píxel de 250 m; incertidumbre del mapa, no del lote",
-        archivo_soilgrids_json="soilgrids_rest.json", parametros=P)
+        archivo_soilgrids_json="soilgrids_rest.json",
+        profundidad_m=round(hasta_cm / 100.0, 2),
+        arena=float(P["arena"]["valor"]),
+        arcilla=float(P["arcilla"]["valor"]),
+        mo_pct=float(P["mo_pct"]["valor"]),
+        cos_t_ha=float(P["cos_t_ha"]["valor"]),
+        k_erodabilidad_williams=round(k_williams, 6) if k_williams is not None else None,
+        parametros=P,
+    )
 
 
 if __name__ == "__main__":
     raiz = Path(sys.argv[1])
     for lote in ("DEMO-USA-01", "DEMO-COL-01"):
-        rest = json.loads((raiz / lote / "soilgrids_rest.json").read_text())
+        rest = json.loads((raiz / lote / "soilgrids_rest.json").read_text(encoding="utf-8"))
         out = parametros_desde_rest(rest, lote)
-        (raiz / lote / "parametros_suelo.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+        (raiz / lote / "parametros_suelo.json").write_text(
+            json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n"
+        )

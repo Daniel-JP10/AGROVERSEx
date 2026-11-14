@@ -1,0 +1,428 @@
+{
+ "lote_id": "DEMO-COL-01",
+ "periodo": [
+  "2001-01-01",
+  "2024-12-31"
+ ],
+ "dias_periodo": 8766,
+ "elevaciones_m": {
+  "celda_merra2_power": 2553.24,
+  "lote_srtm": 2934.0,
+  "estacion_san_luis_referencia": 2961.0,
+  "estacion_san_luis_cabecera_ghcn": 2976.4,
+  "delta_z_lote_menos_celda": 380.76,
+  "delta_z_estacion_2961_menos_celda": 407.76,
+  "delta_z_estacion_ghcn_menos_celda": 423.16
+ },
+ "gradientes_termicos": {
+  "estandar_isa_c_por_m": -0.0065,
+  "delta_t_lote_isa_c": -2.4749,
+  "delta_t_estacion_2961_isa_c": -2.6504,
+  "delta_t_estacion_2976_isa_c": -2.7505,
+  "fuentes_primarias_isa": [
+   "U.S. Standard Atmosphere, 1976 (NOAA, NASA, USAF; NOAA-S/T 76-1562), Part 1, Table I, p. 3: gradiente troposférico L_M,0 = -6,5 K/km (-0,0065 °C/m) de 0 a 11 km",
+   "FAO Irrigation and Drainage Paper No. 56 (Allen et al., 1998, ISBN 92-5-104219-5), Eq. 7 y Annex 3 Eq. 3-2: tasa constante de enfriamiento vertical alpha_1 = 0,0065 K/m",
+   "ICAO Doc 7488/3 (1993) / ISO 2533:1975 Manual of the ICAO Standard Atmosphere: -6,5 °C/km en la troposfera"
+  ],
+  "contraste_andino_c_por_m": -0.00613,
+  "fuente_contraste_andino": "Eslava, J. A. (1993) / Pabón-Caicedo et al. (IDEAM / Univ. Nacional de Colombia): gradiente vertical medio en los Andes colombianos de -6,13 °C/km (-0,55 a -0,65 °C/100 m)"
+ },
+ "estacion_ghcn": {
+  "estacion_id": "COM00080370",
+  "nombre": "SAN LUIS, CO",
+  "lat": 0.862,
+  "lon": -77.672,
+  "elevacion_ghcn_m": 2976.4,
+  "sha256_csv": "b2dca61c6f63748daa21bf876815b402e6c2f60ed9710f302202152db93f94b5",
+  "rechazados_por_bandera_calidad": {
+   "TAVG": 0,
+   "TMAX": 0,
+   "TMIN": 0,
+   "PRCP": 0
+  }
+ },
+ "comparaciones": {
+  "T2M_vs_TAVG": {
+   "cruda_2553m": {
+    "n_dias_validos": 6338,
+    "fraccion_valida": 0.723,
+    "media_power_c": 13.213,
+    "media_ghcn_c": 12.414,
+    "sesgo_c": 0.7995,
+    "sesgo_c_ic95_bootstrap_anual": [
+     0.7128,
+     0.8944
+    ],
+    "mae_c": 1.035,
+    "mae_c_ic95_bootstrap_anual": [
+     0.9739,
+     1.1041
+    ],
+    "rmse_c": 1.3002,
+    "rmse_c_ic95_bootstrap_anual": [
+     1.2261,
+     1.3809
+    ],
+    "corr_pearson": 0.5633,
+    "corr_spearman": 0.5422,
+    "corr_anomalias_pearson": 0.47
+   },
+   "corregida_lote_2934m": {
+    "n_dias_validos": 6338,
+    "fraccion_valida": 0.723,
+    "media_power_c": 10.738,
+    "media_ghcn_c": 12.414,
+    "sesgo_c": -1.6755,
+    "sesgo_c_ic95_bootstrap_anual": [
+     -1.7622,
+     -1.5805
+    ],
+    "mae_c": 1.7352,
+    "mae_c_ic95_bootstrap_anual": [
+     1.6531,
+     1.8116
+    ],
+    "rmse_c": 1.9643,
+    "rmse_c_ic95_bootstrap_anual": [
+     1.8833,
+     2.0343
+    ],
+    "corr_pearson": 0.5633,
+    "corr_spearman": 0.5422,
+    "corr_anomalias_pearson": 0.47
+   },
+   "corregida_estacion_2961m": {
+    "n_dias_validos": 6338,
+    "fraccion_valida": 0.723,
+    "media_power_c": 10.563,
+    "media_ghcn_c": 12.414,
+    "sesgo_c": -1.851,
+    "sesgo_c_ic95_bootstrap_anual": [
+     -1.9377,
+     -1.756
+    ],
+    "mae_c": 1.8945,
+    "mae_c_ic95_bootstrap_anual": [
+     1.8088,
+     1.9744
+    ],
+    "rmse_c": 2.116,
+    "rmse_c_ic95_bootstrap_anual": [
+     2.0338,
+     2.1883
+    ],
+    "corr_pearson": 0.5633,
+    "corr_spearman": 0.5422,
+    "corr_anomalias_pearson": 0.47
+   },
+   "corregida_estacion_ghcn_2976m": {
+    "n_dias_validos": 6338,
+    "fraccion_valida": 0.723,
+    "media_power_c": 10.462,
+    "media_ghcn_c": 12.414,
+    "sesgo_c": -1.9511,
+    "sesgo_c_ic95_bootstrap_anual": [
+     -2.0378,
+     -1.8561
+    ],
+    "mae_c": 1.9872,
+    "mae_c_ic95_bootstrap_anual": [
+     1.9003,
+     2.0685
+    ],
+    "rmse_c": 2.2041,
+    "rmse_c_ic95_bootstrap_anual": [
+     2.1212,
+     2.2777
+    ],
+    "corr_pearson": 0.5633,
+    "corr_spearman": 0.5422,
+    "corr_anomalias_pearson": 0.47
+   },
+   "contraste_andino_lote_2934m": {
+    "n_dias_validos": 6338,
+    "fraccion_valida": 0.723,
+    "media_power_c": 10.879,
+    "media_ghcn_c": 12.414,
+    "sesgo_c": -1.5346,
+    "sesgo_c_ic95_bootstrap_anual": [
+     -1.6213,
+     -1.4396
+    ],
+    "mae_c": 1.6115,
+    "mae_c_ic95_bootstrap_anual": [
+     1.5325,
+     1.6847
+    ],
+    "rmse_c": 1.8456,
+    "rmse_c_ic95_bootstrap_anual": [
+     1.7671,
+     1.9136
+    ],
+    "corr_pearson": 0.5633,
+    "corr_spearman": 0.5422,
+    "corr_anomalias_pearson": 0.47
+   }
+  },
+  "T2M_MAX_vs_TMAX": {
+   "cruda_2553m": {
+    "n_dias_validos": 17,
+    "fraccion_valida": 0.0019,
+    "media_power_c": 17.43,
+    "media_ghcn_c": 16.306,
+    "sesgo_c": 1.1241,
+    "sesgo_c_ic95_bootstrap_anual": [
+     0.239,
+     1.6821
+    ],
+    "mae_c": 1.5512,
+    "mae_c_ic95_bootstrap_anual": [
+     1.1316,
+     2.0488
+    ],
+    "rmse_c": 1.9138,
+    "rmse_c_ic95_bootstrap_anual": [
+     1.4039,
+     2.3822
+    ],
+    "corr_pearson": 0.4834,
+    "corr_spearman": 0.3411,
+    "corr_anomalias_pearson": 0.0855
+   },
+   "corregida_lote_2934m": {
+    "n_dias_validos": 17,
+    "fraccion_valida": 0.0019,
+    "media_power_c": 14.955,
+    "media_ghcn_c": 16.306,
+    "sesgo_c": -1.3508,
+    "sesgo_c_ic95_bootstrap_anual": [
+     -2.236,
+     -0.7928
+    ],
+    "mae_c": 1.6591,
+    "mae_c_ic95_bootstrap_anual": [
+     1.218,
+     2.405
+    ],
+    "rmse_c": 2.0552,
+    "rmse_c_ic95_bootstrap_anual": [
+     1.4375,
+     3.0163
+    ],
+    "corr_pearson": 0.4834,
+    "corr_spearman": 0.3411,
+    "corr_anomalias_pearson": 0.0855
+   },
+   "corregida_estacion_2961m": {
+    "n_dias_validos": 17,
+    "fraccion_valida": 0.0019,
+    "media_power_c": 14.78,
+    "media_ghcn_c": 16.306,
+    "sesgo_c": -1.5263,
+    "sesgo_c_ic95_bootstrap_anual": [
+     -2.4115,
+     -0.9683
+    ],
+    "mae_c": 1.7933,
+    "mae_c_ic95_bootstrap_anual": [
+     1.344,
+     2.5546
+    ],
+    "rmse_c": 2.1746,
+    "rmse_c_ic95_bootstrap_anual": [
+     1.5452,
+     3.1564
+    ],
+    "corr_pearson": 0.4834,
+    "corr_spearman": 0.3411,
+    "corr_anomalias_pearson": 0.0855
+   },
+   "corregida_estacion_ghcn_2976m": {
+    "n_dias_validos": 17,
+    "fraccion_valida": 0.0019,
+    "media_power_c": 14.679,
+    "media_ghcn_c": 16.306,
+    "sesgo_c": -1.6264,
+    "sesgo_c_ic95_bootstrap_anual": [
+     -2.5116,
+     -1.0684
+    ],
+    "mae_c": 1.8698,
+    "mae_c_ic95_bootstrap_anual": [
+     1.4252,
+     2.638
+    ],
+    "rmse_c": 2.246,
+    "rmse_c_ic95_bootstrap_anual": [
+     1.6209,
+     3.2333
+    ],
+    "corr_pearson": 0.4834,
+    "corr_spearman": 0.3411,
+    "corr_anomalias_pearson": 0.0855
+   },
+   "contraste_andino_lote_2934m": {
+    "n_dias_validos": 17,
+    "fraccion_valida": 0.0019,
+    "media_power_c": 15.096,
+    "media_ghcn_c": 16.306,
+    "sesgo_c": -1.2099,
+    "sesgo_c_ic95_bootstrap_anual": [
+     -2.0951,
+     -0.6519
+    ],
+    "mae_c": 1.5513,
+    "mae_c_ic95_bootstrap_anual": [
+     1.104,
+     2.2945
+    ],
+    "rmse_c": 1.9655,
+    "rmse_c_ic95_bootstrap_anual": [
+     1.3406,
+     2.9051
+    ],
+    "corr_pearson": 0.4834,
+    "corr_spearman": 0.3411,
+    "corr_anomalias_pearson": 0.0855
+   }
+  },
+  "T2M_MIN_vs_TMIN": {
+   "cruda_2553m": {
+    "n_dias_validos": 5184,
+    "fraccion_valida": 0.5914,
+    "media_power_c": 9.751,
+    "media_ghcn_c": 6.239,
+    "sesgo_c": 3.5116,
+    "sesgo_c_ic95_bootstrap_anual": [
+     3.4015,
+     3.653
+    ],
+    "mae_c": 3.5233,
+    "mae_c_ic95_bootstrap_anual": [
+     3.413,
+     3.6652
+    ],
+    "rmse_c": 4.0872,
+    "rmse_c_ic95_bootstrap_anual": [
+     3.9699,
+     4.2353
+    ],
+    "corr_pearson": 0.3198,
+    "corr_spearman": 0.2882,
+    "corr_anomalias_pearson": 0.2287
+   },
+   "corregida_lote_2934m": {
+    "n_dias_validos": 5184,
+    "fraccion_valida": 0.5914,
+    "media_power_c": 7.276,
+    "media_ghcn_c": 6.239,
+    "sesgo_c": 1.0366,
+    "sesgo_c_ic95_bootstrap_anual": [
+     0.9266,
+     1.1781
+    ],
+    "mae_c": 1.7928,
+    "mae_c_ic95_bootstrap_anual": [
+     1.7323,
+     1.8718
+    ],
+    "rmse_c": 2.3343,
+    "rmse_c_ic95_bootstrap_anual": [
+     2.2451,
+     2.4469
+    ],
+    "corr_pearson": 0.3198,
+    "corr_spearman": 0.2882,
+    "corr_anomalias_pearson": 0.2287
+   },
+   "corregida_estacion_2961m": {
+    "n_dias_validos": 5184,
+    "fraccion_valida": 0.5914,
+    "media_power_c": 7.1,
+    "media_ghcn_c": 6.239,
+    "sesgo_c": 0.8611,
+    "sesgo_c_ic95_bootstrap_anual": [
+     0.7511,
+     1.0026
+    ],
+    "mae_c": 1.7534,
+    "mae_c_ic95_bootstrap_anual": [
+     1.696,
+     1.8265
+    ],
+    "rmse_c": 2.2618,
+    "rmse_c_ic95_bootstrap_anual": [
+     2.1763,
+     2.369
+    ],
+    "corr_pearson": 0.3198,
+    "corr_spearman": 0.2882,
+    "corr_anomalias_pearson": 0.2287
+   },
+   "corregida_estacion_ghcn_2976m": {
+    "n_dias_validos": 5184,
+    "fraccion_valida": 0.5914,
+    "media_power_c": 7.0,
+    "media_ghcn_c": 6.239,
+    "sesgo_c": 0.761,
+    "sesgo_c_ic95_bootstrap_anual": [
+     0.651,
+     0.9025
+    ],
+    "mae_c": 1.7368,
+    "mae_c_ic95_bootstrap_anual": [
+     1.6811,
+     1.8076
+    ],
+    "rmse_c": 2.2256,
+    "rmse_c_ic95_bootstrap_anual": [
+     2.1428,
+     2.3293
+    ],
+    "corr_pearson": 0.3198,
+    "corr_spearman": 0.2882,
+    "corr_anomalias_pearson": 0.2287
+   },
+   "contraste_andino_lote_2934m": {
+    "n_dias_validos": 5184,
+    "fraccion_valida": 0.5914,
+    "media_power_c": 7.417,
+    "media_ghcn_c": 6.239,
+    "sesgo_c": 1.1775,
+    "sesgo_c_ic95_bootstrap_anual": [
+     1.0675,
+     1.3189
+    ],
+    "mae_c": 1.8341,
+    "mae_c_ic95_bootstrap_anual": [
+     1.7697,
+     1.9187
+    ],
+    "rmse_c": 2.4001,
+    "rmse_c_ic95_bootstrap_anual": [
+     2.3076,
+     2.5169
+    ],
+    "corr_pearson": 0.3198,
+    "corr_spearman": 0.2882,
+    "corr_anomalias_pearson": 0.2287
+   }
+  }
+ },
+ "analisis_extremos_frios_tmin": {
+  "ghcn_tmin_n_validos": 5184,
+  "ghcn_tmin_min_c": -1.4,
+  "ghcn_tmin_p01_c": 0.8,
+  "ghcn_tmin_p05_c": 2.02,
+  "ghcn_dias_le_0c": 17,
+  "ghcn_dias_le_2c": 260,
+  "ghcn_dias_le_4c": 924,
+  "power_cruda_min_c": 4.42,
+  "power_cruda_dias_le_2c": 0,
+  "power_cruda_dias_le_4c": 0,
+  "power_corr_2934m_min_c": 1.95,
+  "power_corr_2934m_dias_le_2c": 1,
+  "power_corr_2934m_dias_le_4c": 62
+ },
+ "recomendacion_contrato": "Usar T2M_MIN_CORR para alertas de helada y temperaturas mínimas en DEMO-COL-01 (reduce el sesgo cálido de +3,51 °C a +1,04 °C y el MAE de 3,52 °C a 1,79 °C frente a GHCN COM00080370). Para temperatura media diaria (T2M) la columna cruda tiene menor sesgo (+0,80 °C, MAE 1,04 °C) que T2M_CORR (-1,68 °C, MAE 1,74 °C) porque el calentamiento radiativo diurno en el altiplano ecuatorial y el reporte sinóptico diurno (atributo H) compensan la diferencia de altitud en las horas de sol; se entregan ambas columnas (crudas y *_CORR) en power_diario.csv."
+}
