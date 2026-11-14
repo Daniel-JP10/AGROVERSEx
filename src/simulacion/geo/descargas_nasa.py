@@ -12,17 +12,23 @@ from simulacion.geo.descargas import sha256_archivo
 
 DATOS = Path(os.environ.get("AGRO_DATOS", "datos"))
 FIRMA_HDF5 = b"\x89HDF\r\n\x1a\n"  # netCDF4 es HDF5; un error HTML con código 200 no la trae
-OPENDAP = "https://opendap.earthdata.nasa.gov/collections/{cid}/granules/{ur}"
 
-# Producto -> colección CMR y rutas DAP4 de las variables (verificadas en el .dmr del granulo)
+# Producto -> consulta CMR y rutas DAP4 de las variables (verificadas en el .dmr de un granulo)
+G = "/MOD_Grid_monthly_CMG_VI/Data_Fields/"
 PRODUCTOS = {
-    "mod13c2": dict(
-        cid="C2565788914-LPCLOUD", short_name="MOD13C2", version="061", desde="2000-01-01",
-        variables=[
-            "/MOD_Grid_monthly_CMG_VI/Data_Fields/CMG_0_05_Deg_Monthly_NDVI",
-            "/MOD_Grid_monthly_CMG_VI/Data_Fields/CMG_0_05_Deg_Monthly_pixel_reliability",
-        ],
-    ),
+    "mod13c2": dict(short_name="MOD13C2", version="061", desde="2000-01-01", hasta=None,
+                    variables=[G + "CMG_0_05_Deg_Monthly_NDVI", G + "CMG_0_05_Deg_Monthly_pixel_reliability"]),
+    "imerg_final": dict(short_name="GPM_3IMERGM", version="07", desde="2000-01-01", hasta="2025-09-30",
+                        variables=["/Grid/precipitation", "/Grid/precipitationQualityIndex"]),
+    "imerg_late": dict(short_name="GPM_3IMERGDL", version="07", desde="2025-10-01", hasta=None,
+                       variables=["/precipitation", "/randomError"]),
+    # QV2M y PS dan la humedad relativa por presión de vapor; T2MDEW la da sin presión. Son 2D y pequeñas: se bajan las cuatro para contrastar
+    "merra2_slv": dict(short_name="M2TMNXSLV", version="5.12.4", desde="2000-01-01", hasta=None,
+                       variables=["/T2M", "/QV2M", "/PS", "/T2MDEW"]),
+    "merra2_rad": dict(short_name="M2TMNXRAD", version="5.12.4", desde="2000-01-01", hasta=None,
+                       variables=["/SWGDN"]),
+    "gldas_noah025": dict(short_name="GLDAS_NOAH025_M", version="2.1", desde="2000-01-01", hasta=None,
+                          variables=["/RootMoist_inst", "/SoilMoi0_10cm_inst", "/Evap_tavg"]),
 }
 
 
@@ -71,26 +77,29 @@ def bajar_subconjunto(sesion, url: str, final: Path, reintentos: int = 12, esper
 
 
 def granulos(producto: str):
+    """Devuelve [(nombre, base OPeNDAP)] ordenado y la configuración; la base sale del enlace de servicio de CMR."""
     import earthaccess  # import tardío: las pruebas no lo necesitan
     p = PRODUCTOS[producto]
     earthaccess.login(strategy="netrc")
     gs = earthaccess.search_data(short_name=p["short_name"], version=p["version"],
-                                 temporal=(p["desde"], None))
-    return sorted(g["umm"]["GranuleUR"] for g in gs), p
+                                 temporal=(p["desde"], p["hasta"]))
+    salida = []
+    for g in gs:
+        base = next(u["URL"] for u in g["umm"]["RelatedUrls"] if "opendap.earthdata.nasa.gov" in u["URL"])
+        nombre = g["umm"]["GranuleUR"].split(":")[-1].rsplit(".", 1)[0] if ":" in g["umm"]["GranuleUR"]             else g["umm"]["GranuleUR"]
+        salida.append((nombre, base))
+    return sorted(salida), p
 
 
 def principal(producto: str, hilos: int, limite: int | None):
     import earthaccess
     import yaml
-    urs, p = granulos(producto)
-    urs = urs[:limite] if limite else urs
+    gr, p = granulos(producto)
+    gr = gr[:limite] if limite else gr
     sesion = earthaccess.get_requests_https_session()
     reg = RegistroHashes(DATOS / "crudos/registros" / f"hashes_{producto}.jsonl")
-    filas = []
-    for ur in urs:
-        base = OPENDAP.format(cid=p["cid"], ur=ur)
-        filas.append(dict(id=f"{producto}_{ur}", url=url_dap4(base, p["variables"]),
-                          archivo=f"{producto}/{ur}.nc4", licencia="PENDIENTE", ficha=f"datos/fichas/{producto}.md"))
+    filas = [dict(id=f"{producto}_{n}", url=url_dap4(b, p["variables"]), archivo=f"{producto}/{n}.nc4",
+                  licencia="PENDIENTE", ficha=f"datos/fichas/{producto}.md") for n, b in gr]
     man = DATOS / f"manifiesto_{producto}.yaml"
     man.write_text("# consulta exacta por granulo; hashes en crudos/registros/hashes_*.jsonl\n"
                    + yaml.safe_dump(filas, allow_unicode=True, sort_keys=False), encoding="utf-8")

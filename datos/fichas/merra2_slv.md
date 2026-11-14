@@ -4,19 +4,19 @@
 - Producto oficial y versión: MERRA-2 M2TMNXSLV 5.12.4 (tavgM_2d_slv_Nx). Colección C1276812859-GES_DISC. VERIFICADO (CMR)
 - Agencia y centro de datos: NASA, GES DISC (GMAO). Reanálisis (modelo con asimilación), no observación directa
 - Página oficial: PENDIENTE; https://cmr.earthdata.nasa.gov/search/concepts/C1276812859-GES_DISC.umm_json
-- DOI: 10.5067/AP1B0BA5PD2K. FUENTE: CMR vía `T-D3_estimacion.md`
+- DOI: 10.5067/AP1B0BA5PD2K. Cita: Global Modeling and Assimilation Office, & Pawson, S. (2015). MERRA-2 tavgM_2d_slv_Nx: 2d,Monthly mean,Time-Averaged,Single-Level,Assimilation,Single-Level Diagnostics V5.12.4 [Dataset]. NASA Goddard Earth Sciences Data and Information Services Center. https://doi.org/10.5067/AP1B0BA5PD2K Colección C1276812859-GES_DISC. Licencia (use_constraints de CMR, textual): The Earth Observing System Data and Information System (EOSDIS) data use and citation guidance for NASA data can be accessed at https://earthdata.nasa.gov/engage/open-data-services-software-policies/data-use-guidance. For information on how to properly cite and acknowledge data from the NASA GES DISC, refer to https://disc.gsfc.nasa.gov/data-guidelines.. VERIFICADO (CMR y doi.org coinciden; `Docu/datos/citas_cmr.json`).
 - Variable y unidades: `T2M` (K), `QV2M` (kg kg-1), `PS` (Pa), `T2MDEW` (K); fill 9.99999987e14. Nombres, unidades y fill de las variables asociadas en CMR (VERIFICADO); valores no leídos. La humedad relativa se calcula después (T2M con QV2M y PS, o T2M con T2MDEW): método PENDIENTE
 - Resolución espacial nominal: 0,625 x 0,5 grados
 - Resolución temporal: mensual
 - CRS nativo: PENDIENTE
-- Periodo descargado: NINGUNO. BLOQUEADO el 2026-11-14 hacia las 13:0x: GES DISC devuelve 403 `EULA Acceptance Failure` con las credenciales de `_netrc` (descarga directa, OPeNDAP y Harmony). Nada descargado de este producto. Previsto 2000-01 a 2026-09
+- Periodo descargado: Descargado: 2000-01 a 2026-09, 321 archivos, 0,714 GB
 - Área descargada: global previsto
-- Herramienta y consulta exacta de descarga: Prevista: OPeNDAP `dap4.ce=/T2M;/QV2M;/PS;/T2MDEW` (más lat, lon, time) sobre `https://opendap.earthdata.nasa.gov/collections/C1276812859-GES_DISC/granules/M2TMNXSLV.5.12.4%3AMERRA2_400.tavgM_2d_slv_Nx.<AAAAMM>.nc4`. El granulo 2026-09 pesa 75,2 MB completo (CMR)
-- Fecha de descarga: no descargado
+- Herramienta y consulta exacta de descarga: `python -m simulacion.geo.descargas_nasa merra2_slv 6`; consulta por granulo en `datos/manifiesto_merra2_slv.yaml`, hashes en `datos/hashes_merra2_slv.jsonl`. Forma: OPeNDAP `dap4.ce=/T2M;/QV2M;/PS;/T2MDEW` (más lat, lon, time) sobre `https://opendap.earthdata.nasa.gov/collections/C1276812859-GES_DISC/granules/M2TMNXSLV.5.12.4%3AMERRA2_400.tavgM_2d_slv_Nx.<AAAAMM>.nc4`. El granulo 2026-09 pesa 75,2 MB completo (CMR)
+- Fecha de descarga: 2026-11-14, 13:29 a 13:55 hora de Colombia
 - Banderas de calidad aplicadas: PENDIENTE (sin revisar el archivo)
-- Fracción de datos válidos en el área: PENDIENTE
+- Fracción de datos válidos en el área: Valores revisados en 2000-01: T2M 233,1 a 305,8 K; PS 50669 a 103231 Pa; T2MDEW 233,5 a 298,3 K; QV2M 0,0001 a 0,0200 kg/kg; sin celdas en relleno; malla 361 x 576, 0,625 x 0,5 grados, latitud -90 a 90. VERIFICADO. Justificación de las cuatro variables: T2M con T2MDEW da humedad relativa sin presión; T2M con QV2M y PS la da por humedad específica; son campos 2D pequeños (0,714 GB todos) y sirven para contrastar los dos cálculos
 - Transformaciones a la grilla común y método de remuestreo: Ninguna en la descarga
-- Limitaciones conocidas: Reanálisis, latencia de unas 2 semanas. BLOQUEADO el 2026-11-14 hacia las 13:0x: GES DISC devuelve 403 `EULA Acceptance Failure` con las credenciales de `_netrc` (descarga directa, OPeNDAP y Harmony). Nada descargado de este producto
+- Limitaciones conocidas: Reanálisis, latencia de unas 2 semanas. Revisado un granulo con valores reales (ver Fracción de datos válidos)
 - Requisito del reto y pregunta que atiende: N2, D1, D2, F4; PI-D1 y PI-D4. Compuerta G2
 - Responsable: constructor de datos (subagente), orquestador de datos Daniel
 - Verificador y fecha: PENDIENTE
