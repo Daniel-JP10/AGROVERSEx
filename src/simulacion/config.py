@@ -1,10 +1,13 @@
-# asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+# asistido por SI: Claude Code (Anthropic), variable AGRO_DATOS para la ruta de datos (T-D1)
+import os
 from datetime import date
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[2]
-CRUDOS = RAIZ / "datos/crudos"
-PROCESADOS = RAIZ / "datos/procesados"
+# AGRO_DATOS apunta los datos pesados fuera del repo (sin ella, datos/ junto al repo)
+DATOS = Path(os.environ.get("AGRO_DATOS", RAIZ / "datos"))
+CRUDOS = DATOS / "crudos"
+PROCESADOS = DATOS / "procesados"
 FICHAS = RAIZ / "datos/fichas"
 
 # Mollweide para áreas, WGS84 para coordenadas de salida
