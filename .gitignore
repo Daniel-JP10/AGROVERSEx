@@ -1,1 +1,6 @@
 repo/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+salidas/

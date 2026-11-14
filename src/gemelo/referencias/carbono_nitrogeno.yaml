@@ -1,0 +1,78 @@
+# asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# Carbono (ICBM, Andrén y Kätterer 1997, Ecological Applications 7(4): 1226-1236) y nitrógeno mineral.
+parametros:
+  k1_anual:
+    valor: 0.8
+    rango: [0.6, 1.0]
+    unidad: 1/año
+    etiqueta: FUENTE
+    referencia: "ICBM: tasa de descomposición del reservorio joven, Andrén y Kätterer (1997)"
+  k2_anual:
+    valor: 0.006
+    rango: [0.004, 0.008]
+    unidad: 1/año
+    etiqueta: FUENTE
+    referencia: "ICBM: tasa de descomposición del reservorio viejo, Andrén y Kätterer (1997)"
+  h_residuo:
+    valor: 0.125
+    rango: [0.10, 0.15]
+    unidad: adimensional
+    etiqueta: FUENTE
+    referencia: "ICBM: coeficiente de humificación de residuos de cultivo (paja), Andrén y Kätterer (1997)"
+  t_min_descomposicion:
+    valor: -3.8
+    unidad: °C
+    etiqueta: INFERENCIA
+    referencia: "Función de temperatura de ICBM regional, ((T + 3,8) / 33,8)^2 (Andrén et al., 2004); aplicada a paso diario"
+  t_ref_descomposicion:
+    valor: 30.0
+    unidad: °C
+    etiqueta: INFERENCIA
+    referencia: "Temperatura de referencia de la función anterior (Andrén et al., 2004)"
+  t_normalizacion:
+    valor: 5.5
+    rango: [4.0, 8.0]
+    unidad: °C
+    etiqueta: SUPUESTO
+    referencia: "r = 1 a esta temperatura con suelo húmedo, del orden de la media anual de Ultuna donde se calibró ICBM; normalización de diseño"
+  fraccion_joven_inicial:
+    valor: 0.02
+    rango: [0.01, 0.05]
+    unidad: fracción del COS
+    etiqueta: SUPUESTO
+    referencia: "Reparto inicial joven/viejo; la tendencia de corto plazo depende de este valor"
+  profundidad_cos_cm:
+    valor: 30.0
+    unidad: cm
+    etiqueta: FUENTE
+    referencia: "Profundidad estándar de inventario de COS 0-30 cm (IPCC 2006, vol. 4, cap. 2)"
+  fraccion_carbono_residuo:
+    valor: 0.45
+    rango: [0.40, 0.47]
+    unidad: kg C/kg MS
+    etiqueta: SUPUESTO
+    referencia: "Fracción de carbono de la materia seca vegetal; valores de literatura 0,40-0,47"
+  cn_reservorio_viejo_respaldo:
+    valor: 11.0
+    rango: [9.0, 14.0]
+    unidad: kg C/kg N
+    etiqueta: SUPUESTO
+    referencia: "Respaldo si no hay N total de SoilGrids; normalmente C:N sale de soc/nitrogen de SoilGrids"
+  n_mineral_inicial_kg_ha:
+    valor: 30.0
+    rango: [10.0, 60.0]
+    unidad: kg N/ha
+    etiqueta: SUPUESTO
+    referencia: "Sin análisis de suelo no se conoce el N mineral; reemplazar con el laboratorio (campo PENDIENTE en la pestaña Suelo)"
+  ndfa_max_compensacion:
+    valor: 0.9
+    rango: [0.8, 0.95]
+    unidad: kg N/kg N
+    etiqueta: SUPUESTO
+    referencia: "Tope de la fijación cuando el N del suelo no alcanza; la fijación de la soya aumenta con poco N en el suelo (Salvagiotti et al., 2008, Field Crops Res. 108: 1-13); tope de diseño"
+  fraccion_volatilizacion_fertilizante:
+    valor: 0.10
+    rango: [0.03, 0.30]
+    unidad: kg N/kg N
+    etiqueta: FUENTE
+    referencia: "IPCC 2006, vol. 4, cap. 11, Tabla 11.3: FracGASF = 0,10 (rango 0,03-0,3) para fertilizante sintético"

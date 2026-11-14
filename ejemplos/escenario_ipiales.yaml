@@ -1,0 +1,99 @@
+# asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# Escenario de ejemplo: lote papero en Ipiales, Nariño (Andes de Colombia, ~2550 m). Esquema: contratos/gemelo_api.md.
+# Ejecutar:  python -m gemelo simular   ejemplos/escenario_ipiales.yaml -o salidas/ipiales_simulacion.json
+#            python -m gemelo optimizar ejemplos/escenario_ipiales.yaml -o salidas/ipiales_optimizacion.json
+version_contrato: 1
+
+lote:
+  id: ipiales-demo
+  nombre: Lote demostrativo Ipiales (Nariño)
+  lat: 0.8302
+  lon: -77.6444
+  unidad_id: COL-ADM2-7082276B52108893597118
+  clima_tipo: tropical            # trópico: sin reglas de sucesión con intervalo numérico (INV-ROT §5.2)
+
+clima:
+  fuente: power_csv
+  archivo: ../datos/referencia/clima/power_ipiales_diario.csv
+  # Alternativa con la base de la rama datos (mensual desagregado a diario):
+  # fuente: sqlite_mensual
+  # ruta: ../datos/agroversex.sqlite
+  # unidad_id: COL-ADM2-7082276B52108893597118
+  # elevacion_m: 2900
+
+suelo:
+  fuente: soilgrids_json
+  archivo: ../datos/referencia/suelo/soilgrids_ipiales.json
+  # Suelo volcánico (MO ~8 %): fuera del dominio de Saxton y Rawls; con un análisis local:
+  # fuente: manual
+  # arena: 0.45
+  # arcilla: 0.18
+  # mo_pct: 7.5
+  # cos_t_ha: 180
+  # cn_suelo: 12
+
+escenario:
+  tipo: historico
+  anios: 3
+  max_miembros: 8
+
+simulacion:
+  n_parametros: 8
+  semilla: 42
+  n_sub: 1
+  equilibrio: completo
+  referencia: A
+
+calibracion: {}
+
+# Papa con la variante "Europa" de FAO-56 (145 días). Las variedades andinas de altura suelen ser más largas:
+# con datos locales, dar etapas: [d_ini, d_des, d_med, d_fin]. Dosis de N SUPUESTO para el ejemplo.
+estrategias:
+  - id: A
+    nombre: Papa continua (habitual)
+    etiqueta: "FUENTE EV-ROT-022 (lo común es repetir papa)"
+    temporadas:
+      - {cultivo: papa, siembra: A1-03-01, etapas_variante: Europa, fertilizacion: [{dia: 0, kg_n: 150}]}
+      - {cultivo: papa, siembra: A2-03-01, etapas_variante: Europa, fertilizacion: [{dia: 0, kg_n: 150}]}
+      - {cultivo: papa, siembra: A3-03-01, etapas_variante: Europa, fertilizacion: [{dia: 0, kg_n: 150}]}
+  - id: B
+    nombre: Papa-papa-avena
+    etiqueta: "FUENTE EV-ROT-022 (alternativa de Agrosavia)"
+    temporadas:
+      - {cultivo: papa, siembra: A1-03-01, etapas_variante: Europa, fertilizacion: [{dia: 0, kg_n: 150}]}
+      - {cultivo: papa, siembra: A2-03-01, etapas_variante: Europa, fertilizacion: [{dia: 0, kg_n: 150}]}
+      - {cultivo: avena, siembra: A3-03-01, fertilizacion: [{dia: 0, kg_n: 40}]}
+  - id: C
+    nombre: Papa-avena-frijol-papa
+    etiqueta: "FUENTE EV-ROT-022 (alternativa papa-avena-arveja; frijol en lugar de arveja, que no está en el catálogo)"
+    temporadas:
+      - {cultivo: papa, siembra: A1-03-01, etapas_variante: Europa, fertilizacion: [{dia: 0, kg_n: 150}]}
+      - {cultivo: avena, siembra: A1-09-01, fertilizacion: [{dia: 0, kg_n: 40}]}
+      - {cultivo: frijol, siembra: A2-03-01}
+      - {cultivo: papa, siembra: A3-03-01, etapas_variante: Europa, fertilizacion: [{dia: 0, kg_n: 150}]}
+  - id: D
+    nombre: Papa con avena de cobertura
+    etiqueta: ilustrativa
+    temporadas:
+      - {cultivo: papa, siembra: A1-03-01, etapas_variante: Europa, fertilizacion: [{dia: 0, kg_n: 150}]}
+      - {cultivo: avena, siembra: A1-09-01, cosechar: false}
+      - {cultivo: papa, siembra: A2-03-01, etapas_variante: Europa, fertilizacion: [{dia: 0, kg_n: 150}]}
+      - {cultivo: avena, siembra: A2-09-01, cosechar: false}
+      - {cultivo: papa, siembra: A3-03-01, etapas_variante: Europa, fertilizacion: [{dia: 0, kg_n: 150}]}
+
+optimizacion:
+  linea_base: A
+  campanias:
+    - {nombre: semestre A, fecha: "03-01", opciones: [papa, frijol, avena_grano]}
+    - {nombre: semestre B, fecha: "09-01", opciones: [avena_cobertura, avena_grano, frijol]}
+  opciones:
+    papa: {cultivo: papa, etapas_variante: Europa, fertilizacion: [{dia: 0, kg_n: 150}]}
+    frijol: {cultivo: frijol}
+    avena_grano: {cultivo: avena, fertilizacion: [{dia: 0, kg_n: 40}]}
+    avena_cobertura: {cultivo: avena, cosechar: false}
+  desfases_dias: [0, 15]
+  riego: {permitido: false}
+  exigidos: [papa]
+  min_cosechas_por_anio: 1
+  busqueda: {poblacion: 24, generaciones: 12, miembros_clima: 4, muestras_parametros: 3, miembros_final: 8,
+             muestras_final: 6, max_soluciones: 8}
