@@ -27,7 +27,7 @@ N = config.N_MESES
 TABLAS_COMPARTIDAS = ("unidad", "estatico", "clase_fraccion", "variable", "fuente", "metadatos")
 COROPLETA = ("precip", "t2m", "sm_sup")  # SUPUESTO: la fase 3 confirma las variables de coropleta por defecto
 EST_COLS = ("silt_0_30", "clay_0_30", "sand_0_30", "phh2o_0_30", "soc_0_30", "bdod_0_30", "elev_max", "elev_min")
-DECISIONES = "15.2-C, 15.2-G, 15.2-I, D-007, D-008, D-009, D-010"
+DECISIONES = "15.2-C, 15.2-G, 15.2-I, D-007, D-008, D-010"
 SUPUESTOS_CLAVE = {**m_agua.METADATOS, "dias_calor": "PENDIENTE (sin umbral con ficha, DEP-F1-9)",
                    "erosion": "PENDIENTE: sin pendiente de NASADEM a 30 m; RUSLE con relieve GMTED2010",
                    "coropleta_por_defecto": "SUPUESTO precip, t2m, sm_sup (la fase 3 confirma)"}

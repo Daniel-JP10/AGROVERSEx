@@ -77,18 +77,18 @@ def test_banda_ndvi_ordenada(sim):
     assert (d["ndvi_p10"][ok] <= d["ndvi"][ok]).all() and (d["ndvi"][ok] <= d["ndvi_p90"][ok]).all()
 
 
-def _pendiente_china(monkeypatch, flag):
-    monkeypatch.setattr(config, "INCLUIR_PROCEDENCIA_CHINA", flag)
+def _pendiente(prefijo):
     c = clima.generar_clima(IDS, slice(None), geo=GEO)
     d = vg.generar_ndvi(c, slice(None), GEO)
-    f = [IDS.index(f"CN{i}") for i in range(8)]
+    f = [IDS.index(f"{prefijo}{i}") for i in range(8)]
     a = np.nanmax(d["ndvi"][f, 12:276].reshape(8, 22, 12), axis=2).mean(0)
     return np.polyfit(np.arange(22), a, 1)[0]
 
 
-def test_greening_china_apagado(monkeypatch):
-    # Con la bandera encendida el pico sube; apagada no (D-009)
-    assert _pendiente_china(monkeypatch, True) > _pendiente_china(monkeypatch, False) + 0.0005
+def test_sin_greening_de_china():
+    # Chen 2019 en China se quitó (§5.1): CHN queda neutro, sin pendiente de greening
+    assert not hasattr(config, "INCLUIR_PROCEDENCIA_CHINA")
+    assert "CHN" not in vg.PAISES_GREENING
 
 
 def test_et_cobertura_2026(sim):

@@ -26,5 +26,3 @@ FECHA_INICIO = date(2000, 1, 1)
 # PENDIENTE: se fija con la consulta real de POWER en la tarea 13; 2026-11-05 es aproximado (INICIAR, tabla de POWER)
 FECHA_FIN_DIARIA = date(2026, 11, 5)
 
-# Procedencia china permitida en la demo interna (D-009); volver a False para la entrega
-INCLUIR_PROCEDENCIA_CHINA = True

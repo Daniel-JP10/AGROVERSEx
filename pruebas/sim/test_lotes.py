@@ -32,12 +32,14 @@ def _lotes(n=50):
     return lotes.generar_lotes("zona_x", n, geo=GEO, geometrias=GEOMS, zonas=ZONAS)
 
 
-def test_11_zonas_50_lotes(monkeypatch):
+def test_10_zonas_50_lotes_sin_procedencia_china():
     z = lotes.cargar_zonas()
-    assert len(z) == 11
-    assert 540 <= 11 * 50 <= 560
-    monkeypatch.setattr(config, "INCLUIR_PROCEDENCIA_CHINA", False)
-    assert len(lotes.cargar_zonas()) == 10
+    assert len(z) == 10
+    assert 490 <= 10 * 50 <= 510
+    assert not hasattr(config, "INCLUIR_PROCEDENCIA_CHINA")
+    assert "north_china_plain" not in z
+    assert not any("procedencia" in v for v in z.values())
+    assert not any(u.startswith("CHN.") for v in z.values() for u in v["unidades"])
     assert all(len(v["unidades"]) > 0 for v in z.values())
 
 

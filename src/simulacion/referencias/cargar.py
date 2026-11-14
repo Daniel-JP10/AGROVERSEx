@@ -59,12 +59,9 @@ def cargar_eventos():
 
 def cargar_kluger():
     filas = _leer("kluger.yaml")["efecto_antecesor"]
-    # D-009: las filas de China se rotulan y se quitan si la bandera está apagada
-    if not config.INCLUIR_PROCEDENCIA_CHINA:
-        filas = [f for f in filas if not f["procedencia_china"]]
     cols = ["pais", "antecesor", "cultivo", "efecto2", "eff_div", "beta_lluvia", "beta_t",
             "sig_efecto2", "sig_eff_div", "sig_beta_lluvia", "sig_beta_t",
-            "procedencia_china", "fuente_id"]
+            "fuente_id"]
     return pd.DataFrame(filas, columns=cols)
 
 
@@ -83,14 +80,14 @@ def cargar_faostat():
 def cargar_teleconexiones():
     filas = _leer("teleconexiones.yaml")["teleconexiones"]
     df = pd.DataFrame([f for f in filas if f["estado"].startswith("2 fuentes")])
-    # coef queda NULL: la magnitud, cuando existe, va en coef_mm_dia (Cai 2025)
+    # coef queda NULL: sin magnitud en las fuentes usables, la magnitud es SUPUESTO en clima.py
     df["coef"] = np.nan
-    for c, v in (("nina_aplica", True), ("coef_mm_dia", None), ("meses_coef", None)):
+    for c, v in (("nina_aplica", True),):
         if c not in df:
             df[c] = v
     df["nina_aplica"] = df["nina_aplica"].map(lambda v: True if pd.isna(v) else bool(v))
     return df[["macroregion", "temporada", "variable", "signo_nino", "signo_nina", "coef", "fuentes", "estado",
-               "nina_aplica", "coef_mm_dia", "meses_coef", "fuente_informe"]]
+               "nina_aplica", "fuente_informe"]]
 
 
 def cargar_berkeley():

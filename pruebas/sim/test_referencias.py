@@ -1,5 +1,6 @@
 # asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import re
+from pathlib import Path
 
 import pandas as pd
 import pytest
@@ -134,15 +135,16 @@ def test_eventos_transcripcion():
         assert e["estado_texto"] == f[6]
 
 
-def test_kluger_36_filas():
-    assert len(ref.cargar_kluger()) == 36
+def test_kluger_34_filas():
+    assert len(ref.cargar_kluger()) == 34
 
 
 @SIN_EVIDENCIA
 def test_kluger_transcripcion():
-    filas = _tabla(ROT, "2. Efecto del cultivo")
+    # la tabla de evidencia trae 36 filas; las 2 de China no se cargan (§5.1)
+    filas = [f for f in _tabla(ROT, "2. Efecto del cultivo") if f[0] != "China"]
     df = ref.cargar_kluger()
-    assert len(filas) == len(df) == 36
+    assert len(filas) == len(df) == 34
     for f, (_, r) in zip(filas, df.iterrows()):
         antecesor, cultivo = f[1].split("→")
         assert (r["pais"], r["antecesor"], r["cultivo"]) == (f[0], antecesor, cultivo)
@@ -157,15 +159,18 @@ def test_kluger_transcripcion():
         assert r["sig_beta_t"] == ("*" in f[5])
 
 
-@SIN_EVIDENCIA
-def test_kluger_procedencia_china(monkeypatch):
-    china = sum(1 for f in _tabla(ROT, "2. Efecto del cultivo") if f[0] == "China")
-    assert china == 2
-    assert len(ref.cargar_kluger()) == 36  # bandera encendida: se incluyen
-    monkeypatch.setattr(config, "INCLUIR_PROCEDENCIA_CHINA", False)
-    sin = ref.cargar_kluger()
-    assert 36 - len(sin) == china
-    assert "China" not in set(sin["pais"])
+def test_kluger_sin_filas_ni_columna_de_procedencia_china():
+    k = ref.cargar_kluger()
+    assert len(k) == 34
+    assert "China" not in set(k["pais"])
+    assert "procedencia_china" not in k.columns
+
+
+def test_teleconexiones_sin_coeficiente_de_procedencia_china():
+    t = ref.cargar_teleconexiones()
+    assert "coef_mm_dia" not in t.columns and "meses_coef" not in t.columns
+    txt = (Path(ref.__file__).parent / "teleconexiones.yaml").read_text(encoding="utf-8").lower()
+    assert "procedencia" not in txt and "coef_mm_dia" not in txt
 
 
 def test_fao56_15_cultivos_13_con_agua():
