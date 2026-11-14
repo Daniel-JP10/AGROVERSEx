@@ -32,3 +32,41 @@ Consultado 2026-11-14 ~15:16.
 - Worldview (https://raw.githubusercontent.com/nasa-gibs/worldview/main/config/default/common/config/metadata/layers/modis/BlueMarble.md): "The MODIS Blue Marble, Next Generation is a static product created with data from 2004 from the MODIS instrument on board the Terra satellite. The image resolution is 500 m."
 - Los títulos dicen agosto de 2004 para las tres capas; el GetCapabilities no trae el año. Que ShadedRelief use el mismo compuesto de agosto es lo que dice el título; la descripción de resolución solo aparece para NextGeneration (PENDIENTE para las otras dos).
 - Los restos de nubes en los Andes se aceptan como limitación declarada (director). El texto visible está en la clave `fuentes.fondo` (es/en).
+
+## JSON literal de cada capa (curl a https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/<capa>.json, 2026-11-14; está en varias líneas, buscar `"title"`)
+
+```json
+// BlueMarble_ShadedRelief
+{
+  "title": "Blue Marble (August 2004, Shaded Relief)",
+  "subtitle": "MODIS / NASA Earth Observatory",
+  "ongoing": false,
+  "measurement": "Blue Marble",
+  "retentionPeriod": -1,
+  "daynight": [
+    "day"
+  ]
+}
+// BlueMarble_ShadedRelief_Bathymetry
+{
+  "title": "Blue Marble (August 2004, Shaded Relief and Bathymetry)",
+  "subtitle": "MODIS / NASA Earth Observatory",
+  "ongoing": false,
+  "measurement": "Blue Marble",
+  "retentionPeriod": -1,
+  "daynight": [
+    "day"
+  ]
+}
+// BlueMarble_NextGeneration
+{
+  "title": "Blue Marble (August 2004)",
+  "subtitle": "MODIS / NASA Earth Observatory",
+  "ongoing": false,
+  "measurement": "Blue Marble",
+  "retentionPeriod": -1,
+  "daynight": [
+    "day"
+  ]
+}
+```

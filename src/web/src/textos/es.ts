@@ -79,7 +79,7 @@ export const es = {
   'filtros.supuestoB': '°C (convención de NOAA para el ONI, aplicada al RONI). Fuera de esos meses el mapa se apaga.',
   'filtros.titulo': 'Filtros',
   'filtros.todos': 'Todos los meses',
-  'fuentes.climatologia': 'Climatología base: WorldClim 2.1 (uso no comercial), 1970-2000. La serie 2000-2026 es simulada.',
+  'fuentes.climatologia': 'Climatología base 1970-2000: fuente PENDIENTE de confirmar. La serie 2000-2026 es simulada.',
   'globo.acercar': 'Acercar',
   'globo.alejar': 'Alejar',
   'globo.disputa': 'Trama: zonas en disputa · límites ilustrativos',

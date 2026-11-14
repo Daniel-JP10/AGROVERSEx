@@ -81,7 +81,7 @@ export const en: Record<ClaveTexto, string> = {
   'filtros.supuestoB': '°C (NOAA convention for the ONI, applied to the RONI). Outside those months the map is dimmed.',
   'filtros.titulo': 'Filters',
   'filtros.todos': 'All months',
-  'fuentes.climatologia': 'Baseline climatology: WorldClim 2.1 (non-commercial use), 1970-2000. The 2000-2026 series is simulated.',
+  'fuentes.climatologia': 'Baseline climatology 1970-2000: source PENDING confirmation. The 2000-2026 series is simulated.',
   'globo.acercar': 'Zoom in',
   'globo.alejar': 'Zoom out',
   'globo.disputa': 'Hatching: disputed areas · boundaries are illustrative',
