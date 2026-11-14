@@ -1,0 +1,4 @@
+final area primer 2000-01 ultimo 2025-09 n_meses 309 estado ['final'] unidad ['mm/hr'] version ['07B']
+final cultivo primer 2000-01 ultimo 2025-09 n_meses 309 estado ['final'] unidad ['mm/hr'] version ['07B']
+late area primer 2025-10 ultimo 2026-10 n_meses 13 estado ['provisional'] unidad ['mm/day'] version ['07B']
+late cultivo primer 2025-10 ultimo 2026-10 n_meses 13 estado ['provisional'] unidad ['mm/day'] version ['07B']

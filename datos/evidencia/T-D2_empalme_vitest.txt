@@ -1,0 +1,62 @@
+[33m(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./server/api" without a file extension (vite.config.ts:4:26). Add the file extension
+  - import "./server/teselas" without a file extension (vite.config.ts:5:31). Add the file extension
+  - import "./sqlite" without a file extension (server/api.ts:6:25). Add the file extension
+  - import "./rutas_serie" without a file extension (server/api.ts:7:62). Add the file extension
+  - import "./rutas_rotaciones" without a file extension (server/api.ts:8:48). Add the file extension
+  - import "./rutas_atributos" without a file extension (server/api.ts:9:27). Add the file extension
+  - import "./rutas_lotes" without a file extension (server/api.ts:10:29). Add the file extension
+  - import "./validar" without a file extension (server/api.ts:11:84). Add the file extension
+  - import "./validar" without a file extension (server/rutas_atributos.ts:3:30). Add the file extension
+  - import "./validar" without a file extension (server/rutas_serie.ts:3:70). Add the file extension
+  - import "./validar" without a file extension (server/rutas_rotaciones.ts:3:41). Add the file extension
+  - import "./validar" without a file extension (server/rutas_lotes.ts:3:41). Add the file extension
+  - import "./rutas_serie" without a file extension (server/rutas_atributos.ts:4:27). Add the file extension
+  - import "./rutas_serie" without a file extension (server/rutas_rotaciones.ts:4:27). Add the file extension
+  - import "./rutas_serie" without a file extension (server/rutas_lotes.ts:4:27). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.[39m
+[api] No existe la base C:/NASA/wt/empalme-imerg/datos/procesados/agroversex.sqlite. Define AGROVERSEX_SQLITE con su ruta.
+
+ RUN  v5.0.5 C:/NASA/wt/empalme-imerg/src/web
+
+ ❯ pruebas/empalme_imerg.test.ts (3 tests | 2 failed) 33ms
+   ❯ empalme IMERG Final a Late en la serie mostrada (3)
+     × 2025-09 (Final) y 2025-10 (Late) salen en la misma unidad de pantalla 22ms
+     × 2025-10 mostrado / octubre de Final mostrado queda en el rango físico 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  pruebas/empalme_imerg.test.ts > empalme IMERG Final a Late en la serie mostrada > 2025-09 (Final) y 2025-10 (Late) salen en la misma unidad de pantalla
+AssertionError: expected 'mm/day' to be 'mm/mes' // Object.is equality
+
+Expected: "mm/mes"
+Received: "mm/day"
+
+ ❯ pruebas/empalme_imerg.test.ts:27:27
+     25|       const fin = mostrar(F.find(f => f.unidad_id === u && f.mes === '…
+     26|       const late = mostrar(F.find(f => f.unidad_id === u && f.mes === …
+     27|       expect(late.unidad).toBe(fin.unidad)
+       |                           ^
+     28|     }
+     29|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  pruebas/empalme_imerg.test.ts > empalme IMERG Final a Late en la serie mostrada > 2025-10 mostrado / octubre de Final mostrado queda en el rango físico
+AssertionError: COL-ADM0: razón 0.04146475868158728: expected 0.04146475868158728 to be greater than 0.5
+ ❯ pruebas/empalme_imerg.test.ts:33:37
+     31|     for (const u of unidades) {
+     32|       const r = razon(u, f => mostrar(f))
+     33|       expect(r, `${u}: razón ${r}`).toBeGreaterThan(RANGO[0]); expect(…
+       |                                     ^
+     34|     }
+     35|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 1 passed (3)
+   Start at  15:29:26
+   Duration  592ms (tests 32%, import 30%, transform 27%, worker 10%, environment 1%)
+

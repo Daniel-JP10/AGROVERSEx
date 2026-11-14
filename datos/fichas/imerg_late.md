@@ -20,3 +20,11 @@
 - Requisito del reto y pregunta que atiende: N2, D1, D2, F4; PI-D1 y PI-D4. Compuerta G2
 - Responsable: constructor de datos (subagente), orquestador de datos Daniel
 - Verificador y fecha: PENDIENTE
+
+
+## Revisión de `randomError` (T-D2, 2026-11-14)
+
+- Lectura descartada como causa: en el DMR de GPM_3IMERGDL 07 la variable `randomError` trae `units` mm/day, `_FillValue` -9999,900391 y ningún `scale_factor`, `add_offset` ni `missing_value`. El relleno se enmascara (0 celdas con relleno en `randomError` en tres días revisados, 2025-10-01, 2026-04-23 y 2026-11-13) y no hay escala que aplicar.
+- Distribución (2025-10-01): mediana 3,1 mm/día, percentil 90 de 461, percentil 99 de 4.802 y máximo 218.369; 372 mil celdas por encima de 1.000. En el 100 % de las celdas con precipitación mayor que 1 mm/día el error es mayor que la propia precipitación (máximo: precipitación 403 mm/día y error 218.369, unas 540 veces). Tres días de tres meses distintos dan el mismo patrón.
+- Conclusión (INFERENCIA, no corregida): la lectura es correcta y los valores no se pueden interpretar como un error cuadrático medio en mm/día. `randomError` de Late NO se usa como rango. Todo rango de lluvia es `tipo_rango = espacial`. Queda como PENDIENTE preguntar a GES DISC por la unidad real o el significado de `randomError` en el producto diario Late.
+- Orientación: igual que Final (ver `imerg_final.md`), el arreglo de GDAL sale espejado en longitud; `lectura_nasa.py` lo corrige y lo comprueba con puntos de control.
