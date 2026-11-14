@@ -1,0 +1,791 @@
+rotulo: INFERENCIA
+nota: 'Región de Berkeley por CONTINENT de ne_10m_admin_0_countries (país propio si Berkeley lo publica); ENSO solo donde hay forzante. Sin región: tendencia global GISTEMP.'
+paises:
+  ABW:
+    berkeley: Norteamérica
+    enso: null
+  AFG:
+    berkeley: Asia
+    enso: null
+  AGO:
+    berkeley: África
+    enso: null
+  AIA:
+    berkeley: Norteamérica
+    enso: null
+  ALB:
+    berkeley: Europa
+    enso: null
+  ALD:
+    berkeley: Europa
+    enso: null
+  AND:
+    berkeley: Europa
+    enso: null
+  ARE:
+    berkeley: Asia
+    enso: null
+  ARG:
+    berkeley: Argentina
+    enso: null
+  ARM:
+    berkeley: Asia
+    enso: null
+  ASM:
+    berkeley: Oceanía
+    enso: null
+  ATA:
+    berkeley: null
+    enso: null
+  ATC:
+    berkeley: Oceanía
+    enso: null
+  ATF:
+    berkeley: null
+    enso: null
+  ATG:
+    berkeley: Norteamérica
+    enso: null
+  AUS:
+    berkeley: Australia
+    enso: null
+  AUT:
+    berkeley: Europa
+    enso: null
+  AZE:
+    berkeley: Asia
+    enso: null
+  BDI:
+    berkeley: África
+    enso: null
+  BEL:
+    berkeley: Europa
+    enso: null
+  BEN:
+    berkeley: África
+    enso: null
+  BFA:
+    berkeley: África
+    enso: null
+  BGD:
+    berkeley: Asia
+    enso: null
+  BGR:
+    berkeley: Europa
+    enso: null
+  BHR:
+    berkeley: Asia
+    enso: null
+  BHS:
+    berkeley: Norteamérica
+    enso: null
+  BIH:
+    berkeley: Europa
+    enso: null
+  BJN:
+    berkeley: Norteamérica
+    enso: null
+  BLM:
+    berkeley: Norteamérica
+    enso: null
+  BLR:
+    berkeley: Europa
+    enso: null
+  BLZ:
+    berkeley: Norteamérica
+    enso: Centroamérica y Corredor Seco
+  BMU:
+    berkeley: Norteamérica
+    enso: null
+  BOL:
+    berkeley: Suramérica
+    enso: null
+  BRA:
+    berkeley: Brasil
+    enso: null
+  BRB:
+    berkeley: Norteamérica
+    enso: null
+  BRI:
+    berkeley: Suramérica
+    enso: null
+  BRN:
+    berkeley: Asia
+    enso: null
+  BRT:
+    berkeley: África
+    enso: null
+  BTN:
+    berkeley: Asia
+    enso: null
+  BWA:
+    berkeley: África
+    enso: Sureste de África
+  CAF:
+    berkeley: África
+    enso: null
+  CAN:
+    berkeley: Norteamérica
+    enso: null
+  CHE:
+    berkeley: Europa
+    enso: null
+  CHL:
+    berkeley: Suramérica
+    enso: null
+  CHN:
+    berkeley: Asia
+    enso: null
+  CIV:
+    berkeley: África
+    enso: null
+  CLP:
+    berkeley: null
+    enso: null
+  CMR:
+    berkeley: África
+    enso: null
+  CNM:
+    berkeley: Asia
+    enso: null
+  COD:
+    berkeley: África
+    enso: null
+  COG:
+    berkeley: África
+    enso: null
+  COK:
+    berkeley: Oceanía
+    enso: null
+  COL:
+    berkeley: Colombia
+    enso: Colombia (Caribe y Andina)
+  COM:
+    berkeley: África
+    enso: null
+  CPV:
+    berkeley: África
+    enso: null
+  CRI:
+    berkeley: Norteamérica
+    enso: Centroamérica y Corredor Seco
+  CSI:
+    berkeley: Oceanía
+    enso: null
+  CUB:
+    berkeley: Norteamérica
+    enso: null
+  CUW:
+    berkeley: Norteamérica
+    enso: null
+  CYM:
+    berkeley: Norteamérica
+    enso: null
+  CYN:
+    berkeley: Asia
+    enso: null
+  CYP:
+    berkeley: Asia
+    enso: null
+  CZE:
+    berkeley: Europa
+    enso: null
+  DEU:
+    berkeley: Europa
+    enso: null
+  DJI:
+    berkeley: África
+    enso: Cuerno de África
+  DMA:
+    berkeley: Norteamérica
+    enso: null
+  DNK:
+    berkeley: Europa
+    enso: null
+  DOM:
+    berkeley: Norteamérica
+    enso: null
+  DZA:
+    berkeley: África
+    enso: null
+  ECU:
+    berkeley: Suramérica
+    enso: null
+  EGY:
+    berkeley: África
+    enso: null
+  ERI:
+    berkeley: África
+    enso: null
+  ESB:
+    berkeley: Asia
+    enso: null
+  ESP:
+    berkeley: Europa
+    enso: null
+  EST:
+    berkeley: Europa
+    enso: null
+  ETH:
+    berkeley: Etiopía
+    enso: Cuerno de África
+  FIN:
+    berkeley: Europa
+    enso: null
+  FJI:
+    berkeley: Oceanía
+    enso: Pacífico occidental
+  FLK:
+    berkeley: Suramérica
+    enso: null
+  FRA:
+    berkeley: Europa
+    enso: null
+  FRO:
+    berkeley: Europa
+    enso: null
+  FSM:
+    berkeley: Oceanía
+    enso: Pacífico occidental
+  GAB:
+    berkeley: África
+    enso: null
+  GBR:
+    berkeley: Europa
+    enso: null
+  GEO:
+    berkeley: Asia
+    enso: null
+  GGY:
+    berkeley: Europa
+    enso: null
+  GHA:
+    berkeley: África
+    enso: null
+  GIB:
+    berkeley: Europa
+    enso: null
+  GIN:
+    berkeley: África
+    enso: null
+  GMB:
+    berkeley: África
+    enso: null
+  GNB:
+    berkeley: África
+    enso: null
+  GNQ:
+    berkeley: África
+    enso: null
+  GRC:
+    berkeley: Europa
+    enso: null
+  GRD:
+    berkeley: Norteamérica
+    enso: null
+  GRL:
+    berkeley: Norteamérica
+    enso: null
+  GTM:
+    berkeley: Norteamérica
+    enso: Centroamérica y Corredor Seco
+  GUM:
+    berkeley: Oceanía
+    enso: null
+  GUY:
+    berkeley: Suramérica
+    enso: null
+  HKG:
+    berkeley: Asia
+    enso: null
+  HMD:
+    berkeley: null
+    enso: null
+  HND:
+    berkeley: Norteamérica
+    enso: Centroamérica y Corredor Seco
+  HRV:
+    berkeley: Europa
+    enso: null
+  HTI:
+    berkeley: Norteamérica
+    enso: null
+  HUN:
+    berkeley: Europa
+    enso: null
+  IDN:
+    berkeley: Asia
+    enso: Indonesia
+  IMN:
+    berkeley: Europa
+    enso: null
+  IND:
+    berkeley: India
+    enso: null
+  IOA:
+    berkeley: Asia
+    enso: null
+  IOT:
+    berkeley: null
+    enso: null
+  IRL:
+    berkeley: Europa
+    enso: null
+  IRN:
+    berkeley: Asia
+    enso: null
+  IRQ:
+    berkeley: Asia
+    enso: null
+  ISL:
+    berkeley: Europa
+    enso: null
+  ISR:
+    berkeley: Asia
+    enso: null
+  ITA:
+    berkeley: Europa
+    enso: null
+  JAM:
+    berkeley: Norteamérica
+    enso: null
+  JEY:
+    berkeley: Europa
+    enso: null
+  JOR:
+    berkeley: Asia
+    enso: null
+  JPN:
+    berkeley: Asia
+    enso: null
+  KAB:
+    berkeley: Asia
+    enso: null
+  KAS:
+    berkeley: Asia
+    enso: null
+  KAZ:
+    berkeley: Asia
+    enso: null
+  KEN:
+    berkeley: África
+    enso: Cuerno de África
+  KGZ:
+    berkeley: Asia
+    enso: null
+  KHM:
+    berkeley: Asia
+    enso: null
+  KIR:
+    berkeley: Oceanía
+    enso: Pacífico occidental
+  KNA:
+    berkeley: Norteamérica
+    enso: null
+  KOR:
+    berkeley: Asia
+    enso: null
+  KOS:
+    berkeley: Europa
+    enso: null
+  KWT:
+    berkeley: Asia
+    enso: null
+  LAO:
+    berkeley: Asia
+    enso: null
+  LBN:
+    berkeley: Asia
+    enso: null
+  LBR:
+    berkeley: África
+    enso: null
+  LBY:
+    berkeley: África
+    enso: null
+  LCA:
+    berkeley: Norteamérica
+    enso: null
+  LIE:
+    berkeley: Europa
+    enso: null
+  LKA:
+    berkeley: Asia
+    enso: null
+  LSO:
+    berkeley: África
+    enso: Sureste de África
+  LTU:
+    berkeley: Europa
+    enso: null
+  LUX:
+    berkeley: Europa
+    enso: null
+  LVA:
+    berkeley: Europa
+    enso: null
+  MAC:
+    berkeley: Asia
+    enso: null
+  MAF:
+    berkeley: Norteamérica
+    enso: null
+  MAR:
+    berkeley: África
+    enso: null
+  MCO:
+    berkeley: Europa
+    enso: null
+  MDA:
+    berkeley: Europa
+    enso: null
+  MDG:
+    berkeley: África
+    enso: null
+  MDV:
+    berkeley: null
+    enso: null
+  MEX:
+    berkeley: Norteamérica
+    enso: null
+  MHL:
+    berkeley: Oceanía
+    enso: Pacífico occidental
+  MKD:
+    berkeley: Europa
+    enso: null
+  MLI:
+    berkeley: África
+    enso: null
+  MLT:
+    berkeley: Europa
+    enso: null
+  MMR:
+    berkeley: Asia
+    enso: null
+  MNE:
+    berkeley: Europa
+    enso: null
+  MNG:
+    berkeley: Asia
+    enso: null
+  MNP:
+    berkeley: Oceanía
+    enso: null
+  MOZ:
+    berkeley: África
+    enso: Sureste de África
+  MRT:
+    berkeley: África
+    enso: null
+  MSR:
+    berkeley: Norteamérica
+    enso: null
+  MUS:
+    berkeley: null
+    enso: null
+  MWI:
+    berkeley: África
+    enso: Sureste de África
+  MYS:
+    berkeley: Asia
+    enso: null
+  NAM:
+    berkeley: África
+    enso: null
+  NCL:
+    berkeley: Oceanía
+    enso: Pacífico occidental
+  NER:
+    berkeley: África
+    enso: null
+  NFK:
+    berkeley: Oceanía
+    enso: null
+  NGA:
+    berkeley: Nigeria
+    enso: null
+  NIC:
+    berkeley: Norteamérica
+    enso: Centroamérica y Corredor Seco
+  NIU:
+    berkeley: Oceanía
+    enso: null
+  NLD:
+    berkeley: Europa
+    enso: null
+  NOR:
+    berkeley: Europa
+    enso: null
+  NPL:
+    berkeley: Asia
+    enso: null
+  NRU:
+    berkeley: Oceanía
+    enso: Pacífico occidental
+  NZL:
+    berkeley: Oceanía
+    enso: null
+  OMN:
+    berkeley: Asia
+    enso: null
+  PAK:
+    berkeley: Asia
+    enso: null
+  PAN:
+    berkeley: Norteamérica
+    enso: Centroamérica y Corredor Seco
+  PCN:
+    berkeley: Oceanía
+    enso: null
+  PER:
+    berkeley: Suramérica
+    enso: null
+  PGA:
+    berkeley: Asia
+    enso: null
+  PHL:
+    berkeley: Asia
+    enso: null
+  PLW:
+    berkeley: Oceanía
+    enso: Pacífico occidental
+  PNG:
+    berkeley: Oceanía
+    enso: Pacífico occidental
+  POL:
+    berkeley: Europa
+    enso: null
+  PRI:
+    berkeley: Norteamérica
+    enso: null
+  PRK:
+    berkeley: Asia
+    enso: null
+  PRT:
+    berkeley: Europa
+    enso: null
+  PRY:
+    berkeley: Suramérica
+    enso: null
+  PSX:
+    berkeley: Asia
+    enso: null
+  PYF:
+    berkeley: Oceanía
+    enso: null
+  QAT:
+    berkeley: Asia
+    enso: null
+  ROU:
+    berkeley: Europa
+    enso: null
+  RUS:
+    berkeley: Rusia
+    enso: null
+  RWA:
+    berkeley: África
+    enso: null
+  SAH:
+    berkeley: África
+    enso: null
+  SAU:
+    berkeley: Asia
+    enso: null
+  SCR:
+    berkeley: Asia
+    enso: null
+  SDN:
+    berkeley: África
+    enso: null
+  SDS:
+    berkeley: África
+    enso: null
+  SEN:
+    berkeley: África
+    enso: null
+  SER:
+    berkeley: Norteamérica
+    enso: null
+  SGP:
+    berkeley: Asia
+    enso: null
+  SGS:
+    berkeley: null
+    enso: null
+  SHN:
+    berkeley: null
+    enso: null
+  SLB:
+    berkeley: Oceanía
+    enso: Pacífico occidental
+  SLE:
+    berkeley: África
+    enso: null
+  SLV:
+    berkeley: Norteamérica
+    enso: Centroamérica y Corredor Seco
+  SMR:
+    berkeley: Europa
+    enso: null
+  SOL:
+    berkeley: África
+    enso: null
+  SOM:
+    berkeley: África
+    enso: Cuerno de África
+  SPI:
+    berkeley: Suramérica
+    enso: null
+  SPM:
+    berkeley: Norteamérica
+    enso: null
+  SRB:
+    berkeley: Europa
+    enso: null
+  STP:
+    berkeley: África
+    enso: null
+  SUR:
+    berkeley: Suramérica
+    enso: null
+  SVK:
+    berkeley: Europa
+    enso: null
+  SVN:
+    berkeley: Europa
+    enso: null
+  SWE:
+    berkeley: Europa
+    enso: null
+  SWZ:
+    berkeley: África
+    enso: Sureste de África
+  SXM:
+    berkeley: Norteamérica
+    enso: null
+  SYC:
+    berkeley: null
+    enso: null
+  SYR:
+    berkeley: Asia
+    enso: null
+  TCA:
+    berkeley: Norteamérica
+    enso: null
+  TCD:
+    berkeley: África
+    enso: null
+  TGO:
+    berkeley: África
+    enso: null
+  THA:
+    berkeley: Asia
+    enso: null
+  TJK:
+    berkeley: Asia
+    enso: null
+  TKM:
+    berkeley: Asia
+    enso: null
+  TLS:
+    berkeley: Asia
+    enso: null
+  TON:
+    berkeley: Oceanía
+    enso: null
+  TTO:
+    berkeley: Norteamérica
+    enso: null
+  TUN:
+    berkeley: África
+    enso: null
+  TUR:
+    berkeley: Asia
+    enso: null
+  TUV:
+    berkeley: Oceanía
+    enso: Pacífico occidental
+  TWN:
+    berkeley: Asia
+    enso: null
+  TZA:
+    berkeley: África
+    enso: null
+  UGA:
+    berkeley: África
+    enso: null
+  UKR:
+    berkeley: Europa
+    enso: null
+  UMI:
+    berkeley: Norteamérica
+    enso: null
+  URY:
+    berkeley: Suramérica
+    enso: Sur de Brasil, Uruguay y Pampa
+  USA:
+    berkeley: EE. UU. (hasta 2016)
+    enso: null
+  USG:
+    berkeley: Norteamérica
+    enso: null
+  UZB:
+    berkeley: Asia
+    enso: null
+  VAT:
+    berkeley: Europa
+    enso: null
+  VCT:
+    berkeley: Norteamérica
+    enso: null
+  VEN:
+    berkeley: Suramérica
+    enso: null
+  VGB:
+    berkeley: Norteamérica
+    enso: null
+  VIR:
+    berkeley: Norteamérica
+    enso: null
+  VNM:
+    berkeley: Asia
+    enso: null
+  VUT:
+    berkeley: Oceanía
+    enso: Pacífico occidental
+  WLF:
+    berkeley: Oceanía
+    enso: null
+  WSB:
+    berkeley: Asia
+    enso: null
+  WSM:
+    berkeley: Oceanía
+    enso: null
+  YEM:
+    berkeley: Asia
+    enso: null
+  ZAF:
+    berkeley: África
+    enso: Sureste de África
+  ZMB:
+    berkeley: África
+    enso: Sureste de África
+  ZWE:
+    berkeley: África
+    enso: Sureste de África
+# ENSO acotado por ADM1 (INFERENCIA): solo las unidades con esos ADM1 llevan la región; la unidad nacional (sin ADM1) no.
+enso_adm1:
+  "Sur de Brasil, Uruguay y Pampa":
+    BRA: [Rio Grande do Sul, Santa Catarina, Paraná]
+    ARG: [Buenos Aires, Córdoba, Santa Fe, Entre Ríos, La Pampa]
+  # INFERENCIA: la fuente (CPC, DJF) habla de "TX a FL"; ADM1 de la franja sur-sureste del Golfo y el Atlántico sur
+  "Sur de EE. UU.":
+    USA: [Texas, Louisiana, Mississippi, Alabama, Georgia, Florida, South Carolina]
+  "Australia oriental y norte":
+    AUS: [Queensland, New South Wales, Victoria, Northern Territory, Australian Capital Territory]
+# ADM1 sin teleconexión: Colombia Pacífica es PENDIENTE por contradicción de fuentes; solo Chocó es del todo Pacífico
+# (Valle, Cauca y Nariño son mixtos y quedan con la señal: limitación).
+enso_excluye_adm1:
+  COL: [Chocó]

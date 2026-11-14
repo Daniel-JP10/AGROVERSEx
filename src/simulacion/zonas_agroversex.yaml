@@ -1,0 +1,50 @@
+# Zonas DEMO de INICIAR §8.6 (todas DEMO, ninguna es dato real de fincas).
+# Regla de elección (SUPUESTO del orquestador, revisión 2026-11-13): unidades ADM1 de geo.sqlite que cubren
+# el núcleo agrícola de la región de INICIAR §11.2, tomadas por nombre de ADM1 sin mapa de cultivo a escala de lote.
+# `cultivos`: cultivo habitual de §11.2 (FUENTE en esa sección); los lotes se reparten entre ellos.
+# North China Plain solo entra con INCLUIR_PROCEDENCIA_CHINA (D-009) y lleva su procedencia.
+corn_belt:
+  nombre: Corn Belt
+  cultivos: [maiz, soya]
+  unidades: [USA.16_1, USA.14_1, USA.15_1, USA.28_1, USA.24_1]   # Iowa, Illinois, Indiana, Nebraska, Minnesota
+pampa:
+  nombre: Pampa
+  cultivos: [soya, maiz, trigo]
+  unidades: [ARG.1_1, ARG.6_1, ARG.21_1, ARG.8_1]   # Buenos Aires, Córdoba, Santa Fe, Entre Ríos
+cerrado:
+  nombre: Cerrado
+  cultivos: [soya, maiz]
+  unidades: [BRA.9_1, BRA.12_1, BRA.11_1, BRA.27_1]   # Goiás, Mato Grosso, Mato Grosso do Sul, Tocantins
+llanos:
+  nombre: Llanos
+  cultivos: [maiz, soya]
+  unidades: [COL.21_2, COL.10_2, COL.33_2]   # Meta, Casanare, Vichada
+andina_colombia:
+  nombre: Andina de Colombia
+  cultivos: [papa]
+  unidades: [COL.7_2, COL.15_2, COL.22_2]   # Boyacá, Cundinamarca, Nariño
+indo_gangetica:
+  nombre: Indo-Gangética
+  cultivos: [arroz, trigo]
+  unidades: [IND.28_1, IND.12_1, IND.34_1, IND.5_1]   # Punjab, Haryana, Uttar Pradesh, Bihar
+sahel:
+  nombre: Sahel
+  cultivos: [mijo, caupi]
+  unidades: [NER.4_1, NER.8_1, MLI.6_1, BFA.4_1, SEN.8_1]   # Maradi, Zinder, Mopti, Centre-Nord, Louga
+africa_oriental:
+  nombre: África Oriental
+  cultivos: [maiz, frijol]
+  unidades: [KEN.31_1, KEN.3_1, TZA.13_1, UGA.38_1]   # Nakuru, Bungoma, Mbeya, Mbale
+francia:
+  nombre: Francia
+  cultivos: [trigo]
+  unidades: [FRA.4_1, FRA.7_1, FRA.6_1]   # Centre-Val de Loire, Hauts-de-France, Grand Est
+australia:
+  nombre: Australia
+  cultivos: [trigo]
+  unidades: [AUS.11_1, AUS.5_1, AUS.10_1, AUS.8_1]   # Australia Occidental, Nueva Gales del Sur, Victoria, Australia Meridional
+north_china_plain:
+  nombre: North China Plain
+  procedencia: china        # D-009, desviación explícita de AGENTS §5.1; volver a False la bandera para la entrega
+  cultivos: [trigo, maiz]
+  unidades: [CHN.10_1, CHN.12_1, CHN.23_1]   # Hebei, Henan, Shandong

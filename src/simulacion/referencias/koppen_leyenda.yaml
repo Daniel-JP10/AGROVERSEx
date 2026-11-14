@@ -1,0 +1,213 @@
+fuente: Beck et al. (2023), Sci. Data 10, 724; legend.txt de los mapas Köppen-Geiger 1991-2020
+rotulo: FUENTE
+clases:
+  1:
+    codigo: Af
+    descripcion: Tropical, rainforest
+    rgb:
+    - 0
+    - 0
+    - 255
+  2:
+    codigo: Am
+    descripcion: Tropical, monsoon
+    rgb:
+    - 0
+    - 120
+    - 255
+  3:
+    codigo: Aw
+    descripcion: Tropical, savannah
+    rgb:
+    - 70
+    - 170
+    - 250
+  4:
+    codigo: BWh
+    descripcion: Arid, desert, hot
+    rgb:
+    - 255
+    - 0
+    - 0
+  5:
+    codigo: BWk
+    descripcion: Arid, desert, cold
+    rgb:
+    - 255
+    - 150
+    - 150
+  6:
+    codigo: BSh
+    descripcion: Arid, steppe, hot
+    rgb:
+    - 245
+    - 165
+    - 0
+  7:
+    codigo: BSk
+    descripcion: Arid, steppe, cold
+    rgb:
+    - 255
+    - 220
+    - 100
+  8:
+    codigo: Csa
+    descripcion: Temperate, dry summer, hot summer
+    rgb:
+    - 255
+    - 255
+    - 0
+  9:
+    codigo: Csb
+    descripcion: Temperate, dry summer, warm summer
+    rgb:
+    - 200
+    - 200
+    - 0
+  10:
+    codigo: Csc
+    descripcion: Temperate, dry summer, cold summer
+    rgb:
+    - 150
+    - 150
+    - 0
+  11:
+    codigo: Cwa
+    descripcion: Temperate, dry winter, hot summer
+    rgb:
+    - 150
+    - 255
+    - 150
+  12:
+    codigo: Cwb
+    descripcion: Temperate, dry winter, warm summer
+    rgb:
+    - 100
+    - 200
+    - 100
+  13:
+    codigo: Cwc
+    descripcion: Temperate, dry winter, cold summer
+    rgb:
+    - 50
+    - 150
+    - 50
+  14:
+    codigo: Cfa
+    descripcion: Temperate, no dry season, hot summer
+    rgb:
+    - 200
+    - 255
+    - 80
+  15:
+    codigo: Cfb
+    descripcion: Temperate, no dry season, warm summer
+    rgb:
+    - 100
+    - 255
+    - 80
+  16:
+    codigo: Cfc
+    descripcion: Temperate, no dry season, cold summer
+    rgb:
+    - 50
+    - 200
+    - 0
+  17:
+    codigo: Dsa
+    descripcion: Cold, dry summer, hot summer
+    rgb:
+    - 255
+    - 0
+    - 255
+  18:
+    codigo: Dsb
+    descripcion: Cold, dry summer, warm summer
+    rgb:
+    - 200
+    - 0
+    - 200
+  19:
+    codigo: Dsc
+    descripcion: Cold, dry summer, cold summer
+    rgb:
+    - 150
+    - 50
+    - 150
+  20:
+    codigo: Dsd
+    descripcion: Cold, dry summer, very cold winter
+    rgb:
+    - 150
+    - 100
+    - 150
+  21:
+    codigo: Dwa
+    descripcion: Cold, dry winter, hot summer
+    rgb:
+    - 170
+    - 175
+    - 255
+  22:
+    codigo: Dwb
+    descripcion: Cold, dry winter, warm summer
+    rgb:
+    - 90
+    - 120
+    - 220
+  23:
+    codigo: Dwc
+    descripcion: Cold, dry winter, cold summer
+    rgb:
+    - 75
+    - 80
+    - 180
+  24:
+    codigo: Dwd
+    descripcion: Cold, dry winter, very cold winter
+    rgb:
+    - 50
+    - 0
+    - 135
+  25:
+    codigo: Dfa
+    descripcion: Cold, no dry season, hot summer
+    rgb:
+    - 0
+    - 255
+    - 255
+  26:
+    codigo: Dfb
+    descripcion: Cold, no dry season, warm summer
+    rgb:
+    - 55
+    - 200
+    - 255
+  27:
+    codigo: Dfc
+    descripcion: Cold, no dry season, cold summer
+    rgb:
+    - 0
+    - 125
+    - 125
+  28:
+    codigo: Dfd
+    descripcion: Cold, no dry season, very cold winter
+    rgb:
+    - 0
+    - 70
+    - 95
+  29:
+    codigo: ET
+    descripcion: Polar, tundra
+    rgb:
+    - 178
+    - 178
+    - 178
+  30:
+    codigo: EF
+    descripcion: Polar, frost
+    rgb:
+    - 102
+    - 102
+    - 102

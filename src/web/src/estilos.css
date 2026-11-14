@@ -1,0 +1,84 @@
+/* asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón */
+@import './app/tema.css';
+* { box-sizing: border-box; }
+html, body, #raiz { height: 100%; margin: 0; background: var(--fondo); color: var(--texto); }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:disabled { cursor: default; opacity: 0.45; }
+:focus-visible { outline: 2px solid var(--acento); outline-offset: 1px; }
+
+.app { height: 100%; display: grid; grid-template-rows: auto 1fr auto auto; }
+.banda { position: relative; background: var(--banda-fondo); color: var(--banda-texto); text-align: center; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; padding: 4px; border-bottom: 1px solid var(--borde); }
+.banda .acciones { position: absolute; right: 8px; top: 0; bottom: 0; display: flex; align-items: center; gap: 6px; }
+.banda .acciones button { height: 22px; min-width: 28px; border-radius: 6px; border: 1px solid currentColor; background: none; font-size: 11px; font-weight: 600; color: var(--banda-texto); }
+.pie { font-size: 11px; color: var(--suave); text-align: center; padding: 4px; border-top: 1px solid var(--borde); background: var(--panel-base); }
+.centro { display: grid; min-height: 0; }
+.riel { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 4px; padding: 6px; background: var(--panel); border: 1px solid var(--borde); border-radius: var(--radio); box-shadow: var(--sombra); backdrop-filter: blur(8px); z-index: 4; }
+.riel button { position: relative; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 8px; border: 1px solid transparent; background: none; color: var(--suave); }
+.riel button:hover { background: var(--realce); color: var(--texto); }
+.riel button[aria-pressed="true"] { background: var(--realce); color: var(--acento); border-color: var(--acento); }
+.riel .etq { position: absolute; left: calc(100% + 10px); top: 50%; transform: translateY(-50%); padding: 4px 10px; border-radius: 6px; background: var(--panel-base); border: 1px solid var(--borde); color: var(--texto); font-size: 12px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.12s; }
+.riel button:hover .etq, .riel button:focus-visible .etq { opacity: 1; }
+
+.zona-mapa { position: relative; min-height: 0; overflow: hidden; }
+.globo, .estrellas, .mapa { position: absolute; inset: 0; }
+.estrellas { width: 100%; height: 100%; }
+.mapa { background: transparent; }
+.maplibregl-canvas { background: transparent; }
+.tooltip { position: absolute; left: 0; top: 0; pointer-events: none; background: var(--panel); border: 1px solid var(--borde); border-radius: 8px; padding: 6px 10px; font-size: 12px; line-height: 1.4; z-index: 5; white-space: nowrap; }
+
+.busqueda { position: absolute; top: 12px; left: 12px; /* flota sobre el globo */ width: 300px; z-index: 4; }
+.busqueda input { width: 100%; padding: 10px 14px; border-radius: var(--radio); border: 1px solid var(--borde); background: var(--panel); color: var(--texto); font: inherit; backdrop-filter: blur(6px); }
+.busqueda ul { list-style: none; margin: 4px 0 0; padding: 4px; background: var(--panel); border: 1px solid var(--borde); border-radius: var(--radio); }
+.busqueda li { padding: 7px 10px; border-radius: 6px; cursor: pointer; display: flex; justify-content: space-between; gap: 8px; }
+.busqueda li.activo, .busqueda li:hover { background: var(--realce); }
+.busqueda small { color: var(--suave); }
+
+.controles { position: absolute; right: 12px; bottom: 56px; display: flex; flex-direction: column; gap: 6px; z-index: 4; }
+.controles button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--borde); background: var(--panel); font-size: 16px; display: grid; place-items: center; }
+.barra-inferior { position: absolute; left: 0; right: 0; bottom: 0; height: 24px; background: rgba(7, 9, 13, 0.7); display: flex; align-items: center; gap: 8px; padding: 0 12px; font-size: 11px; color: var(--suave); z-index: 3; pointer-events: none; }
+.barra-inferior .escala { height: 6px; border: 1px solid var(--texto); border-top: none; display: inline-block; }
+.barra-inferior .coords { margin-left: auto; margin-right: 220px; font-variant-numeric: tabular-nums; }
+.maplibregl-ctrl-bottom-right { z-index: 4; }
+
+.panel { position: absolute; right: 12px; top: 12px; width: 320px; padding: 16px; background: var(--panel); border: 1px solid var(--borde); border-radius: var(--radio); z-index: 4; backdrop-filter: blur(6px); }
+.panel h2 { margin: 8px 0 2px; font-size: 20px; }
+.panel .cerrar { position: absolute; right: 8px; top: 6px; background: none; border: none; font-size: 20px; color: var(--suave); }
+.miga { font-size: 12px; color: var(--suave); }
+.miga button { background: none; border: none; padding: 0; color: var(--agua); text-decoration: underline; }
+.etiqueta { color: var(--acento); font-size: 11px; margin: 0 0 12px; }
+.dato { display: grid; gap: 2px; border-top: 1px solid var(--borde); padding-top: 10px; }
+.dato strong { font-size: 28px; }
+.dato small, .dato span { color: var(--suave); font-size: 12px; }
+
+.tiempo { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: var(--panel-base); border-top: 1px solid var(--borde); }
+.tiempo button { min-width: 36px; height: 32px; border-radius: 8px; border: 1px solid var(--borde); background: var(--realce); }
+.tiempo input { flex: 1; accent-color: var(--acento); }
+.tiempo .ext { font-size: 12px; color: var(--suave); }
+.tiempo .mes { width: 64px; text-align: right; font-variant-numeric: tabular-nums; }
+
+.fps { position: absolute; left: 12px; bottom: 32px; z-index: 5; font: 11px monospace; background: #000a; padding: 2px 6px; border-radius: 4px; color: #7f7; }
+.aviso-disputa { position: absolute; left: 12px; bottom: 64px; z-index: 4; font-size: 11px; color: var(--texto, #cfd8e6); background: var(--panel); border: 1px solid var(--borde); border-radius: 6px; padding: 3px 8px; pointer-events: none; }
+
+/* Paneles flotantes oscuros sobre el espacio negro */
+.app { gap: 6px; padding-bottom: 6px; }
+.banda { margin: 6px 8px 0; border: 1px solid var(--borde); border-radius: var(--radio); box-shadow: var(--sombra); }
+.zona-mapa { margin: 0 8px; border-radius: var(--radio); }
+.tiempo { margin: 0 8px; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--panel); box-shadow: var(--sombra); }
+.pie { margin: 0 8px; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--panel); }
+.tiempo .ext, .tiempo .mes { white-space: nowrap; }
+.tiempo .mes { width: auto; min-width: 64px; }
+
+/* Panel de ayuda de la cabecera */
+.banda .ayuda { position: absolute; top: 100%; right: 0; z-index: 30; width: min(420px, 94vw); max-height: 70vh; overflow: auto; text-align: left; letter-spacing: 0; font-weight: 400; font-size: 13px; padding: 12px 14px; background: var(--panel-base); color: var(--texto); border: 1px solid var(--borde); border-radius: var(--radio); box-shadow: var(--sombra); }
+.banda .ayuda dt { font-weight: 600; color: var(--acento); }
+.banda .ayuda dd { margin: 0 0 6px; }
+.banda .ayuda small { color: var(--suave); }
+.panel-herr { left: 76px; right: auto; top: 50%; transform: translateY(-50%); width: 260px; display: grid; gap: 8px; }
+.panel-herr label { display: grid; gap: 4px; font-size: 12px; }
+.panel-herr input[type=number] { padding: 4px 6px; background: var(--panel-base); color: var(--texto); border: 1px solid var(--borde); border-radius: 6px; }
+.leyenda { position: absolute; right: 72px; bottom: 40px; z-index: 4; width: 220px; padding: 8px 10px; font-size: 11px; background: var(--panel); border: 1px solid var(--borde); border-radius: 8px; }
+.leyenda .chip { display: inline-block; margin-top: 2px; padding: 1px 6px; border: 1px solid var(--borde); border-radius: 10px; }
+.leyenda .barra { height: 10px; margin: 6px 0 2px; border-radius: 3px; }
+.leyenda .extremos { display: flex; justify-content: space-between; }
+.leyenda .muestra { display: inline-block; width: 14px; height: 14px; vertical-align: middle; border: 1px solid var(--borde); background: repeating-linear-gradient(135deg, #141a24 0 3px, #d7dde6 3px 4px); }
+.etiqueta-centro { position: absolute; left: 50%; top: 56px; transform: translateX(-50%); z-index: 4; max-width: 70%; padding: 4px 10px; font-size: 12px; text-align: center; background: var(--panel); border: 1px solid var(--borde); border-radius: 8px; pointer-events: none; }

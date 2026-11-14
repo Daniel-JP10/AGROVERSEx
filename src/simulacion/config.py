@@ -1,0 +1,27 @@
+# asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+from datetime import date
+from pathlib import Path
+
+RAIZ = Path(__file__).resolve().parents[2]
+CRUDOS = RAIZ / "datos/crudos"
+PROCESADOS = RAIZ / "datos/procesados"
+FICHAS = RAIZ / "datos/fichas"
+
+# Mollweide para áreas, WGS84 para coordenadas de salida
+CRS_AREA = "ESRI:54009"
+CRS_SALIDA = "EPSG:4326"
+
+SEMILLA = 20261108
+GEO_SQLITE = PROCESADOS / "geo.sqlite"
+# Respaldo mientras geo.sqlite se reconstruye (Köppen y latitudes no cambian)
+GEO_SQLITE_RESPALDO = PROCESADOS / "geo.sqlite.bak_prereconstruccion"
+AGROVERSEX_SQLITE = PROCESADOS / "agroversex.sqlite"
+
+# Periodo de 323 meses en UTC, de ene-2000 a nov-2026 (INICIAR §5.1)
+N_MESES = 323
+FECHA_INICIO = date(2000, 1, 1)
+# PENDIENTE: se fija con la consulta real de POWER en la tarea 13; 2026-11-05 es aproximado (INICIAR, tabla de POWER)
+FECHA_FIN_DIARIA = date(2026, 11, 5)
+
+# Procedencia china permitida en la demo interna (D-009); volver a False para la entrega
+INCLUIR_PROCEDENCIA_CHINA = True

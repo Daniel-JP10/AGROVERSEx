@@ -1,0 +1,11 @@
+/* asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón */
+/* Herramientas: medir y aviso de zoom. Tokens del tema oscuro (app/tema.css) */
+.medir { display: grid; gap: 8px; }
+.medir-modo, .medir-acciones { display: flex; flex-wrap: wrap; gap: 6px; }
+.medir-resultado { font-weight: 600; }
+.aviso-zoom {
+  position: absolute; top: 56px; left: 50%; transform: translateX(-50%);
+  margin: 0; padding: 6px 12px; border-radius: 6px;
+  background: var(--panel-base, #1b2433); color: var(--texto, #e8edf2);
+  border: 1px solid var(--acento, #ffb84d); z-index: 3;
+}
