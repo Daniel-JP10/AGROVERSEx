@@ -1,5 +1,5 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
-import { Icono } from './iconos'
+import { Icono } from '../../app/iconos'
 
 export const HERRAMIENTAS: { id: string; etiqueta: string; atajo?: string }[] = [
   { id: 'capas', etiqueta: 'Capas' },

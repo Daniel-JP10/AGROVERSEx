@@ -211,3 +211,6 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/simulacion/geo/imerg_late.py` | Regla de días válidos de IMERG Late por celda (D-011) | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_imerg_late.py` | Pruebas de la regla de IMERG Late | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/sensibilidad_late.py` | Sensibilidad 70/80/90 de IMERG Late en Colombia | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/tierra/interfaz.ts` | Interfaz del globo para Web, contrato web_componentes §4 | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/tierra/Tierra.tsx` | Sección Tierra: compone el globo que montaba App.tsx | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/interfaz.test.ts` | Pruebas de la interfaz del globo | 2026-11-14 |
