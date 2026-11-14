@@ -73,3 +73,22 @@ pruebas\geo\test_colombia.py:42: AssertionError
 =========================== short test summary info ===========================
 FAILED pruebas/geo/test_colombia.py::test_contiene_y_exclusion_por_departamento
 1 failed, 2 passed in 0.80s
+
+# RED completar_perdidos con cierre de mapshaper 2026-11-14T18:36:30Z
+src\simulacion\geo\teselas.py:112: AssertionError
+=========================== short test summary info ===========================
+FAILED pruebas/geo/test_teselas.py::test_completar_perdidos_con_cierre_sin_salto_final
+1 failed, 7 passed, 4 deselected in 0.36s
+
+# RED teselas: tiempo/RAM de tippecanoe y AGRO_HERRAMIENTAS 2026-11-14T18:37:00Z
+=========================== short test summary info ===========================
+FAILED pruebas/geo/test_teselas.py::test_comando_tippecanoe_flags - Assertion...
+FAILED pruebas/geo/test_teselas.py::test_herramientas_se_puede_apuntar_con_variable
+2 failed, 7 passed, 4 deselected in 0.42s
+
+# RED indice sin filas repetidas de nivel superior 2026-11-14T18:37:43Z
+pruebas\geo\test_indice_busqueda.py:52: AssertionError
+=========================== short test summary info ===========================
+FAILED pruebas/geo/test_indice_busqueda.py::test_zona_en_disputa_lleva_marca_y_contexto
+FAILED pruebas/geo/test_indice_busqueda.py::test_filas_que_repiten_un_nivel_superior_no_se_indexan
+2 failed, 6 passed, 1 deselected in 2.33s

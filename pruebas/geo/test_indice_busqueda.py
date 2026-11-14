@@ -1,96 +1,94 @@
-# asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+# asistido por SI: Claude Code (Anthropic), pruebas del índice de búsqueda sobre unidades CGAZ (T-D1)
 import gzip
 import json
-import sqlite3
-from pathlib import Path
 
+import pandas as pd
 import pytest
 
 from simulacion.geo.indice_busqueda import construir_indice, escribir_indice
 
-ESQUEMA = Path(__file__).parents[2] / "src/simulacion/geo/esquema_geo.sql"
-
-# (id, nivel, iso3, padre_id, nombre, nombre_ascii, nombre_es, nombre_en)
-UNIDADES = [
-    ("COL", 0, "COL", None, "Colombia", "Colombia", "Colombia", "Colombia"),
-    ("COL.1_1", 1, "COL", "COL", "Antioquia", "Antioquia", "Antioquia", "Antioquia"),
-    ("COL.2_1", 1, "COL", "COL", "Bolívar", "Bolivar", None, "Bolivar"),
-    ("COL.1.1_1", 2, "COL", "COL.1_1", "Bolívar", "Bolivar", "Bolívar", None),
-    ("COL.2.1_1", 2, "COL", "COL.2_1", "Bolívar", "Bolivar", None, None),
-    ("XD1", 9, "XD1", None, "Zona en disputa (XD1)", "Zona en disputa (XD1)", None, None),
-    ("gb:77", 2, "COL", None, "Huérfana", "Huerfana", None, None),
-]
-
-
-@pytest.fixture
-def sqlite_temporal(tmp_path):
-    ruta = tmp_path / "geo.sqlite"
-    con = sqlite3.connect(ruta)
-    con.executescript(ESQUEMA.read_text(encoding="utf-8"))
-    con.executemany(
-        "INSERT INTO unidad(id, nivel, iso3, padre_id, nombre, nombre_ascii, nombre_es, nombre_en)"
-        " VALUES (?,?,?,?,?,?,?,?)", UNIDADES)
-    con.commit()
-    con.close()
-    return ruta
+COLS = ["unidad_id", "nivel", "iso3", "padre_id", "nombre", "nombre_ascii", "es_disputa", "nivel_real"]
+UNIDADES = pd.DataFrame([
+    ("COL-ADM0", 0, "COL", None, "Colombia", "Colombia", 0, "ADM0"),
+    ("COL-ADM1-1", 1, "COL", "COL-ADM0", "Antioquia", "Antioquia", 0, "ADM1"),
+    ("COL-ADM1-2", 1, "COL", "COL-ADM0", "Bolívar", "Bolivar", 0, "ADM1"),
+    ("COL-ADM2-1", 2, "COL", "COL-ADM1-1", "Bolívar", "Bolivar", 0, "ADM2"),
+    ("COL-ADM2-2", 2, "COL", "COL-ADM1-2", "Bolívar", "Bolivar", 0, "ADM2"),
+    ("111-ADM0", 0, "111", None, "Abyei", "Abyei", 1, "DISP"),
+    ("111-ADM2-DIS001", 2, "111", "111-ADM0", "Abyei", "Abyei", 1, "DISP"),
+    ("AND-ADM2-1", 2, "COL", "COL-ADM1-1", "Repetida", "Repetida", 0, "ADM1"),
+    ("COL-ADM2-9", 2, "COL", None, "Huérfana", "Huerfana", 0, "ADM2"),
+], columns=COLS)
 
 
-def test_contexto_distingue_los_bolivar(sqlite_temporal):
-    filas = {f["id"]: f for f in construir_indice(sqlite_temporal)}
-    assert filas["COL.1.1_1"]["ctx"] == "Antioquia · Colombia"
-    assert filas["COL.2.1_1"]["ctx"] == "Bolívar · Colombia"
-    assert filas["COL.1_1"]["ctx"] == "Colombia"
-    assert filas["COL"]["ctx"] == ""
+def _por_id(ne=None):
+    return {f["id"]: f for f in construir_indice(UNIDADES, ne)}
 
 
-def test_ascii_normalizado(sqlite_temporal):
-    filas = {f["id"]: f for f in construir_indice(sqlite_temporal)}
-    assert filas["COL.1.1_1"]["a"] == "bolivar"
+def test_contexto_distingue_los_bolivar():
+    filas = _por_id()
+    assert filas["COL-ADM2-1"]["ctx"] == "Antioquia · Colombia"
+    assert filas["COL-ADM2-2"]["ctx"] == "Bolívar · Colombia"
+    assert filas["COL-ADM1-1"]["ctx"] == "Colombia"
+    assert filas["COL-ADM0"]["ctx"] == ""
 
 
-def test_nombre_es_nulo_omite_clave(sqlite_temporal):
-    filas = {f["id"]: f for f in construir_indice(sqlite_temporal)}
-    assert "es" not in filas["COL.2.1_1"]
-    assert "en" not in filas["COL.2.1_1"]
-    assert filas["COL.1.1_1"]["es"] == "Bolívar"
+def test_ascii_normalizado_y_sin_es_en():
+    filas = _por_id()
+    assert filas["COL-ADM2-1"]["a"] == "bolivar"
+    assert "es" not in filas["COL-ADM2-1"] and "en" not in filas["COL-ADM2-1"]
 
 
-def test_incluye_zonas_en_disputa(sqlite_temporal):
-    filas = {f["id"]: f for f in construir_indice(sqlite_temporal)}
-    assert filas["XD1"]["ctx"] == "Zona en disputa" and filas["XD1"]["nivel"] == 9
-    assert len(filas) == 7
+def test_zona_en_disputa_lleva_marca_y_contexto():
+    f = _por_id()["111-ADM0"]
+    assert f["ctx"] == "Zona en disputa" and f["d"] == 1 and f["nivel"] == 0
+    assert "d" not in _por_id()["COL-ADM0"]
+    assert len(_por_id()) == 7
 
 
-def test_padre_nulo_completa_pais_por_iso3(sqlite_temporal):
-    filas = {f["id"]: f for f in construir_indice(sqlite_temporal)}
-    assert filas["gb:77"]["ctx"] == "Colombia"
+def test_filas_que_repiten_un_nivel_superior_no_se_indexan():
+    # la capa ADM2 repite el nivel 1 donde no hay municipios, y las zonas en disputa salen en los tres niveles
+    ids = set(_por_id())
+    assert "AND-ADM2-1" not in ids and "111-ADM2-DIS001" not in ids and "111-ADM0" in ids
 
 
-def test_escritura_y_lectura_de_vuelta(sqlite_temporal, tmp_path):
-    filas = construir_indice(sqlite_temporal)
+def test_padre_nulo_completa_pais_por_iso3():
+    assert _por_id()["COL-ADM2-9"]["ctx"] == "Colombia"
+
+
+def test_escritura_y_lectura_de_vuelta(tmp_path):
+    filas = construir_indice(UNIDADES)
     ruta = tmp_path / "salida" / "indice.json.gz"
     n = escribir_indice(filas, ruta)
     assert n == ruta.stat().st_size
     assert json.loads(gzip.decompress(ruta.read_bytes())) == filas
 
 
-def test_nombres_ne_completan_nivel_0(sqlite_temporal):
-    ne = {"COL": ("Colombia NE", "Colombia NE"), "CIV": ("Costa de Marfil", "Ivory Coast")}
-    con = sqlite3.connect(sqlite_temporal)
-    con.execute("INSERT INTO unidad(id, nivel, iso3, nombre, nombre_ascii) VALUES ('CIV', 0, 'CIV', 'Côte d''Ivoire', 'Cote d''Ivoire')")
-    con.commit()
-    con.close()
-    filas = {f["id"]: f for f in construir_indice(sqlite_temporal, ne)}
-    assert filas["CIV"]["es"] == "Costa de Marfil" and filas["CIV"]["en"] == "Ivory Coast"
-    assert filas["COL"]["es"] == "Colombia"  # lo que la base ya trae no se pisa
-    assert "es" not in filas["COL.2.1_1"]  # solo el nivel 0
+def test_indice_reproducible_por_hash(tmp_path):
+    import hashlib
+    h = []
+    for i in range(2):
+        ruta = tmp_path / f"i{i}.json.gz"
+        escribir_indice(construir_indice(UNIDADES), ruta)
+        h.append(hashlib.sha256(ruta.read_bytes()).hexdigest())
+    assert h[0] == h[1]
 
 
-def test_costa_de_marfil_encuentra_civ():
-    from simulacion.geo.normalizar import normalizar_nombre
+def test_nombres_ne_completan_nivel_0():
+    ne = {"COL": ("Colombia NE", "Colombia EN"), "CIV": ("Costa de Marfil", "Ivory Coast")}
+    t = pd.concat([UNIDADES, pd.DataFrame([("CIV-ADM0", 0, "CIV", None, "Côte d'Ivoire", "Cote d'Ivoire", 0, "ADM0")], columns=COLS)])
+    filas = {f["id"]: f for f in construir_indice(t, ne)}
+    assert filas["CIV-ADM0"]["es"] == "Costa de Marfil" and filas["CIV-ADM0"]["en"] == "Ivory Coast"
+    assert filas["COL-ADM0"]["es"] == "Colombia NE"
+    assert "es" not in filas["COL-ADM2-2"]  # solo el nivel 0
+
+
+@pytest.mark.datos_reales
+def test_kosovo_xkx_encuentra_su_nombre_en_ne():
     from simulacion.geo.indice_busqueda import NE_ADMIN0, nombres_paises
+    from simulacion.geo.normalizar import normalizar_nombre
     if not NE_ADMIN0.exists():
         pytest.skip("sin ne_10m_admin_0_countries.zip en datos/crudos")
     ne = nombres_paises()
     assert normalizar_nombre(ne["CIV"][0]) == "costa de marfil"
-    assert ne["XKO"] == ne["KOS"] and ne["FRA"][0] == "Francia"
+    assert ne["XKX"] == ne["KOS"] and ne["FRA"][0] == "Francia"

@@ -1,23 +1,24 @@
-# asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+# asistido por SI: Claude Code (Anthropic), índice de búsqueda sobre unidades CGAZ y nombres de Natural Earth (T-D1)
 import gzip
 import json
-import sqlite3
 from pathlib import Path
 
-from simulacion.config import CRUDOS, GEO_SQLITE, PROCESADOS
+import pandas as pd
+import pyogrio
+
+from simulacion.config import CRUDOS, PROCESADOS
 from simulacion.geo.normalizar import normalizar_nombre
 
 SALIDA = PROCESADOS / "indice_busqueda.json.gz"
-NE_ADMIN0 = CRUDOS / "ne_10m_admin_0_countries.zip"
-# Códigos de GADM/gbOpen que Natural Earth escribe distinto (ADM0_A3)
-ALIAS_NE = {"XKO": "KOS", "ZNC": "CYN"}
+NE_ADMIN0 = CRUDOS / "natural_earth/ne_10m_admin_0_countries.zip"
+# Códigos de CGAZ que Natural Earth escribe distinto (ADM0_A3)
+ALIAS_NE = {"XKX": "KOS"}
 
 
 def nombres_paises(ruta: Path | None = None) -> dict[str, tuple[str, str]]:
-    """iso3 de `unidad` -> (NAME_ES, NAME_EN) de Natural Earth admin0 (dominio público). El cruce usa ADM0_A3 y,
-    si falta, ISO_A3 e ISO_A3_EH (NE pone -99 en Francia, Noruega y otros); además ALIAS_NE (Kosovo, Chipre del
-    Norte). Sin cruce (en NE son parte de otro país o no existen): BES, BVT, CCK, CXR, GLP, GUF, MTQ, MYT, REU,
-    SJM, TKL, XAD, XCA, XCL, XPI, XSP; quedan sin es/en y se buscan por su nombre."""
+    """iso3 de CGAZ -> (NAME_ES, NAME_EN) de Natural Earth admin0 (dominio público). El cruce usa ADM0_A3 y,
+    si falta, ISO_A3 e ISO_A3_EH (NE pone -99 en Francia, Noruega y otros); además ALIAS_NE (Kosovo).
+    Los países de CGAZ sin cruce quedan sin es/en y se buscan por su nombre de CGAZ."""
     import pyogrio
     ruta = Path(ruta or NE_ADMIN0)
     if not ruta.exists():
@@ -30,42 +31,46 @@ def nombres_paises(ruta: Path | None = None) -> dict[str, tuple[str, str]]:
             k = getattr(r, col)
             if k and k != "-99" and r.NAME_ES and r.NAME_EN:
                 salida[k] = (r.NAME_ES, r.NAME_EN)
-    for gadm, ne in ALIAS_NE.items():
+    for cgaz, ne in ALIAS_NE.items():
         if ne in salida:
-            salida[gadm] = salida[ne]
+            salida[cgaz] = salida[ne]
     return salida
 
 
-def construir_indice(ruta_sqlite: Path, nombres_ne: dict | None = None) -> list[dict]:
-    """nombres_ne (ver nombres_paises) completa es y en del nivel 0 donde la base no los trae."""
-    con = sqlite3.connect(ruta_sqlite)
-    # el nivel 9 (zonas en disputa) tiene polígono en adm0, así que se indexa con ctx "Zona en disputa"
-    filas = con.execute(
-        "SELECT id, nivel, padre_id, nombre, nombre_ascii, nombre_es, nombre_en, iso3"
-        " FROM unidad WHERE nivel IN (0, 1, 2, 9) ORDER BY nivel, id").fetchall()
-    con.close()
-    nombres = {f[0]: f[3] for f in filas}
-    padres = {f[0]: f[2] for f in filas}
+def leer_atributos(ruta_gpkg: Path) -> pd.DataFrame:
+    # solo atributos de las tres capas, sin geometría
+    return pd.concat([pyogrio.read_dataframe(ruta_gpkg, layer=f"adm{n}", read_geometry=False,
+                                             columns=["unidad_id", "nivel", "iso3", "padre_id", "nombre",
+                                                      "nombre_ascii", "es_disputa", "nivel_real"]) for n in (0, 1, 2)],
+                     ignore_index=True)
+
+
+def construir_indice(unidades: pd.DataFrame, nombres_ne: dict | None = None) -> list[dict]:
+    """nombres_ne (ver nombres_paises) pone es y en en el nivel 0; el resto de niveles no los trae CGAZ."""
+    # no se indexan las filas que repiten un nivel superior (ADM2 sin municipios) ni las disputas de ADM1 y ADM2
+    propias = (unidades["nivel_real"] == "ADM" + unidades["nivel"].astype(str)) | ((unidades["nivel"] == 0) & (unidades["es_disputa"] == 1))
+    filas = unidades[propias].sort_values(["nivel", "unidad_id"], kind="stable")
+    nombres = dict(zip(filas["unidad_id"], filas["nombre"]))
+    padres = dict(zip(filas["unidad_id"], filas["padre_id"]))
+    pais = {r.iso3: r.nombre for r in filas.itertuples() if r.nivel == 0}
     salida = []
-    for id_, nivel, padre, nombre, ascii_, es, en, iso3 in filas:
+    for r in filas.itertuples():
         # cadena de ancestros, del padre inmediato al país
-        cadena, p = [], padre
+        cadena, p = [], r.padre_id
         while p in nombres:
             cadena.append(nombres[p])
             p = padres[p]
-        # si la cadena no llega al país (padre NULL, p. ej. ADM2 de gbOpen sin ADM1) se completa por iso3
-        if nivel in (1, 2) and iso3 in nombres and (not cadena or cadena[-1] != nombres[iso3]):
-            cadena.append(nombres[iso3])
-        if nivel == 9:
+        # si la cadena no llega al país (padre nulo) se completa por iso3
+        if r.nivel in (1, 2) and r.iso3 in pais and (not cadena or cadena[-1] != pais[r.iso3]):
+            cadena.append(pais[r.iso3])
+        if r.es_disputa:
             cadena = ["Zona en disputa"]
-        if nivel == 0 and nombres_ne and iso3 in nombres_ne:
-            es, en = es or nombres_ne[iso3][0], en or nombres_ne[iso3][1]
-        fila = {"id": id_, "nivel": nivel, "n": nombre,
-                "a": normalizar_nombre(ascii_ or nombre), "ctx": " · ".join(cadena)}
-        if es:
-            fila["es"] = es
-        if en:
-            fila["en"] = en
+        fila = {"id": r.unidad_id, "nivel": int(r.nivel), "n": r.nombre,
+                "a": normalizar_nombre(r.nombre_ascii or r.nombre), "ctx": " · ".join(cadena)}
+        if r.es_disputa:
+            fila["d"] = 1
+        if r.nivel == 0 and nombres_ne and r.iso3 in nombres_ne:
+            fila["es"], fila["en"] = nombres_ne[r.iso3]
         salida.append(fila)
     return salida
 
@@ -80,5 +85,5 @@ def escribir_indice(filas: list[dict], ruta: Path) -> int:
 
 
 if __name__ == "__main__":
-    filas = construir_indice(GEO_SQLITE, nombres_paises())
+    filas = construir_indice(leer_atributos(PROCESADOS / "unidades.gpkg"), nombres_paises())
     print(f"{len(filas)} filas, {escribir_indice(filas, SALIDA)} bytes -> {SALIDA}")
