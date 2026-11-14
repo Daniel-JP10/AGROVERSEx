@@ -1,0 +1,22 @@
+# Ficha de dataset
+
+- Nombre corto: merra2_rad
+- Producto oficial y versión: MERRA-2 M2TMNXRAD 5.12.4 (tavgM_2d_rad_Nx). Colección C1276812858-GES_DISC. VERIFICADO (CMR)
+- Agencia y centro de datos: NASA, GES DISC (GMAO). Reanálisis, no observación directa
+- Página oficial: PENDIENTE; https://cmr.earthdata.nasa.gov/search/concepts/C1276812858-GES_DISC.umm_json
+- DOI: 10.5067/OU3HJDS973O0. FUENTE: CMR vía `T-D3_estimacion.md`
+- Variable y unidades: `SWGDN` (W m-2, fill 9.99999987e14), onda corta incidente en superficie. VERIFICADO en la lista de CMR; valores no leídos
+- Resolución espacial nominal: 0,625 x 0,5 grados
+- Resolución temporal: mensual
+- CRS nativo: PENDIENTE
+- Periodo descargado: NINGUNO. BLOQUEADO el 2026-11-14 hacia las 13:0x: GES DISC devuelve 403 `EULA Acceptance Failure` con las credenciales de `_netrc` (descarga directa, OPeNDAP y Harmony). Nada descargado de este producto. Previsto 2000-01 a 2026-09
+- Área descargada: global previsto
+- Herramienta y consulta exacta de descarga: Prevista: `dap4.ce=/SWGDN` sobre `https://opendap.earthdata.nasa.gov/collections/C1276812858-GES_DISC/granules/M2TMNXRAD.5.12.4%3AMERRA2_400.tavgM_2d_rad_Nx.<AAAAMM>.nc4`
+- Fecha de descarga: no descargado
+- Banderas de calidad aplicadas: PENDIENTE
+- Fracción de datos válidos en el área: PENDIENTE
+- Transformaciones a la grilla común y método de remuestreo: Ninguna en la descarga
+- Limitaciones conocidas: Reanálisis. BLOQUEADO el 2026-11-14 hacia las 13:0x: GES DISC devuelve 403 `EULA Acceptance Failure` con las credenciales de `_netrc` (descarga directa, OPeNDAP y Harmony). Nada descargado de este producto
+- Requisito del reto y pregunta que atiende: N2, D1, D2, F4; PI-D1 y PI-D4. Compuerta G2
+- Responsable: constructor de datos (subagente), orquestador de datos Daniel
+- Verificador y fecha: PENDIENTE

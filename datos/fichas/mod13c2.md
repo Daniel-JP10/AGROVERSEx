@@ -1,0 +1,22 @@
+# Ficha de dataset
+
+- Nombre corto: mod13c2
+- Producto oficial y versión: MOD13C2 versión 061 (MODIS/Terra, índices de vegetación mensuales, grilla global 0,05 grados CMG). Colección CMR C2565788914-LPCLOUD. VERIFICADO (CMR)
+- Agencia y centro de datos: NASA, LP DAAC (provider LPCLOUD)
+- Página oficial: PENDIENTE (no se leyó la página del producto); metadatos en https://cmr.earthdata.nasa.gov/search/concepts/C2565788914-LPCLOUD.umm_json
+- DOI: 10.5067/MODIS/MOD13C2.061. FUENTE: CMR vía `Docu/datos/T-D3_estimacion.md`
+- Variable y unidades: `CMG_0_05_Deg_Monthly_NDVI` (Int16, unidades `NDVI`, `_FillValue` -3000, `valid_range` -2000 a 10000, `scale_factor` 10000: NDVI = valor / 10000) y `CMG_0_05_Deg_Monthly_pixel_reliability` (Int8, `rank`, `_FillValue` -1, rango 0 a 4). VERIFICADO en el .dmr del granulo MOD13C2.A2026274.061.2026307134330. Los archivos guardan los enteros del producto, sin conversión
+- Resolución espacial nominal: 0,05 grados, 3600 x 7200 celdas. VERIFICADO (.dmr)
+- Resolución temporal: mensual
+- CRS nativo: Geográfico lat/lon (`Projection=GCTP_GEO`, esquina superior izquierda -180, 90). VERIFICADO (.dmr)
+- Periodo descargado: granulos de 2000-02 (A2000032) hasta el último en CMR; conteo final en `Docu/datos/T-D3_descargas.md`
+- Área descargada: global
+- Herramienta y consulta exacta de descarga: `earthaccess.search_data(short_name='MOD13C2', version='061', temporal=('2000-01-01', None))`; por granulo, OPeNDAP de Earthdata: `https://opendap.earthdata.nasa.gov/collections/C2565788914-LPCLOUD/granules/<GranuleUR>.dap.nc4?dap4.ce=/MOD_Grid_monthly_CMG_VI/Data_Fields/CMG_0_05_Deg_Monthly_NDVI;/MOD_Grid_monthly_CMG_VI/Data_Fields/CMG_0_05_Deg_Monthly_pixel_reliability`. Comando: `python -m simulacion.geo.descargas_nasa mod13c2 6`. Manifiesto con la consulta de cada granulo: `datos/manifiesto_mod13c2.yaml` (en el directorio de datos, fuera de git); hashes en `datos/crudos/registros/hashes_mod13c2.jsonl`
+- Fecha de descarga: 2026-11-14, desde las 13:08 hora de Colombia
+- Banderas de calidad aplicadas: Ninguna en la descarga. Propuesta para la agregación: excluir fill (-3000 y -1) y `pixel_reliability` 2 (nieve/hielo), 3 (nube) y -1; decidir si entran 1 (marginal) y 4 (estimado de la serie histórica). Leyenda de rangos VERIFICADA en el .dmr. Umbral final: PENDIENTE
+- Fracción de datos válidos en el área: PENDIENTE, sale de la agregación
+- Transformaciones a la grilla común y método de remuestreo: Ninguna en la descarga. Agregación por unidad con el motor de T-D2, sin remuestreo del ráster
+- Limitaciones conocidas: (1) Deriva orbital de Terra, VERIFICADA en https://www.earthdata.nasa.gov/data/alerts-outages/terra-modis-acquisition-plan-through-december-2025 (publicada 2021-10-19, actualizada 2026-09-04, leída 2026-11-14): "Terra will continue to drift and is expected to reach a 10:15 a.m. MLT in October 2022"; "Products are mostly expected to be science quality except for reduced grid size (from lower altitude)"; sin repetición estricta de 16 días. La página no dice cómo afecta al NDVI mensual; ese efecto es PENDIENTE y se declara sin cifra. (2) Esa página habla de adquisición hasta diciembre de 2025, pero CMR tiene granulo de 2026-10: la continuidad futura de Terra es PENDIENTE. (3) Los valores de píxel de un archivo descargado no se leyeron: no hay lector HDF5/netCDF en el entorno
+- Requisito del reto y pregunta que atiende: N2, D1, D2, F4; PI-D1 y PI-D4. Compuerta G2
+- Responsable: constructor de datos (subagente), orquestador de datos Daniel
+- Verificador y fecha: PENDIENTE
