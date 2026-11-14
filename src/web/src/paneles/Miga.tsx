@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useEstado } from '../app/estado'
 import { migaDe, type UnidadMiga } from '../datos/busqueda'
 import { claveUnidad, porClave } from '../datos/indice'
+import { nombreUnidad } from '../globo/config'
 import { t } from '../textos/i18n'
 
 // País › Departamento › Unidad, con padre_id e iso3 de /api/unidad/:id
@@ -40,8 +41,8 @@ export function Miga() {
       {pasos.map((p, i) => {
         const u = porClave.get(claveUnidad(p.nivel, p.id))
         return i === pasos.length - 1 || !u
-          ? <span key={p.id} aria-current={i === pasos.length - 1 ? 'page' : undefined}>{i > 0 && ' › '}{p.nombre}</span>
-          : <span key={p.id}>{i > 0 && ' › '}<button onClick={() => seleccionar(u)}>{p.nombre}</button></span>
+          ? <span key={p.id} aria-current={i === pasos.length - 1 ? 'page' : undefined}>{i > 0 && ' › '}{nombreUnidad(p.nombre, !!u?.disputa)}</span>
+          : <span key={p.id}>{i > 0 && ' › '}<button onClick={() => seleccionar(u)}>{nombreUnidad(p.nombre, !!u.disputa)}</button></span>
       })}
     </nav>
   )

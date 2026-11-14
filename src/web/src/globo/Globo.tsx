@@ -5,7 +5,7 @@ import type { Map as MapaGL } from 'maplibre-gl'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import { Protocol } from 'pmtiles'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { NIVELES, construirEstilo, nivelParaZoom, capasInteractivas, OPACIDAD, opacidadRelleno, ATRIBUCION, avisoDisputa } from './config'
+import { NIVELES, construirEstilo, nivelParaZoom, capasInteractivas, OPACIDAD, opacidadRelleno, ATRIBUCION, avisoDisputa, esDisputa, nombreUnidad } from './config'
 import { crearRecoloreo } from './recoloreo'
 import { iniciarEstrellas } from './estrellas'
 import { iniciarHalo } from './atmosfera'
@@ -30,7 +30,7 @@ const ref = (nivel: number, id: number | string) => {
   return { source: c.fuente, sourceLayer: c.capaFuente, id }
 }
 
-// Trama de rayas para las zonas en disputa (nivel 9 dentro de adm0)
+// Trama de rayas para las zonas en disputa (es_disputa = 1)
 function trama(): ImageData {
   const c = document.createElement('canvas')
   c.width = c.height = 12
@@ -97,7 +97,7 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       const nf = Number(f.properties.nivel), id = String(f.properties.id)
       const t = texto(motores[nf]?.estado(id))
       centro.current.style.display = 'block'
-      centro.current.textContent = `${f.properties.nombre ?? id}: ${t}`
+      centro.current.textContent = `${nombreUnidad(String(f.properties.nombre ?? id), esDisputa(f.properties))}: ${t}`
     }
     m.on('idle', etiqueta) // tras mover y tras cargar teselas/valores
     const parar = iniciarEstrellas(lienzo.current!, m)
@@ -136,9 +136,10 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       t.style.display = 'block'
       t.style.transform = `translate(${e.point.x + 14}px, ${e.point.y + 14}px)`
       const nombre = document.createElement('b')
-      nombre.textContent = String(f.properties?.nombre ?? u?.nombre ?? id)
+      const disp = esDisputa(f.properties) || !!u?.disputa
+      nombre.textContent = nombreUnidad(String(f.properties?.nombre ?? u?.nombre ?? id), disp)
       const linea = (txt: string) => { const d = document.createElement('div'); d.textContent = txt; return d }
-      t.replaceChildren(nombre, ...(u?.pais ? [linea(u.pais)] : []),
+      t.replaceChildren(nombre, ...(u?.pais && !disp ? [linea(u.pais)] : []),
         linea(texto(est)))
     }
     m.on('mousemove', (e) => {

@@ -3,7 +3,7 @@
 import MiniSearch from 'minisearch'
 import { INDICE_BUSQUEDA } from '../globo/config'
 
-export interface FilaIndice { id: string; nivel: number; n: string; a: string; es?: string; en?: string; ctx: string }
+export interface FilaIndice { id: string; nivel: number; n: string; a: string; es?: string; en?: string; ctx: string; d?: number }
 export interface UnidadMiga { padre_id: string | null; iso3: string; nombre: string; nivel: number }
 export interface Paso { id: string; nombre: string; nivel: number }
 
@@ -16,7 +16,7 @@ export function cargarIndice(): Promise<FilaIndice[]> {
 export function crearBuscador(filas: FilaIndice[]) {
   const ms = new MiniSearch<FilaIndice>({
     fields: ['n', 'a', 'es', 'en'],
-    storeFields: ['id', 'nivel', 'n', 'a', 'es', 'en', 'ctx'],
+    storeFields: ['id', 'nivel', 'n', 'a', 'es', 'en', 'ctx', 'd'],
     processTerm: quitarTildes,
     searchOptions: {
       prefix: true, fuzzy: 0.2, combineWith: 'AND',
