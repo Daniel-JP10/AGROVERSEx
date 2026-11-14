@@ -1,0 +1,30 @@
+     31|     expect(ATRIBUCION).toContain('ESDIS')
+     32|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  pruebas/fondos.test.ts > fondos > ninguna URL ni texto de fondo menciona EOX ni cloudless
+AssertionError: expected '[{"id":"bluemarble","nombre":"blue ma…' not to match /eox|cloudless/
+
+- Expected:
+/eox|cloudless/
+
++ Received:
+"[{\"id\":\"bluemarble\",\"nombre\":\"blue marble (nasa gibs)\",\"maxzoom\":8,\"requieretoken\":false,\"tiles\":[\"https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/bluemarble_shadedrelief_bathymetry/default/default/googlemapscompatible_level8/{z}/{y}/{x}.jpeg\"],\"atribucion\":\"imágenes nasa gibs\",\"licencia\":\"dominio público (nasa)\"},{\"id\":\"eox-s2-2024\",\"nombre\":\"sentinel-2 cloudless 2024 (eox)\",\"maxzoom\":14,\"requieretoken\":false,\"tiles\":[\"https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/googlemapscompatible/{z}/{y}/{x}.jpg\"],\"atribucion\":\"eoxcloudless https://cloudless.eox.at by eox it services gmbh (contains modified copernicus sentinel data 2024)\",\"licencia\":\"cc by-nc-sa 4.0\"}]imágenes nasa gibs · eoxcloudless https://cloudless.eox.at by eox it services gmbh (contains modified copernicus sentinel data 2024) · límites gadm 4.1 (uso no comercial)"
+
+ ❯ pruebas/fondos.test.ts:35:22
+     33|   it('ninguna URL ni texto de fondo menciona EOX ni cloudless', () => {
+     34|     const todo = JSON.stringify(FONDOS).toLowerCase() + ATRIBUCION.toL…
+     35|     expect(todo).not.toMatch(/eox|cloudless/)
+       |                      ^
+     36|     for (const f of FONDOS) for (const u of f.tiles) expect(u).toConta…
+     37|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 4 passed (6)
+   Start at  15:17:56
+   Duration  524ms (transform 63%, import 19%, tests 13%, worker 5%)
+
