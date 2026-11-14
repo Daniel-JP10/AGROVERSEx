@@ -1,0 +1,23 @@
+$ pytest pruebas/lotes/test_imerg_diario.py
+    from lotes_demo.imerg_diario import indices_celda, parsear_ascii, url_dia
+E   ModuleNotFoundError: No module named 'lotes_demo.imerg_diario'
+=========================== short test summary info ===========================
+ERROR pruebas/lotes/test_imerg_diario.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.23s
+FAILED pruebas/lotes/test_lotes_demo.py::test_contiene_campos_del_contrato_web
+FAILED pruebas/lotes/test_lotes_demo.py::test_coordenadas_tres_decimales - Fi...
+FAILED pruebas/lotes/test_lotes_demo.py::test_poligono_dentro_de_su_unidad_adm2
+4 failed in 5.06s
+RED forzantes:
+ERROR pruebas/lotes/test_forzantes.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.41s
+RED suelo:
+ERROR pruebas/lotes/test_suelo.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.23s
+RED hls:
+ERROR pruebas/lotes/test_hls_validez.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 1.97s

@@ -226,3 +226,9 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `datos/control_desfase_imerg.py`, `datos/meses_precipitacion_col.py` | Control del desfase de IMERG y meses de precipitación de Colombia (T-D2) | 2026-11-14 |
 | Claude Code (Anthropic) | `datos/sensibilidad_col.py`, `datos/comparar_sens.py`, `datos/fixture_empalme_imerg.py` | Sensibilidades de clases y reliability, y fixture del empalme IMERG (T-D2) | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_lectura_nasa.py`, `pruebas/geo/test_teselas.py` | Prueba de orientación 120E/120O de IMERG y skipif de test_ruta_wsl (T-D2) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/lotes_demo/imerg_diario.py` y `pruebas/lotes/test_imerg_diario.py` | Lectura puntual de IMERG Final V07 diario por OPeNDAP (T-D5 B) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/lotes_demo/forzantes.py` y `pruebas/lotes/test_forzantes.py` | Lectura y validación de forzantes POWER e IMERG (T-D5 B) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/lotes_demo/suelo.py` y `pruebas/lotes/test_suelo.py` | Parámetros de suelo desde SoilGrids REST (T-D5 B) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/lotes_demo/hls_validez.py` y `pruebas/lotes/test_hls_validez.py` | Fracción de observaciones HLS válidas por píxel y mes (T-D5 B) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/lotes_demo/construir_lotes.py`, `pruebas/lotes/test_lotes_demo.py`, `datos/lotes/lotes_demo.json` | Construcción de lotes_demo.json (T-D5 B) | 2026-11-14 |
+| Claude Code (Anthropic) | `contratos/forzantes_gemelo.md` y fichas `datos/fichas/power_diario.md`, `hls_v2.md`, `imerg_diario.md` | Redacción del contrato y las fichas (T-D5 B) | 2026-11-14 |

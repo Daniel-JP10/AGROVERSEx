@@ -1,0 +1,27 @@
+# Ficha de dataset
+
+- Nombre corto: hls_v2
+- Producto oficial y versión: HLSL30 v2.0 (HLS Landsat OLI, concept id C2021957657-LPCLOUD) y HLSS30 v2.0 (HLS Sentinel-2 MSI, C2021957295-LPCLOUD), verificados en CMR el 2026-11-14. Solo se lee la capa Fmask
+- Agencia y centro de datos: NASA, LP DAAC (LPCLOUD)
+- Página oficial: https://www.earthdata.nasa.gov/data/catalog/lpcloud-hlsl30-2.0
+- DOI: HLSL30 10.5067/HLS/HLSL30.002 (FUENTE, página del catálogo Earthdata); HLSS30 PENDIENTE, no leído
+- Variable y unidades: Fmask, campo de bits uint8; relleno 255 (FUENTE, catálogo). Bits: 1 nube, 2 adyacente a nube/sombra, 3 sombra, 4 nieve/hielo, 5 agua, 6-7 aerosol (FUENTE: página de algoritmos de NASA HLS y catálogo de Google Earth Engine; el PDF oficial de la guía no se pudo leer en esta sesión)
+- Resolución espacial nominal: 30 m
+- Resolución temporal: escenas, cada 2 a 3 días combinando ambos
+- CRS nativo: UTM por tesela MGRS (VERIFICADO: zona 18 N en T18NTG)
+- Periodo descargado: 2022-01-01 a 2024-12-31 (tres años completos)
+- Área descargada: ventana del polígono del lote DEMO, lectura por rango HTTP de COG, sin guardar escenas
+- Herramienta y consulta exacta de descarga: CMR `granules.json` con `short_name`, `version=2.0`, `bounding_box` del polígono y `temporal`; lectura con rasterio `/vsicurl/` y `rasterio.mask.mask` (`src/lotes_demo/hls_validez.py`)
+- Fecha de descarga: 2026-11-14
+- Banderas de calidad aplicadas: válida = con dato y sin bits 1 a 4; el agua no invalida
+- Fracción de datos válidos en el área: ver `datos/procesados/lotes/<lote>/hls_validez.json` y `contratos/forzantes_gemelo.md`
+- Transformaciones a la grilla común y método de remuestreo: ninguna; píxeles 30 m nativos con centro dentro del polígono (CRS de origen UTM de la tesela, el polígono se reproyecta de EPSG:4326 a ese CRS; sin remuestreo)
+- Requisito del reto y pregunta que atiende: N2, D1; PI-D2 (evidencia sobre observaciones válidas), no cambia el lote
+- Limitaciones conocidas:
+  - Denominador: escenas con dato en el píxel; una escena es una observación. No pondera por hora ni por sensor.
+  - Solo la tesela de la zona UTM del centro del lote (T14 para EE. UU., T18 para Colombia); las escenas de la tesela vecina del traslape se descartan para no contar dos veces el mismo píxel.
+  - Fmask no detecta cirros en v2.0; puede quedar niebla o nube fina marcada como clara. INFERENCIA
+  - Ventana de 3 años, sin separar años El Niño y La Niña.
+- Licencia: datos abiertos "sin restricción" según la página del catálogo Earthdata; citar
+- Responsable: constructor de datos (Claude Code), tarea T-D5 Parte B
+- Verificador y fecha: PENDIENTE
