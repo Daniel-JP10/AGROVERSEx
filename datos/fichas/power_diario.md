@@ -18,6 +18,7 @@
 - Transformaciones a la grilla común y método de remuestreo: ninguna; el CSV se guarda tal cual lo entrega la API
 - Requisito del reto y pregunta que atiende: N2, N3, F13; PI-D2, PI-D3
 - Limitaciones conocidas:
+  - Elevación en DEMO-COL-01: la celda tiene 2553 m de elevación media (cabecera del CSV) y el lote unos 2934 m según el orquestador (FUENTE), unos 380 m de diferencia, más que los 42 m de la estación de referencia. Temperaturas sin corregir: no hay gradiente citado y verificable.
   - Es dato de reanálisis a 0,5 grados. En Ipiales la elevación de la celda MERRA-2 que informa el CSV es 2553 m; no se corrige por altura del lote (sin gradiente citado y verificable).
   - El rol de POWER según D-012 era contraste; aquí es la fuente de clima diario del Gemelo (formato power_csv), por decisión de la tarea T-D5. El director debe confirmarlo.
   - Licencia: política de datos de NASA, CC0 salvo restricción, según LICENCIAS_TERCEROS.md; sin restricción marcada en el CSV.
