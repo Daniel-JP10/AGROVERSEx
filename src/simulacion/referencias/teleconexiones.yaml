@@ -1,5 +1,7 @@
 # Teleconexiones ENSO por región (INV-ENS y R-1b). La carga usa solo estado '2 fuentes'.
 # coef NULL: sin magnitud en las fuentes usables, SUPUESTO en clima.py.
+# LIMITACIÓN (D-024, docu.md §6.1: un efecto regional sin evidencia de su región no se aplica): La Niña queda apagada en
+# África (Cuerno y Sureste) mientras ninguna fuente nombre esa región con dos fuentes.
 # nina_aplica false: la fuente solo cubre El Niño, La Niña queda sin efecto (la simetría no es segunda fuente).
 teleconexiones:
   - {"macroregion": "Colombia (Caribe y Andina)", "temporada": "parcial (picos abr-may y oct-nov)", "variable": "lluvia, temperatura", "signo_nino": "menos lluvia; Bogotá-Cund. +0,5 C", "signo_nina": "más lluvia (EV-ENS-015); Bogotá-Cund. -0,5 C", "magnitud_texto": "Bogotá-Cund.: hasta -60 % lluvia (El Niño), más de +60 % (La Niña); coeficientes -0,25/°C y +0,20 °C/°C son SUPUESTO", "fuentes": "EV-ENS-008 (IDEAM/PNUD), EV-ENS-015 (Salas 2020, solo resumen)", "estado": "2 fuentes (Pacífica PENDIENTE por contradicción)", "etiqueta": "FUENTE", "fuente_id": "EV-ENS-008", "fuente_informe": "INV-R1b, tabla de uso", "nina_aplica": true}

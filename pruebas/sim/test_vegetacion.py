@@ -85,11 +85,6 @@ def _pendiente(prefijo):
     return np.polyfit(np.arange(22), a, 1)[0]
 
 
-def test_sin_greening_de_china():
-    # Chen 2019 en China se quitó (§5.1): CHN queda neutro, sin pendiente de greening
-    assert not hasattr(config, "INCLUIR_PROCEDENCIA_CHINA")
-    assert "CHN" not in vg.PAISES_GREENING
-
 
 def test_et_cobertura_2026(sim):
     c, _ = sim
@@ -134,3 +129,8 @@ def test_colombia_real():
     print("LST", np.nanpercentile(e["lst_dia"], [0, 5, 50, 95, 100]).round(1))
     assert np.nanmin(d["ndvi"]) >= -0.2 and np.nanmax(d["ndvi"]) <= 1.0
     assert np.nanmin(e["lst_dia"]) >= 250 and np.nanmax(e["lst_dia"]) <= 340
+
+
+def test_sin_coeficiente_de_greening_para_ningun_pais():
+    # D-024: Chen 2019 sale; India queda sin ajuste de greening (limitación declarada)
+    assert not hasattr(vg, "GREENING") and not hasattr(vg, "PAISES_GREENING")

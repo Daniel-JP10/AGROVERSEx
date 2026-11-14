@@ -8,3 +8,9 @@ FAILED pruebas/sim/test_referencias.py::test_africa_enso_sin_cai_2025_y_con_cita
      × server\rutas_rotaciones.ts 8ms
  Test Files  1 failed (1)
       Tests  1 failed | 24 passed (25)
+RED 2 2026-11-14T15:55:08-05:00
+FAILED pruebas/sim/test_vegetacion.py::test_colombia_real - TypeError: unsupp...
+FAILED pruebas/sim/test_vegetacion.py::test_sin_coeficiente_de_greening_para_ningun_pais
+FAILED pruebas/sim/test_referencias.py::test_africa_nina_apagada_con_limitacion_declarada
+FAILED pruebas/sim/test_referencias.py::test_kluger_citado_como_preprint_fuente
+4 failed, 21 passed, 12 skipped in 13.72s
