@@ -217,3 +217,4 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/web/src/comun/unidades.ts` | Conversión única paraMostrar con días reales del mes, contrato web_componentes §5 | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/unidades.test.ts` | Pruebas de paraMostrar y sus tres llamadores | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/textos_tierra.test.ts` | Pruebas de textos por clave de la sección Tierra | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/rutas_base.test.ts` | Prueba de que teselas e índice respetan la base de publicación (BASE_URL) | 2026-11-14 |

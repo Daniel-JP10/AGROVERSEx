@@ -29,18 +29,20 @@ export interface NivelConfig {
 export const SIN_ADM2: readonly string[] = ['ABW', 'AIA', 'AND', 'ATA', 'ATF', 'ATG', 'BES', 'BHR', 'BMU', 'BRB', 'BVT', 'CCK', 'COK', 'CUW', 'CXR', 'CYM', 'DMA', 'ESH', 'FLK', 'GGY', 'GIB', 'GRD', 'GRL', 'HMD', 'IMN', 'IOT', 'JEY', 'KNA', 'LBY', 'LIE', 'MAF', 'MDA', 'MHL', 'MNE', 'MSR', 'MUS', 'MYT', 'NFK', 'NIU', 'NRU', 'PCN', 'PYF', 'SGS', 'SJM', 'SMR', 'SPM', 'SXM', 'TCA', 'TKL', 'TTO', 'UMI', 'VAT', 'VCT', 'VGB', 'XAD', 'XCA', 'XCL', 'XPI', 'XSP', 'ZNC']
 // Países que solo existen como ADM0
 export const SIN_ADM1: readonly string[] = ['ABW', 'ATA', 'BVT', 'CCK', 'CUW', 'CXR', 'FLK', 'GIB', 'HMD', 'IOT', 'KIR', 'MAF', 'MCO', 'MDV', 'NFK', 'NIU', 'PCN', 'SGS', 'SXM', 'VAT', 'XCA', 'XCL', 'XPI', 'XSP']
+// Teselas e índice cuelgan de la base de publicación (en Pages el sitio vive en /AGROVERSEx/, no en la raíz)
+const TESELAS = `${import.meta.env.BASE_URL}teselas/`
 
 export const NIVELES: NivelConfig[] = [
-  { nivel: 0, fuente: 'adm0', archivo: '/teselas/adm0.pmtiles', capaFuente: 'adm0', propId: 'id', zoomDesde: 0, zoomHasta: 6, fundido: 0, sinHijo: SIN_ADM1 },
-  { nivel: 1, fuente: 'adm1', archivo: '/teselas/adm1.pmtiles', capaFuente: 'adm1', propId: 'id', zoomDesde: 2, zoomHasta: 9, fundido: 0.5, sinHijo: SIN_ADM2 },
-  { nivel: 2, fuente: 'adm2', archivo: '/teselas/adm2.pmtiles', capaFuente: 'adm2', propId: 'id', zoomDesde: 6, zoomHasta: 12, fundido: 1, sinHijo: [] },
+  { nivel: 0, fuente: 'adm0', archivo: `${TESELAS}adm0.pmtiles`, capaFuente: 'adm0', propId: 'id', zoomDesde: 0, zoomHasta: 6, fundido: 0, sinHijo: SIN_ADM1 },
+  { nivel: 1, fuente: 'adm1', archivo: `${TESELAS}adm1.pmtiles`, capaFuente: 'adm1', propId: 'id', zoomDesde: 2, zoomHasta: 9, fundido: 0.5, sinHijo: SIN_ADM2 },
+  { nivel: 2, fuente: 'adm2', archivo: `${TESELAS}adm2.pmtiles`, capaFuente: 'adm2', propId: 'id', zoomDesde: 6, zoomHasta: 12, fundido: 1, sinHijo: [] },
 ]
 
 /** Zona en disputa: va dentro de adm0 con nivel = 9. */
 export const NIVEL_DISPUTA = 9
 export const avisoDisputa = () => t('globo.disputa')
 
-export const INDICE_BUSQUEDA = '/teselas/indice_busqueda.json.gz'
+export const INDICE_BUSQUEDA = `${TESELAS}indice_busqueda.json.gz`
 
 /** Nivel con el que se interactúa a un zoom dado (el más profundo ya entrado a pleno). */
 export function nivelParaZoom(zoom: number): number {
