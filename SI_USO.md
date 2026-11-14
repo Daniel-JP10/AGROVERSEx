@@ -222,3 +222,6 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `pruebas/geo/test_zonal_mensual.py` | Pruebas del motor zonal (T-D2) | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_lectura_nasa.py` | Pruebas de la orientación de lecturas (T-D2) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/pi_d1_colombia.py` | Respuesta preliminar de PI-D1 en Colombia (area frente a cultivo) | 2026-11-14 |
+| Claude Code (Anthropic) | `datos/fichas/gfsad1kcm.md` | Ficha de dataset de GFSAD1KCM con DOI y licencia verificados en CMR (T-D2) | 2026-11-14 |
+| Claude Code (Anthropic) | `datos/control_desfase_imerg.py`, `datos/meses_precipitacion_col.py` | Control del desfase de IMERG y meses de precipitación de Colombia (T-D2) | 2026-11-14 |
+| Claude Code (Anthropic) | `datos/sensibilidad_col.py`, `datos/comparar_sens.py`, `datos/fixture_empalme_imerg.py` | Sensibilidades de clases y reliability, y fixture del empalme IMERG (T-D2) | 2026-11-14 |

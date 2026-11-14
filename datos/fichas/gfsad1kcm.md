@@ -3,8 +3,8 @@
 - Nombre corto: gfsad1kcm
 - Producto oficial y versión: GFSAD1KCM versión 001, Global Food Security Support Analysis Data (GFSAD) Crop Mask 2010 Global 1 km V001 (NASA MEaSUREs). Colección CMR C2763261632-LPCLOUD. VERIFICADO (CMR, consulta del 2026-11-14)
 - Agencia y centro de datos: NASA, LP DAAC (provider LPCLOUD)
-- Página oficial: DOI https://doi.org/10.5067/MEaSUREs/GFSAD/GFSAD1KCM.001 (página no leída: PENDIENTE). Guía de usuario leída: https://lpdaac.usgs.gov/documents/172/GFSAD1K_User_Guide_V1.pdf
-- Cita: Thenkabail, P. (2017). Global Food Security Support Analysis Data (GFSAD) Crop Mask 2010 Global 1 km V001 [Dataset]. NASA Land Processes Distributed Active Archive Center. Autor, fecha (2017-02-09) y editor de CMR `CollectionCitations`; lista completa de autores PENDIENTE. Licencia: política de uso de datos de Earthdata (LicenseURL de CMR), sin restricción marcada en CMR
+- Página oficial: DOI 10.5067/MEASURES/GFSAD/GFSAD1KCM.001 en CMR (el DOI no distingue mayúsculas); https://doi.org/10.5067/MEaSUREs/GFSAD/GFSAD1KCM.001 responde 302 a https://www.earthdata.nasa.gov/data/catalog/lpcloud-gfsad1kcm-001 con HTTP 200. VERIFICADO el 2026-11-14 (CMR y doi.org). Guía de usuario leída: https://lpdaac.usgs.gov/documents/172/GFSAD1K_User_Guide_V1.pdf
+- Cita: Thenkabail, P. (2017). Global Food Security Support Analysis Data (GFSAD) Crop Mask 2010 Global 1 km V001 [Dataset]. NASA Land Processes Distributed Active Archive Center. Autor, fecha (2017-02-09) y editor de CMR `CollectionCitations`; CMR lista un solo creador, Prasad Thenkabail (lugar Sioux Falls, South Dakota). VERIFICADO (CMR). Licencia: política de uso de datos de Earthdata, LicenseURL de CMR https://earthdata.nasa.gov/earth-observation-data/data-use-policy; `UseConstraints` de CMR solo trae ese enlace y no marca restricción. VERIFICADO (CMR 2026-11-14). Es dato de NASA: permitido por §5.1
 - Variable y unidades: una banda uint8 de clases; sin `nodata` declarado. Leyenda de la guía de usuario (sección 2.2.4, VERIFICADO): 1 riego mayor, 2 riego menor, 3 secano, 4 secano con fragmentos menores, 5 secano con fragmentos muy menores, 9 sin cultivo. El valor 0 aparece en el archivo (547 millones de celdas, el océano) y no figura en la leyenda: se trata como no cultivo (INFERENCIA)
 - Resolución espacial nominal: 1 km; celda real 0,008928197 grados (unos 993 m en el ecuador), 40457 columnas por 20188 filas
 - CRS nativo: EPSG:4326, esquina superior izquierda (-180,2545, 90,2545). VERIFICADO (rasterio)
@@ -17,3 +17,5 @@
 - Requisito del reto y pregunta que atiende: F8, N2; PI-D1. Compuerta G2
 - Responsable: constructor de datos (subagente), orquestador de datos Daniel
 - Verificador y fecha: PENDIENTE
+- Sensibilidad de clases en Colombia (D-023): 1-3 frente a 1-5 corrida y guardada en `datos/evidencia/T-D2_sensibilidades_COL.json` (resumen en `T-D2_pi_d1_respuesta.md`); las clases 4 y 5 cambian el resultado de PI-D1 de forma apreciable. Significado de las clases 1 a 5: guía de usuario oficial de LP DAAC (URL arriba, sección 2.2.4), leída en la corrida anterior; en esta sesión no se pudo volver a extraer el texto del PDF (sin lector de PDF fijado), así que la cita literal queda PENDIENTE de segunda verificación.
+- Limitación declarada: el año nominal de la máscara es 2010 (datos de 2007 a 2012); no representa los cultivos de 2019-2025 de las series.

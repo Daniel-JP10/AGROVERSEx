@@ -2,6 +2,10 @@
 
 Estado: v0 con el esquema real de la primera corrida (Colombia). Origen del esquema: `Docu/01_IDEA_AGROVERSEx.md` §5.2. Lo congela el integrador; las columnas marcadas "añadida" son aditivas y las propone T-D2.
 
+## Cambio aditivo (D-023, 2026-11-14)
+
+Las columnas `nivel`, `unidad` y `motivo` se añaden al esquema de `Docu/01_IDEA_AGROVERSEx.md` §5.2 como cambio ADITIVO: ningún consumidor existente que lea las columnas originales por nombre se rompe. El umbral de `frac_valida` de 0,5 queda aprobado. Aviso al consumidor web: `paraMostrar` convierte solo mm/hr a mm/mes; los valores de Late llegan en mm/day (ver `datos/evidencia/T-D2_empalme_vitest.txt`).
+
 ## Una fila = una unidad, una variable, un mes, una ponderación
 
 | Columna | Tipo | Significado |
@@ -28,7 +32,7 @@ Estado: v0 con el esquema real de la primera corrida (Colombia). Origen del esqu
 - Pesos: fracción exacta de cada celda cubierta por la unidad (exactextract) por `sin(lat sup) - sin(lat inf)` de la fila. Las unidades diminutas y las que cruzan 180 grados quedan con pesos (prueba).
 - Unidades físicas: IMERG Final en mm/hr y Late en mm/day (el cambio de unidad ocurre en 2025-10; el consumidor debe convertir, 1 mm/hr = 24 mm/day). T2M en K, humedad radicular en kg m-2, NDVI sin unidad.
 
-- Fracción de cultivo (`ponderacion = cultivo`): GFSAD1KCM 001 (mapa de 2010, 1 km), clases 1, 2 y 3 (riego mayor, riego menor y secano), promedio por área sobre cada celda gruesa, sin interpolar clases. Ficha: `datos/fichas/gfsad1kcm.md`. Las unidades sin cultivo salen con `motivo = sin_cultivo`.
+- Fracción de cultivo (`ponderacion = cultivo`): GFSAD1KCM 001 (mapa de 2010, 1 km), clases 1, 2 y 3 (riego mayor, riego menor y secano; sensibilidad con 1 a 5 en `datos/evidencia/T-D2_sensibilidades_COL.json`; mapa de 2010 como limitación), promedio por área sobre cada celda gruesa, sin interpolar clases. Ficha: `datos/fichas/gfsad1kcm.md`. Las unidades sin cultivo salen con `motivo = sin_cultivo`.
 - Primera corrida: Colombia (COL), niveles 0, 1 y 2, 1.156 unidades; `datos/procesados/series/COL/`.
 
 ## Formato de archivo (provisional)

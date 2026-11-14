@@ -1,0 +1,8 @@
+## Windows
+..............s.......................ss..ss.ss.s.s.s.s..sss..s......... [ 92%]
+.......................                                                  [100%]
+286 passed, 27 skipped, 75 deselected in 41.67s
+## WSL
+=========================== short test summary info ============================
+FAILED pruebas/geo/test_teselas.py::test_ruta_wsl - IndexError: string index ...
+1 failed, 307 passed, 16 skipped, 75 deselected in 90.67s (0:01:30)

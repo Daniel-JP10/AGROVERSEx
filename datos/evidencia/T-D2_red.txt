@@ -10,3 +10,12 @@ ERROR pruebas/geo/test_zonal_mensual.py
 ERROR pruebas/geo/test_lectura_nasa.py
 !!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!!
 2 errors in 0.44s
+
+## Pruebas de orientacion con datos reales, lectura espejada a proposito (WSL, Sat Nov 14 15:21:50 HPS 2026)
+$ AGRO_COPIA=... pytest pruebas/geo/test_lectura_nasa.py -k "signo or pacifico"
+E       assert 0.007740667012267902 > 0.3
+E        +  where 0.007740667012267902 = _media_caja(array([[nan, nan, nan, ..., nan, nan, nan],\n       [nan, nan, nan, ..., nan, nan, nan],\n       [nan, nan, nan, ..., na...nan, nan, ..., nan, nan, nan],\n       [nan, nan, nan, ..., nan, nan, nan],\n       [nan, nan, nan, ..., nan, nan, nan]]), Grilla(x0=-180.0, y0=90.0, dx=0.1, dy=0.1, alto=1800, ancho=3600), -2, 4, 109, 119)
+FAILED pruebas/geo/test_lectura_nasa.py::test_imerg_signo_de_longitud_borneo_y_colombia
+1 failed, 1 passed, 3 deselected, 2 warnings in 13.60s
+(revertido)
+NOTA: la prueba Pacifico-Sahara pasa tambien con la lectura espejada en enero 2000 (Pacifico espejado cae en el Atlantico ecuatorial, tambien humedo); por eso el control de signo real es Borneo (0,53 frente a 0,008 mm/hr espejado) y falla como debe.

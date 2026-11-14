@@ -45,3 +45,36 @@ def test_orientacion_de_cada_producto_con_datos_reales():
         archivos = L.archivos(Path(base) / "crudos", prod)
         mes = sorted(archivos)[0]
         assert L.leer_campo(archivos[mes], prod, int(mes[5:]))[1] == regla
+
+
+def _media_caja(a, g, lat0, lat1, lon0, lon1):
+    # promedio de la caja [lat0, lat1] x [lon0, lon1] sobre el campo norte arriba
+    i0, i1 = int((g.y0 - lat1) / g.dy), int((g.y0 - lat0) / g.dy)
+    j0, j1 = int((lon0 - g.x0) / g.dx), int((lon1 - g.x0) / g.dx)
+    return float(np.nanmean(a[i0:i1, j0:j1]))
+
+
+def _lluvia_enero_2000():
+    base = os.environ.get("AGRO_COPIA")
+    if not base or not (Path(base) / "crudos").exists():
+        pytest.skip("sin copia de crudos en WSL (AGRO_COPIA)")
+    f = L.archivos(Path(base) / "crudos", "imerg_final")["2000-01"]
+    return L.leer_campo(f, "imerg_final", 1)[0], L.GRILLAS["imerg"]
+
+
+@pytest.mark.datos_reales
+def test_imerg_enero_pacifico_oeste_llueve_mas_que_el_sahara():
+    a, g = _lluvia_enero_2000()
+    pacifico, sahara = _media_caja(a, g, 0, 10, 130, 160), _media_caja(a, g, 20, 28, 0, 20)
+    assert pacifico > 0.1 and pacifico > 10 * sahara
+
+
+@pytest.mark.datos_reales
+def test_imerg_signo_de_longitud_borneo_y_colombia():
+    a, g = _lluvia_enero_2000()
+    esp = a[:, ::-1]  # lectura espejada en longitud (el error original de GDAL)
+    # Borneo (+109 a +119 E) es húmedo y su espejo (109 a 119 O, Pacífico oriental) casi seco en enero de 2000
+    assert _media_caja(a, g, -2, 4, 109, 119) > 0.3 > 0.05 > _media_caja(esp, g, -2, 4, 109, 119)
+    # Chocó (longitudes negativas) más húmedo que el mar Arábigo en su longitud espejo; el campo espejado invierte la relación
+    assert _media_caja(a, g, 4, 8, -78, -74) > 1.3 * _media_caja(a, g, 4, 8, 74, 78)
+    assert _media_caja(esp, g, 4, 8, -78, -74) < _media_caja(esp, g, 4, 8, 74, 78)

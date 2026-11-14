@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-VARS = {"precipitacion_final": "lluvia (IMERG Final, mm/hr)", "ndvi": "NDVI (MOD13C2)"}
+VARS = {"precipitacion_final": "lluvia (IMERG Final, mm/hr)", "ndvi": "NDVI (MOD13C2)", "t2m": "T2M (MERRA-2, K; la diferencia relativa sobre kelvin es engañosa, ver la absoluta)", "humedad_radicular": "humedad radicular (GLDAS Noah modelo, kg m-2)"}
 
 
 def comparar(carpeta: Path, meses: list[str]) -> dict:
