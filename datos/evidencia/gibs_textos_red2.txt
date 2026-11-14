@@ -1,0 +1,25 @@
++ Received
+
+- []
++ [
++   "src\\textos\\avisos.ts",
++   "src\\textos\\en.ts",
++   "src\\textos\\es.ts",
++ ]
+
+ ❯ pruebas/textos_prohibidos.test.ts:24:19
+     22|       if (m) malos.push(f)
+     23|     }
+     24|     expect(malos).toEqual([])
+       |                   ^
+     25|   })
+     26| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  15:44:00
+   Duration  470ms (transform 42%, import 31%, tests 20%, worker 7%)
+

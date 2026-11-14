@@ -2,7 +2,7 @@
 import { fondoBase, fondoDetalle, ZOOM_DETALLE } from './fondos'
 import { t } from '../textos/i18n'
 // Configuración centralizada de capas del globo.
-// Teselas reales de GADM (adm0/adm1/adm2), generadas en la fase 1. Propiedades: id (texto),
+// Teselas provisionales (adm0/adm1/adm2) con ids de GADM, generadas en la fase 1; se reemplazan por CGAZ en T-D9. Propiedades: id (texto),
 // nivel, iso3, padre_id, nombre, es_disputa. Las zonas en disputa (es_disputa = 1) están en las tres capas.
 
 export interface NivelConfig {
@@ -67,7 +67,7 @@ export function urlTrueColor(fecha: string): string {
 export const TRUECOLOR_ACTIVO = false
 export const FECHA_TRUECOLOR = '2024-06-15'
 
-export const ATRIBUCION = `Imágenes NASA GIBS · ${fondoDetalle(true)!.atribucion} · Límites GADM 4.1 (uso no comercial)`
+export const ATRIBUCION = `${fondoDetalle(true)!.atribucion} · Límites: geoBoundaries CGAZ, CC BY 4.0 (derivados bajo ODbL, D-015); Runfola et al. 2020, PLoS ONE 15(4): e0231866`
 
 /** Capas con las que se interactúa en un nivel: su relleno y los respaldos de los niveles superiores. */
 export function capasInteractivas(nivel: number): string[] {

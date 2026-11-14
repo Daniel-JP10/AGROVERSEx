@@ -30,7 +30,7 @@ export function crearFixture(): string {
     }
   })
   db.exec(`INSERT INTO estatico VALUES('AAA','elev_media',NULL,NULL,NULL,1234.5,0.9)`)
-  db.exec(`INSERT INTO clase_fraccion VALUES('AAA','koppen','Af',0.5)`)
+  db.exec(`INSERT INTO clase_fraccion VALUES('AAA','igbp','12',0.5)`)
   db.exec(`UPDATE variable SET unidad_medida='mm/h' WHERE id='precip'`)
   db.exec(`INSERT INTO variable(id,nombre,escala,desplazamiento,valido_min,valido_max,etiqueta,unidad_medida) VALUES
     ('ndvi',NULL,0.0001,0,-0.2,1,'FUENTE','adim'),('nbr2',NULL,0.0001,0,-1,1,'FUENTE','adim'),('sm_verdad',NULL,0.001,0,0,0.9,'SUPUESTO','m3/m3'),

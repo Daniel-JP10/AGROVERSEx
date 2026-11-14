@@ -2,14 +2,14 @@
 import { expect, test } from '@playwright/test'
 
 // Corre con AGROVERSEX_SQLITE y AGROVERSEX_DATOS definidos
-test('filtro por clima: las unidades filtradas se apagan sin volverse hueco', async ({ page }) => {
+test('filtro por cobertura: las unidades filtradas se apagan sin volverse hueco', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('button', { name: 'Filtros' }).click()
-  const koppen = page.getByRole('group', { name: /Köppen/ }).getByRole('checkbox').first()
-  await expect(koppen).toBeVisible({ timeout: 15000 })
+  const clase = page.getByRole('group', { name: /Cobertura IGBP/ }).getByRole('checkbox').first()
+  await expect(clase).toBeVisible({ timeout: 15000 })
   await page.evaluate(() => (window as any).__mapa.jumpTo({ center: [-60, -5], zoom: 3 }))
   await page.waitForTimeout(4000)
-  await koppen.check()
+  await clase.check()
   await page.waitForTimeout(3000)
   const r = await page.evaluate(() => {
     const m = (window as any).__mapa, c = m.getContainer()

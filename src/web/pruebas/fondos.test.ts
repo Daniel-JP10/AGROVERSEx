@@ -26,7 +26,31 @@ describe('fondos', () => {
     expect(on.indexOf('detalle')).toBeLessThan(on.indexOf('adm0-relleno'))
     expect(ids(construirEstilo('http://x', false))).not.toContain('detalle')
   })
-  it('la atribución visible incluye a EOX', () => {
-    expect(ATRIBUCION).toContain('EOxCloudless')
+  it('la atribución visible exige el texto de NASA GIBS (ESDIS)', () => {
+    expect(ATRIBUCION).toContain("NASA's Global Imagery Browse Services (GIBS)")
+    expect(ATRIBUCION).toContain('ESDIS')
+  })
+  it('ninguna URL ni texto de fondo menciona EOX ni cloudless', () => {
+    const todo = JSON.stringify(FONDOS).toLowerCase() + ATRIBUCION.toLowerCase()
+    expect(todo).not.toMatch(/eox|cloudless/)
+    for (const f of FONDOS) for (const u of f.tiles) expect(u).toContain('gibs.earthdata.nasa.gov')
+  })
+  it('el fondo por defecto es un mosaico sin fecha y la fuente usa el zoom nativo', () => {
+    const det = fondoDetalle(true)!
+    for (const u of [...det.tiles, ...fondoBase().tiles]) expect(u).not.toMatch(/\d{4}-\d{2}-\d{2}/)
+    const fuentes = (construirEstilo('http://x', true) as any).sources
+    expect(fuentes.detalle.maxzoom).toBe(det.maxzoom)
+    expect(det.maxzoom).toBe(8)
+    expect(fuentes.bluemarble.maxzoom).toBe(fondoBase().maxzoom)
+  })
+  it('la capa MODIS de un día existe solo como opción, no por defecto', () => {
+    expect(FONDOS.some((f) => f.id === 'gibs-modis-terra' && f.maxzoom === 9)).toBe(true)
+    expect(fondoDetalle(true)!.id).not.toBe('gibs-modis-terra')
+  })
+  it('la atribución de límites es geoBoundaries (D-015) y no GADM', () => {
+    expect(ATRIBUCION).toContain('geoBoundaries')
+    expect(ATRIBUCION).toContain('Runfola et al. 2020')
+    expect(ATRIBUCION).toMatch(/CC BY 4\.0/)
+    expect(ATRIBUCION).not.toMatch(/GADM/i)
   })
 })

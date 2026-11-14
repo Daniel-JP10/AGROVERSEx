@@ -1,6 +1,6 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import { useEffect, useRef, useState } from 'react'
-import { AVISO_N7, BANDA, LICENCIAS_NC } from '../textos/avisos'
+import { AVISO_N7, BANDA, FUENTES_AYUDA } from '../textos/avisos'
 import { GLOSARIO } from '../textos/glosario'
 import { alternar, t, useIdioma } from '../textos/i18n'
 import { detalle, useModo, type Modo } from '../textos/modos'
@@ -40,7 +40,7 @@ export function Cabecera() {
             ))}
           </dl>
           <h3>{t('ayuda.fuentes')}</h3>
-          <ul>{LICENCIAS_NC.map((l) => <li key={l}>{l}</li>)}</ul>
+          <ul>{FUENTES_AYUDA.map((l) => <li key={l}>{l}</li>)}</ul>
           <p className="aviso-n7">{AVISO_N7}</p>
         </section>
       )}

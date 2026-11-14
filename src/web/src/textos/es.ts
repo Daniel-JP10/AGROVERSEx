@@ -79,7 +79,7 @@ export const es = {
   'filtros.supuestoB': '°C (convención de NOAA para el ONI, aplicada al RONI). Fuera de esos meses el mapa se apaga.',
   'filtros.titulo': 'Filtros',
   'filtros.todos': 'Todos los meses',
-  'fuentes.climatologia': 'Climatología base: WorldClim 2.1 (uso no comercial), 1970-2000. La serie 2000-2026 es simulada.',
+  'fuentes.climatologia': 'Climatología base 1970-2000: fuente PENDIENTE de confirmar. La serie 2000-2026 es simulada.',
   'globo.acercar': 'Acercar',
   'globo.alejar': 'Alejar',
   'globo.disputa': 'Trama: zonas en disputa · límites ilustrativos',
@@ -124,7 +124,6 @@ export const es = {
   'panel.cerrar': 'Cerrar panel',
   'panel.errRotaciones': 'No se pudieron cargar las rotaciones',
   'panel.titulo': 'Panel de región',
-  'resumen.clima': 'Clima (Köppen)',
   'resumen.condicion': 'Condición de la tierra',
   'resumen.degradada': 'degradada',
   'resumen.estable': 'estable',
@@ -134,7 +133,6 @@ export const es = {
   'resumen.mejora': 'en mejora',
   'resumen.ninguno': 'ninguno registrado',
   'resumen.rango': 'rango',
-  'resumen.sinClase': 'sin clase',
   'resumen.sinConexion': 'sin conexión',
   'resumen.sinIntervalo': 'sin intervalo en el producto',
   'resumen.sinRegistro': 'sin registro',
@@ -192,5 +190,6 @@ export const es = {
   'globo.rangoEscala': 'rango de la escala',
   'globo.fueraFiltro': 'fuera del filtro',
   'unidad.disputa': 'Zona en disputa',
+  'fuentes.fondo': 'El fondo del globo es contexto visual, no un dato del análisis: los datos se pintan encima. Son mosaicos de NASA GIBS (Blue Marble, MODIS/Terra, agosto de 2004) y conservan restos de nubes en zonas como los Andes.',
 } as const
 export type ClaveTexto = keyof typeof es
