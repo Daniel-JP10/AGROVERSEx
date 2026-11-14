@@ -28,6 +28,9 @@ Estado: v0 con el esquema real de la primera corrida (Colombia). Origen del esqu
 - Pesos: fracción exacta de cada celda cubierta por la unidad (exactextract) por `sin(lat sup) - sin(lat inf)` de la fila. Las unidades diminutas y las que cruzan 180 grados quedan con pesos (prueba).
 - Unidades físicas: IMERG Final en mm/hr y Late en mm/day (el cambio de unidad ocurre en 2025-10; el consumidor debe convertir, 1 mm/hr = 24 mm/day). T2M en K, humedad radicular en kg m-2, NDVI sin unidad.
 
+- Fracción de cultivo (`ponderacion = cultivo`): GFSAD1KCM 001 (mapa de 2010, 1 km), clases 1, 2 y 3 (riego mayor, riego menor y secano), promedio por área sobre cada celda gruesa, sin interpolar clases. Ficha: `datos/fichas/gfsad1kcm.md`. Las unidades sin cultivo salen con `motivo = sin_cultivo`.
+- Primera corrida: Colombia (COL), niveles 0, 1 y 2, 1.156 unidades; `datos/procesados/series/COL/`.
+
 ## Formato de archivo (provisional)
 
 Parquet particionado por variable es lo pedido; el entorno no tiene pyarrow, así que la corrida escribe `serie_mensual_<variable>_<ponderacion>.csv.gz` (CSV con gzip, UTF-8, vacío = ausente). `precipitacion` va en dos archivos (`precipitacion_final` y `precipitacion_late`) que se concatenan. Propuesta: pyarrow, versión a fijar y revisar por el director.

@@ -1,0 +1,62 @@
+{
+ "pesos_c91f11a7f4b8989e": {
+  "grilla": "imerg",
+  "segundos": 2.25,
+  "nnz": 39161
+ },
+ "precipitacion_final": {
+  "meses": 309,
+  "segundos_total": 110.5,
+  "segundos_por_mes": 0.358,
+  "segundos_agregar_por_mes_y_modo": 0.0083,
+  "filas_area": 357204,
+  "filas_cultivo": 357204
+ },
+ "precipitacion_late": {
+  "meses": 13,
+  "segundos_total": 152.5,
+  "segundos_por_mes": 11.735,
+  "segundos_agregar_por_mes_y_modo": 0.0103,
+  "filas_area": 15028,
+  "filas_cultivo": 15028
+ },
+ "pesos_2a34d67bb5d4294d": {
+  "grilla": "merra2",
+  "segundos": 4.51,
+  "nnz": 3741
+ },
+ "t2m": {
+  "meses": 321,
+  "segundos_total": 8.8,
+  "segundos_por_mes": 0.028,
+  "segundos_agregar_por_mes_y_modo": 0.0016,
+  "filas_area": 371076,
+  "filas_cultivo": 371076
+ },
+ "pesos_41b7e98b6e11e859": {
+  "grilla": "gldas",
+  "segundos": 4.67,
+  "nnz": 9503
+ },
+ "humedad_radicular": {
+  "meses": 319,
+  "segundos_total": 14.1,
+  "segundos_por_mes": 0.044,
+  "segundos_agregar_por_mes_y_modo": 0.0028,
+  "filas_area": 368764,
+  "filas_cultivo": 368764
+ },
+ "pesos_d3958b87eb940641": {
+  "grilla": "mod13c2",
+  "segundos": 2.56,
+  "nnz": 133890
+ },
+ "ndvi": {
+  "meses": 321,
+  "segundos_total": 387.4,
+  "segundos_por_mes": 1.207,
+  "segundos_agregar_por_mes_y_modo": 0.0248,
+  "filas_area": 371076,
+  "filas_cultivo": 371076
+ }
+}

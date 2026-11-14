@@ -1,0 +1,12 @@
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pruebas/geo/test_lectura_nasa.py:8: in <module>
+    from simulacion.geo import lectura_nasa as L
+E   ImportError: cannot import name 'lectura_nasa' from 'simulacion.geo' (/home/usuario/tmp/agroversex/t-d2/red/src/simulacion/geo/__init__.py)
+=========================== short test summary info ============================
+ERROR pruebas/geo/test_zonal_mensual.py
+ERROR pruebas/geo/test_lectura_nasa.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!!
+2 errors in 0.44s

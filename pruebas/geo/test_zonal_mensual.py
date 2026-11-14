@@ -138,3 +138,35 @@ def test_fraccion_de_cultivo_exacta_sobre_malla_gruesa_desalineada():
     assert f[1, 1] == pytest.approx(0.5)  # lat 1,5-2,5: mitad norte; lon 0,5-1,5 entera
     assert f[2, 0] == 0.0 and f[0, 1] == pytest.approx(1.0)
     assert set(np.unique(f)) <= {0.0, 0.25, 0.5, 0.75, 1.0}  # solo fracciones de conteo, no mezclas interpoladas
+
+
+@pytest.mark.datos_reales
+def test_contra_exactextract_directo_en_municipios_de_colombia():
+    import os
+    from pathlib import Path
+
+    import pyogrio
+    from exactextract import exact_extract
+    from exactextract.raster import NumPyRasterSource
+
+    from simulacion.geo import lectura_nasa as L
+    base = os.environ.get("AGRO_COPIA")
+    if not base or not (Path(base) / "crudos").exists():
+        pytest.skip("sin copia de crudos en WSL (AGRO_COPIA)")
+    u = pyogrio.read_dataframe(Path(base) / "proc" / "unidades.gpkg", layer="adm2", where="iso3='COL'",
+                               columns=["unidad_id"]).sample(60, random_state=7).reset_index(drop=True)
+    g = L.GRILLAS["imerg"]
+    f = L.archivos(Path(base) / "crudos", "imerg_final")["2020-01"]
+    campo, _ = L.leer_campo(f, "imerg_final", 1, (True, True, True))
+    p = zm.calcular_pesos(g, list(u.geometry))
+    r = zm.agregar(p, g, campo.ravel(), umbral=0.0)
+    # referencia: exactextract directo con la media ponderada por área de fila (peso de latitud)
+    ext = (g.x0, g.y0 - g.alto * g.dy, g.x0 + g.ancho * g.dx, g.y0)
+    wkt = zm._wkt4326()
+    val = NumPyRasterSource(campo.astype("float32"), *ext, srs_wkt=wkt, nodata=np.nan)
+    peso = NumPyRasterSource(np.broadcast_to(g.areas_fila().astype("float32")[:, None], campo.shape).copy(), *ext, srs_wkt=wkt)
+    u2 = u.assign(uid=np.arange(len(u)))[["uid", "geometry"]]
+    d = exact_extract(val, u2, ["weighted_mean"], weights=peso, include_cols=["uid"], output="pandas")
+    dif = np.abs(d["weighted_mean"].to_numpy() - r["valor"][d["uid"].to_numpy()])
+    print("diferencia maxima contra exactextract directo (mm/hr):", np.nanmax(dif))
+    assert np.nanmax(dif) < 1e-4

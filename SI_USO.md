@@ -221,3 +221,4 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/simulacion/geo/serie_mensual.py` | Corrida de series mensuales por país (T-D2) | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_zonal_mensual.py` | Pruebas del motor zonal (T-D2) | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_lectura_nasa.py` | Pruebas de la orientación de lecturas (T-D2) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/pi_d1_colombia.py` | Respuesta preliminar de PI-D1 en Colombia (area frente a cultivo) | 2026-11-14 |
