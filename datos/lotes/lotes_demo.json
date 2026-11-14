@@ -9,7 +9,8 @@
    "clima_tipo": "templado",
    "lat": 41.165,
    "lon": -96.477,
-   "area_ha": 64.0,
+   "area_ha": 74.6,
+   "area_ha_parte_a": 64.0,
    "estacion_referencia": "GHCN-Daily USC00255362 MEAD 6S",
    "geometria": {
     "type": "Polygon",
@@ -48,7 +49,8 @@
    "clima_tipo": "tropical",
    "lat": 0.842,
    "lon": -77.661,
-   "area_ha": 63.9,
+   "area_ha": 78.9,
+   "area_ha_parte_a": 63.9,
    "estacion_referencia": "GHCN-Daily COM00080370 SAN LUIS",
    "geometria": {
     "type": "Polygon",

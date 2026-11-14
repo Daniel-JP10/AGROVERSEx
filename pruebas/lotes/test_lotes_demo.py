@@ -37,3 +37,10 @@ def test_poligono_dentro_de_su_unidad_adm2():
     for x in _lotes():
         u = g[g.unidad_id == x["unidad_id"]].geometry.iloc[0]
         assert u.contains(shape(x["geometria"])), x["lote_id"]
+
+
+def test_area_declarada_coincide_con_el_poligono():
+    from lotes_demo.construir_lotes import area_ha
+    for x in _lotes():
+        a = area_ha(x["geometria"]["coordinates"][0], x["lat"])
+        assert abs(a - x["area_ha"]) < 0.1 and 60 < a < 90

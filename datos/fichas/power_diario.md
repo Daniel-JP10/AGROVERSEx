@@ -1,0 +1,25 @@
+# Ficha de dataset
+
+- Nombre corto: power_diario
+- Producto oficial y versión: NASA POWER, API temporal diaria de punto, comunidad AG, resolución nativa (`power.larc.nasa.gov/api/temporal/daily/point`). Versión de la API: PENDIENTE (el CSV no la declara). Fuentes internas según la cabecera del CSV (VERIFICADO por lectura): MERRA-2 (PRECTOTCORR, T2M, T2M_MAX, T2M_MIN, RH2M, WS2M) y CERES SYN1deg (ALLSKY_SFC_SW_DWN)
+- Agencia y centro de datos: NASA, Langley Research Center
+- Página oficial: https://power.larc.nasa.gov/docs/
+- DOI: PENDIENTE
+- Variable y unidades: PRECTOTCORR mm/día; T2M, T2M_MAX, T2M_MIN °C; RH2M %; ALLSKY_SFC_SW_DWN MJ/m2/día; WS2M m/s. Faltante: -999 (no aparece en estas descargas, VERIFICADO)
+- Resolución espacial nominal: celda de reanálisis MERRA-2 de 0,5 x 0,625 grados (contexto del lote, no medición del lote)
+- Resolución temporal: diaria. La cabecera del CSV dice "in LST" (día de hora solar local); no se convirtió a UTC porque POWER no publica horario. Limitación declarada
+- CRS nativo: WGS 84 lat/lon (EPSG:4326), punto
+- Periodo descargado: 2001-01-01 a 2024-12-31 (8766 días)
+- Área descargada: punto del centro del lote DEMO (3 decimales)
+- Herramienta y consulta exacta de descarga: curl a `https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR,T2M,T2M_MAX,T2M_MIN,RH2M,ALLSKY_SFC_SW_DWN,WS2M&community=AG&longitude=<lon>&latitude=<lat>&start=20010101&end=20241231&format=CSV`; lon/lat en `datos/lotes/lotes_demo.json`
+- Fecha de descarga: 2026-11-14
+- Banderas de calidad aplicadas: ninguna publicada por POWER en este formato; se prueba Tmin <= Tmax y precipitación >= 0 (`pruebas/lotes/test_forzantes.py`)
+- Fracción de datos válidos en el área: 100 % de los días sin -999 (VERIFICADO por conteo)
+- Transformaciones a la grilla común y método de remuestreo: ninguna; el CSV se guarda tal cual lo entrega la API
+- Requisito del reto y pregunta que atiende: N2, N3, F13; PI-D2, PI-D3
+- Limitaciones conocidas:
+  - Es dato de reanálisis a 0,5 grados. En Ipiales la elevación de la celda MERRA-2 que informa el CSV es 2553 m; no se corrige por altura del lote (sin gradiente citado y verificable).
+  - El rol de POWER según D-012 era contraste; aquí es la fuente de clima diario del Gemelo (formato power_csv), por decisión de la tarea T-D5. El director debe confirmarlo.
+  - Licencia: política de datos de NASA, CC0 salvo restricción, según LICENCIAS_TERCEROS.md; sin restricción marcada en el CSV.
+- Responsable: constructor de datos (Claude Code), tarea T-D5 Parte B
+- Verificador y fecha: PENDIENTE
