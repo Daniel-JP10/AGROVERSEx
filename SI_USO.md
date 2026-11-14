@@ -217,3 +217,4 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/web/src/comun/unidades.ts` | Conversión única paraMostrar con días reales del mes, contrato web_componentes §5 | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/unidades.test.ts` | Pruebas de paraMostrar y sus tres llamadores | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/textos_tierra.test.ts` | Pruebas de textos por clave de la sección Tierra | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/comun/unidades.ts`, `src/web/pruebas/empalme_imerg.test.ts` | Conversión mm/day de IMERG Late en paraMostrar y prueba del empalme 2025-09 a 2025-10 (D-023) | 2026-11-14 |

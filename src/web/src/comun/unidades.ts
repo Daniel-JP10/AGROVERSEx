@@ -20,11 +20,13 @@ export function diasDelMes(mes: Mes): number {
 }
 
 const MM_HORA = new Set(['mm/h', 'mm/hr'])
+const MM_DIA = new Set(['mm/d', 'mm/day', 'mm/dia', 'mm/día']) // IMERG Late
 
 export function paraMostrar(variable: string, valor: number | null | undefined, unidadProducto: string | null, mes: Mes): { valor: number | null; unidad: string } {
   const dias = diasDelMes(mes) // valida el mes aunque no haga falta
   const v = valor ?? null
   if (variable === 'precip' && unidadProducto && MM_HORA.has(unidadProducto)) return { valor: v === null ? null : v * 24 * dias, unidad: 'mm/mes' }
+  if (variable === 'precip' && unidadProducto && MM_DIA.has(unidadProducto.toLowerCase())) return { valor: v === null ? null : v * dias, unidad: 'mm/mes' }
   const u = unidadProducto === 'C' ? '°C' : unidadProducto === 'adim' || !unidadProducto ? (variable === 'ndvi' || unidadProducto === 'adim' ? 'adimensional' : '') : unidadProducto
   return { valor: v, unidad: u }
 }
