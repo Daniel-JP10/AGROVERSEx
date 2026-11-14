@@ -34,8 +34,8 @@ export const capaPorId = (id: string): Capa => CAPAS.find((c) => c.id === id) ??
 export const TEMAS: Tema[] = ['Agua', 'Clima', 'Vegetación']
 export const TEMA_CLAVE: Record<Tema, ClaveTexto> = { Agua: 'tema.Agua', Clima: 'tema.Clima', Vegetación: 'tema.Vegetación' }
 
-// La base guarda la lluvia en mm/h, como IMERG; se muestra en mm/mes con los días reales del mes
-export function valoresCapa(c: Capa, valores: Float32Array, mes: number): Float32Array {
+// La unidad llega del dato (Final mm/h, Late mm/day; por omisión mm/h); se muestra en mm/mes con los días reales del mes
+export function valoresCapa(c: Capa, valores: Float32Array, mes: number, unidad = 'mm/h'): Float32Array {
   if (c.id !== 'precip') return valores
-  return valores.map((x) => paraMostrar('precip', x, 'mm/h', mes).valor as number)
+  return valores.map((x) => paraMostrar('precip', x, unidad, mes).valor as number)
 }

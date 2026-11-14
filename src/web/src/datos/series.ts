@@ -24,8 +24,8 @@ export async function pedirSerie(id: string, vars: string[], desde = 0, hasta = 
   }
 }
 
-// Lluvia mm/h -> mm/mes del mes dado (la conversión vive en comun/unidades.ts)
-export const mmPorMes = (mmh: number, mes: Mes) => paraMostrar('precip', mmh, 'mm/h', mes).valor as number
+// Lluvia (unidad del producto, por omisión mm/h) -> mm/mes del mes dado (la conversión vive en comun/unidades.ts)
+export const mmPorMes = (v: number, mes: Mes, unidad = 'mm/h') => paraMostrar('precip', v, unidad, mes).valor as number
 
 // Resta la media de la base [baseDesde, baseHasta] (índices incluidos), ignorando null.
 export function anomalia(s: Num[], baseDesde: number, baseHasta: number): Num[] {

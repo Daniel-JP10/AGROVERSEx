@@ -1,0 +1,4 @@
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  pruebas/empalme_imerg.test.ts > Final (mm/hr) y Late (mm/day) del mismo valor físico por cada camino > mmHoraAMmMes, mmPorMes y valoresCapa terminan iguales
+AssertionError: expected 1785.6000000000004 to be close to 74.4, received difference is 1711.2000000000003, but expected 0.005
+      Tests  1 failed | 3 passed (4)

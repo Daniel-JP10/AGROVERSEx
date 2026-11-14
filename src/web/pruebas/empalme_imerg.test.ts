@@ -38,3 +38,23 @@ describe('empalme IMERG Final a Late en la serie mostrada', () => {
     for (const u of unidades) { const r = razon(u, conv); expect(r).toBeGreaterThan(RANGO[0]); expect(r).toBeLessThan(RANGO[1]) }
   })
 })
+
+describe('Final (mm/hr) y Late (mm/day) del mismo valor físico por cada camino', () => {
+  const mes = 11 * 12 + 9 // 2025-10 contado desde 2000-01
+  const dias = 31
+  const hr = 0.1 // mm/hr
+  const dia = hr * 24 // mm/day, mismo valor físico
+  it('mmHoraAMmMes, mmPorMes y valoresCapa terminan iguales', async () => {
+    const { mmHoraAMmMes } = await import('../src/datos/desescalar')
+    const { mmPorMes } = await import('../src/datos/series')
+    const { valoresCapa, capaPorId } = await import('../src/datos/capas')
+    const esperado = hr * 24 * dias
+    expect(mmHoraAMmMes(hr, mes, 'mm/hr')).toBeCloseTo(esperado)
+    expect(mmHoraAMmMes(dia, mes, 'mm/day')).toBeCloseTo(esperado)
+    expect(mmPorMes(hr, mes, 'mm/hr')).toBeCloseTo(esperado)
+    expect(mmPorMes(dia, mes, 'mm/day')).toBeCloseTo(esperado)
+    const c = capaPorId('precip')
+    expect(valoresCapa(c, new Float32Array([hr]), mes, 'mm/hr')[0]).toBeCloseTo(esperado, 3)
+    expect(valoresCapa(c, new Float32Array([dia]), mes, 'mm/day')[0]).toBeCloseTo(esperado, 3)
+  })
+})
