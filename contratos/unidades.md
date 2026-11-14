@@ -1,6 +1,6 @@
 # Contrato de unidades · v0 (2026-11-14, T-D1)
 
-Estado: v0, provisional en conteos y listas; el formato de `unidad_id` y los atributos son lo que Web puede usar ya. Los conteos y la lista de países sin nivel 2 se regeneran de los datos al cerrar T-D1 (v1). Decisión de origen: D-002.
+Estado: v0 con conteos y listas derivados de los datos construidos el 2026-11-14 (`unidades_informe.json`); el formato de `unidad_id` y los atributos son lo que Web puede usar ya. Decisión de origen: D-002.
 
 ## Fuente
 
@@ -29,9 +29,9 @@ Texto, estable mientras no cambie el archivo fuente, único en todo el conjunto 
 | `nivel` | entero 0, 1 o 2 | Capa de CGAZ de la que sale |
 | `nivel_real` | texto | `shapeType` de CGAZ: `ADM0`, `ADM1`, `ADM2` o `DISP`. Si `nivel_real` es menor que `nivel`, la unidad repite un nivel superior (sin municipios en ese país) |
 | `iso3` | texto | País (`shapeGroup`) |
-| `padre_id` | texto o nulo | `unidad_id` de la unidad del nivel superior que contiene el punto interior. Nulo solo en nivel 0 |
-| `nombre` | texto | `shapeName` de CGAZ; puede faltar en 37 unidades de ADM2 (se rellena con el `unidad_id`) |
-| `area_km2` | real | Área en km² calculada en proyección de igual área ESRI:54009 (Mollweide) |
+| `padre_id` | texto o nulo (`cruce_ambiguo` marca los que el punto interior no resolvió) | `unidad_id` de la unidad del nivel superior que contiene el punto interior. Nulo solo en nivel 0 |
+| `nombre` | texto | `shapeName` de CGAZ; falta en 37 unidades de ADM2 y se escribe "Sin nombre {shapeID}" |
+| `area_km2` | real | Área en km² calculada en EPSG:6933 (igual área sobre el elipsoide WGS84), con vértices cada 0,1 grados como máximo. Frente al área geodésica del elipsoide: desviación máxima 0,33 % y 99,996 % de las unidades dentro de 0,1 % |
 | `es_disputa` | 0 o 1 | Zona en disputa según CGAZ |
 | `fuente` | texto | Archivo de origen y versión |
 
@@ -47,7 +47,7 @@ Las teselas llevan solo `unidad_id`, `nombre`, `nivel`, `iso3` y `padre_id`. Web
 
 ## Países sin nivel 2 (derivado de los datos: ningún polígono con `shapeType = ADM2` en la capa ADM2)
 
-Reales (22): AND, ARE, ATA, ATG, BHR, BRB, DMA, ESH, GRD, GRL, KNA, LBY, LIE, MDA, MHL, MLT, MNE, MUS, NRU, SMR, TTO, VAT, VCT. Más las 19 zonas en disputa numéricas (111 a 129). En esos países la capa ADM2 repite la geometría de nivel 1 (o de nivel 0 para ATA y VAT): Web no debe mostrar "municipio". Lista de v0 obtenida con una consulta a la tabla; la lista final se regenera en `datos/procesados` y reemplaza esta.
+Son 42 unidades de país o zona. Códigos de país (23): AND, ARE, ATA, ATG, BHR, BRB, DMA, ESH, GRD, GRL, KNA, LBY, LIE, MDA, MHL, MLT, MNE, MUS, NRU, SMR, TTO, VAT, VCT. Códigos de zona en disputa (19): 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129. En todos la capa ADM2 repite la geometría de nivel 1 (o de nivel 0 en ATA y VAT; `nivel_real` lo dice): Web no debe mostrar "municipio" ahí. ESH figura aquí como zona en disputa de CGAZ (`es_disputa = 1`). La lista sale de `paises_sin_nivel2` sobre la capa ADM2 y una prueba comprueba que cada código esté en este párrafo; no se escribe a mano.
 
 ## Avisos para Web
 
