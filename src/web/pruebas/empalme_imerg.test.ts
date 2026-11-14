@@ -58,3 +58,16 @@ describe('Final (mm/hr) y Late (mm/day) del mismo valor físico por cada camino'
     expect(valoresCapa(c, new Float32Array([dia]), mes, 'mm/day')[0]).toBeCloseTo(esperado, 3)
   })
 })
+
+import pares from './fixture_pares_COL.json'
+describe('paraMostrar cubre todo par (variable, unidad) de serie_mensual en Colombia', () => {
+  // fixture: datos/extraer_pares_variable_unidad.py sobre datos/procesados/series/COL
+  it.each(pares as [string, string][])('%s en %s tiene conversión', (v, u) => {
+    expect(() => paraMostrar(v, 1, u, '2025-10')).not.toThrow()
+  })
+  it('un par inventado lanza error con el par en el mensaje', () => {
+    expect(() => paraMostrar('precip', 1, 'furlong/fortnight', '2025-10')).toThrow(/precip.*furlong/)
+    expect(() => paraMostrar('inventada', 1, 'mm/hr', '2025-10')).toThrow(/inventada/)
+  })
+  it('T2M de K a °C', () => expect(paraMostrar('t2m', 273.15, 'K', '2025-10')).toEqual({ valor: 0, unidad: '°C' }))
+})

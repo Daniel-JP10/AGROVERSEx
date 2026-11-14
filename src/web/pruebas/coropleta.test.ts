@@ -54,7 +54,7 @@ describe('motor', () => {
 })
 
 describe('texto y unidades', () => {
-  it('lluvia mm/h a mm/mes', () => expect(mmHoraAMmMes(0.1, '2023-04')).toBeCloseTo(72))
+  it('lluvia mm/h a mm/mes', () => expect(mmHoraAMmMes(0.1, '2023-04', 'mm/h')).toBeCloseTo(72))
   it('hueco se rotula, nunca 0', () => {
     expect(textoValor(estadoUnidad(NaN, undefined, R, {}), 'mm/mes', R)).toContain('sin dato del producto')
   })

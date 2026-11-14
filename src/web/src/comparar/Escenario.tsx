@@ -1,14 +1,15 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import { useEffect, useState } from 'react'
 import { useEstado } from '../app/estado'
-import { pedirSerie, mmPorMes } from '../datos/series'
+import { pedirSerie } from '../datos/series'
+import { paraMostrar } from '../comun/unidades'
 import { limitarEscenario, percentil } from './sincronia'
 import { t } from '../textos/i18n'
 
 interface Rango { p25: number; p75: number; min: number; max: number }
 const VARS = [
-  { id: 'precip', nombre: 'capa.precipCorta' as const, unidad: 'mm/mes', conv: mmPorMes },
-  { id: 't2m', nombre: 'capa.tempCorta' as const, unidad: '°C', conv: (x: number, _mes: number) => x },
+  { id: 'precip', nombre: 'capa.precipCorta' as const, unidad: 'mm/mes' },
+  { id: 't2m', nombre: 'capa.tempCorta' as const, unidad: '°C' },
 ]
 
 // p25 y p75 salen de la serie mensual de la unidad (INFERENCIA, 2000-2026). Sin base: el control se desactiva con aviso.
@@ -27,7 +28,7 @@ export function Escenario() {
       if (!vivo) return
       const out: Record<string, Rango> = {}
       for (const v of VARS) {
-        const s = (r.series[v.id]?.valor ?? []).map((x, i) => (x === null ? null : v.conv(x, i)))
+        const s = (r.series[v.id]?.valor ?? []).map((x, i) => (x === null ? null : paraMostrar(v.id, x, r.series[v.id]?.unidad_medida ?? null, i).valor))
         const p25 = percentil(s, 0.25), p75 = percentil(s, 0.75), c = s.filter((x): x is number => x !== null)
         if (p25 !== null && p75 !== null) out[v.id] = { p25, p75, min: Math.min(...c), max: Math.max(...c) }
       }

@@ -80,7 +80,7 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
           if (mes !== useEstado.getState().mes || idCapa !== useEstado.getState().capa) return // llegó tarde: ya se pidió otro mes o capa
           motores[n]?.destruir()
           const mo = crearMotorCoropleta(m, { nivel: n, rango: c.rango })
-          mo.aplicar(valoresCapa(c, d.valores, mes), ids, filtro, f?.valores)
+          mo.aplicar(valoresCapa(c, d.valores, mes, c.unidadProducto ?? ''), ids, filtro, f?.valores)
           motores[n] = mo
         }
         aplicarVersion(++version)

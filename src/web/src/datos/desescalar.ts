@@ -15,4 +15,4 @@ export function formatearRango(p05: number, p50: number, p95: number, unidad: st
 }
 
 // La lluvia llega en la unidad del producto (mm/h o mm/day); la conversión a mm/mes es explícita y solo para mostrar.
-export const mmHoraAMmMes = (v: number, mes: Mes, unidad = 'mm/h') => paraMostrar('precip', v, unidad, mes).valor as number
+export const mmHoraAMmMes = (v: number, mes: Mes, unidad: string) => paraMostrar('precip', v, unidad, mes).valor as number

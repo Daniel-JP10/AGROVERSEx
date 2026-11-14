@@ -43,7 +43,7 @@ export function Dividida({ mapa, mesB, setMesB }: { mapa: MapaGL; mesB: number; 
           if (mes !== mesRef.current || idCapa !== useEstado.getState().capa) return
           motores[n]?.destruir()
           const mo = crearMotorCoropleta(m, { nivel: n, rango: c.rango })
-          mo.aplicar(valoresCapa(c, d.valores, mes), ids, filtro, f?.valores)
+          mo.aplicar(valoresCapa(c, d.valores, mes, c.unidadProducto ?? ''), ids, filtro, f?.valores)
           motores[n] = mo
         }
         aplicar(++version)
