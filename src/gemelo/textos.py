@@ -1,4 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Antigravity (agente), clave bilingüe warning.soilgrids_andisol_mo (D-030)
 """Textos del gemelo como claves con parámetros, en inglés (idioma de la entrega) y español (contrato v1.1).
 
 Cada clave tiene una plantilla con `{parametro}` en `en` y `es`. Los documentos llevan `{clave, parametros}` y Web
@@ -63,6 +64,12 @@ _BASE: dict[str, tuple[str, str]] = {
                                     "Saxton y Rawls fuera de dominio ({excede}); entradas recortadas al límite. Los "
                                     "suelos con mucha materia orgánica o volcánicos (Andisoles) suelen retener más "
                                     "agua de la estimada: medir capacidad de campo en laboratorio."),
+    "warning.soilgrids_andisol_mo": ("SoilGrids 2.0 limitation in Andean Andisols: organic matter may be "
+                                     "underestimated (reported {mo} %); local calibration of theta_cc or organic "
+                                     "matter by the farmer matters.",
+                                     "Limitación de SoilGrids 2.0 en Andisoles andinos: puede subestimar la materia "
+                                     "orgánica (reportada {mo} %); por eso importa la calibración local de θ "
+                                     "(theta_cc) o materia orgánica por el agricultor."),
     "warning.succession_pending": ("Succession rule {familia} / {enfermedad} PENDIENTE: not applied",
                                    "Regla de sucesión {familia} / {enfermedad} PENDIENTE: no se aplica"),
     "warning.succession_family": ("Family {familia} has no match in the catalogue: rule not applied",
@@ -316,6 +323,8 @@ _PATRONES = [
     (r"^N mineral inicial sin análisis de suelo", "warning.initial_n", ()),
     (r"^Humedad inicial del suelo SUPUESTO", "warning.initial_moisture", ()),
     (r"^Saxton y Rawls fuera de dominio \((?P<excede>[^)]*)\)", "warning.saxton_rawls_domain", ("excede",)),
+    (r"^Limitación de SoilGrids 2\.0 en Andisoles andinos: puede subestimar la materia orgánica \(reportada (?P<mo>[0-9.]+) %\)",
+     "warning.soilgrids_andisol_mo", ("mo",)),
     (r"^Regla de sucesión (?P<familia>.+) / (?P<enfermedad>.+) PENDIENTE", "warning.succession_pending",
      ("familia", "enfermedad")),
     (r"^Familia '?(?P<familia>[^']+)'? sin correspondencia", "warning.succession_family", ("familia",)),

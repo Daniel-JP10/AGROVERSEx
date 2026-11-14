@@ -1,4 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Antigravity (agente), exposición de limitación SoilGrids Andisol en riesgos (D-030)
 """Tarjeta de cinco secciones por estrategia (contrato v1.1): por_que, evidencia, beneficios, vacios y riesgos.
 
 Contenido estructurado: cada entrada es {clave, parametros, valores, referencias}; Web redacta con el catálogo de
@@ -158,7 +159,8 @@ def _riesgos(e: dict, base: dict, objetivos: list[str], doc: dict, es_base: bool
                                                       "base": b["p10"], "unidad": clave_unidad(v["unidad"])},
                               {"indicador": k, "p10": v["p10"], "base_p10": b["p10"]}))
     for a in doc.get("avisos_claves", []):
-        if a["clave"] in ("warning.saxton_rawls_domain", "warning.monthly_context_only", "warning.succession_none"):
+        if a["clave"] in ("warning.saxton_rawls_domain", "warning.soilgrids_andisol_mo",
+                          "warning.monthly_context_only", "warning.succession_none"):
             out.append(_e(a["clave"], a["parametros"]))
     out.append(_e("card.risk.not_modelled"))
     out.append(_e("card.risk.local_review"))

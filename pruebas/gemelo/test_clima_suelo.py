@@ -1,4 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Antigravity (agente), separación de pruebas de dominio y limitación Andisol (D-030)
 import numpy as np
 import pytest
 
@@ -81,10 +82,10 @@ def test_perfil_soilgrids_ames(suelo_ames):
     assert suelo_ames["arcilla"].rango[0] <= suelo_ames.valor("arcilla") <= suelo_ames["arcilla"].rango[1]
 
 
-def test_perfil_ipiales_avisa_fuera_de_dominio():
-    from gemelo.suelo import perfil_desde_soilgrids
-    from conftest import REF
-    p = perfil_desde_soilgrids(REF / "suelo" / "soilgrids_ipiales.json")
+def test_perfil_andisol_sobre_ocho_pct_avisa_fuera_de_dominio():
+    from gemelo.suelo import perfil_manual
+    p = perfil_manual(arena=0.39, arcilla=0.28, mo_pct=11.0, cos_t_ha=220.0,
+                      referencia="perfil tipo Andisol con MO > 8 %")
     assert any("fuera de dominio" in a for a in p.avisos)
     calibrado = p.calibrar(mo_pct=5.0)
     assert not any("fuera de dominio" in a for a in calibrado.avisos)
@@ -93,3 +94,15 @@ def test_perfil_ipiales_avisa_fuera_de_dominio():
     assert medido.valor("theta_cc") == 0.48 and medido["theta_cc"].rango is None
     with pytest.raises(KeyError):
         p.calibrar(color=3)
+
+
+def test_perfil_demo_col_soilgrids_actual_no_avisa_dominio_y_declara_limitacion():
+    from gemelo.suelo import perfil_desde_soilgrids
+    from conftest import REF
+    p = perfil_desde_soilgrids(REF / "suelo" / "soilgrids_ipiales.json")
+    assert p.valor("mo_pct") < 8.0
+    assert not any("fuera de dominio" in a for a in p.avisos)
+    assert any("SoilGrids" in a and "Andisoles" in a and "subestimar" in a and "theta_cc" in a for a in p.avisos)
+    calibrado = p.calibrar(theta_cc=0.48)
+    assert calibrado["theta_cc"].naturaleza == "observado"
+    assert not any("SoilGrids 2.0 en Andisoles" in a for a in calibrado.avisos)

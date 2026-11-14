@@ -1,4 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Antigravity (agente), limitación de SoilGrids en Andisoles y calibración (D-030)
 """Caracterización del suelo: SoilGrids 2.0 -> textura, COS, N -> propiedades hidráulicas (Saxton y Rawls, 2006).
 
 Unidades: fracciones de arena y arcilla en kg/kg; MO en % en peso; contenidos de agua en m³/m³; Ksat en mm/h.
@@ -14,6 +15,8 @@ from gemelo.procedencia import REFERENCIAS, Parametro, cargar_tabla
 
 SAXTON_RAWLS = "Saxton y Rawls (2006), Soil Sci. Soc. Am. J. 70: 1569-1578, Tabla 1"
 DOMINIO_SR = {"mo_pct_max": 8.0, "arcilla_max": 0.60}
+# Umbral orientativo para advertir posible subestimación de MO en Andisoles andinos estimados por SoilGrids 2.0
+UMBRAL_ANDISOL_SOILGRIDS = {"mo_pct": 5.0, "cos_t_ha": 120.0}
 _REF_AS = yaml.safe_load((REFERENCIAS / "agua_suelo.yaml").read_text(encoding="utf-8"))
 
 
@@ -109,6 +112,8 @@ class PerfilSuelo:
         for k, v in valores.items():
             if k not in textura:
                 perfil.parametros[k] = perfil.parametros[k].calibrar(v)
+        if "theta_cc" in valores or "mo_pct" in valores:
+            perfil.avisos = [a for a in perfil.avisos if "SoilGrids 2.0 en Andisoles" not in a]
         return perfil
 
     def a_dict(self) -> dict:
@@ -240,7 +245,10 @@ def perfil_desde_parametros_datos(ruta: str | Path) -> PerfilSuelo:
 def completar_hidraulica(perfil: PerfilSuelo, recalcular: bool = False) -> PerfilSuelo:
     """Añade theta_cc, theta_pmp, theta_sat, ksat, grupo hidrológico y tau con su incertidumbre."""
     ps = dict(perfil.parametros)
-    avisos = [a for a in perfil.avisos if "Saxton" not in a] if recalcular else list(perfil.avisos)
+    if recalcular:
+        avisos = [a for a in perfil.avisos if "Saxton" not in a and "SoilGrids 2.0 en Andisoles" not in a]
+    else:
+        avisos = list(perfil.avisos)
     a, c, mo = (ps[k].exigir() for k in ("arena", "arcilla", "mo_pct"))
     r = saxton_rawls(a, c, mo)
     # Rango de ensamble del orden del error estándar que reporta Saxton y Rawls (2006) para cada ecuación
@@ -259,6 +267,21 @@ def completar_hidraulica(perfil: PerfilSuelo, recalcular: bool = False) -> Perfi
         avisos.append(f"Saxton y Rawls fuera de dominio ({', '.join(excede)}); entradas recortadas al límite. "
                       "Los suelos con mucha materia orgánica o volcánicos (Andisoles) suelen retener más agua de "
                       "la estimada: medir capacidad de campo en laboratorio.")
+    else:
+        cos = ps["cos_t_ha"].valor if "cos_t_ha" in ps else None
+        es_soilgrids = "SoilGrids" in perfil.fuente
+        mo_o_theta_obs = ps["mo_pct"].naturaleza == "observado" or (
+            "theta_cc" in ps and ps["theta_cc"].naturaleza == "observado"
+        )
+        alto_c = mo >= UMBRAL_ANDISOL_SOILGRIDS["mo_pct"] or (
+            cos is not None and cos >= UMBRAL_ANDISOL_SOILGRIDS["cos_t_ha"]
+        )
+        if es_soilgrids and alto_c and not mo_o_theta_obs:
+            avisos.append(
+                f"Limitación de SoilGrids 2.0 en Andisoles andinos: puede subestimar la materia orgánica "
+                f"(reportada {mo:.1f} %); por eso importa la calibración local de θ (theta_cc) o materia orgánica "
+                f"por el agricultor."
+            )
     grupo = grupo_hidrologico(ks)
     ps["grupo_hidrologico"] = Parametro("grupo_hidrologico", "ABCD".index(grupo), "índice 0=A..3=D", "INFERENCIA",
                                         referencia="NRCS NEH 630 cap. 7 a partir de Ksat estimado",

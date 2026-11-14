@@ -487,7 +487,7 @@ El núcleo se construyó de abajo hacia arriba, validando cada proceso contra un
 - **Sin desnitrificación ni emisiones de N2O.** La salida gaseosa de N es solo la volatilización del fertilizante.
 - **Raíces fuera del balance de carbono.** Solo el residuo aéreo entra a $Y$, lo que subestima la entrada de C, sobre todo en pastos y cereales.
 - **Carbono en equilibrio con la referencia (SUPUESTO).** Sin series medidas de COS no se puede afirmar una tendencia absoluta.
-- **Saxton y Rawls fuera de dominio** en suelos volcánicos o muy orgánicos (Ipiales). La capacidad de retención probablemente está subestimada; conviene medirla y calibrar `suelo.theta_cc`.
+- **Saxton y Rawls fuera de dominio** en suelos volcánicos o muy orgánicos (MO > 8 % o arcilla > 60 %). Además, **SoilGrids 2.0 puede subestimar la materia orgánica de los Andisoles andinos** (por ejemplo, en `DEMO-COL-01` / Ipiales reporta ~7,48 %, justo por debajo del corte de 8 % de Saxton y Rawls): la capacidad de retención puede quedar subestimada sin aviso numérico de dominio, razón por la cual importa la calibración local de `θ` (`suelo.theta_cc` o `mo_pct`) por el agricultor (`D-030`).
 - **Una sola capa para N** con distribución uniforme; la lixiviación supone mezcla completa.
 - **Kc único** (no dual): la evaporación del suelo bajo cultivo está incluida en Kc y la cobertura inicial puede sobreestimarse en suelo húmedo.
 - **Calendario nominal.** Sin 29 de febrero, y las etapas no responden a la temperatura (FAO-56 da días, no tiempo térmico). Para papa andina de altura conviene dar etapas locales.
@@ -542,3 +542,5 @@ Regla del equipo: no se usan datos, coeficientes, servicios ni modelos de entida
 | Reglas de sucesión (EV-ROT-016, 030 a 033) | intervalos entre cultivos | fichas de la rama datos (Cornell y fuentes de Dinamarca); `sucesion.yaml` es copia sin cambios de la rama datos, que la mantuvo en su revisión de procedencia (`datos-procedencia-fuentes`) |
 
 De lo que Datos quitó por esta regla (filas de China de Kluger, coeficientes de Cai 2025, greening de Chen 2019, zona North China Plain), el gemelo no usa nada.
+
+Los archivos de referencia internos de Ames y Mead en `datos/referencia/` y `ejemplos/` son extractos de NASA POWER y SoilGrids 2.0 y quedan exclusivamente para fijación interna de pruebas, nunca en los índices públicos ni en la app (`D-029`).
