@@ -31,7 +31,7 @@ const CONV: Record<string, Record<string, Conv>> = {
   precip: { 'mm/h': mmHora, 'mm/hr': mmHora, 'mm/day': mmDia, 'mm/d': mmDia, 'mm/dia': mmDia, 'mm/día': mmDia },
   t2m: { K: kC, C: id('°C') },
   t2m_p10: { C: id('°C') }, t2m_p90: { C: id('°C') },
-  sm_raiz: { 'kg m-2': id('kg/m²') }, // GLDAS, sin conversión (el contrato no pide otra)
+  sm_raiz: { 'kg m-2': id('kg/m²') }, // GLDAS (modelo), sin conversión (el contrato no pide otra)
   ndvi: { '1': id('adimensional'), adim: id('adimensional') },
   nbr2: { adim: id('adimensional') },
   sm_verdad: { 'm3/m3': id('m³/m³') },

@@ -2,19 +2,19 @@
 import { fondoBase, fondoDetalle, ZOOM_DETALLE } from './fondos'
 import { t } from '../textos/i18n'
 // Configuración centralizada de capas del globo.
-// Teselas provisionales (adm0/adm1/adm2) con ids de GADM, generadas en la fase 1; se reemplazan por CGAZ en T-D9. Propiedades: id (texto),
-// nivel, iso3, padre_id, nombre, es_disputa. Las zonas en disputa (es_disputa = 1) están en las tres capas.
+// Teselas CGAZ de T-D1 (contratos/unidades.md): adm0, adm1 y adm2 con propiedades unidad_id, nombre, nivel, iso3 y padre_id.
+// Las zonas en disputa (iso3 111 a 129 o ESH) están en las tres capas y se detectan con esDisputa.
 
 export interface NivelConfig {
   /** Posición en la jerarquía: 0 = país, 1 = departamento, 2 = municipio */
   nivel: number
   /** Nombre de la fuente MapLibre y de la capa dentro del PMTiles */
   fuente: string
-  /** Ruta del PMTiles, relativa al origen del sitio */
+  /** Ruta del PMTiles con el prefijo de despliegue (BASE_URL) */
   archivo: string
   /** Nombre de la capa vectorial dentro del archivo */
   capaFuente: string
-  /** Propiedad con el id estable (texto en GADM) */
+  /** Propiedad con el id estable: unidad_id de contratos/unidades.md */
   propId: string
   /** Rango de zoom de las teselas (informativo y para la transición) */
   zoomDesde: number
@@ -25,19 +25,22 @@ export interface NivelConfig {
   sinHijo: readonly string[]
 }
 
-// Países con ADM1 pero sin ADM2 en GADM (derivado de `unidad` en geo.sqlite; GHA sí tiene ADM2, con ids atípicos como GHA1.1_2)
-export const SIN_ADM2: readonly string[] = ['ABW', 'AIA', 'AND', 'ATA', 'ATF', 'ATG', 'BES', 'BHR', 'BMU', 'BRB', 'BVT', 'CCK', 'COK', 'CUW', 'CXR', 'CYM', 'DMA', 'ESH', 'FLK', 'GGY', 'GIB', 'GRD', 'GRL', 'HMD', 'IMN', 'IOT', 'JEY', 'KNA', 'LBY', 'LIE', 'MAF', 'MDA', 'MHL', 'MNE', 'MSR', 'MUS', 'MYT', 'NFK', 'NIU', 'NRU', 'PCN', 'PYF', 'SGS', 'SJM', 'SMR', 'SPM', 'SXM', 'TCA', 'TKL', 'TTO', 'UMI', 'VAT', 'VCT', 'VGB', 'XAD', 'XCA', 'XCL', 'XPI', 'XSP', 'ZNC']
-// Países que solo existen como ADM0
-export const SIN_ADM1: readonly string[] = ['ABW', 'ATA', 'BVT', 'CCK', 'CUW', 'CXR', 'FLK', 'GIB', 'HMD', 'IOT', 'KIR', 'MAF', 'MCO', 'MDV', 'NFK', 'NIU', 'PCN', 'SGS', 'SXM', 'VAT', 'XCA', 'XCL', 'XPI', 'XSP']
+// Países sin ADM2 en CGAZ: lista de contratos/unidades.md ("Países sin nivel 2", códigos de país). Una prueba la compara con el contrato.
+// Las zonas en disputa (111 a 129) salen por la capa de disputa, no por el respaldo.
+export const SIN_ADM2: readonly string[] = ['AND', 'ARE', 'ATA', 'ATG', 'BHR', 'BRB', 'DMA', 'ESH', 'GRD', 'GRL', 'KNA', 'LBY', 'LIE', 'MDA', 'MHL', 'MLT', 'MNE', 'MUS', 'NRU', 'SMR', 'TTO', 'VAT', 'VCT']
+// Países cuya capa ADM1 repite el nivel 0 (nivel_real = ADM0), medido sobre unidades.gpkg el 2026-11-14; el contrato aún no los lista
+export const SIN_ADM1: readonly string[] = ['ATA', 'VAT']
+// Teselas e índice cuelgan de la base de publicación (en Pages el sitio vive en /AGROVERSEx/, no en la raíz)
+const TESELAS = `${import.meta.env.BASE_URL}teselas/`
 
 export const NIVELES: NivelConfig[] = [
-  { nivel: 0, fuente: 'adm0', archivo: '/teselas/adm0.pmtiles', capaFuente: 'adm0', propId: 'id', zoomDesde: 0, zoomHasta: 6, fundido: 0, sinHijo: SIN_ADM1 },
-  { nivel: 1, fuente: 'adm1', archivo: '/teselas/adm1.pmtiles', capaFuente: 'adm1', propId: 'id', zoomDesde: 2, zoomHasta: 9, fundido: 0.5, sinHijo: SIN_ADM2 },
-  { nivel: 2, fuente: 'adm2', archivo: '/teselas/adm2.pmtiles', capaFuente: 'adm2', propId: 'id', zoomDesde: 6, zoomHasta: 12, fundido: 1, sinHijo: [] },
+  { nivel: 0, fuente: 'adm0', archivo: `${TESELAS}adm0.pmtiles`, capaFuente: 'adm0', propId: 'unidad_id', zoomDesde: 0, zoomHasta: 6, fundido: 0, sinHijo: SIN_ADM1 },
+  { nivel: 1, fuente: 'adm1', archivo: `${TESELAS}adm1.pmtiles`, capaFuente: 'adm1', propId: 'unidad_id', zoomDesde: 2, zoomHasta: 9, fundido: 0.5, sinHijo: SIN_ADM2 },
+  { nivel: 2, fuente: 'adm2', archivo: `${TESELAS}adm2.pmtiles`, capaFuente: 'adm2', propId: 'unidad_id', zoomDesde: 6, zoomHasta: 12, fundido: 1, sinHijo: [] },
 ]
 
 /** Zona en disputa: es_disputa = 1 en adm0, adm1 y adm2 (nivel normal, iso3 111..129 o ESH). */
-// Las teselas aún no llevan es_disputa (contratos/unidades.md): se deriva de iso3 (111..129 o ESH) hasta que D-016 lo agregue
+// Las teselas CGAZ no llevan es_disputa (solo unidad_id, nombre, nivel, iso3, padre_id): se deriva de iso3 (111..129 o ESH)
 export const ISO3_DISPUTA = [...Array.from({ length: 19 }, (_, i) => String(111 + i)), 'ESH']
 export const esDisputa = (p?: { es_disputa?: unknown; iso3?: unknown } | null) =>
   Number(p?.es_disputa) === 1 || ISO3_DISPUTA.includes(String(p?.iso3))
@@ -46,7 +49,7 @@ const exprDisputa = ['any', ['==', ['get', 'es_disputa'], 1], ['in', ['get', 'is
 export const nombreUnidad = (nombre: string, disputa: boolean) => (disputa ? t('unidad.disputa') : nombre)
 export const avisoDisputa = () => t('globo.disputa')
 
-export const INDICE_BUSQUEDA = '/teselas/indice_busqueda.json.gz'
+export const INDICE_BUSQUEDA = `${TESELAS}indice_busqueda.json.gz`
 
 /** Nivel con el que se interactúa a un zoom dado (el más profundo ya entrado a pleno). */
 export function nivelParaZoom(zoom: number): number {

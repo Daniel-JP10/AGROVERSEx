@@ -5,6 +5,7 @@ import { useEstado } from '../../app/estado'
 import { ocultasPorFiltros, UMBRAL_RONI, type AtributosUnidad, type FiltrosGlobales } from '../../datos/filtrar'
 import { filtrosRegionalesPara } from './filtros_regionales'
 import { t } from '../../textos/i18n'
+import { HAY_API } from '../../comun/rutas'
 
 interface Atributos { zona_demo: boolean; unidades: AtributosUnidad[] }
 const NIVELES = [0, 1, 2]
@@ -36,6 +37,7 @@ export function Filtros() {
   const num = (v: string) => (v === '' ? undefined : Number(v))
 
   useEffect(() => {
+    if (!HAY_API) { setError(true); return } // sin API no hay atributos estáticos todavía
     Promise.all(NIVELES.map((n) => fetch(`/api/atributos?nivel=${n}`).then((r) => (r.ok ? r.json() : Promise.reject(r.status)))))
       .then((rs) => setAttrs({ zona_demo: rs.some((r) => r.zona_demo), unidades: rs.flatMap((r) => r.unidades) }))
       .catch(() => setError(true))

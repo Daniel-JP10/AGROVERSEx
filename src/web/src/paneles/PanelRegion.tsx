@@ -15,6 +15,8 @@ import { Miga } from './Miga'
 import { useEstado } from '../app/estado'
 import { NOMBRE_NIVEL, nombreUnidad } from '../globo/config'
 import { t } from '../textos/i18n'
+import { tieneDatoReal } from '../datos/estatico'
+import { HAY_API } from '../comun/rutas'
 
 export function PanelRegion() {
   const sel = useEstado((s) => s.seleccion)
@@ -27,7 +29,8 @@ export function PanelRegion() {
   const idSel = sel ? String(sel.id) : ''
   useEffect(() => {
     setRot(null); setErrRot(false)
-    if (idSel) pedirRotaciones(idSel).then(setRot).catch(() => setErrRot(true))
+    if (idSel && !HAY_API) setErrRot(true) // sin API no se pide /api/rotaciones (D-014)
+    else if (idSel) pedirRotaciones(idSel).then(setRot).catch(() => setErrRot(true))
   }, [idSel])
   // Lotes solo existe en zonas DEMO (la zona sale de zona_demo vía /api/rotaciones)
   const PESTANAS: Pestana[] = [...BASE, ...(rot?.zona ? ['Lotes' as const] : []), 'Fuentes']
@@ -45,7 +48,7 @@ export function PanelRegion() {
       <Miga />
       {aviso && <p role="status" className="etiqueta">{aviso}</p>}
       <h2>{nombreUnidad(sel.nombre, !!sel.disputa)}</h2>
-      <p className="etiqueta">{sel.disputa ? t('unidad.disputa') : NOMBRE_NIVEL[sel.nivel]} · {sel.nivel === 0 || sel.disputa ? '' : `${sel.pais} · `}datos SIMULADOS</p>
+      <p className="etiqueta">{sel.disputa ? t('unidad.disputa') : NOMBRE_NIVEL[sel.nivel]} · {sel.nivel === 0 || sel.disputa ? '' : `${sel.pais} · `}{tieneDatoReal(id) ? t('panel.datosReales') : t('globo.sinCargados')}</p>
       <div role="tablist" className="pestanas" onKeyDown={(e) => {
         const i = PESTANAS.indexOf(activa), d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0
         if (d) setTab(PESTANAS[(i + d + PESTANAS.length) % PESTANAS.length])

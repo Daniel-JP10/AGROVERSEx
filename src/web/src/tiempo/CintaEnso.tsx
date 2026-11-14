@@ -3,13 +3,16 @@ import { useEffect, useState } from 'react'
 import { N_MESES } from './valor'
 import { mesIdAEtiqueta, mesesConHueco, type Producto } from './huecos'
 import { t } from '../textos/i18n'
+import { HAY_API } from '../comun/rutas'
 
 export interface PuntoEnso { mes: number; roni: number }
 export interface Evento { mes: number; nombre: string }
 export interface DatosCinta { enso: PuntoEnso[]; eventos: Evento[] }
 
 /** RONI real de /api/enso ([{mes_id, oni, roni}]) y eventos globales de /api/eventos (inicio y fin son años: el marcador va en enero del año de inicio). */
-export async function cargarCinta(f: typeof fetch = fetch): Promise<DatosCinta> {
+export async function cargarCinta(f?: typeof fetch): Promise<DatosCinta> {
+  if (!f && !HAY_API) return { enso: [], eventos: [] } // sin API no hay RONI estático todavía: la cinta lo dice con enso.sinDato
+  f ??= fetch
   const pedir = async (u: string) => { try { const r = await f(u); const j = r.ok ? await r.json() : null; return Array.isArray(j) ? j : [] } catch { return [] } }
   const [enso, ev] = await Promise.all([pedir('/api/enso'), pedir('/api/eventos')])
   return {

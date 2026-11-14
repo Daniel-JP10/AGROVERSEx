@@ -3,11 +3,11 @@ import { describe, expect, it } from 'vitest'
 import { NIVELES, capasNivel, construirEstilo, nivelParaZoom, SIN_ADM2, SIN_ADM1 } from '../src/globo/config'
 
 describe('tres niveles reales', () => {
-  it('hay tres niveles con capa igual a la fuente y propId id', () => {
+  it('hay tres niveles con capa igual a la fuente y propId unidad_id', () => {
     expect(NIVELES.length).toBe(3)
     for (const c of NIVELES) {
       expect(c.capaFuente).toBe(c.fuente)
-      expect(c.propId).toBe('id')
+      expect(c.propId).toBe('unidad_id')
     }
   })
   it('rangos de las teselas: 0-6, 2-9, 5-12', () => {
@@ -33,7 +33,7 @@ describe('tres niveles reales', () => {
   })
   it('respaldo de ADM1 sin ADM2 (Liechtenstein) y estilo coherente', () => {
     expect(SIN_ADM2).toContain('LIE')
-    expect(SIN_ADM1).toContain('ABW')
+    expect(SIN_ADM1).toContain('ATA')
     const e = construirEstilo('http://x') as { sources: Record<string, unknown>; layers: { id: string; source: string }[] }
     const ids = e.layers.map((l) => l.id)
     expect(new Set(ids).size).toBe(ids.length)

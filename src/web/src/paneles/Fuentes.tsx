@@ -1,33 +1,32 @@
-// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+// asistido por SI: Claude Code, fuentes reales de las variables pintadas (T-D9)
 import { useEffect, useState } from 'react'
-import { clienteDefecto } from '../datos/consultas'
-import type { Meta } from '../datos/tipos'
-import { Chip } from './Chip'
+import { cargarMatriz, textoEstado, type ProductoMes } from '../datos/estatico'
+import { CAPAS } from '../datos/capas'
 import { t } from '../textos/i18n'
 
-// La tabla fuente guarda identificadores; aquí van el nombre legible y si el dato es real o imitado
-const NOMBRE: Record<string, string> = {
-  soilgrids2: 'SoilGrids 2.0', gmted2010: 'GMTED2010',
-  'EV-AGU': 'Productos de agua que se imitan (SMAP, IMERG, GRACE, GLDAS)', 'EV-VEG': 'Productos de vegetación que se imitan (MODIS, HLS)',
-  'EV-SUE': 'Referencias de suelo', demo: 'Simulación AGROVERSEx',
-}
-const REAL = /^(soilgrids|gmted)/
-
 export function Fuentes() {
-  const [m, setM] = useState<Meta | null>(null)
-  useEffect(() => { clienteDefecto.meta().then(setM).catch(() => {}) }, [])
-  if (!m) return <p role="status">{t('comun.cargando')}</p>
+  const [f, setF] = useState<{ id: string; nombre: string; productos: ProductoMes[] }[] | null>(null)
+  useEffect(() => {
+    Promise.all(CAPAS.map((c) => cargarMatriz(c.id, 0).then((m) => ({ id: c.id, nombre: c.nombre, productos: m.productos })))).then(setF).catch(() => {})
+  }, [])
+  if (!f) return <p role="status">{t('comun.cargando')}</p>
   return (
     <div>
-      {m.fuentes.map((f, i) => (
-        <details key={i}>
-          <summary>{NOMBRE[String(f.id)] ?? String(f.nombre ?? f.producto ?? f.id ?? `fuente ${i + 1}`)} <Chip e={REAL.test(String(f.id)) ? 'real_contexto' : String(f.etiqueta ?? '')} /></summary>
-          <dl>{Object.entries(f).filter(([, v]) => v !== null).map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{String(v)}</dd></div>)}</dl>
+      {f.map((v) => (
+        <details key={v.id}>
+          <summary>{v.nombre}</summary>
+          {v.productos.map((p) => (
+            <dl key={p.producto}>
+              <div><dt>{t('globo.producto')}</dt><dd>{p.producto}</dd></div>
+              <div><dt>version</dt><dd>{p.version}</dd></div>
+              <div><dt>{t('globo.estado')}</dt><dd>{textoEstado(p.estado)}</dd></div>
+              <div><dt>unit</dt><dd>{p.unidad}</dd></div>
+            </dl>
+          ))}
         </details>
       ))}
+      <p className="etiqueta">{t('fuentes.ponderacion')}</p>
       <p className="etiqueta">{t('fuentes.fondo')}</p>
-      <p className="etiqueta">{t('fuentes.climatologia')}</p>
-      <p className="etiqueta">{m.rotulo_estatico}</p>
     </div>
   )
 }

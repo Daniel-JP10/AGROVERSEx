@@ -243,3 +243,6 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/web/src/comun/unidades.ts`, `src/web/pruebas/empalme_imerg.test.ts` | Conversión mm/day de IMERG Late en paraMostrar y prueba del empalme 2025-09 a 2025-10 (D-023) | 2026-11-14 |
 | Claude Code (Anthropic) | `datos/extraer_pares_variable_unidad.py` | Extrae los pares (variable, unidad) de serie_mensual para la prueba de paraMostrar | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/paneles_unidad.test.ts` | Prueba de que los paneles muestran error ante una unidad sin conversión | 2026-11-14 |
+| Claude Code (Anthropic) | `src/mapa_estatico/__init__.py`, `src/mapa_estatico/construir.py`, `pruebas/mapa/test_construir.py` | Conversión de series mensuales a matrices estáticas comprimidas, copia de lotes_demo.json y manifiesto con sha256 (T-D9, D-027) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/comun/rutas.ts`, `src/web/src/datos/estatico.ts`, `src/web/pruebas/estatico.test.ts` | Lectura de archivos estáticos reales en el globo y paneles sin servidor, y pruebas con datos reales de Colombia (T-D9) | 2026-11-14 |
+| Claude Code (Anthropic) | `contratos/web_datos.md` | Contrato v0 de archivos estáticos para el Mapa y Web con tamaños y sumas SHA-256 (T-D9, T-D7 Parte C) | 2026-11-14 |

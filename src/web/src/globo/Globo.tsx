@@ -13,11 +13,11 @@ import { avisoSinRed } from './fondos'
 import './globo.css'
 import { cargarIndice, claveUnidad, porClave, type Unidad } from '../datos/indice'
 import { useEstado } from '../app/estado'
-import { crearMotorCoropleta, SIN_DATO, textoValor, type MotorCoropleta } from './coropleta'
+import { crearMotorCoropleta, SIN_DATO_REAL, textoValor, type MotorCoropleta } from './coropleta'
 import { Leyenda } from './leyenda'
 import { registrarPatron } from './patron'
-import { clienteDefecto } from '../datos/consultas'
-import { capaPorId, valoresCapa } from '../datos/capas'
+import { cargarCoropleta, cargarGeo, textoEstado, type ProductoMes } from '../datos/estatico'
+import { capaPorId } from '../datos/capas'
 import type { Nivel } from '../datos/tipos'
 import { Controles } from './Controles'
 import { t } from '../textos/i18n'
@@ -68,20 +68,22 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
     m.on('styleimagemissing', (e) => { if (e.id === 'trama' && !m.hasImage('trama')) m.addImage('trama', trama()) })
     const motores: (MotorCoropleta | undefined)[] = []
     let version = 0
-    const [aplicarVersion, pararColor] = crearRecoloreo(m, (n, id) => (motores[n] ? (motores[n]!.estado(id) ?? SIN_DATO) : undefined), (p) => useEstado.getState().setPintando(p))
+    const [aplicarVersion, pararColor] = crearRecoloreo(m, (n, id) => (motores[n] ? (motores[n]!.estado(id) ?? SIN_DATO_REAL) : undefined), (p) => useEstado.getState().setPintando(p))
     const aplicarMes = (_mes: number) => cargarDatos()
-    // Datos reales: /api/coropleta por nivel para la capa activa; sin dato = hueco
+    // Datos reales de archivos estáticos (datos/estatico.ts): una unidad con valor nulo = hueco; una unidad fuera de Colombia no se pinta
+    let producto: ProductoMes | null = null
     const cargarDatos = async () => {
       const { mes, filtro, capa: idCapa } = useEstado.getState()
       const c = capaPorId(idCapa)
       try {
         for (const n of [0, 1, 2] as Nivel[]) {
-          const [ids, d, f] = await Promise.all([clienteDefecto.orden(n), clienteDefecto.coropleta(n, c.id, mes), c.fraccion ? clienteDefecto.coropleta(n, c.fraccion, mes) : undefined])
+          const d = await cargarCoropleta(n, c.id, mes)
           if (mes !== useEstado.getState().mes || idCapa !== useEstado.getState().capa) return // llegó tarde: ya se pidió otro mes o capa
           motores[n]?.destruir()
           const mo = crearMotorCoropleta(m, { nivel: n, rango: c.rango })
-          mo.aplicar(valoresCapa(c, d.valores, mes, c.unidadProducto ?? ''), ids, filtro, f?.valores)
+          mo.aplicar(d.valores, d.ids, filtro, d.frac, d)
           motores[n] = mo
+          producto = d.producto
         }
         aplicarVersion(++version)
       } catch { useEstado.getState().setAviso(t('globo.sinBaseCoropleta')) }
@@ -94,7 +96,7 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       const c = m.getContainer()
       const f = m.queryRenderedFeatures([c.clientWidth / 2, c.clientHeight / 2], { layers: capasInteractivas(nivel) })[0]
       if (!f || m.getZoom() < 6) { centro.current.style.display = 'none'; return }
-      const nf = Number(f.properties.nivel), id = String(f.properties.id)
+      const nf = Number(f.properties.nivel), id = String(f.properties.unidad_id)
       const t = texto(motores[nf]?.estado(id))
       centro.current.style.display = 'block'
       centro.current.textContent = `${nombreUnidad(String(f.properties.nombre ?? id), esDisputa(f.properties))}: ${t}`
@@ -122,7 +124,7 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       if (!e) return
       const nivel = nivelParaZoom(m.getZoom())
       const f = m.queryRenderedFeatures(e.point, { layers: capasInteractivas(nivel) })[0]
-      const id = f?.properties?.id as string | undefined
+      const id = f?.properties?.unidad_id as string | undefined
       if (id === undefined) return quitarHover()
       const nivelF = Number(f.properties.nivel) // un respaldo puede ser de un nivel menor al activo
       if (!hover || hover.id !== id || hover.nivel !== nivelF) {
@@ -132,15 +134,16 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       }
       const u = porClave.get(claveUnidad(nivelF, id))
       const est = motores[nivelF]?.estado(String(id))
-      const t = tip.current!
-      t.style.display = 'block'
-      t.style.transform = `translate(${e.point.x + 14}px, ${e.point.y + 14}px)`
+      const caja = tip.current!
+      caja.style.display = 'block'
+      caja.style.transform = `translate(${e.point.x + 14}px, ${e.point.y + 14}px)`
       const nombre = document.createElement('b')
       const disp = esDisputa(f.properties) || !!u?.disputa
       nombre.textContent = nombreUnidad(String(f.properties?.nombre ?? u?.nombre ?? id), disp)
       const linea = (txt: string) => { const d = document.createElement('div'); d.textContent = txt; return d }
-      t.replaceChildren(nombre, ...(u?.pais && !disp ? [linea(u.pais)] : []),
-        linea(texto(est)))
+      caja.replaceChildren(nombre, ...(u?.pais && !disp ? [linea(u.pais)] : []),
+        linea(texto(est)),
+        ...(est && !est.hueco && producto ? [linea(`${t('globo.fraccionValida')} ${(est.frac ?? NaN).toLocaleString('es', { maximumFractionDigits: 2 })} · ${producto.producto} ${producto.version} · ${textoEstado(producto.estado)}`)] : []))
     }
     m.on('mousemove', (e) => {
       setCoords([e.lngLat.lng, e.lngLat.lat])
@@ -151,21 +154,20 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
     m.on('click', (e) => {
       const nivel = nivelParaZoom(m.getZoom())
       const f = m.queryRenderedFeatures(e.point, { layers: capasInteractivas(nivel) })[0]
-      const id = f?.properties?.id
+      const id = f?.properties?.unidad_id
       if (id !== undefined) useEstado.getState().seleccionarPorId(Number(f.properties.nivel), id)
     })
 
-    // Vuelo: bbox de /api/unidad/:id; si cruza el antimeridiano o no hay base, punto interior o aviso
+    // Vuelo: bbox de unidades_geo (archivo estático); si cruza el antimeridiano, punto interior; sin bbox, aviso
     const volar = async (u: Unidad) => {
       const ZOOM = [3.5, 5.5, 7.5]
       try {
-        const r = await fetch(`/api/unidad/${encodeURIComponent(String(u.id))}`)
-        if (!r.ok) throw new Error(String(r.status))
-        const d = (await r.json()).unidad
+        const g = (await cargarGeo())[String(u.id)]
+        if (!g) throw new Error('sin bbox')
         if (useEstado.getState().seleccion !== u) return // el usuario ya eligió otra
-        if (d.bbox_oeste <= -179.9 && d.bbox_este >= 179.9) // cruza el antimeridiano: fitBounds daría todo el mundo
-          return void m.flyTo({ center: [d.punto_lon, d.punto_lat], zoom: ZOOM[u.nivel] ?? 4, duration: 1800, essential: true })
-        m.fitBounds([[d.bbox_oeste, d.bbox_sur], [d.bbox_este, d.bbox_norte]], { padding: { top: 80, bottom: 120, left: 120, right: 380 }, duration: 1800, maxZoom: 9, essential: true })
+        if (g[0] <= -179.9 && g[2] >= 179.9 && g[5] !== undefined) // cruza el antimeridiano: fitBounds daría todo el mundo
+          return void m.flyTo({ center: [g[5], g[6]!], zoom: ZOOM[u.nivel] ?? 4, duration: 1800, essential: true })
+        m.fitBounds([[g[0], g[1]], [g[2], g[3]]], { padding: { top: 80, bottom: 120, left: 120, right: 380 }, duration: 1800, maxZoom: 9, essential: true })
       } catch {
         useEstado.getState().setAviso(t('globo.sinBaseCentrar'))
       }

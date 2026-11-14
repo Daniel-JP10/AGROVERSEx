@@ -28,7 +28,7 @@ export function Escenario() {
       if (!vivo) return
       const out: Record<string, Rango> = {}
       for (const v of VARS) {
-        const s = (r.series[v.id]?.valor ?? []).map((x, i) => (x === null ? null : paraMostrar(v.id, x, r.series[v.id]?.unidad_medida ?? null, i).valor))
+        const s = (r.series[v.id]?.valor ?? []).map((x, i) => (x === null ? null : paraMostrar(v.id, x, r.series[v.id]?.unidad_mes[i] ?? null, i).valor))
         const p25 = percentil(s, 0.25), p75 = percentil(s, 0.75), c = s.filter((x): x is number => x !== null)
         if (p25 !== null && p75 !== null) out[v.id] = { p25, p75, min: Math.min(...c), max: Math.max(...c) }
       }
