@@ -10,6 +10,12 @@ Todo dataset, librería, herramienta o modelo que no es del equipo, con su licen
 | Natural Earth (base cartográfica) | PENDIENTE (T-D1) | Dominio público según D-002 | PENDIENTE | PENDIENTE | Daniel (orquestador de datos) | 2026-11-14 | PENDIENTE |
 | SoilGrids 2.0, ISRIC | PENDIENTE (T-D4) | CC BY 4.0 según código del prototipo | PENDIENTE | PENDIENTE | Daniel (orquestador de datos) | 2026-11-14 | PENDIENTE |
 | Productos NASA (IMERG, MERRA-2 o POWER, SMAP, MODIS o VIIRS, GRACE, SRTM o NASADEM, ECOSTRESS, HLS) | PENDIENTE (T-D3, T-D4, T-D5) | PENDIENTE | PENDIENTE | PENDIENTE | Daniel (orquestador de datos) | 2026-11-14 | PENDIENTE |
+| MOD13C2 (NDVI Terra, LP DAAC) | 061 | PENDIENTE (política de datos de NASA; texto no leído) | https://cmr.earthdata.nasa.gov/search/concepts/C2565788914-LPCLOUD.umm_json | Ver CITAS.md | constructor de datos T-D3 | 2026-11-14 | Descargado |
+| GPM IMERG Final mensual GPM_3IMERGM (GES DISC) | 07 (V07B) | PENDIENTE (política de datos de NASA; texto no leído) | https://cmr.earthdata.nasa.gov/search/concepts/C2723754851-GES_DISC.umm_json | Ver CITAS.md | constructor de datos T-D3 | 2026-11-14 | Sin descargar (EULA) |
+| GPM IMERG Late diario GPM_3IMERGDL (GES DISC) | 07 (V07C) | PENDIENTE (política de datos de NASA; texto no leído) | https://cmr.earthdata.nasa.gov/search/concepts/C2723754859-GES_DISC.umm_json | Ver CITAS.md | constructor de datos T-D3 | 2026-11-14 | Sin descargar (EULA) |
+| MERRA-2 M2TMNXSLV (GES DISC) | 5.12.4 | PENDIENTE (política de datos de NASA; texto no leído) | https://cmr.earthdata.nasa.gov/search/concepts/C1276812859-GES_DISC.umm_json | Ver CITAS.md | constructor de datos T-D3 | 2026-11-14 | Sin descargar (EULA) |
+| MERRA-2 M2TMNXRAD (GES DISC) | 5.12.4 | PENDIENTE (política de datos de NASA; texto no leído) | https://cmr.earthdata.nasa.gov/search/concepts/C1276812858-GES_DISC.umm_json | Ver CITAS.md | constructor de datos T-D3 | 2026-11-14 | Sin descargar (EULA) |
+| GLDAS_NOAH025_M, modelo (GES DISC) | 2.1 | PENDIENTE (política de datos de NASA; texto no leído) | https://cmr.earthdata.nasa.gov/search/concepts/C1342986036-GES_DISC.umm_json | Ver CITAS.md | constructor de datos T-D3 | 2026-11-14 | Sin descargar (EULA) |
 
 Fuera del proyecto por licencia: GADM (D-002), WorldClim 2.1 (D-004), GAEZ v4 (D-005).
 

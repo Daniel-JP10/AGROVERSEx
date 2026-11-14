@@ -1,0 +1,22 @@
+# Ficha de dataset
+
+- Nombre corto: imerg_final
+- Producto oficial y versión: GPM IMERG Final Run mensual, GPM_3IMERGM versión 07 (V07B). Colección C2723754851-GES_DISC. VERIFICADO (CMR)
+- Agencia y centro de datos: NASA, GES DISC
+- Página oficial: PENDIENTE; metadatos en https://cmr.earthdata.nasa.gov/search/concepts/C2723754851-GES_DISC.umm_json
+- DOI: 10.5067/GPM/IMERG/3B-MONTH/07. FUENTE: CMR vía `T-D3_estimacion.md`
+- Variable y unidades: `/Grid/precipitation` (mm/hr, fill -9999.9) y `/Grid/precipitationQualityIndex` (equivalent gauges per 2.5 deg box, fill -9999.9); opcional `/Grid/randomError` (mm/hr). Nombres, unidades y fill salen de las variables asociadas en CMR (VERIFICADO); valores del archivo no leídos. Unidad del producto mm/h; la conversión a mm/mes es de la interfaz
+- Resolución espacial nominal: 0,1 grados (título en CMR)
+- Resolución temporal: mensual
+- CRS nativo: PENDIENTE (requiere abrir el archivo)
+- Periodo descargado: NINGUNO. BLOQUEADO el 2026-11-14 hacia las 13:0x: GES DISC devuelve 403 `EULA Acceptance Failure` con las credenciales de `_netrc` (descarga directa, OPeNDAP y Harmony). Nada descargado de este producto. Previsto 2000-01 a 2025-09
+- Área descargada: global previsto
+- Herramienta y consulta exacta de descarga: Prevista: OPeNDAP/Harmony con `dap4.ce=/Grid/precipitation;/Grid/precipitationQualityIndex`. Verificada la consulta CMR `GET https://cmr.earthdata.nasa.gov/search/granules.json?short_name=GPM_3IMERGM&version=07&sort_key=-start_date&page_size=1`: último granulo `GPM_3IMERGM.07:3B-MO.MS.MRG.3IMERG.20250901-S000000-E235959.09.V07B.HDF5` (2025-09-01 a 2025-09-30, actualizado 2026-02-02). Con `temporal=2025-10-01T00:00:00Z,` devuelve 0 granulos. El Final diario GPM_3IMERGDF también termina en 20250930 V07B. VERIFICADO el 2026-11-14
+- Fecha de descarga: no descargado
+- Banderas de calidad aplicadas: PENDIENTE; el campo de calidad es precipitationQualityIndex
+- Fracción de datos válidos en el área: PENDIENTE
+- Transformaciones a la grilla común y método de remuestreo: Ninguna en la descarga
+- Limitaciones conocidas: Final V07 termina en 2025-09 en CMR. Desde 2025-10 el mes sale de `imerg_late` con `estado = provisional`; Final y Late nunca comparten `estado`. No hay IMERG V08 en CMR según `T-D3_estimacion.md`. BLOQUEADO el 2026-11-14 hacia las 13:0x: GES DISC devuelve 403 `EULA Acceptance Failure` con las credenciales de `_netrc` (descarga directa, OPeNDAP y Harmony). Nada descargado de este producto
+- Requisito del reto y pregunta que atiende: N2, D1, D2, F4; PI-D1 y PI-D4. Compuerta G2
+- Responsable: constructor de datos (subagente), orquestador de datos Daniel
+- Verificador y fecha: PENDIENTE

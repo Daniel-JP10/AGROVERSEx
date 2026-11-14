@@ -1,0 +1,22 @@
+# Ficha de dataset
+
+- Nombre corto: imerg_late
+- Producto oficial y versión: GPM IMERG Late Run diario, GPM_3IMERGDL versión 07 (V07C). Colección C2723754859-GES_DISC. No existe Late mensual en CMR. VERIFICADO
+- Agencia y centro de datos: NASA, GES DISC
+- Página oficial: PENDIENTE; https://cmr.earthdata.nasa.gov/search/concepts/C2723754859-GES_DISC.umm_json
+- DOI: 10.5067/GPM/IMERGDL/DAY/07. FUENTE: CMR vía `T-D3_estimacion.md`
+- Variable y unidades: `precipitation` y `randomError` en **mm/day** según CMR (fill -9999.9), más `precipitation_cnt` y `precipitation_cnt_cond`. OJO: el mensual Final está en mm/hr y el diario Late en mm/day; se conserva la unidad del producto y la agregación a mes debe declarar la conversión. Valores no leídos
+- Resolución espacial nominal: 0,1 grados
+- Resolución temporal: diaria (UTC, granulo de 00:00:00 a 23:59:59)
+- CRS nativo: PENDIENTE
+- Periodo descargado: NINGUNO. BLOQUEADO el 2026-11-14 hacia las 13:0x: GES DISC devuelve 403 `EULA Acceptance Failure` con las credenciales de `_netrc` (descarga directa, OPeNDAP y Harmony). Nada descargado de este producto. Previsto 2025-10-01 al último (CMR: 409 granulos, último 2026-11-13 V07C)
+- Área descargada: global previsto
+- Herramienta y consulta exacta de descarga: Prevista: `earthaccess.search_data(short_name='GPM_3IMERGDL', version='07', temporal=('2025-10-01', None))` con subconjunto de `precipitation` y `randomError`. Último granulo en CMR: `GPM_3IMERGDL.07:3B-DAY-L.MS.MRG.3IMERG.20261113-S000000-E235959.V07C.nc4`
+- Fecha de descarga: no descargado
+- Banderas de calidad aplicadas: PENDIENTE
+- Fracción de datos válidos en el área: PENDIENTE
+- Transformaciones a la grilla común y método de remuestreo: Diario a mensual en UTC, promedio de días válidos, mes con `estado = provisional`. Umbral mínimo propuesto: 80 % de los días del mes con dato válido (24 de 30, 25 de 31, 23 de 28); por debajo, el mes queda NaN con motivo. Justificación: SUPUESTO propio, sin literatura verificada; con menos días un evento extremo ausente cambia el total mensual de forma notable. Lo agregan T-D2/T-D3 y lo revisa el director
+- Limitaciones conocidas: Provisional: Late se reemplaza por Final cuando exista; el mes en curso no se agrega. BLOQUEADO el 2026-11-14 hacia las 13:0x: GES DISC devuelve 403 `EULA Acceptance Failure` con las credenciales de `_netrc` (descarga directa, OPeNDAP y Harmony). Nada descargado de este producto
+- Requisito del reto y pregunta que atiende: N2, D1, D2, F4; PI-D1 y PI-D4. Compuerta G2
+- Responsable: constructor de datos (subagente), orquestador de datos Daniel
+- Verificador y fecha: PENDIENTE
