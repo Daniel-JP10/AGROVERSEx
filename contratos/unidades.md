@@ -67,3 +67,15 @@ Son 42 unidades de país o zona. Códigos de país (23): AND, ARE, ATA, ATG, BHR
 - Los límites son ilustrativos. Las zonas en disputa siguen el criterio de CGAZ (Departamento de Estado de EE. UU.); el aviso se mantiene.
 - `maxzoom` de cada capa con un nivel de margen sobre el zoom visible, apagando por opacidad: MapLibre filtra por el zoom entero de la tesela.
 - Los ids de GADM del prototipo no existen en este repo.
+
+## Nombres de Colombia que no coinciden con DIVIPOLA (D-018)
+
+Se dejan como vienen en CGAZ, sin corrección a mano. Fuente: `datos/evidencia/T-D1_colombia_divipola.json`.
+
+| Nombre en CGAZ | Nombre en DIVIPOLA | Emparejamiento |
+|-|-|-|
+| Distrito Especial, Industrial Y Portuario De Barr* | BARRANQUILLA (08001) | por exclusión en el departamento |
+| Mompós | SANTA CRUZ DE MOMPOX (13468) | por exclusión en el departamento |
+| Ricaurte (Coloso) | COLOSÓ | por nombre, INFERENCIA |
+| Tolú Viejo | SAN JOSÉ DE TOLUVIEJO | por nombre, INFERENCIA |
+| Mapiripana | NUEVO BELÉN DE BAJIRÁ | sin emparejar: no parece variante de nombre sino territorio distinto, PENDIENTE de revisión |

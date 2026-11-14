@@ -22,6 +22,7 @@ uv venv .venv --python 3.12
 uv pip install --python .venv/Scripts/python.exe --require-hashes -r requirements-geo.lock.txt
 
 # WSL Ubuntu 24.04: rasterio and exactextract
+# The default WSL distro on this machine is docker-desktop: always call wsl -d Ubuntu-24.04
 uv venv ~/venvs/agroversex_geo --python 3.12
 uv pip install --python ~/venvs/agroversex_geo/bin/python --require-hashes -r requirements-geo-wsl.lock.txt
 
