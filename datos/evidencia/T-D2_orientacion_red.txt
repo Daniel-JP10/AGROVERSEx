@@ -1,0 +1,7 @@
+RED: lectura de IMERG con longitud espejada a propósito (AGRO_ESPEJO=1, WSL, 2026-11-14). Las dos pruebas de orientación fallan; sin la variable pasan (4 passed).
+E       assert 0.007740667012267902 > 0.3
+E        +  where 0.007740667012267902 = _media_caja(array([[nan, nan, nan, ..., nan, nan, nan],\n       [nan, nan, nan, ..., nan, nan, nan],\n       [nan, nan, nan, ..., na...nan, nan, ..., nan, nan, nan],\n       [nan, nan, nan, ..., nan, nan, nan],\n       [nan, nan, nan, ..., nan, nan, nan]]), Grilla(x0=-180.0, y0=90.0, dx=0.1, dy=0.1, alto=1800, ancho=3600), -2, 4, 109, 119)
+E       assert 0.042218493628953 > (1.5 * 0.35001328317540176)
+FAILED pruebas/geo/test_lectura_nasa.py::test_imerg_signo_de_longitud_borneo_y_colombia
+FAILED pruebas/geo/test_lectura_nasa.py::test_imerg_banda_ecuatorial_120e_frente_a_120o_con_un_ano
+2 failed, 4 deselected, 3 warnings in 7.77s

@@ -59,11 +59,14 @@ def _lluvia_enero_2000():
     if not base or not (Path(base) / "crudos").exists():
         pytest.skip("sin copia de crudos en WSL (AGRO_COPIA)")
     f = L.archivos(Path(base) / "crudos", "imerg_final")["2000-01"]
-    return L.leer_campo(f, "imerg_final", 1)[0], L.GRILLAS["imerg"]
+    a = L.leer_campo(f, "imerg_final", 1)[0]
+    # AGRO_ESPEJO=1 fuerza a propósito la lectura espejada, para demostrar que las pruebas la detectan
+    return (a[:, ::-1] if os.environ.get("AGRO_ESPEJO") else a), L.GRILLAS["imerg"]
 
 
 @pytest.mark.datos_reales
 def test_imerg_enero_pacifico_oeste_llueve_mas_que_el_sahara():
+    # solo control de plausibilidad: el espejo del Pacífico occidental cae en el Atlántico húmedo, no discrimina
     a, g = _lluvia_enero_2000()
     pacifico, sahara = _media_caja(a, g, 0, 10, 130, 160), _media_caja(a, g, 20, 28, 0, 20)
     assert pacifico > 0.1 and pacifico > 10 * sahara
@@ -78,3 +81,20 @@ def test_imerg_signo_de_longitud_borneo_y_colombia():
     # Chocó (longitudes negativas) más húmedo que el mar Arábigo en su longitud espejo; el campo espejado invierte la relación
     assert _media_caja(a, g, 4, 8, -78, -74) > 1.3 * _media_caja(a, g, 4, 8, 74, 78)
     assert _media_caja(esp, g, 4, 8, -78, -74) < _media_caja(esp, g, 4, 8, 74, 78)
+
+
+@pytest.mark.datos_reales
+def test_imerg_banda_ecuatorial_120e_frente_a_120o_con_un_ano():
+    # continente marítimo (120E) frente a Pacífico oriental (120O), media de 12 meses de 2000; el espejo las intercambia
+    base = os.environ.get("AGRO_COPIA")
+    if not base or not (Path(base) / "crudos").exists():
+        pytest.skip("sin copia de crudos en WSL (AGRO_COPIA)")
+    arch = L.archivos(Path(base) / "crudos", "imerg_final")
+    _, regla = L.leer_campo(arch["2000-01"], "imerg_final", 1)  # la regla se deduce en enero y se reutiliza
+    campos = [L.leer_campo(arch[f"2000-{m:02d}"], "imerg_final", m, regla)[0] for m in range(1, 13)]
+    a = np.nanmean(campos, axis=0)
+    if os.environ.get("AGRO_ESPEJO"):
+        a = a[:, ::-1]
+    g = L.GRILLAS["imerg"]
+    este, oeste = _media_caja(a, g, -5, 5, 115, 125), _media_caja(a, g, -5, 5, -125, -115)
+    assert este > 1.5 * oeste
