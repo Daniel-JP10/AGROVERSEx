@@ -12,7 +12,7 @@ from gemelo.procedencia import ParametroPendiente
 from gemelo.salida import guardar_json, guardar_sqlite
 
 RESUMEN = ("produccion_relativa_anio", "rendimiento_relativo", "riego_mm_anio", "deficit_relativo",
-           "lixiviacion_n_kg_ha_anio", "cambio_carbono_t_ha_anio", "exposicion_erosiva_mm_anio")
+           "lixiviacion_n_kg_ha_anio", "cambio_carbono_t_ha_anio", "lluvia_intensa_sobre_suelo_desnudo_mm_anio")
 
 
 def _tabla(estrategias: list[dict]) -> str:
@@ -42,6 +42,12 @@ def main(argv: list[str] | None = None) -> int:
         p.add_argument("escenario", type=Path, help="archivo YAML de escenario (contratos/gemelo_api.md)")
         p.add_argument("-o", "--salida", type=Path, required=True, help="archivo JSON de salida")
         p.add_argument("--sqlite", type=Path, help="además, añadir la corrida a esta base SQLite")
+    p = sub.add_parser("paquete", help="paquete estático por lote para la app pública (contrato v1.1)")
+    p.add_argument("escenario", type=Path, nargs="?", help="archivo YAML de escenario del lote")
+    p.add_argument("--lote-id", help="id DEMO-{iso3}-{nn} del lote")
+    p.add_argument("--salida", type=Path, default=Path("datos/publicos/gemelo"), help="carpeta del paquete")
+    p.add_argument("--definitivo", action="store_true", help="el id ya es el del lote DEMO elegido (no provisional)")
+    p.add_argument("--solo-indice", action="store_true", help="solo regenerar indice.json y textos")
     p = sub.add_parser("cultivos", help="catálogo de cultivos y qué falta para simularlos")
     p.add_argument("--json", action="store_true")
     sub.add_parser("definiciones", help="indicadores, objetivos y cultivos en JSON")
@@ -58,6 +64,15 @@ def main(argv: list[str] | None = None) -> int:
             if args.orden == "optimizar":
                 print("\n".join(doc["compromisos"]["explicacion"]))
             _guardar(doc, args)
+        elif args.orden == "paquete":
+            from gemelo import paquete
+            if not args.solo_indice:
+                if not args.escenario or not args.lote_id:
+                    raise ValueError("paquete: se necesitan el escenario y --lote-id (o --solo-indice)")
+                t = time.time()
+                paquete.construir_lote(args.escenario, args.lote_id, args.salida, not args.definitivo)
+                print(f"lote {args.lote_id}: {time.time() - t:.0f} s")
+            print(f"índice: {paquete.actualizar_indice(args.salida)}")
         elif args.orden == "cultivos":
             cat = cargar_catalogo()
             if args.json:

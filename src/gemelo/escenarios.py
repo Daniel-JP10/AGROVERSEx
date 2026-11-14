@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 import numpy as np
 
 from gemelo.clima import ClimaDiario, calcular_eto
+from gemelo.enso import AVISO_INTERINO, fases_por_anio
 
 PERCENTIL_TIPO = {"seco": 20.0, "normal": 50.0, "humedo": 80.0}
 AVISO_HIPOTETICO = ("Escenario hipotético construido con años históricos reales; no es un pronóstico ni una "
@@ -42,13 +43,28 @@ class EscenarioClimatico:
                 **self.detalle}
 
 
+TIPOS_ENSO = {"enso_nino": "nino", "enso_nina": "nina", "enso_neutra": "neutra"}
+
+
 def construir(clima: ClimaDiario, tipo: str, anios_horizonte: int, semilla: int = 0, n_miembros: int | None = None,
               anio_inicio: int | None = None, delta_precip_pct: float = 0.0, delta_temp_c: float = 0.0,
-              max_miembros: int | None = None) -> EscenarioClimatico:
+              max_miembros: int | None = None, enso_archivo: str | None = None) -> EscenarioClimatico:
     n, H = clima.n_anios, anios_horizonte
     if H < 1:
         raise ValueError("el horizonte debe tener al menos un año")
     rng = np.random.default_rng(semilla)
+    if tipo in TIPOS_ENSO:
+        fases, meta = fases_por_anio(enso_archivo)
+        fase = TIPOS_ENSO[tipo]
+        banda = [i for i, a in enumerate(clima.anios) if fases.get(int(a)) == fase]
+        if not banda:
+            raise ValueError(f"escenario {tipo}: ningún año del registro clasificado como {fase}")
+        m = n_miembros or max(len(banda), 5)
+        miembros = [list(rng.choice(banda, size=H, replace=True)) for _ in range(m)]
+        detalle = {"fase_enso": fase, "clasificacion_enso": meta,
+                   "anios_analogos": sorted(int(clima.anios[i]) for i in banda),
+                   "avisos": [AVISO_INTERINO] if meta["interina"] else []}
+        return EscenarioClimatico(tipo, H, miembros, aviso=AVISO_HIPOTETICO, detalle=detalle)
     if tipo in ("historico", "personalizado"):
         if H > n:
             raise ValueError(f"horizonte de {H} años mayor que el registro ({n} años)")
@@ -77,7 +93,8 @@ def construir(clima: ClimaDiario, tipo: str, anios_horizonte: int, semilla: int 
                    "anios_analogos": sorted(int(clima.anios[i]) for i in banda),
                    "precip_anual_analogos_mm": sorted(float(p_anual[i]) for i in banda)}
         return EscenarioClimatico(tipo, H, miembros, aviso=AVISO_HIPOTETICO, detalle=detalle)
-    raise ValueError(f"tipo de escenario {tipo!r}: historico, seco, normal, humedo o personalizado")
+    raise ValueError(f"tipo de escenario {tipo!r}: historico, seco, normal, humedo, personalizado, enso_nino, "
+                     "enso_nina o enso_neutra")
 
 
 def series(clima: ClimaDiario, esc: EscenarioClimatico, viento_respaldo: float = 2.0) -> tuple[dict, str]:

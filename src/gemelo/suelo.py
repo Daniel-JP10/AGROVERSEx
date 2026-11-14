@@ -217,6 +217,26 @@ def perfil_manual(arena: float, arcilla: float, mo_pct: float, cos_t_ha: float, 
     return completar_hidraulica(PerfilSuelo(ps, [], referencia))
 
 
+def perfil_desde_parametros_datos(ruta: str | Path) -> PerfilSuelo:
+    """parametros_suelo.json de Datos (T-D5, contratos/forzantes_gemelo.md): arena y arcilla (kg/kg), mo_pct (%),
+    cos_t_ha (t C/ha, 0-30 cm), opcionales     cn_suelo y profundidad_m. Producto de mapas: naturaleza 'estimado'."""
+    ruta = Path(ruta)
+    d = json.loads(ruta.read_text(encoding="utf-8"))
+    faltan = [k for k in ("arena", "arcilla", "mo_pct", "cos_t_ha") if d.get(k) is None]
+    if faltan:
+        raise ValueError(f"{ruta.name}: faltan {faltan}")
+    ref = f"parámetros de suelo de Datos ({ruta.name}{'; ' + d['fuente'] if d.get('fuente') else ''})"
+
+    def est(n, v, u):
+        return Parametro(n, float(v), u, "FUENTE", referencia=ref, naturaleza="estimado")
+    ps = {"profundidad_perfil_m": est("profundidad_perfil_m", d.get("profundidad_m", 1.0), "m"),
+          "arena": est("arena", d["arena"], "kg/kg"), "arcilla": est("arcilla", d["arcilla"], "kg/kg"),
+          "mo_pct": est("mo_pct", d["mo_pct"], "%"), "cos_t_ha": est("cos_t_ha", d["cos_t_ha"], "t C/ha")}
+    if d.get("cn_suelo") is not None:
+        ps["cn_suelo"] = est("cn_suelo", d["cn_suelo"], "kg C/kg N")
+    return completar_hidraulica(PerfilSuelo(ps, [], ref))
+
+
 def completar_hidraulica(perfil: PerfilSuelo, recalcular: bool = False) -> PerfilSuelo:
     """Añade theta_cc, theta_pmp, theta_sat, ksat, grupo hidrológico y tau con su incertidumbre."""
     ps = dict(perfil.parametros)

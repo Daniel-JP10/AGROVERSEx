@@ -342,7 +342,7 @@ $$M = S\ (\text{estrategias}) \times K\ (\text{miembros climáticos}) \times P\ 
 | `produccion_relativa_anio` | $\sum_{\text{temporadas cosechadas}} Y/Y_{max} \,/\, H$ (temporadas de rendimiento pleno por año; compara cultivos distintos) |
 | `rendimiento_relativo` | media por temporada de $Y/Y_{pot}$ |
 | `deficit_relativo` | $1 - \sum ET_a/\sum ET_c$ en días de cultivo |
-| `exposicion_erosiva_mm_anio` | $\sum P\cdot\mathbb{1}[P \ge P_{90}]\cdot(1-V)(1-f_r) / H$, con $P_{90}$ el percentil 90 de los días con lluvia del registro |
+| `lluvia_intensa_sobre_suelo_desnudo_mm_anio` (v1: `exposicion_erosiva_mm_anio`, hoy alias obsoleto; `exposicion_erosiva` es el índice de Datos, T-D6) | $\sum P\cdot\mathbb{1}[P \ge P_{90}]\cdot(1-V)(1-f_r) / H$, con $P_{90}$ el percentil 90 de los días con lluvia del registro |
 | `dias_suelo_desnudo_anio` | días con protección (viva o de residuo) menor que 30 % |
 | `cambio_carbono_t_ha_anio` | $(C_{fin} - C_0)/H$ |
 | `lixiviacion_n_kg_ha_anio`, `fijacion_n_kg_ha_anio`, ... | sumas de flujos por año |
@@ -366,7 +366,7 @@ $$M = S\ (\text{estrategias}) \times K\ (\text{miembros climáticos}) \times P\ 
 | `produccion` | media de `produccion_relativa_anio` |
 | `riesgo_produccion` | $CVaR_{90}$ de la producción (robustez en años malos) |
 | `carbono` | media del cambio de carbono |
-| `exposicion_erosiva` | media de lluvia intensa sobre suelo desprotegido |
+| `lluvia_intensa_suelo_desnudo` (v1: `exposicion_erosiva`) | media de lluvia intensa sobre suelo desprotegido |
 | `lixiviacion` | media de N lavado |
 | `riego`, `costo` | opcionales |
 
@@ -401,7 +401,18 @@ Las reglas de sucesión salen de la tabla `regla_sucesion` (FUENTE EV-ROT-016, 0
   - procedencia de cada parámetro y avisos para el usuario;
   - indicadores con p10/p50/p90, indicadores de temporada, trayectorias mensuales con bandas y comparación rápida.
 - **SQLite opcional:** tablas `corrida`, `indicador` y `trayectoria_mensual`.
-- **`api.py`** expone `simular`, `optimizar_rotacion` y `definiciones`; **`cli.py`** expone los comandos `simular`, `optimizar`, `cultivos` y `definiciones`.
+- **`api.py`** expone `simular`, `optimizar_rotacion` y `definiciones`; **`cli.py`** expone los comandos `simular`, `optimizar`, `paquete`, `cultivos` y `definiciones`.
+- **Contrato v1.1** (todo aditivo):
+  - `paquete.py` genera el paquete estático por lote en `datos/publicos/gemelo/` (escenarios histórico, seco, normal, húmedo y ENSO, grilla de deslizadores y calibraciones típicas) con su `indice.json`;
+  - `tarjetas.py` arma la tarjeta de cinco secciones y la sensibilidad de los parámetros SUPUESTO;
+  - `textos.py` es el catálogo de claves en inglés y español;
+  - `prioridades.py` mapea los objetivos a los cuatro deslizadores de Web con la fórmula de orden;
+  - `enso.py` clasifica los años por fase ENSO.
+
+```powershell
+python -m gemelo paquete ejemplos/escenario_ames.yaml --lote-id DEMO-USA-01
+python -m gemelo paquete ejemplos/escenario_ipiales.yaml --lote-id DEMO-COL-01
+```
 
 El esquema completo está en [`contratos/gemelo_api.md`](../../contratos/gemelo_api.md).
 

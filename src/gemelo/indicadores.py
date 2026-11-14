@@ -26,8 +26,11 @@ DEFINICIONES = {
     "cobertura_media": ("fracción", "media diaria de V", "Qué tanto suelo cubre la vegetación en promedio"),
     "dias_suelo_desnudo_anio": ("días/año", "días con (1 - V)(1 - f_res) > 1 - umbral, / H",
                                 "Días con el suelo desprotegido"),
-    "exposicion_erosiva_mm_anio": ("mm/año", "sum(P * 1[P >= P_int] * (1 - V)(1 - f_res)) / H",
-                                   "Lluvia intensa que cae sobre suelo desprotegido"),
+    "lluvia_intensa_sobre_suelo_desnudo_mm_anio": ("mm/año", "sum(P * 1[P >= P_int] * (1 - V)(1 - f_res)) / H",
+                                                   "Lluvia intensa que cae sobre suelo desprotegido"),
+    "exposicion_erosiva_mm_anio": ("mm/año", "alias de lluvia_intensa_sobre_suelo_desnudo_mm_anio",
+                                   "Nombre obsoleto (v1); usar lluvia_intensa_sobre_suelo_desnudo_mm_anio. "
+                                   "exposicion_erosiva es la función de Datos (T-D6)"),
     "rendimiento_relativo": ("adimensional", "media por temporada de Y / Y_pot",
                              "Cosecha lograda frente a la posible sin falta de agua ni nitrógeno"),
     "indice_productivo": ("adimensional", "media por temporada de Y / Y_max (Y_max: solo radiación)",
@@ -42,6 +45,8 @@ DEFINICIONES = {
     "cierre_balance_agua_mm": ("mm", "max |W(t) - W(t-1) - (P + I - ETa - R - D)|",
                                "Error numérico del balance de agua (debe ser ~0)"),
 }
+
+OBSOLETOS = {"exposicion_erosiva_mm_anio": "lluvia_intensa_sobre_suelo_desnudo_mm_anio"}
 
 DEFINICIONES_TEMPORADA = {
     "rendimiento_kg_ha": ("kg MS/ha", "IC * B a la cosecha (0 si es cobertura)"),
@@ -90,12 +95,13 @@ def por_miembro(reg: dict, prog: dict, H: int, p_intensa: float, umbral_cobertur
         "cambio_carbono_t_ha_anio": (reg["C"][:, -1] - reg["inicial"]["C"]) / H,
         "cobertura_media": reg["V"].mean(1),
         "dias_suelo_desnudo_anio": (reg["desnudo"] > 1 - umbral_cobertura).sum(1) / H,
-        "exposicion_erosiva_mm_anio": (reg["P"] * (reg["P"] >= p_intensa) * reg["desnudo"]).sum(1) / H,
+        "lluvia_intensa_sobre_suelo_desnudo_mm_anio": (reg["P"] * (reg["P"] >= p_intensa) * reg["desnudo"]).sum(1) / H,
         "rendimiento_relativo": np.where(n_temp > 0, rel_t.sum(1) / np.maximum(n_temp, 1), np.nan),
         "indice_productivo": np.where(n_temp > 0, prod_t.sum(1) / np.maximum(n_temp, 1), np.nan),
         "produccion_relativa_anio": np.where(prog["cosecha"] & prog["cosechar"], prod_t, 0.0).sum(1) / H,
         "cierre_balance_agua_mm": np.abs(cierre).max(1),
     }
+    out["exposicion_erosiva_mm_anio"] = out["lluvia_intensa_sobre_suelo_desnudo_mm_anio"]
     if costos is not None and costos_fijos is not None:
         out["costo_anio"] = (reg["I_bruto"].sum(1) * float(costos.get("riego_por_mm", 0.0)) + costos_fijos) / H
     return out

@@ -45,6 +45,13 @@ def _calibrar_tabla(tabla: TablaParametros, prefijo: str, calibracion: dict) -> 
 def construir_theta(suelo: PerfilSuelo, cultivos: list[Cultivo], n: int, semilla: int,
                     calibracion: dict | None = None) -> Theta:
     """Reúne los parámetros con procedencia, aplica la calibración local y muestrea n vectores theta."""
+    planos, avisos, suelo = reunir_parametros(suelo, cultivos, calibracion)
+    return theta_desde_muestras(planos, muestrear(planos, n, semilla), suelo, cultivos, avisos)
+
+
+def reunir_parametros(suelo: PerfilSuelo, cultivos: list[Cultivo],
+                      calibracion: dict | None = None) -> tuple[dict[str, Parametro], list[str], PerfilSuelo]:
+    """Parámetros planos con procedencia (calibración aplicada), avisos y suelo calibrado."""
     calibracion = calibracion or {}
     avisos = list(suelo.avisos)
     sv = {k.split(".", 1)[1]: v for k, v in calibracion.items() if k.startswith("suelo.") and v is not None}
@@ -80,8 +87,13 @@ def construir_theta(suelo: PerfilSuelo, cultivos: list[Cultivo], n: int, semilla
     if "agua.fraccion_humedad_inicial" not in calibracion:
         avisos.append("Humedad inicial del suelo SUPUESTO (20-80 % del agua disponible); con SMAP L4 o medición "
                       "local se reduce la incertidumbre del primer ciclo")
+    return planos, avisos, suelo
 
-    m = muestrear(planos, n, semilla)
+
+def theta_desde_muestras(planos: dict[str, Parametro], m: dict[str, np.ndarray], suelo: PerfilSuelo,
+                         cultivos: list[Cultivo], avisos: list[str]) -> Theta:
+    """theta a partir de muestras {clave: valores (n,)} ya hechas (LHS o barridos a mano)."""
+    n = len(next(iter(m.values())))
     ts = {"zp": m["suelo.profundidad_perfil_m"]}
     ts["th_pmp"] = m["suelo.theta_pmp"]
     ts["th_cc"] = np.maximum(m["suelo.theta_cc"], ts["th_pmp"] + 0.03)
@@ -230,6 +242,8 @@ def resumir_estrategias(ens: Ensamble, costos: dict | None = None) -> list[dict]
         for k, v in h.items():
             unidad, formula, texto = ind.DEFINICIONES[k]
             indicadores[k] = {**resumir(v[b]), "unidad": unidad, "definicion": formula, "explicacion": texto}
+            if k in ind.OBSOLETOS:
+                indicadores[k].update(obsoleto=True, reemplazado_por=ind.OBSOLETOS[k])
         if "costo_anio" not in h:
             u, f, t = ind.DEFINICIONES["costo_anio"]
             indicadores["costo_anio"] = {"p10": None, "p50": None, "p90": None, "unidad": u, "definicion": f,

@@ -68,6 +68,7 @@ def test_nsga2_frente_factible_y_no_dominado(clima_ames, suelo_ames):
     base = Estrategia("BASE", "Maíz continuo", [Temporada("maiz", dia_nominal(f"A{i}-05-01"),
                                                           fertilizacion=[Fertilizacion(0, 150.0)]) for i in (1, 2)])
     p = _problema(objetivos=["produccion", "carbono", "exposicion_erosiva"])
+    assert p.objetivos == ["produccion", "carbono", "lluvia_intensa_suelo_desnudo"]
     r = optimizar(clima_ames, esc, suelo_ames, p, base, poblacion=10, generaciones=4, miembros_clima=2,
                   muestras_parametros=2, miembros_final=3, muestras_final=2, semilla=5, max_soluciones=5)
     assert 1 <= len(r["frente"]) <= 5
@@ -79,7 +80,7 @@ def test_nsga2_frente_factible_y_no_dominado(clima_ames, suelo_ames):
         temps = f["temporadas"]
         for a, b in zip(temps, temps[1:]):
             assert dia_nominal(a["cosecha"]) < dia_nominal(b["siembra"])
-        F.append([-f["objetivos"]["produccion"], -f["objetivos"]["carbono"], f["objetivos"]["exposicion_erosiva"]])
+        F.append([-f["objetivos"]["produccion"], -f["objetivos"]["carbono"], f["objetivos"]["lluvia_intensa_suelo_desnudo"]])
         assert set(f["frente_a_linea_base"]) == {"gana", "cede", "similar"}
     assert r["compromisos"]["compromiso_equilibrado"] in {f["id"] for f in r["frente"]}
     assert r["linea_base"]["id"] == "BASE"

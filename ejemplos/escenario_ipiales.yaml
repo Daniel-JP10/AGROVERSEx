@@ -5,7 +5,7 @@
 version_contrato: 1
 
 lote:
-  id: ipiales-demo
+  id: DEMO-COL-01                 # provisional hasta que se elijan los lotes DEMO (formato DEMO-{iso3}-{nn})
   nombre: Lote demostrativo Ipiales (Nariño)
   lat: 0.8302
   lon: -77.6444
@@ -97,3 +97,16 @@ optimizacion:
   min_cosechas_por_anio: 1
   busqueda: {poblacion: 24, generaciones: 12, miembros_clima: 4, muestras_parametros: 3, miembros_final: 8,
              muestras_final: 6, max_soluciones: 8}
+
+# Paquete estático (python -m gemelo paquete): grilla de deslizadores y calibraciones típicas del lote
+paquete:
+  n_parametros_grilla: 4
+  calibraciones_tipicas:
+    mo_laboratorio: {descripcion: "Materia orgánica medida en laboratorio (7,5 %, suelo volcánico)",
+                     valores: {suelo.mo_pct: 7.5}}
+    n_inicial_bajo: {descripcion: "Análisis de suelo con poco N mineral inicial", valores: {cn.n_mineral_inicial_kg_ha: 15}}
+    n_inicial_alto: {descripcion: "Análisis de suelo con mucho N mineral inicial", valores: {cn.n_mineral_inicial_kg_ha: 50}}
+    suelo_seco_al_inicio: {descripcion: "Humedad inicial medida baja (30 % del agua disponible)",
+                           valores: {agua.fraccion_humedad_inicial: 0.3}}
+    suelo_humedo_al_inicio: {descripcion: "Humedad inicial medida alta (80 % del agua disponible)",
+                             valores: {agua.fraccion_humedad_inicial: 0.8}}

@@ -102,6 +102,23 @@ def cargar_power(ruta: str | Path) -> ClimaDiario:
                                 meta["fuente"] + "; MERRA-2 y CERES, celda 0,5° x 0,625°", naturaleza="estimado")
 
 
+def cargar_forzantes(ruta: str | Path, lat: float, elevacion_m: float) -> ClimaDiario:
+    """Forzantes diarios de Datos (T-D5, contratos/forzantes_gemelo.md): columna `fecha` (AAAA-MM-DD) y las
+    variables del gemelo en sus unidades (precip mm/día, t2m/t2m_max/t2m_min °C, rh2m %, rad_sw MJ/m²/día,
+    ws2m m/s). CSV o Parquet. Son productos satelitales y de reanálisis: naturaleza 'estimado'."""
+    ruta = Path(ruta)
+    df = pd.read_parquet(ruta) if ruta.suffix == ".parquet" else pd.read_csv(ruta)
+    if "fecha" not in df.columns:
+        raise ValueError(f"forzantes {ruta.name}: falta la columna fecha")
+    faltan = [v for v in ("precip", "rad_sw") if v not in df.columns]
+    if faltan or not ({"t2m"} <= set(df.columns) or {"t2m_max", "t2m_min"} <= set(df.columns)):
+        raise ValueError(f"forzantes {ruta.name}: faltan columnas {faltan or ['t2m o t2m_max y t2m_min']}")
+    df["fecha"] = pd.to_datetime(df["fecha"])
+    return a_calendario_nominal(df[["fecha", *[v for v in VARIABLES if v in df.columns]]], float(lat),
+                                float(elevacion_m), f"forzantes diarios de Datos ({ruta.name})",
+                                naturaleza="estimado")
+
+
 # ------------------------------------------------------------------------------------- FAO-56: radiación y ET0
 
 def radiacion_extraterrestre(lat_grados, doy):

@@ -11,13 +11,33 @@ from pathlib import Path
 
 import numpy as np
 
-from gemelo.entrada import VERSION_CONTRATO, Entrada
+from gemelo import prioridades, tarjetas, textos
+from gemelo.entrada import VERSION_CONTRATO, VERSION_CONTRATO_COMPLETA, Entrada
 from gemelo.simulador import VERSION_MODELO, Ensamble
 
 AVISO_SIMULADO = ("Todos los resultados son simulados (naturaleza 'simulado'): estiman tendencias y compromisos "
                   "entre estrategias, no son mediciones ni garantías de cosecha.")
 AVISO_EQUILIBRIO = ("Carbono: se supone que el suelo está en equilibrio con la estrategia de referencia (SUPUESTO); "
                     "los cambios de carbono se leen como diferencias frente a ese manejo, no como tendencia absoluta.")
+AVISO_MENSUAL = ("Clima mensual desagregado a diario: solo contexto. Al partir la lluvia mensual en días se borran las "
+                 "tormentas, y los indicadores de lluvia intensa y erosión pierden sentido.")
+
+
+def fuentes_datos(entrada: Entrada) -> list[str]:
+    """Claves source.* de los datos que alimentan la corrida, para el rótulo."""
+    c, s = entrada.clima.fuente, entrada.suelo.fuente or ""
+    clima = ("source.nasa_power" if "NASA POWER" in c else "source.agroversex_monthly" if "mensual" in c
+             else "source.datos_forcings")
+    suelo = ("source.datos_soil" if "de Datos" in s else "source.soilgrids" if "SoilGrids" in s
+             else "source.user_soil")
+    return [clima, suelo]
+
+
+def rotulo(entrada: Entrada) -> dict:
+    """'Simulación del modelo con datos <fuente>': distinto de SIMULADO, que en el proyecto es dato ficticio."""
+    f = fuentes_datos(entrada)
+    return {"clave": "label.model_simulation", "parametros": {"fuentes": f},
+            **{i: textos.texto("label.model_simulation", i, fuentes=textos.lista_fuentes(f, i)) for i in textos.IDIOMAS}}
 
 
 def limpiar(obj):
@@ -72,7 +92,8 @@ def diagnostico_carbono(ens: Ensamble) -> dict:
 
 def metadatos(entrada: Entrada, ens: Ensamble, semilla: int, tipo: str) -> dict:
     return {
-        "version_contrato": VERSION_CONTRATO, "version_modelo": VERSION_MODELO, "tipo": tipo,
+        "version_contrato": VERSION_CONTRATO, "version_contrato_completa": VERSION_CONTRATO_COMPLETA,
+        "rotulo": rotulo(entrada), "version_modelo": VERSION_MODELO, "tipo": tipo,
         "generado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"), "commit": commit_git(),
         "semilla": semilla, "huella_parametros": huella_parametros(ens.theta.parametros), "naturaleza": "simulado",
         "paso_tiempo": "diario (calendario nominal de 365 días)", "horizonte_anios": ens.H,
@@ -99,7 +120,19 @@ def _avisos(entrada: Entrada, ens: Ensamble, extra: list[str] | None = None) -> 
         avisos.append(f"Clima: huecos cortos rellenados por interpolación {entrada.clima.huecos_rellenos}")
     if entrada.clima.naturaleza != "observado":
         avisos.append(f"Clima de naturaleza '{entrada.clima.naturaleza}' ({entrada.clima.fuente})")
+    if "desagregado a diario" in entrada.clima.fuente:
+        avisos.append(AVISO_MENSUAL)
+    avisos += entrada.escenario.detalle.get("avisos", [])
     return list(dict.fromkeys(a for a in avisos + (extra or []) if a))
+
+
+def anotar_claves(doc: dict) -> dict:
+    """Añade las claves de texto (v1.1) junto a los textos en español de la v1."""
+    doc["avisos_claves"] = [textos.clave_de_aviso(a) for a in doc.get("avisos", [])]
+    for e in doc.get("estrategias") or [doc["linea_base"], *doc.get("frente", [])]:
+        for k, v in e["indicadores"].items():
+            v["nombre_clave"], v["explicacion_clave"] = f"indicator.{k}.name", f"indicator.{k}.explanation"
+    return doc
 
 
 def _comun(entrada: Entrada, ens: Ensamble, semilla: int, tipo: str) -> dict:
@@ -113,18 +146,31 @@ def _comun(entrada: Entrada, ens: Ensamble, semilla: int, tipo: str) -> dict:
     }
 
 
+def _completar_v11(doc: dict, estrategias: list[dict], metricas: list[dict]) -> dict:
+    """Bloques aditivos de la v1.1: métricas por estrategia, prioridades, claves de texto y tarjetas."""
+    for e, m in zip(estrategias, metricas):
+        e["metricas"] = limpiar(m)
+    doc["prioridades"] = prioridades.bloque({e["id"]: e["metricas"] for e in estrategias})
+    anotar_claves(doc)
+    doc["tarjetas"] = tarjetas.construir(doc)
+    return doc
+
+
 def documento_simulacion(entrada: Entrada, ens: Ensamble, estrategias: list[dict]) -> dict:
-    return limpiar({**_comun(entrada, ens, int(entrada.simulacion["semilla"]), "simulacion"),
-                    "estrategias": estrategias, "comparacion_p50": _comparacion(estrategias),
-                    "avisos": _avisos(entrada, ens)})
+    ref = entrada.simulacion.get("referencia") or estrategias[0]["id"]
+    doc = limpiar({**_comun(entrada, ens, int(entrada.simulacion["semilla"]), "simulacion"),
+                   "estrategia_referencia": ref, "estrategias": estrategias,
+                   "comparacion_p50": _comparacion(estrategias), "avisos": _avisos(entrada, ens)})
+    return _completar_v11(doc, doc["estrategias"], prioridades.metricas_ensamble(ens))
 
 
 def documento_optimizacion(entrada: Entrada, resultado: dict) -> dict:
     ens = resultado["ensamble_final"]
     cuerpo = {k: v for k, v in resultado.items() if k not in ("ensamble_final", "avisos")}
     todas = [resultado["linea_base"], *resultado["frente"]]
-    return limpiar({**_comun(entrada, ens, int(resultado["busqueda"]["semilla"]), "optimizacion"), **cuerpo,
-                    "comparacion_p50": _comparacion(todas), "avisos": _avisos(entrada, ens, resultado["avisos"])})
+    doc = limpiar({**_comun(entrada, ens, int(resultado["busqueda"]["semilla"]), "optimizacion"), **cuerpo,
+                   "comparacion_p50": _comparacion(todas), "avisos": _avisos(entrada, ens, resultado["avisos"])})
+    return _completar_v11(doc, [doc["linea_base"], *doc["frente"]], prioridades.metricas_ensamble(ens))
 
 
 def guardar_json(doc: dict, ruta: str | Path) -> Path:

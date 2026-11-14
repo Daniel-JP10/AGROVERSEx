@@ -122,7 +122,7 @@ def test_extremos_no_rompen_balances(precip, t, suelo_franco):
         assert ens.reg["B"].max() == 0
 
 
-def test_cobertura_reduce_exposicion_erosiva(clima_ames, suelo_ames):
+def test_cobertura_reduce_lluvia_intensa_sobre_suelo_desnudo(clima_ames, suelo_ames):
     esc = construir(clima_ames, "historico", 2, max_miembros=3)
     desnudo = Estrategia("A", "Maíz-soya", [Temporada("maiz", dia_nominal("A1-05-01")),
                                             Temporada("soya", dia_nominal("A2-05-15"))])
@@ -132,7 +132,10 @@ def test_cobertura_reduce_exposicion_erosiva(clima_ames, suelo_ames):
     r = resumir_estrategias(ejecutar(clima_ames, esc, suelo_ames, [desnudo, cubierto], n_parametros=2))
     a, b = r[0]["indicadores"], r[1]["indicadores"]
     assert b["cobertura_media"]["p50"] > a["cobertura_media"]["p50"]
-    assert b["exposicion_erosiva_mm_anio"]["p50"] <= a["exposicion_erosiva_mm_anio"]["p50"]
+    k = "lluvia_intensa_sobre_suelo_desnudo_mm_anio"
+    assert b[k]["p50"] <= a[k]["p50"]
+    assert a["exposicion_erosiva_mm_anio"]["p50"] == a[k]["p50"]
+    assert a["exposicion_erosiva_mm_anio"]["obsoleto"] and a["exposicion_erosiva_mm_anio"]["reemplazado_por"] == k
     assert b["dias_suelo_desnudo_anio"]["p50"] <= a["dias_suelo_desnudo_anio"]["p50"]
 
 

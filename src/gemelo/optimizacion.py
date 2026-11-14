@@ -45,14 +45,20 @@ OBJETIVOS = {
                           "texto": "Producción en el peor 10 % de los casos (CVaR 90 %): robustez ante años malos"},
     "carbono": {"indicador": "cambio_carbono_t_ha_anio", "sentido": "max",
                 "texto": "Cambio del carbono del suelo (media del ensamble)"},
-    "exposicion_erosiva": {"indicador": "exposicion_erosiva_mm_anio", "sentido": "min",
-                           "texto": "Lluvia intensa sobre suelo desprotegido (media del ensamble)"},
+    "lluvia_intensa_suelo_desnudo": {"indicador": "lluvia_intensa_sobre_suelo_desnudo_mm_anio", "sentido": "min",
+                                     "texto": "Lluvia intensa sobre suelo desprotegido (media del ensamble)"},
     "lixiviacion": {"indicador": "lixiviacion_n_kg_ha_anio", "sentido": "min",
                     "texto": "Nitrógeno lavado (media del ensamble)"},
     "riego": {"indicador": "riego_mm_anio", "sentido": "min", "texto": "Agua de riego (media del ensamble)"},
     "costo": {"indicador": "costo_anio", "sentido": "min", "texto": "Costo directo (media del ensamble)"},
+    "deficit": {"indicador": "deficit_relativo", "sentido": "min",
+                "texto": "Déficit hídrico relativo (media del ensamble)"},
+    "fertilizante": {"indicador": "fertilizante_n_kg_ha_anio", "sentido": "min",
+                     "texto": "Nitrógeno de fertilizante aplicado (media del ensamble)"},
 }
-OBJETIVOS_BASE = ("produccion", "riesgo_produccion", "carbono", "exposicion_erosiva", "lixiviacion")
+OBJETIVOS_BASE = ("produccion", "riesgo_produccion", "carbono", "lluvia_intensa_suelo_desnudo", "lixiviacion")
+# Ids de objetivo de la v1 que se aceptan en la entrada y se traducen al id vigente
+ALIAS_OBJETIVOS = {"exposicion_erosiva": "lluvia_intensa_suelo_desnudo"}
 RESTRICCIONES = ("solape_dias", "sucesion_dias", "cultivos_exigidos_faltantes", "cosechas_faltantes",
                  "riego_exceso_mm_anio")
 PENALIDAD = 1e6
@@ -149,6 +155,7 @@ class ProblemaRotacion:
     def __post_init__(self):
         if self.objetivos is None:
             self.objetivos = list(OBJETIVOS_BASE) + (["riego"] if self.riego_permitido else [])
+        self.objetivos = list(dict.fromkeys(ALIAS_OBJETIVOS.get(o, o) for o in self.objetivos))
         desconocidos = [o for o in self.objetivos if o not in OBJETIVOS]
         if desconocidos:
             raise ValueError(f"objetivos desconocidos {desconocidos}; válidos: {list(OBJETIVOS)}")
@@ -441,15 +448,22 @@ def optimizar(clima: ClimaDiario, escenario: EscenarioClimatico, suelo: PerfilSu
         f"Compromiso equilibrado (más cercano al ideal con todos los objetivos normalizados y peso igual, SUPUESTO): "
         f"{candidatas[compromiso].id}",
     ]
+    explicacion_claves = [
+        {"clave": "tradeoff.no_single_best", "parametros": {}},
+        *({"clave": "tradeoff.best_for", "parametros": {"objetivo": {"clave": f"objective.{o}"}, "id": i}}
+          for o, i in mejor_por.items()),
+        {"clave": "tradeoff.balanced", "parametros": {"id": candidatas[compromiso].id}},
+    ]
     if not any(f["domina_a_linea_base"] for f in frente):
         explicacion.append("Ninguna candidata mejora a la línea base en todos los objetivos a la vez.")
+        explicacion_claves.append({"clave": "tradeoff.none_dominates", "parametros": {}})
     return {
-        "objetivos": [{"id": o, **OBJETIVOS[o]} for o in problema.objetivos],
+        "objetivos": [{"id": o, **OBJETIVOS[o], "texto_clave": f"objective.{o}"} for o in problema.objetivos],
         "restricciones": list(RESTRICCIONES),
         "linea_base": {**resumen[0], "objetivos": a_natural(problema.objetivos, f_base)},
         "frente": frente,
         "compromisos": {"mejor_por_objetivo": mejor_por, "compromiso_equilibrado": candidatas[compromiso].id,
-                        "explicacion": explicacion},
+                        "explicacion": explicacion, "explicacion_claves": explicacion_claves},
         "busqueda": {"algoritmo": "NSGA-II (pymoo)", "poblacion": poblacion, "generaciones": generaciones,
                      "miembros_clima_busqueda": esc_opt.n_miembros, "muestras_parametros_busqueda": muestras_parametros,
                      "miembros_clima_final": ens.K, "muestras_parametros_final": ens.P,

@@ -1,16 +1,25 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
 """Lectura del escenario de entrada (YAML o dict con el esquema de contratos/gemelo_api.md) a objetos del gemelo."""
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import yaml
 
-from gemelo.clima import ClimaDiario, cargar_power, desagregar_mensual, mensual_desde_sqlite
+from gemelo.clima import ClimaDiario, cargar_forzantes, cargar_power, desagregar_mensual, mensual_desde_sqlite
 from gemelo.escenarios import EscenarioClimatico, construir
 from gemelo.modelos import Estrategia, Fertilizacion, Lote, Riego, Temporada, dia_nominal
-from gemelo.suelo import PerfilSuelo, perfil_desde_soilgrids, perfil_manual
+from gemelo.suelo import PerfilSuelo, perfil_desde_parametros_datos, perfil_desde_soilgrids, perfil_manual
 
 VERSION_CONTRATO = 1
+VERSION_CONTRATO_COMPLETA = "1.1"
+LOTE_DEMO = re.compile(r"^DEMO-[A-Z]{3}-\d{2}$")
+
+
+def validar_lote_demo(lote_id: str) -> str:
+    if not LOTE_DEMO.match(lote_id):
+        raise ValueError(f"lote.id {lote_id!r}: un lote DEMO se identifica como DEMO-{{iso3}}-{{nn}}, p. ej. DEMO-COL-01")
+    return lote_id
 
 
 @dataclass
@@ -62,7 +71,12 @@ def _clima(d: dict, base: Path, semilla: int) -> ClimaDiario:
             raise ValueError("clima sqlite_mensual: falta elevacion_m (la necesita Penman-Monteith)")
         return desagregar_mensual(mensual, anios, float(d.get("lat", lat)), float(d["elevacion_m"]), semilla,
                                   fuente=f"agroversex.sqlite tabla mensual ({d['unidad_id']}), desagregado a diario")
-    raise ValueError(f"clima.fuente {fuente!r}: power_csv o sqlite_mensual")
+    if fuente == "forzantes_diarios":
+        faltan = [k for k in ("archivo", "lat", "elevacion_m") if k not in d]
+        if faltan:
+            raise ValueError(f"clima forzantes_diarios: faltan {faltan}")
+        return cargar_forzantes(_ruta(d["archivo"], base), d["lat"], d["elevacion_m"])
+    raise ValueError(f"clima.fuente {fuente!r}: power_csv, forzantes_diarios o sqlite_mensual")
 
 
 def _suelo(d: dict, base: Path) -> PerfilSuelo:
@@ -72,7 +86,9 @@ def _suelo(d: dict, base: Path) -> PerfilSuelo:
     if fuente == "manual":
         return perfil_manual(float(d["arena"]), float(d["arcilla"]), float(d["mo_pct"]), float(d["cos_t_ha"]),
                              d.get("cn_suelo"), float(d.get("profundidad_m", 1.0)))
-    raise ValueError(f"suelo.fuente {fuente!r}: soilgrids_json o manual")
+    if fuente == "parametros_suelo_json":
+        return perfil_desde_parametros_datos(_ruta(d["archivo"], base))
+    raise ValueError(f"suelo.fuente {fuente!r}: soilgrids_json, parametros_suelo_json o manual")
 
 
 def leer_entrada(fuente: str | Path | dict, base: Path | None = None) -> Entrada:
@@ -87,6 +103,8 @@ def leer_entrada(fuente: str | Path | dict, base: Path | None = None) -> Entrada
     if int(v) > VERSION_CONTRATO:
         raise ValueError(f"version_contrato {v} más nueva que la que entiende este gemelo ({VERSION_CONTRATO})")
     lo = d.get("lote", {})
+    if lo.get("zona_demo") or str(lo.get("id", "")).upper().startswith("DEMO"):
+        validar_lote_demo(str(lo.get("id", "")))
     lote = Lote(str(lo.get("id", "lote")), lo.get("nombre", ""), float(lo.get("lat", 0.0)), float(lo.get("lon", 0.0)),
                 lo.get("unidad_id"), lo.get("finca_id"), lo.get("geometria_wkt"), lo.get("area_ha"),
                 lo.get("zona_demo"))
@@ -96,11 +114,13 @@ def leer_entrada(fuente: str | Path | dict, base: Path | None = None) -> Entrada
     e = d.get("escenario", {})
     esc = construir(clima, e.get("tipo", "historico"), int(e.get("anios", 3)), int(e.get("semilla", 0)),
                     e.get("n_miembros"), e.get("anio_inicio"), float(e.get("delta_precip_pct", 0.0)),
-                    float(e.get("delta_temp_c", 0.0)), e.get("max_miembros"))
+                    float(e.get("delta_temp_c", 0.0)), e.get("max_miembros"),
+                    str(_ruta(e["enso_archivo"], base)) if e.get("enso_archivo") else None)
     estrategias = [estrategia_desde_dict(x) for x in d.get("estrategias", [])]
     ids = [x.id for x in estrategias]
     if len(set(ids)) != len(ids):
         raise ValueError(f"ids de estrategia repetidos: {ids}")
     return Entrada(lote, lo.get("clima_tipo", "templado"), clima, _suelo(d["suelo"], base), esc, estrategias, sim,
                    dict(d.get("calibracion") or {}), d.get("costos"), d.get("optimizacion"),
-                   {"archivo": str(fuente) if not isinstance(fuente, dict) else None})
+                   {"archivo": str(fuente) if not isinstance(fuente, dict) else None,
+                    "enso_archivo": str(_ruta(e["enso_archivo"], base)) if e.get("enso_archivo") else None})

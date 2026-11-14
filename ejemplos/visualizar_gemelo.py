@@ -323,7 +323,7 @@ guardar(fig, "paso8_incertidumbre")
 titulo(9, "RESULTADO: indicadores por estrategia (p50 con rango p10-p90)")
 claves = ["produccion_relativa_anio", "rendimiento_relativo", "deficit_relativo", "riego_mm_anio",
           "lixiviacion_n_kg_ha_anio", "fijacion_n_kg_ha_anio", "cambio_carbono_t_ha_anio",
-          "exposicion_erosiva_mm_anio", "cobertura_media"]
+          "lluvia_intensa_sobre_suelo_desnudo_mm_anio", "cobertura_media"]
 print(f"  {'indicador':<30}" + "".join(f"{e['id']:>24}" for e in res))
 for k in claves:
     fila = [e["indicadores"][k] for e in res]
