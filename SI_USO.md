@@ -59,6 +59,7 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Antigravity (agente) | `requirements-gemelo.lock.txt` | Bloqueo reproducible con hashes SHA-256 generado con `uv pip compile` | 2026-11-14 |
 | Antigravity (agente) | `SI_USO.md` y `LICENCIAS_TERCEROS.md` | Inventario de uso de SI y auditoría de licencias y citas verificadas | 2026-11-14 |
 | Antigravity (agente) | `src/gemelo/suelo.py`, `src/gemelo/textos.py`, `src/gemelo/tarjetas.py`, `pruebas/gemelo/test_clima_suelo.py`, `src/gemelo/README.md` | Separación de pruebas de dominio y declaración bilingüe de limitación de SoilGrids en Andisoles (`D-029`, `D-030`) | 2026-11-14 |
+| Antigravity (agente) | `src/gemelo/suelo.py`, `pruebas/gemelo/test_entradas_datos.py` | Adaptación de `perfil_desde_parametros_datos` al esquema T-D5 anidado en `parametros` | 2026-11-14 |
 
 Notas de procedencia sin generación nueva por este equipo de Gemelo:
 - `src/gemelo/referencias/enso.yaml` y `src/gemelo/referencias/sucesion.yaml` son copias literales de `origin/datos`.

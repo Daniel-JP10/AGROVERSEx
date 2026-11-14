@@ -1,4 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Antigravity (agente), prueba de esquema T-D5 anidado en parametros_suelo.json
 """Entradas de Datos (forzantes diarios y parametros_suelo.json) y escenarios por fase ENSO (v1.1)."""
 import json
 import sqlite3
@@ -132,3 +133,48 @@ def test_serie_mensual_unidad_desconocida_es_error(tmp_path):
     _sqlite_serie(ruta, [("precip", 0, 1.0, "final", "in/hr", None)])
     with pytest.raises(ValueError, match="unidad de precipitación desconocida"):
         mensual_desde_sqlite(ruta, "U")
+
+
+def test_parametros_suelo_anidados_td5(forzantes, tmp_path):
+    from gemelo.suelo import perfil_desde_parametros_datos
+    datos_td5 = {
+        "lote_id": "DEMO-COL-01",
+        "fuente": "SoilGrids 2.0 (ISRIC), API REST rest.isric.org",
+        "naturaleza": "estimado",
+        "parametros": {
+            "arena": {"valor": 0.3921, "rango": [0.14, 0.6335], "unidad": "kg/kg", "etiqueta": "FUENTE",
+                      "profundidad_cm": [0, 100]},
+            "arcilla": {"valor": 0.28325, "rango": [0.03435, 0.6958], "unidad": "kg/kg", "etiqueta": "FUENTE",
+                        "profundidad_cm": [0, 100]},
+            "densidad_aparente": {"valor": 1.1815, "rango": [0.579, 1.6645], "unidad": "kg/dm3",
+                                  "etiqueta": "FUENTE", "profundidad_cm": [0, 100]},
+            "mo_pct": {"valor": 7.4793, "rango": [0.4836, 23.8181], "unidad": "%", "etiqueta": "INFERENCIA",
+                       "profundidad_cm": [0, 100], "metodo": "MO = COS/0,58"},
+            "cos_t_ha": {"valor": 186.999, "rango": [8.7185, 770.174], "unidad": "t C/ha", "etiqueta": "FUENTE",
+                         "profundidad_cm": [0, 30]},
+            "agua_disponible_mm_m": {"valor": 165.7, "rango": [0.0, 461.3], "unidad": "mm de agua por m de suelo",
+                                     "etiqueta": "INFERENCIA", "profundidad_cm": [0, 100]},
+        },
+    }
+    ruta = tmp_path / "parametros_suelo_td5.json"
+    ruta.write_text(json.dumps(datos_td5), encoding="utf-8")
+    perfil = perfil_desde_parametros_datos(ruta)
+    assert perfil.valor("arena") == pytest.approx(0.3921)
+    assert perfil["arena"].rango == pytest.approx((0.14, 0.6335))
+    assert perfil["arena"].distribucion == "triangular"
+    assert perfil["mo_pct"].etiqueta == "INFERENCIA"
+    assert perfil["mo_pct"].naturaleza == "estimado"
+    assert perfil.valor("densidad_aparente") == pytest.approx(1.1815)
+    assert not any("fuera de dominio" in a for a in perfil.avisos)
+    assert any("SoilGrids" in a and "Andisoles" in a for a in perfil.avisos)
+
+    d = dict(ESCENARIO, clima={"fuente": "forzantes_diarios", "archivo": str(forzantes), "lat": 0.842,
+                               "elevacion_m": 2934},
+             suelo={"fuente": "parametros_suelo_json", "archivo": str(ruta)}, costos=None)
+    doc = simular(d)
+    assert doc["metadatos"]["rotulo"]["parametros"]["fuentes"] == ["source.datos_forcings", "source.datos_soil"]
+
+    incompleto = tmp_path / "incompleto.json"
+    incompleto.write_text(json.dumps({"parametros": {"arena": {"valor": 0.3}}}), encoding="utf-8")
+    with pytest.raises(ValueError, match="faltan"):
+        perfil_desde_parametros_datos(incompleto)

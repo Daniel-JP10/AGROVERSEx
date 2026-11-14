@@ -1,5 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
-# asistido por SI: Antigravity (agente), limitación de SoilGrids en Andisoles y calibración (D-030)
+# asistido por SI: Antigravity (agente), limitación de SoilGrids en Andisoles (D-030) y lectura T-D5 de Datos
 """Caracterización del suelo: SoilGrids 2.0 -> textura, COS, N -> propiedades hidráulicas (Saxton y Rawls, 2006).
 
 Unidades: fracciones de arena y arcilla en kg/kg; MO en % en peso; contenidos de agua en m³/m³; Ksat en mm/h.
@@ -223,22 +223,52 @@ def perfil_manual(arena: float, arcilla: float, mo_pct: float, cos_t_ha: float, 
 
 
 def perfil_desde_parametros_datos(ruta: str | Path) -> PerfilSuelo:
-    """parametros_suelo.json de Datos (T-D5, contratos/forzantes_gemelo.md): arena y arcilla (kg/kg), mo_pct (%),
-    cos_t_ha (t C/ha, 0-30 cm), opcionales     cn_suelo y profundidad_m. Producto de mapas: naturaleza 'estimado'."""
+    """parametros_suelo.json de Datos (T-D5): acepta claves planas o anidadas en 'parametros' con valor/rango.
+
+    Requiere arena y arcilla (kg/kg), mo_pct (%) y cos_t_ha (t C/ha); opcionales densidad_aparente, cn_suelo
+    y profundidad_m. Productos de mapas: naturaleza 'estimado' por defecto.
+    """
     ruta = Path(ruta)
     d = json.loads(ruta.read_text(encoding="utf-8"))
-    faltan = [k for k in ("arena", "arcilla", "mo_pct", "cos_t_ha") if d.get(k) is None]
+    bruto = d.get("parametros") if isinstance(d.get("parametros"), dict) else d
+    nat_defecto = d.get("naturaleza", "estimado")
+
+    def _campo(nombre: str) -> tuple[float | None, dict]:
+        raw = bruto.get(nombre)
+        if raw is None and bruto is not d:
+            raw = d.get(nombre)
+        if isinstance(raw, dict):
+            return raw.get("valor"), raw
+        return raw, {}
+
+    faltan = [k for k in ("arena", "arcilla", "mo_pct", "cos_t_ha") if _campo(k)[0] is None]
     if faltan:
         raise ValueError(f"{ruta.name}: faltan {faltan}")
     ref = f"parámetros de suelo de Datos ({ruta.name}{'; ' + d['fuente'] if d.get('fuente') else ''})"
+    norm_u = {"kg/dm3": "kg/dm³"}
 
-    def est(n, v, u):
-        return Parametro(n, float(v), u, "FUENTE", referencia=ref, naturaleza="estimado")
-    ps = {"profundidad_perfil_m": est("profundidad_perfil_m", d.get("profundidad_m", 1.0), "m"),
-          "arena": est("arena", d["arena"], "kg/kg"), "arcilla": est("arcilla", d["arcilla"], "kg/kg"),
-          "mo_pct": est("mo_pct", d["mo_pct"], "%"), "cos_t_ha": est("cos_t_ha", d["cos_t_ha"], "t C/ha")}
-    if d.get("cn_suelo") is not None:
-        ps["cn_suelo"] = est("cn_suelo", d["cn_suelo"], "kg C/kg N")
+    def _param(nombre: str, unidad_defecto: str, valor_defecto: float | None = None) -> Parametro:
+        val, meta = _campo(nombre)
+        v = float(valor_defecto if val is None else val)
+        rango = tuple(meta["rango"]) if meta.get("rango") is not None else None
+        unidad = meta.get("unidad") or unidad_defecto
+        unidad = norm_u.get(unidad, unidad)
+        return Parametro(
+            nombre, v, unidad, meta.get("etiqueta", "FUENTE"), referencia=ref,
+            rango=rango, distribucion="triangular" if rango is not None else "uniforme",
+            contexto=meta.get("metodo", ""), naturaleza=meta.get("naturaleza", nat_defecto),
+        )
+
+    ps = {
+        "profundidad_perfil_m": _param("profundidad_m", "m", valor_defecto=1.0),
+        "arena": _param("arena", "kg/kg"),
+        "arcilla": _param("arcilla", "kg/kg"),
+        "mo_pct": _param("mo_pct", "%"),
+        "cos_t_ha": _param("cos_t_ha", "t C/ha"),
+    }
+    for opc, u in (("densidad_aparente", "kg/dm³"), ("cn_suelo", "kg C/kg N")):
+        if _campo(opc)[0] is not None:
+            ps[opc] = _param(opc, u)
     return completar_hidraulica(PerfilSuelo(ps, [], ref))
 
 
