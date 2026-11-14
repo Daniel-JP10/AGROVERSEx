@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { clienteDefecto } from '../datos/consultas'
 import type { Meta } from '../datos/tipos'
 import { Chip } from './Chip'
+import { t } from '../textos/i18n'
 
 // La tabla fuente guarda identificadores; aquí van el nombre legible y si el dato es real o imitado
 const NOMBRE: Record<string, string> = {
@@ -15,7 +16,7 @@ const REAL = /^(soilgrids|gmted|koppen)/
 export function Fuentes() {
   const [m, setM] = useState<Meta | null>(null)
   useEffect(() => { clienteDefecto.meta().then(setM).catch(() => {}) }, [])
-  if (!m) return <p role="status">Cargando…</p>
+  if (!m) return <p role="status">{t('comun.cargando')}</p>
   return (
     <div>
       {m.fuentes.map((f, i) => (
@@ -24,7 +25,7 @@ export function Fuentes() {
           <dl>{Object.entries(f).filter(([, v]) => v !== null).map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{String(v)}</dd></div>)}</dl>
         </details>
       ))}
-      <p className="etiqueta">Climatología base: WorldClim 2.1 (uso no comercial), 1970-2000. La serie 2000-2026 es simulada.</p>
+      <p className="etiqueta">{t('fuentes.climatologia')}</p>
       <p className="etiqueta">{m.rotulo_estatico}</p>
     </div>
   )

@@ -3,18 +3,19 @@ import { useEffect, useState } from 'react'
 import type { Map as MapaGL, MapMouseEvent } from 'maplibre-gl'
 import { areaKm2, distanciaKm } from './geodesia'
 import './herramientas.css'
+import { t } from '../textos/i18n'
 
 export type Modo = 'distancia' | 'area'
 
 // Resultado en texto: la cifra siempre lleva su método (línea recta o área esférica)
 export function resumen(modo: Modo, puntos: [number, number][]): string {
   if (modo === 'distancia') {
-    if (puntos.length < 2) return 'Añade al menos 2 puntos'
+    if (puntos.length < 2) return t('medir.min2')
     let total = 0
     for (let i = 1; i < puntos.length; i++) total += distanciaKm(puntos[i - 1], puntos[i])
     return `${total.toFixed(1)} km (línea recta, geodésica)`
   }
-  if (puntos.length < 3) return 'Añade al menos 3 puntos'
+  if (puntos.length < 3) return t('medir.min3')
   return `${areaKm2(puntos).toFixed(1)} km² (área esférica)`
 }
 
@@ -33,22 +34,22 @@ export function Medir({ mapa }: { mapa: MapaGL }) {
   const alCentro = () => { const c = mapa.getCenter(); setPuntos((p) => [...p, [c.lng, c.lat]]) }
 
   return (
-    <aside className="panel medir" aria-label="Medir">
-      <h2>Medir</h2>
-      <div role="group" aria-label="Tipo de medición" className="medir-modo">
-        <button type="button" aria-pressed={modo === 'distancia'} onClick={() => elegir('distancia')}>Distancia</button>
-        <button type="button" aria-pressed={modo === 'area'} onClick={() => elegir('area')}>Área</button>
+    <aside className="panel medir" aria-label={t('medir.titulo')}>
+      <h2>{t('medir.titulo')}</h2>
+      <div role="group" aria-label={t('medir.tipo')} className="medir-modo">
+        <button type="button" aria-pressed={modo === 'distancia'} onClick={() => elegir('distancia')}>{t('medir.distancia')}</button>
+        <button type="button" aria-pressed={modo === 'area'} onClick={() => elegir('area')}>{t('medir.area')}</button>
       </div>
-      <p className="etiqueta">Haz clic en el mapa para poner puntos, o usa el botón:</p>
+      <p className="etiqueta">{t('medir.ayuda')}</p>
       <div className="medir-acciones">
-        <button type="button" onClick={alCentro}>Añadir punto en el centro</button>
-        <button type="button" onClick={() => setPuntos((p) => p.slice(0, -1))} disabled={!puntos.length}>Deshacer último punto</button>
-        <button type="button" onClick={() => setPuntos([])}>Borrar</button>
+        <button type="button" onClick={alCentro}>{t('medir.anadir')}</button>
+        <button type="button" onClick={() => setPuntos((p) => p.slice(0, -1))} disabled={!puntos.length}>{t('medir.deshacer')}</button>
+        <button type="button" onClick={() => setPuntos([])}>{t('medir.borrar')}</button>
       </div>
       <p role="status" aria-live="polite" className="medir-resultado">
         {resumen(modo, puntos)} · {puntos.length} puntos
       </p>
-      <p className="etiqueta">Esfera de radio medio: error frente al elipsoide de hasta ~0,5 %. No es una medición oficial.</p>
+      <p className="etiqueta">{t('medir.aviso')}</p>
     </aside>
   )
 }

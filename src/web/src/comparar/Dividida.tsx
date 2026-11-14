@@ -8,12 +8,12 @@ import { crearRecoloreo } from '../globo/recoloreo'
 import { crearMotorCoropleta, SIN_DATO, type MotorCoropleta } from '../globo/coropleta'
 import { registrarPatron } from '../globo/patron'
 import { clienteDefecto } from '../datos/consultas'
-import { mmHoraAMmMes } from '../datos/desescalar'
 import type { Nivel } from '../datos/tipos'
 import { useEstado } from '../app/estado'
 import { etiquetaMes } from '../tiempo/valor'
 import { sincronizarCamaras } from './sincronia'
 import './comparar.css'
+import { t } from '../textos/i18n'
 
 // Segundo mapa solo mientras la herramienta está activa: se crea al montar y se destruye al salir.
 // Mismo tamaño que el principal y recortado a la mitad derecha, así la misma cámara alinea ambos.
@@ -47,7 +47,7 @@ export function Dividida({ mapa, mesB, setMesB }: { mapa: MapaGL; mesB: number; 
           motores[n] = mo
         }
         aplicar(++version)
-      } catch { useEstado.getState().setAviso('Sin base de datos: el segundo mapa no tiene valores') }
+      } catch { useEstado.getState().setAviso(t('comparar.sinBase')) }
     }
     pedir.current = cargar
     let quitar: () => void = () => undefined
@@ -63,12 +63,12 @@ export function Dividida({ mapa, mesB, setMesB }: { mapa: MapaGL; mesB: number; 
       <div className="divisor" aria-hidden="true" />
       <span className="lado lado-a">A · {etiquetaMes(mesA)}</span>
       <span className="lado lado-b">B · {etiquetaMes(mesB)}</span>
-      <div className="barra-dividida" role="group" aria-label="Pantalla dividida">
-        <span>A: {etiquetaMes(mesA)} (línea de tiempo)</span>
+      <div className="barra-dividida" role="group" aria-label={t('comparar.titulo')}>
+        <span>A: {etiquetaMes(mesA)} {t('comparar.lineaTiempo')}</span>
         <label>B: {etiquetaMes(mesB)}
-          <input type="range" min={0} max={322} value={mesB} aria-label="Mes del mapa B" aria-valuetext={etiquetaMes(mesB)} onChange={(e) => setMesB(Number(e.target.value))} />
+          <input type="range" min={0} max={322} value={mesB} aria-label={t('comparar.mesB')} aria-valuetext={etiquetaMes(mesB)} onChange={(e) => setMesB(Number(e.target.value))} />
         </label>
-        <span>Misma variable y escala; cámaras sincronizadas</span>
+        <span>{t('comparar.nota')}</span>
       </div>
     </>
   )

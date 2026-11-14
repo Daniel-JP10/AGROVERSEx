@@ -1,5 +1,6 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import type { Map as MapaGL } from 'maplibre-gl'
+import { t } from '../textos/i18n'
 
 // Cámaras gemelas: lo que mueve a uno lo copia el otro; el indicador evita el eco (jumpTo dispara 'move').
 export function sincronizarCamaras(a: MapaGL, b: MapaGL): () => void {
@@ -21,7 +22,7 @@ export function limitarEscenario(valor: number, p25: number, p75: number): Escen
   if (valor >= p25 && valor <= p75) return { valor, bloqueado: false }
   return {
     valor: Math.min(p75, Math.max(p25, valor)), bloqueado: true,
-    motivo: 'El escenario se limita al rango p25-p75 de esta unidad: fuera de él no hay respaldo en sus datos.',
+    motivo: t('escenario.limite'),
   }
 }
 

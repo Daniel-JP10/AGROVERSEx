@@ -1,3 +1,4 @@
+import { t } from '../textos/i18n'
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 // Geodesia de la herramienta Medir. Puntos en [lon, lat] (grados), como GeoJSON.
 // shortcut: esfera de radio medio (haversine y área esférica), error de hasta ~0,5 % frente al elipsoide; subir a Vincenty/WGS84 si la cifra va a una ficha oficial.
@@ -14,7 +15,7 @@ export function distanciaKm(a: [number, number], b: [number, number]): number {
 
 /** Área de un anillo sobre la esfera, en km² (fórmula de Chamberlain y Duquette). */
 export function areaKm2(anillo: [number, number][]): number {
-  if (anillo.length < 3) throw new Error('Un anillo necesita al menos 3 puntos')
+  if (anillo.length < 3) throw new Error(t('medir.anillo'))
   const n = anillo.length
   let suma = 0
   for (let i = 0; i < n; i++) {
