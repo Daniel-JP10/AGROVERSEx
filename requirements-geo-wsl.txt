@@ -3,4 +3,5 @@
 rasterio==1.4.4
 exactextract==0.3.0
 # Entorno solo WSL (rasterio y exactextract no cargan en Windows por Control de aplicaciones):
-
+#   wsl -d Ubuntu-24.04 -- bash -lc '~/.local/bin/uv venv ~/venvs/agroversex_geo --python 3.12'
+#   wsl -d Ubuntu-24.04 -- bash -lc '~/.local/bin/uv pip install --python ~/venvs/agroversex_geo/bin/python --require-hashes -r /mnt/c/NASA/AGROVERSEx/requirements-geo-wsl.lock.txt'
