@@ -6,8 +6,9 @@ Todo dataset, librería, herramienta o modelo que no es del equipo, con su licen
 
 | Producto | Versión | Licencia | Enlace a la licencia | Cómo se cita | Quién lo agregó | Fecha | Estado |
 |-|-|-|-|-|-|-|-|
-| geoBoundaries CGAZ (niveles 0 a 2) | PENDIENTE (T-D1) | CC BY 4.0 según D-002 | PENDIENTE | PENDIENTE | Daniel (orquestador de datos) | 2026-11-14 | PENDIENTE |
-| Natural Earth (base cartográfica) | PENDIENTE (T-D1) | Dominio público según D-002 | PENDIENTE | PENDIENTE | Daniel (orquestador de datos) | 2026-11-14 | PENDIENTE |
+| geoBoundaries CGAZ (niveles 0 a 2) | Archivos del commit 4004e96 (2024-04-20), línea 6.0.0 | CC BY 4.0 según geoboundaries.org y el LICENSE del repositorio; el archivo no trae licencia. Herencia de las licencias de origen (ODbL, CC BY-SA en parte de los países) sin resolver | https://github.com/wmgeolab/geoBoundaries/blob/main/LICENSE | Runfola et al. (2020), PLoS ONE 15(4): e0231866, https://doi.org/10.1371/journal.pone.0231866 | Claude Code (T-D1), por Daniel | 2026-11-14 | FUENTE; uso público condicionado a la decisión del director sobre la herencia |
+| Natural Earth 1:10m (land, ocean, lakes, coastline, admin_0_countries) | 5.1.1, 5.1.1, 5.0.0, 5.0.0-pre9, 5.1.1 (del `.VERSION.txt` de cada zip) | Dominio público | https://www.naturalearthdata.com/about/terms-of-use/ | "Made with Natural Earth. Free vector and raster map data @ naturalearthdata.com." (opcional) | Claude Code (T-D1), por Daniel | 2026-11-14 | FUENTE |
+| DIVIPOLA, códigos de municipios (DANE, datos.gov.co gdxc-w37w) | Corte 30 de diciembre de 2024 | CC BY-SA 4.0 según los metadatos de datos.gov.co; solo se usa para comparar, no se redistribuye | https://www.datos.gov.co/d/gdxc-w37w | DANE. DIVIPOLA - Códigos municipios, corte 30 de diciembre de 2024. datos.gov.co | Claude Code (T-D1), por Daniel | 2026-11-14 | FUENTE |
 | SoilGrids 2.0, ISRIC | PENDIENTE (T-D4) | CC BY 4.0 según código del prototipo | PENDIENTE | PENDIENTE | Daniel (orquestador de datos) | 2026-11-14 | PENDIENTE |
 | Productos NASA (IMERG, MERRA-2 o POWER, SMAP, MODIS o VIIRS, GRACE, SRTM o NASADEM, ECOSTRESS, HLS) | PENDIENTE (T-D3, T-D4, T-D5) | PENDIENTE | PENDIENTE | PENDIENTE | Daniel (orquestador de datos) | 2026-11-14 | PENDIENTE |
 

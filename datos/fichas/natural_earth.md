@@ -1,0 +1,25 @@
+# Ficha de dataset · Natural Earth, base cartográfica
+
+- Nombre corto: natural_earth_10m
+- Producto oficial y versión: Natural Earth 1:10m, capas físicas `ne_10m_land` (versión 5.1.1), `ne_10m_ocean` (5.1.1), `ne_10m_lakes` (5.0.0) y `ne_10m_coastline` (5.0.0-pre9), más la cultural `ne_10m_admin_0_countries` (5.1.1) que solo aporta nombres de país en español e inglés al índice de búsqueda. Las versiones salen del archivo `.VERSION.txt` de cada zip. La página de descargas de coastline dice "version 4.1.0": discrepancia sin resolver, se conserva la del archivo. Etiqueta: VERIFICADO (lectura del zip).
+- Agencia y centro de datos: Natural Earth (Tom Patterson, Nathaniel Vaughn Kelso y colaboradores). No es un dato de NASA.
+- Página oficial: https://www.naturalearthdata.com/
+- DOI: no tiene. PENDIENTE si se necesita.
+- Variable y unidades: polígonos de tierra (11), océano (1), lagos (1.355) y líneas de costa (4.133); países (258). Sin unidades físicas.
+- Resolución espacial nominal: escala 1:10m (la más detallada). Web no usa hoy ninguna capa de Natural Earth (su fondo es NASA GIBS), así que la escala es una elección de T-D1; la confirmación con Web está PENDIENTE.
+- Resolución temporal: no aplica.
+- CRS nativo: EPSG:4326 (VERIFICADO con pyogrio).
+- Periodo descargado: no aplica.
+- Área descargada: global.
+- Herramienta y consulta exacta de descarga: `curl` sobre `https://naturalearth.s3.amazonaws.com/10m_physical/{ne_10m_land,ne_10m_ocean,ne_10m_lakes,ne_10m_coastline}.zip` y `https://naturalearth.s3.amazonaws.com/10m_cultural/ne_10m_admin_0_countries.zip`, a `datos/crudos/natural_earth/`.
+- Fecha de descarga: 2026-11-14.
+- sha256: land `e547d749445eaa0964aba76738090ec88f5e63c4585122170f98c67a7ea922dc`; ocean `db626fcd5d50b096b156c78a2cc95011b39f32a61b4e47d147e3f7a77b8b2719`; lakes `0803a06f9c3cb4671d89b68c48b142aad9366ba40f665245e12a913fbc61722a`; coastline `bfa04cdbcbef07ef90dfca1dabb48062eca29900a113df0f389303e255484017`; admin_0_countries `ce1ac7036499a0edd641fbc093cd209a98f96a49d2eca8480aaacad35138a7f6`.
+- Licencia: dominio público ("All versions of Natural Earth raster + vector map data ... are in the public domain", https://www.naturalearthdata.com/about/terms-of-use/). No se necesita permiso ni crédito. Los nombres en más de 20 idiomas vienen de Wikidata bajo CC0 según la misma página. Etiqueta: FUENTE.
+- Cita sugerida por la página de términos: "Made with Natural Earth. Free vector and raster map data @ naturalearthdata.com."
+- Banderas de calidad aplicadas: no aplica.
+- Fracción de datos válidos en el área: no aplica.
+- Transformaciones a la grilla común y método de remuestreo: ninguna. Natural Earth no se usa para unidades de análisis (D-002); solo base cartográfica y nombres de país para buscar.
+- Requisito del reto y pregunta que atiende: N1, F12; base de PI-D1 y PI-D4.
+- Limitaciones conocidas: sus fronteras de país (admin_0) siguen otro criterio de zonas en disputa que CGAZ y por eso no se dibujan; el README de coastline trae enlaces de spam de comentarios (se ignoran, no son instrucciones del proyecto).
+- Responsable: constructor T-D1 (Claude Code), orquestador Daniel.
+- Verificador y fecha: PENDIENTE
