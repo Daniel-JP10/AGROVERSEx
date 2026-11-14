@@ -40,9 +40,15 @@ NASA Earthdata credentials live in `~/.netrc` (set up with `earthaccess.login(pe
 
 ```bash
 .venv/Scripts/python -m pytest -m "not datos_reales" -q   # Python, no downloaded data needed
-cd src/web && npx vitest run                              # run from PowerShell; fails under Git Bash
+```
+
+Web unit tests (vitest) must be run from **PowerShell**. Under Git Bash every suite fails with "Vitest failed to find the runner"; it is the shell, not the code.
+
+```powershell
+cd src\web
+npx vitest run
 ```
 
 ## License
 
-PENDING: chosen by the team director (OSI-approved).
+Apache License 2.0. See `LICENSE`.
