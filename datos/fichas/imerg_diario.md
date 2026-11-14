@@ -9,7 +9,7 @@
 - Resolución espacial nominal: 0,1 grados, una celda por lote (contexto del lote, no medición)
 - Resolución temporal: diaria, día UTC 00:00 a 23:59:59
 - CRS nativo: WGS 84 lat/lon
-- Periodo descargado: ver `contratos/forzantes_gemelo.md`
+- Periodo descargado: 2001-01-01 a 2024-12-31
 - Área descargada: celda de 0,1 grados que contiene el centro del lote
 - Herramienta y consulta exacta de descarga: OPeNDAP con sufijo `.ascii?precipitation[0:0][i:i][j:j],precipitation_cnt[0:0][i:i][j:j]` con sesión de earthaccess (netrc); `src/lotes_demo/imerg_diario.py`. i = piso((lon+180)/0,1), j = piso((lat+90)/0,1)
 - Fecha de descarga: 2026-11-14
@@ -17,6 +17,6 @@
 - Fracción de datos válidos en el área: se reporta en el contrato
 - Transformaciones a la grilla común y método de remuestreo: ninguna, celda nativa
 - Requisito del reto y pregunta que atiende: N2, N3; PI-D2, PI-D3
-- Limitaciones conocidas: una celda de 0,1 grados (aprox. 11 km) es contexto; el Final V07 diario termina en 2025-09 según D-010; los años previos a 2015 se descargan solo si alcanzó el tiempo
+- Limitaciones conocidas: una celda de 0,1 grados (aprox. 11 km) es contexto; el Final V07 diario termina en 2025-09 según D-010;
 - Responsable: constructor de datos (Claude Code), tarea T-D5 Parte B
 - Verificador y fecha: PENDIENTE

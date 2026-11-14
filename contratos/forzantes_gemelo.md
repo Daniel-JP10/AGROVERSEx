@@ -50,9 +50,9 @@ No rompe la v1: es un archivo aparte que el Gemelo puede ignorar. Se propone una
 - Producto: GPM IMERG Final Run diario V07 (GPM_3IMERGDF.07), celda de 0,1 grados que contiene el centro del lote. Ficha `datos/fichas/imerg_diario.md`.
 - Columnas: `FECHA_UTC` (día UTC), `YEAR`, `DOY`, `IMERG_PRECIP_MM_DIA` (mm/día), `IMERG_N_MUESTRAS` (conteo de muestras del producto). Vacío significa sin dato; nunca 0.
 - Zona horaria: UTC (3B-DAY es 00:00 a 23:59:59 UTC). POWER es LST, así que hay un desfase de varias horas (EE. UU. cerca de 6 h, Colombia 5 h): un día de lluvia puede caer en el día contiguo y baja la correlación diaria.
-- Periodo: 2015-01-01 a 2024-12-31 garantizado; el relleno de 2001-2014 está en curso al momento de este commit (PENDIENTE de cierre en el traspaso)
-- Huecos: sin días faltantes en 2015-2024 (VERIFICADO por conteo)
-- Contraste con POWER en el periodo común (INFERENCIA; sin pluviómetro propio no se sabe cuál acierta; ejecución en `datos/lotes/comparacion_power_imerg.json`): 2015-2024, lluvia anual media IMERG 878 mm contra POWER 770 mm en EE. UU. (correlación diaria 0,72, mensual 0,97) y IMERG 1525 mm contra POWER 1158 mm en Colombia (diaria 0,32, mensual 0,77); POWER queda 12 % y 24 % por debajo
+- Periodo: 2001-01-01 a 2024-12-31, 8766 días, igual que POWER
+- Huecos: ningún día faltante ni con conteo de muestras cero en las dos series (VERIFICADO por conteo)
+- Contraste con POWER en el periodo común (INFERENCIA; sin pluviómetro propio no se sabe cuál acierta; ejecución en `datos/lotes/comparacion_power_imerg.json`): 2001-2024, lluvia anual media IMERG 833 mm contra POWER 770 mm en EE. UU. (correlación diaria 0,67, mensual 0,96) y IMERG 1534 mm contra POWER 1084 mm en Colombia (diaria 0,28, mensual 0,66); POWER queda 8 % y 29 % por debajo. En Ipiales las dos fuentes difieren mucho: el Gemelo no debe tomar la lluvia de POWER como cierta allí
 
 ## Parámetros de suelo: `parametros_suelo.json`
 
