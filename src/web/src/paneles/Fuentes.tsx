@@ -7,11 +7,11 @@ import { t } from '../textos/i18n'
 
 // La tabla fuente guarda identificadores; aquí van el nombre legible y si el dato es real o imitado
 const NOMBRE: Record<string, string> = {
-  soilgrids2: 'SoilGrids 2.0', gmted2010: 'GMTED2010', koppen_beck2023: 'Köppen-Geiger (Beck et al. 2023)',
+  soilgrids2: 'SoilGrids 2.0', gmted2010: 'GMTED2010',
   'EV-AGU': 'Productos de agua que se imitan (SMAP, IMERG, GRACE, GLDAS)', 'EV-VEG': 'Productos de vegetación que se imitan (MODIS, HLS)',
   'EV-SUE': 'Referencias de suelo', demo: 'Simulación AGROVERSEx',
 }
-const REAL = /^(soilgrids|gmted|koppen)/
+const REAL = /^(soilgrids|gmted)/
 
 export function Fuentes() {
   const [m, setM] = useState<Meta | null>(null)

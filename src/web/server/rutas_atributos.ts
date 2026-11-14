@@ -18,8 +18,6 @@ export function atributos(db: DatabaseSync, q: URLSearchParams): Resp {
     o[r.variable_id] = r.media
     est.set(r.unidad_id, o)
   }
-  const kop = new Map((db.prepare(`SELECT c.unidad_id, c.clase FROM clase_fraccion c JOIN unidad u ON u.id = c.unidad_id
-      WHERE u.nivel = ? AND c.esquema = 'koppen' ORDER BY c.fraccion ASC`).all(nivel) as { unidad_id: string; clase: string }[]).map((r) => [r.unidad_id, r.clase]))
   const anu = new Map((db.prepare(`SELECT a.unidad_id, a.cobertura_igbp, a.clase_condicion FROM anual a JOIN unidad u ON u.id = a.unidad_id
       WHERE u.nivel = ? ORDER BY a.anio ASC`).all(nivel) as { unidad_id: string; cobertura_igbp: number | null; clase_condicion: string | null }[]).map((r) => [r.unidad_id, r]))
   const conEv = new Set((db.prepare('SELECT DISTINCT eu.unidad_id FROM evento_unidad eu JOIN unidad u ON u.id = eu.unidad_id WHERE u.nivel = ?').all(nivel) as { unidad_id: string }[]).map((r) => r.unidad_id))
@@ -27,7 +25,7 @@ export function atributos(db: DatabaseSync, q: URLSearchParams): Resp {
   const filas = (db.prepare('SELECT id, punto_lat FROM unidad WHERE nivel = ? ORDER BY id').all(nivel) as { id: string; punto_lat: number | null }[]).map((u) => {
     const e = est.get(u.id), a = anu.get(u.id)
     return { id: u.id, lat: n(u.punto_lat), elevMin: n(e?.elev_min), elevMax: n(e?.elev_max), ph: n(e?.phh2o_0_30),
-      koppen: kop.get(u.id), igbp: n(a?.cobertura_igbp), condicion: n(a?.clase_condicion), zona: zonas.get(u.id), eventos: conEv.has(u.id) }
+      igbp: n(a?.cobertura_igbp), condicion: n(a?.clase_condicion), zona: zonas.get(u.id), eventos: conEv.has(u.id) }
   })
   return { cuerpo: { nivel, zona_demo: zonas.size > 0, unidades: filas } }
 }

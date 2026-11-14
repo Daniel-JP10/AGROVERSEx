@@ -37,7 +37,7 @@ export function crearCliente(f: Fetcher = (u) => fetch(u)): Cliente {
     },
     async unidad(id) {
       const d = await json<DetalleUnidad>(`/api/unidad/${encodeURIComponent(id)}`)
-      return { ...d, koppen: d.clases.filter((c) => c.esquema === 'koppen').map((c) => c.clase) }
+      return d
     },
   }
 }

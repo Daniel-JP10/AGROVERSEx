@@ -4,7 +4,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, sep } from 'node:path'
 import { ATRIBUCION } from '../src/globo/config'
 
-const PROHIBIDO = /gadm|eox|cloudless|worldclim|gaez/i
+const PROHIBIDO = /gadm|eox|cloudless|worldclim|gaez|k[öo]ppen|köppen-geiger 2023/i  // Köppen: D-025
 const quitarComentarios = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`])\/\/.*$/gm, '$1')
 const archivos = (d: string): string[] => readdirSync(d).flatMap((n) => {
   const r = join(d, n)

@@ -68,7 +68,7 @@ describe('endpoints', () => {
     const u = JSON.parse(get('/api/unidad/AAA').cuerpo as string)
     expect(u.estatico[0]).toMatchObject({ variable_id: 'elev_media', media: 1234.5, q50: null, valido_min: -500, valido_max: 9000 })
     expect(u.estatico[0].rotulo).toBe('media del producto agregado, sin intervalo')
-    expect(u.clases[0].clase).toBe('Af')
+    expect(u.clases[0].clase).toBe('12')
     expect(JSON.parse(get('/api/unidad/AAA.1_1').cuerpo as string).padre.id).toBe('AAA')
   })
   it('meta trae variables con escala, rango y etiqueta', () => {

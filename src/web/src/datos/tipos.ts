@@ -33,6 +33,5 @@ export interface DetalleUnidad {
   padre: { id: string; nombre: string; nivel: number } | null
   estatico: Estatico[]
   clases: { esquema: string; clase: string; fraccion: number }[]
-  koppen?: string[] // clase_fraccion.clase es TEXT
   eventos: { id: string; tipo: string; inicio: string; fin: string; etiqueta: string; intensidad: number | null }[]
 }

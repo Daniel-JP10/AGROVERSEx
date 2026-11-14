@@ -11,7 +11,6 @@ import { t } from '../textos/i18n'
 
 const VARS = ['precip', 't2m', 'ndvi']
 // Clases 1 a 30 de Beck et al. 2023 (legend.txt)
-const KOPPEN = 'Af Am Aw BWh BWk BSh BSk Csa Csb Csc Cwa Cwb Cwc Cfa Cfb Cfc Dsa Dsb Dsc Dsd Dwa Dwb Dwc Dwd Dfa Dfb Dfc Dfd ET EF'.split(' ')
 const condicion = () => [t('resumen.degradada'), t('resumen.estable'), t('resumen.mejora')]
 const num = (x: number) => x.toLocaleString('es', { maximumFractionDigits: 2 })
 
@@ -45,8 +44,6 @@ export function Resumen({ id }: { id: string }) {
       })}
       <h3>{t('resumen.condicion')}</h3>
       <p>{clase === null ? t('resumen.lineaBase') : condicion()[clase]} <Chip e="SIMULADO" /></p>
-      <h3>{t('resumen.clima')}</h3>
-      <p>{d?.clases.length ? [...d.clases].sort((a, b) => b.fraccion - a.fraccion).slice(0, 3).map((c) => `${KOPPEN[Number(c.clase) - 1] ?? c.clase} ${(c.fraccion * 100).toFixed(0)} %`).join(' · ') : t('resumen.sinClase')} <Chip e="REAL·contexto" /></p>
       <h3>{t('resumen.eventos')}</h3>
       <ul>{d?.eventos.length ? d.eventos.map((e) => <li key={e.id}>{e.tipo} {e.inicio}–{e.fin} <Chip e={e.etiqueta} /></li>) : <li>{t('resumen.ninguno')}</li>}</ul>
     </div>
