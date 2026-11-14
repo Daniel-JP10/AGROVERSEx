@@ -4,7 +4,7 @@ import type { FilaIndice } from '../datos/busqueda'
 import { claveUnidad, cargarFilas, porClave } from '../datos/indice'
 import { useEstado } from '../app/estado'
 import { NOMBRE_NIVEL } from '../globo/config'
-import { useIdioma } from '../textos/i18n'
+import { useIdioma, t } from '../textos/i18n'
 
 export function Busqueda() {
   const [texto, setTexto] = useState('')
@@ -38,7 +38,7 @@ export function Busqueda() {
   return (
     <div className="busqueda">
       <input
-        type="search" placeholder={listo ? 'Buscar un lugar…' : 'Cargando índice…'} aria-label="Buscar"
+        type="search" placeholder={listo ? t('busqueda.placeholder') : t('busqueda.cargando')} aria-label={t('busqueda.etiqueta')}
         role="combobox" aria-expanded={abierto} aria-controls="res-busqueda" aria-autocomplete="list"
         aria-activedescendant={abierto ? `res-${activo}` : undefined} value={texto}
         onChange={(e) => { setTexto(e.target.value); setActivo(0) }}

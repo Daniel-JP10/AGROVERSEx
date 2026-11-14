@@ -1,6 +1,7 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import type { Map as MapaGL } from 'maplibre-gl'
 import { registrarPatron } from './patron'
+import { t } from '../textos/i18n'
 
 // Motor de datos de la coropleta. El pintado por rebanadas, la cola durante gestos y el límite
 // de niveles viven en recoloreo.ts (D-015, medido en la PoC); este motor solo calcula el estado
@@ -58,10 +59,10 @@ export function crearMotorCoropleta(map: Pick<MapaGL, 'hasImage' | 'addImage'>, 
 const f2 = (n: number) => n.toLocaleString('es', { maximumFractionDigits: 1 })
 // Nunca un número solo: valor + unidad + rango de la escala (el producto no trae p05-p95 por unidad en el binario)
 export function textoValor(e: EstadoUnidad | undefined, unidad: string, rango: [number, number]): string {
-  if (!e) return 'sin datos cargados'
-  if (e.hueco) return 'sin dato del producto'
-  const t = `${f2(e.valor)} ${unidad} (rango de la escala ${f2(rango[0])} a ${f2(rango[1])} ${unidad})`
-  return e.ok ? t : `${t} · fuera del filtro`
+  if (!e) return t('globo.sinCargados')
+  if (e.hueco) return t('globo.sinDatoProducto')
+  const txt = `${f2(e.valor)} ${unidad} (${t('globo.rangoEscala')} ${f2(rango[0])} ${t('series.a')} ${f2(rango[1])} ${unidad})`
+  return e.ok ? txt : `${txt} · ${t('globo.fueraFiltro')}`
 }
 
 export const opacidadValida = (n: number) => (Number.isFinite(n) ? Math.min(100, Math.max(0, Math.round(n))) : OPACIDAD_DEFECTO)

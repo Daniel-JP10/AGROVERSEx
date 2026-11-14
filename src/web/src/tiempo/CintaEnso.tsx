@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { N_MESES } from './valor'
 import { mesIdAEtiqueta, mesesConHueco, type Producto } from './huecos'
+import { t } from '../textos/i18n'
 
 export interface PuntoEnso { mes: number; roni: number }
 export interface Evento { mes: number; nombre: string }
@@ -35,7 +36,7 @@ export function CintaEnso({ producto, mes }: { producto: Producto; mes: number }
         {d?.eventos.map((e, i) => <line key={i} className="evento" x1={x(e.mes)} x2={x(e.mes)} y1={0} y2={H} vectorEffect="non-scaling-stroke"><title>{`${e.nombre} · ${mesIdAEtiqueta(e.mes)}`}</title></line>)}
         <line className="cursor" x1={x(mes)} x2={x(mes)} y1={0} y2={H} vectorEffect="non-scaling-stroke" />
       </svg>
-      <small>{d && !d.enso.length ? 'RONI: sin dato' : 'RONI (°C) real'} · eventos de la tabla evento (marcador en el año de inicio) · gris: sin dato de {producto.nombre}</small>
+      <small>{d && !d.enso.length ? t('enso.sinDato') : t('enso.real')} {t('enso.nota')} {producto.nombre}</small>
     </div>
   )
 }

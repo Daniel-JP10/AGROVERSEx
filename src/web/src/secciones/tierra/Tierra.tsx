@@ -13,8 +13,10 @@ import { Fps } from './Fps'
 import { Riel } from './Riel'
 import { Dividida } from '../../comparar/Dividida'
 import { Escenario } from '../../comparar/Escenario'
+import { useIdioma } from '../../textos/i18n'
 
 export function Tierra() {
+  useIdioma() // repinta el globo al cambiar de idioma
   // Herramienta activa del riel, en el almacén para que la interfaz pueda abrir el comparador
   const activa = useEstado((s) => s.herramienta)
   const setActiva = useEstado((s) => s.setHerramienta)

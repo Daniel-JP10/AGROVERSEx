@@ -1,5 +1,6 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import { fondoBase, fondoDetalle, ZOOM_DETALLE } from './fondos'
+import { t } from '../textos/i18n'
 // Configuración centralizada de capas del globo.
 // Teselas reales de GADM (adm0/adm1/adm2), generadas en la fase 1. Propiedades: id (texto),
 // nivel, iso3, padre_id, nombre. El nivel 9 (zonas en disputa) viene dentro de la capa adm0.
@@ -37,7 +38,7 @@ export const NIVELES: NivelConfig[] = [
 
 /** Zona en disputa: va dentro de adm0 con nivel = 9. */
 export const NIVEL_DISPUTA = 9
-export const AVISO_DISPUTA = 'Trama: zonas en disputa · límites ilustrativos'
+export const avisoDisputa = () => t('globo.disputa')
 
 export const INDICE_BUSQUEDA = '/teselas/indice_busqueda.json.gz'
 

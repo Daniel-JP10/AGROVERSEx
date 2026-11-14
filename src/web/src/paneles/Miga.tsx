@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useEstado } from '../app/estado'
 import { migaDe, type UnidadMiga } from '../datos/busqueda'
 import { claveUnidad, porClave } from '../datos/indice'
+import { t } from '../textos/i18n'
 
 // País › Departamento › Unidad, con padre_id e iso3 de /api/unidad/:id
 export function Miga() {
@@ -35,7 +36,7 @@ export function Miga() {
   }, [sel])
 
   return (
-    <nav className="miga" aria-label="Ubicación">
+    <nav className="miga" aria-label={t('miga.ubicacion')}>
       {pasos.map((p, i) => {
         const u = porClave.get(claveUnidad(p.nivel, p.id))
         return i === pasos.length - 1 || !u

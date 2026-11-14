@@ -14,6 +14,7 @@ type Pestana = (typeof BASE)[number] | 'Lotes' | 'Fuentes'
 import { Miga } from './Miga'
 import { useEstado } from '../app/estado'
 import { NOMBRE_NIVEL } from '../globo/config'
+import { t } from '../textos/i18n'
 
 export function PanelRegion() {
   const sel = useEstado((s) => s.seleccion)
@@ -39,8 +40,8 @@ export function PanelRegion() {
   if (!sel) return null
   const id = String(sel.id)
   return (
-    <aside className="panel" aria-label="Panel de región">
-      <button className="cerrar" aria-label="Cerrar panel" onClick={() => seleccionar(null)}>×</button>
+    <aside className="panel" aria-label={t('panel.titulo')}>
+      <button className="cerrar" aria-label={t('panel.cerrar')} onClick={() => seleccionar(null)}>×</button>
       <Miga />
       {aviso && <p role="status" className="etiqueta">{aviso}</p>}
       <h2>{sel.nombre}</h2>
@@ -57,7 +58,7 @@ export function PanelRegion() {
         {activa === 'Resumen' && <Resumen id={id} />}
         {activa === 'Series' && <Series id={id} />}
         {activa === 'Suelo' && <Suelo id={id} />}
-        {activa === 'Rotaciones' && (errRot ? <p role="alert">No se pudieron cargar las rotaciones</p> : rot ? <Rotaciones resp={rot} /> : <p role="status">Cargando…</p>)}
+        {activa === 'Rotaciones' && (errRot ? <p role="alert">{t('panel.errRotaciones')}</p> : rot ? <Rotaciones resp={rot} /> : <p role="status">{t('comun.cargando')}</p>)}
         {activa === 'Lotes' && <Lotes id={id} />}
         {activa === 'Fuentes' && <Fuentes />}
       </div>

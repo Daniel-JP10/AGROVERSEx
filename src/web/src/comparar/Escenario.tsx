@@ -3,11 +3,12 @@ import { useEffect, useState } from 'react'
 import { useEstado } from '../app/estado'
 import { pedirSerie, mmPorMes } from '../datos/series'
 import { limitarEscenario, percentil } from './sincronia'
+import { t } from '../textos/i18n'
 
 interface Rango { p25: number; p75: number; min: number; max: number }
 const VARS = [
-  { id: 'precip', nombre: 'Lluvia', unidad: 'mm/mes', conv: mmPorMes },
-  { id: 't2m', nombre: 'Temperatura', unidad: '°C', conv: (x: number, _mes: number) => x },
+  { id: 'precip', nombre: 'capa.precipCorta' as const, unidad: 'mm/mes', conv: mmPorMes },
+  { id: 't2m', nombre: 'capa.tempCorta' as const, unidad: '°C', conv: (x: number, _mes: number) => x },
 ]
 
 // p25 y p75 salen de la serie mensual de la unidad (INFERENCIA, 2000-2026). Sin base: el control se desactiva con aviso.
@@ -38,11 +39,11 @@ export function Escenario() {
   }, [sel])
 
   return (
-    <aside className="panel panel-herr" aria-label="Escenario">
-      <h2>Escenario</h2>
-      {!sel && <p role="status">Seleccione una unidad en el mapa: el escenario se limita a su p25-p75.</p>}
-      {sel && error && <p role="alert">Sin p25-p75 para esta unidad (base de datos no disponible): el control está desactivado.</p>}
-      {sel && !error && !rangos && <p role="status">Calculando p25-p75…</p>}
+    <aside className="panel panel-herr" aria-label={t('escenario.titulo')}>
+      <h2>{t('escenario.titulo')}</h2>
+      {!sel && <p role="status">{t('escenario.seleccione')}</p>}
+      {sel && error && <p role="alert">{t('escenario.sinBase')}</p>}
+      {sel && !error && !rangos && <p role="status">{t('escenario.calculando')}</p>}
       {sel && rangos && VARS.filter((v) => rangos[v.id]).map((v) => {
         const r = rangos[v.id], valor = vals[v.id] ?? r.p25
         // El deslizador se detiene en el borde y queda el motivo a la vista
@@ -50,15 +51,15 @@ export function Escenario() {
           if (e.bloqueado || !borde) setMotivos((m) => ({ ...m, [v.id]: e.motivo })) }
         return (
           <div key={v.id} className="esc-var">
-            <label htmlFor={`esc-${v.id}`}>{v.nombre}: {valor.toFixed(1)} {v.unidad}</label>
+            <label htmlFor={`esc-${v.id}`}>{t(v.nombre)}: {valor.toFixed(1)} {v.unidad}</label>
             <input id={`esc-${v.id}`} type="range" min={r.min} max={r.max} step="any" value={valor}
               aria-valuetext={`${valor.toFixed(1)} ${v.unidad}`} onChange={(ev) => mover(Number(ev.target.value))} />
-            <small>p25 {r.p25.toFixed(1)} · p75 {r.p75.toFixed(1)} {v.unidad} (INFERENCIA, serie mensual 2000-2026)</small>
+            <small>p25 {r.p25.toFixed(1)} · p75 {r.p75.toFixed(1)} {v.unidad} {t('escenario.inferencia')}</small>
             {motivos[v.id] && <p role="alert" className="esc-motivo" data-testid={`motivo-${v.id}`}>{motivos[v.id]}</p>}
           </div>
         )
       })}
-      <small>SIMULADO · DEMO. Solo modula el efecto de rotación publicado; no recalcula el clima ni escribe nada.</small>
+      <small>{t('escenario.aviso')}</small>
     </aside>
   )
 }

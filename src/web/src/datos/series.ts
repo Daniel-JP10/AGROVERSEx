@@ -1,5 +1,7 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import type { Fetcher } from './cliente'
+import { t } from '../textos/i18n'
+import type { ClaveTexto } from '../textos/es'
 import { paraMostrar, type Mes } from '../comun/unidades'
 
 export type Num = number | null
@@ -58,9 +60,9 @@ export function segmentar(s: Num[]): { desde: number; valores: number[] }[] {
   return out
 }
 
-export const NOMBRE_VAR: Record<string, string> = {
-  precip: 'Lluvia', t2m: 'Temperatura a 2 m', ndvi: 'NDVI', sm_sup: 'Humedad superficial', sm_raiz: 'Humedad en la raíz',
-  tws: 'Agua almacenada', rad_sw: 'Radiación solar', rh2m: 'Humedad relativa', et: 'Evapotranspiración', lst_dia: 'Temperatura de la superficie',
+const CLAVE_VAR: Record<string, ClaveTexto> = {
+  precip: 'capa.precipCorta', t2m: 'capa.t2m', ndvi: 'capa.ndvi', sm_sup: 'capa.sm_sup', sm_raiz: 'capa.sm_raiz',
+  tws: 'capa.twsCorta', rad_sw: 'capa.rad_sw', rh2m: 'capa.rh2m', et: 'capa.et', lst_dia: 'capa.lst_dia',
 }
-export const nombreVar = (v: string) => NOMBRE_VAR[v] ?? v
+export const nombreVar = (v: string) => (CLAVE_VAR[v] ? t(CLAVE_VAR[v]) : v)
 

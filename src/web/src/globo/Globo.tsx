@@ -5,11 +5,11 @@ import type { Map as MapaGL } from 'maplibre-gl'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import { Protocol } from 'pmtiles'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { NIVELES, construirEstilo, nivelParaZoom, capasInteractivas, OPACIDAD, opacidadRelleno, ATRIBUCION, AVISO_DISPUTA } from './config'
+import { NIVELES, construirEstilo, nivelParaZoom, capasInteractivas, OPACIDAD, opacidadRelleno, ATRIBUCION, avisoDisputa } from './config'
 import { crearRecoloreo } from './recoloreo'
 import { iniciarEstrellas } from './estrellas'
 import { iniciarHalo } from './atmosfera'
-import { AVISO_SIN_RED } from './fondos'
+import { avisoSinRed } from './fondos'
 import './globo.css'
 import { cargarIndice, claveUnidad, porClave, type Unidad } from '../datos/indice'
 import { useEstado } from '../app/estado'
@@ -20,6 +20,7 @@ import { clienteDefecto } from '../datos/consultas'
 import { capaPorId, valoresCapa } from '../datos/capas'
 import type { Nivel } from '../datos/tipos'
 import { Controles } from './Controles'
+import { t } from '../textos/i18n'
 
 // MapLibre 6 trae el worker como módulo aparte; Vite debe darle su URL
 maplibregl.setWorkerUrl(workerUrl)
@@ -83,7 +84,7 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
           motores[n] = mo
         }
         aplicarVersion(++version)
-      } catch { useEstado.getState().setAviso('Sin base de datos: la coropleta no tiene valores') }
+      } catch { useEstado.getState().setAviso(t('globo.sinBaseCoropleta')) }
     }
     m.on('style.load', () => { registrarPatron(m); if (!m.hasImage('trama')) m.addImage('trama', trama()) })
     const texto = (e: Parameters<typeof textoValor>[0]) => { const c = capaPorId(useEstado.getState().capa); return textoValor(e, c.unidad, c.rango) }
@@ -103,7 +104,7 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
     const pararHalo = iniciarHalo(halo.current!, m)
     // Si fallan las teselas del fondo de detalle, queda Blue Marble y se avisa
     // Teselas de límites o API caídas: aviso visible, los contornos siguen donde haya teselas
-    m.on('error', (e) => { const sid = (e as { sourceId?: string }).sourceId; if (sid && /^admd$/.test(sid)) useEstado.getState().setAviso('No se cargaron los límites (teselas): revise AGROVERSEX_DATOS') })
+    m.on('error', (e) => { const sid = (e as { sourceId?: string }).sourceId; if (sid && /^admd$/.test(sid)) useEstado.getState().setAviso(t('globo.sinLimites')) })
     m.on('error', (e) => { if ((e as { sourceId?: string }).sourceId === 'detalle') setSinRed(true) })
     let hover: { nivel: number; id: number | string } | null = null
     let sel: { nivel: number; id: number | string } | null = null
@@ -165,7 +166,7 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
           return void m.flyTo({ center: [d.punto_lon, d.punto_lat], zoom: ZOOM[u.nivel] ?? 4, duration: 1800, essential: true })
         m.fitBounds([[d.bbox_oeste, d.bbox_sur], [d.bbox_este, d.bbox_norte]], { padding: { top: 80, bottom: 120, left: 120, right: 380 }, duration: 1800, maxZoom: 9, essential: true })
       } catch {
-        useEstado.getState().setAviso('Sin base de datos: no se pudo centrar el mapa en la unidad')
+        useEstado.getState().setAviso(t('globo.sinBaseCentrar'))
       }
     }
     // Selección: resalta y vuela al bbox (vale igual para clic y búsqueda)
@@ -212,11 +213,11 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       <canvas ref={halo} className="halo" aria-hidden="true" />
       <div ref={contenedor} className="mapa" />
       {aviso && <div className="aviso-red" style={{ top: 40 }} role="alert">{aviso}</div>}
-      {sinRed && <div className="aviso-red" role="status">{AVISO_SIN_RED}</div>}
+      {sinRed && <div className="aviso-red" role="status">{avisoSinRed()}</div>}
       <div ref={centro} className="etiqueta-centro" style={{ display: 'none' }} role="status" aria-live="polite" />
       <Leyenda />
       <div ref={tip} className="tooltip" style={{ display: 'none' }} role="tooltip" />
-      <div className="aviso-disputa">{AVISO_DISPUTA}</div>
+      <div className="aviso-disputa">{avisoDisputa()}</div>
       {mapa && <Controles mapa={mapa} coords={coords} />}
     </div>
   )
