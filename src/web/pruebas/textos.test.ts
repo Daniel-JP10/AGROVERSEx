@@ -30,7 +30,7 @@ describe('textos', () => {
   it('avisos obligatorios y licencias NC', () => {
     expect(BANDA).toContain('SIMULADO · DEMO')
     expect(AVISO_N7).toContain('no reemplaza el criterio del agricultor ni del técnico')
-    for (const l of ['GADM', 'WorldClim', 'Köppen']) expect(LICENCIAS_NC.join(' ')).toContain(l)
+    for (const l of ['geoBoundaries', 'WorldClim', 'Köppen']) expect(LICENCIAS_NC.join(' ')).toContain(l)
     expect(LICENCIAS_NC.join(' ')).not.toContain('EOX')
   })
   it('ningún texto menciona Google Earth', () => {

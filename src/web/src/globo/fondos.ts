@@ -20,7 +20,7 @@ export const FONDOS: FondoConfig[] = [
     atribucion: 'Imágenes NASA GIBS', licencia: 'Dominio público (NASA)',
   },
   {
-    // VERIFICADO 2026-11-14: BlueMarble_ShadedRelief (relieve con color de tierra), sin Time, Level8, sin nubes; z9 da 400, nativo 8
+    // VERIFICADO 2026-11-14: BlueMarble_ShadedRelief (relieve con color de tierra), sin Time, Level8, con restos de nubes en los Andes (limitación aceptada); z9 da 400, nativo 8
     id: 'gibs-relieve', nombre: 'Blue Marble relieve sombreado (NASA GIBS)', maxzoom: 8, requiereToken: false,
     tiles: [`${GIBS}/BlueMarble_ShadedRelief/default/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg`],
     atribucion: "We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS).",

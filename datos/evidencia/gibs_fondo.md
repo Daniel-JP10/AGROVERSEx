@@ -24,3 +24,11 @@ Consultado 2026-11-14 ~15:16.
 - Sobrezoom: la fuente MapLibre declara maxzoom 8 (igual al nativo); el mapa sigue ampliando reutilizando teselas z8, sin pedir z9 o más.
 - MODIS Terra de un día (nativo 9, 2024-08-01) queda solo como opción (id gibs-modis-terra).
 - Limitación: sobre zoom 8 la imagen se ve pixelada (INFERENCIA por el nivel de la matriz).
+
+## Año del mosaico (FUENTE: catálogo oficial de GIBS)
+- https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/BlueMarble_ShadedRelief.json : "Blue Marble (August 2004, Shaded Relief)", subtítulo "MODIS / NASA Earth Observatory", "ongoing": false.
+- https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/BlueMarble_ShadedRelief_Bathymetry.json : "Blue Marble (August 2004, Shaded Relief and Bathymetry)".
+- https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/BlueMarble_NextGeneration.json : "Blue Marble (August 2004)".
+- Worldview (https://raw.githubusercontent.com/nasa-gibs/worldview/main/config/default/common/config/metadata/layers/modis/BlueMarble.md): "The MODIS Blue Marble, Next Generation is a static product created with data from 2004 from the MODIS instrument on board the Terra satellite. The image resolution is 500 m."
+- Los títulos dicen agosto de 2004 para las tres capas; el GetCapabilities no trae el año. Que ShadedRelief use el mismo compuesto de agosto es lo que dice el título; la descripción de resolución solo aparece para NextGeneration (PENDIENTE para las otras dos).
+- Los restos de nubes en los Andes se aceptan como limitación declarada (director). El texto visible está en la clave `fuentes.fondo` (es/en).

@@ -193,4 +193,5 @@ export const en: Record<ClaveTexto, string> = {
   'tiempo.sinDato': 'no data',
   'globo.rangoEscala': 'scale range',
   'globo.fueraFiltro': 'outside the filter',
+  'fuentes.fondo': 'The globe background is visual context, not analysis data: the data is painted on top. It is a NASA GIBS mosaic (Blue Marble, MODIS/Terra, August 2004) and keeps some cloud remnants in places such as the Andes.',
 }

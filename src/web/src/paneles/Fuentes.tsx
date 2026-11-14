@@ -25,6 +25,7 @@ export function Fuentes() {
           <dl>{Object.entries(f).filter(([, v]) => v !== null).map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{String(v)}</dd></div>)}</dl>
         </details>
       ))}
+      <p className="etiqueta">{t('fuentes.fondo')}</p>
       <p className="etiqueta">{t('fuentes.climatologia')}</p>
       <p className="etiqueta">{m.rotulo_estatico}</p>
     </div>

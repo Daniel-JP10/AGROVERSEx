@@ -191,5 +191,6 @@ export const es = {
   'tiempo.sinDato': 'sin dato',
   'globo.rangoEscala': 'rango de la escala',
   'globo.fueraFiltro': 'fuera del filtro',
+  'fuentes.fondo': 'El fondo del globo es contexto visual, no un dato del análisis: los datos se pintan encima. Son mosaicos de NASA GIBS (Blue Marble, MODIS/Terra, agosto de 2004) y conservan restos de nubes en zonas como los Andes.',
 } as const
 export type ClaveTexto = keyof typeof es
