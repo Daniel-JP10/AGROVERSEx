@@ -6,6 +6,14 @@ const CON_EJEMPLO = process.env.VITE_EJEMPLOS === '1'
 // Sin idioma guardado: es lo que ve quien entra por primera vez
 test.use({ storageState: { cookies: [], origins: [] } })
 
+test('arranca en inglés cuando nadie fijó el idioma (control de C3 y D-039.1)', async ({ page }) => {
+  await page.goto('/#/')
+  expect(await page.evaluate(() => localStorage.getItem('agroversex-idioma'))).toBeNull()
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+  await expect(page.getByRole('button', { name: 'Start the guided tour' })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Rotations' })).toBeVisible()
+})
+
 test('sin preferencia la experiencia sale en inglés y el selector pasa a español y vuelve', async ({ page }) => {
   await page.goto('/#/')
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
@@ -54,6 +62,7 @@ test.describe('con el ejemplo (VITE_EJEMPLOS=1)', () => {
     await suelo.fill('5')
     const despues = await titulos()
     expect([...despues].sort()).toEqual([...antes].sort())
+    await expect(page.getByTestId('incompleta').first()).toContainText('no data')
     await page.screenshot({ path: 'test-results/prioridades-en.png' })
   })
 })

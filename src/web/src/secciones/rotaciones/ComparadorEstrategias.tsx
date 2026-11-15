@@ -10,9 +10,9 @@ const BLOQUE: Record<SeccionTarjeta, [string, ClaveTexto]> = {
   por_que: ['porque', 'tarjeta.porque'], evidencia: ['evidencia', 'tarjeta.evidencia'], beneficios: ['beneficios', 'tarjeta.beneficios'], vacios: ['vacios', 'tarjeta.vacios'], riesgos: ['riesgos', 'tarjeta.riesgos'],
 }
 
-interface P { e: EstrategiaGemelo; base?: boolean; tarjeta?: TTarjeta; catalogo?: Catalogo }
+interface P { e: EstrategiaGemelo; base?: boolean; tarjeta?: TTarjeta; catalogo?: Catalogo; faltan?: string[] }
 
-function Tarjeta({ e, base, tarjeta, catalogo }: P) {
+function Tarjeta({ e, base, tarjeta, catalogo, faltan }: P) {
   const tr = (clave: string | undefined, plano: string) => (catalogo && clave ? traducir(catalogo, clave) : plano)
   return (
     <article className="estrategia" data-testid="estrategia">
@@ -20,6 +20,12 @@ function Tarjeta({ e, base, tarjeta, catalogo }: P) {
       <p className="insignia">{base ? <span data-testid="linea-base">{t('rotaciones.linea_base')}</span> : t('rotaciones.alternativa')}</p>
       <p><strong>{t('rotaciones.secuencia')}:</strong> {e.secuencia.replace(/\s*->\s*/g, ' → ')}</p>
       <p className="juicio" role="note">{t('aviso.juicio')}</p>
+      {faltan?.length ? (
+        <div className="incompleta" data-testid="incompleta" role="note">
+          <p>{t('prioridades.incompleta')}</p>
+          <ul>{faltan.map((o) => <li key={o} data-objetivo={o}>{t(`prioridades.obj.${o}` as ClaveTexto)}: <span className="sin-dato">{t('comun.sinDato')}</span></li>)}</ul>
+        </div>
+      ) : null}
       <table>
         <caption>{t('rotaciones.indicadores')}</caption>
         <tbody>
@@ -49,12 +55,12 @@ function Tarjeta({ e, base, tarjeta, catalogo }: P) {
 }
 
 // orden: ids de las estrategias según las prioridades; sin él, la línea base primero y luego el frente
-export function ComparadorEstrategias({ linea_base, frente, tarjetas, catalogo, orden }: { linea_base: EstrategiaGemelo; frente: EstrategiaGemelo[]; tarjetas?: Record<string, TTarjeta>; catalogo?: Catalogo; orden?: string[] }) {
+export function ComparadorEstrategias({ linea_base, frente, tarjetas, catalogo, orden, faltantes }: { linea_base: EstrategiaGemelo; frente: EstrategiaGemelo[]; tarjetas?: Record<string, TTarjeta>; catalogo?: Catalogo; orden?: string[]; faltantes?: Record<string, string[]> }) {
   const todas = [linea_base, ...frente]
   const lista = orden ? orden.map((id) => todas.find((e) => e.id === id)).filter((e): e is EstrategiaGemelo => !!e) : todas
   return (
     <section className="comparador-estrategias" aria-label={t('seccion.rotaciones')}>
-      {lista.map((e) => <Tarjeta key={e.id} e={e} base={e.id === linea_base.id} tarjeta={tarjetas?.[e.id]} catalogo={catalogo} />)}
+      {lista.map((e) => <Tarjeta key={e.id} e={e} base={e.id === linea_base.id} tarjeta={tarjetas?.[e.id]} catalogo={catalogo} faltan={faltantes?.[e.id]} />)}
     </section>
   )
 }

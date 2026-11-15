@@ -9,7 +9,7 @@ import { AlertaHelada } from './AlertaHelada'
 import { Compromisos } from './Compromisos'
 import { FrentePareto } from './FrentePareto'
 import { Deslizadores } from './Deslizadores'
-import { ordenDelDocumento, PESOS_IGUALES, type Pesos } from './ordenPrioridades'
+import { faltantesDelDocumento, ordenDelDocumento, PESOS_IGUALES, type Pesos } from './ordenPrioridades'
 import type { Fuente, SalidaOptimizacion } from './gemelo'
 import { useFuente } from './lector'
 import { traducir, type Catalogo } from './textosGemelo'
@@ -53,7 +53,7 @@ export function VistaRotaciones({ fuente }: { fuente: Fuente }) {
           <p className="rotulo" data-testid="rotulo"><strong data-texto-gemelo="">{rotulo(fuente)}</strong></p>
           <Avisos avisos={textos(fuente.doc, fuente.catalogo).avisos} />
           <Deslizadores pesos={pesos} alCambiar={(k, v) => setPesos((p) => ({ ...p, [k]: v }))} />
-          <ComparadorEstrategias linea_base={fuente.doc.linea_base} frente={fuente.doc.frente} tarjetas={fuente.doc.tarjetas} catalogo={fuente.catalogo} orden={ordenDelDocumento(fuente.doc, pesos)} />
+          <ComparadorEstrategias linea_base={fuente.doc.linea_base} frente={fuente.doc.frente} tarjetas={fuente.doc.tarjetas} catalogo={fuente.catalogo} orden={ordenDelDocumento(fuente.doc, pesos)} faltantes={faltantesDelDocumento(fuente.doc)} />
           <FrentePareto objetivos={textos(fuente.doc, fuente.catalogo).objetivos} linea_base={fuente.doc.linea_base} frente={fuente.doc.frente} />
           <Compromisos frente={fuente.doc.frente} compromisos={fuente.doc.compromisos} />
           <section className="alertas" aria-labelledby="h-alertas">

@@ -114,6 +114,14 @@ describe('tarjeta de cinco secciones y partes que esperan al gemelo', () => {
     expect(cuenta(s, /type="range"/g)).toBe(4)
     expect(cuenta(s, /class="pendiente"/g)).toBe(2)
   })
+  it('una estrategia sin algún objetivo de prioridad lo dice con «sin dato» y se marca incompleta, sin valor inventado', () => {
+    const s = conEjemplo()
+    const n = cuenta(s, /data-testid="estrategia"/g)
+    // el ejemplo v1.1 trae carbono y erosión, pero no riego, déficit, fertilizante ni riesgo de producción
+    expect(cuenta(s, /data-testid="incompleta"/g)).toBe(n)
+    expect(cuenta(s, new RegExp(`<li[^>]*data-objetivo="riego"[^>]*>[^<]*<span[^>]*>${t('comun.sinDato')}`, 'g'))).toBe(n)
+    expect(s).toContain(t('prioridades.incompleta'))
+  })
   it('aviso de apoyo y revisión local junto a cada estrategia', () => {
     const s = conEjemplo()
     expect(s).toContain(t('aviso.apoyo'))

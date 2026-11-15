@@ -28,9 +28,19 @@ const leer = (v: Valores, o: string): number | undefined => {
   return fin(x) ? x : undefined
 }
 
+/** Objetivos de prioridad que le faltan a cada estrategia incompleta; las completas no aparecen. Nunca se imputa un valor (D-039.4). */
+export function faltantes(est: { id: string; valores: Valores }[]): Record<string, string[]> {
+  const f: Record<string, string[]> = {}
+  for (const e of est) {
+    const falta = Object.keys(SENTIDO).filter((o) => leer(e.valores, o) === undefined)
+    if (falta.length) f[e.id] = falta
+  }
+  return f
+}
+
 /**
- * Puntajes S por estrategia: normaliza cada objetivo entre las estrategias del mismo documento, promedia por deslizador y pondera.
- * shortcut: un objetivo sin valor se omite para esa estrategia y un deslizador sin ningún valor sale de la suma; revisar si el gemelo fija otra regla.
+ * Puntajes S de las estrategias completas: normaliza cada objetivo entre las estrategias del mismo documento
+ * (solo con los valores que existen), promedia por deslizador y pondera. Las incompletas no tienen puntaje.
  */
 export function puntajes(est: { id: string; valores: Valores }[], pesos: Pesos): Record<string, number> {
   const rango: Record<string, [number, number]> = {}
@@ -43,26 +53,26 @@ export function puntajes(est: { id: string; valores: Valores }[], pesos: Pesos):
     return mx === mn ? 0.5 : SENTIDO[o] === 'max' ? (x - mn) / (mx - mn) : (mx - x) / (mx - mn)
   }
   const suma = DESLIZADORES.reduce((a, k) => a + pesos[k], 0)
-  return Object.fromEntries(est.map((e) => {
+  const falta = faltantes(est)
+  return Object.fromEntries(est.filter((e) => !falta[e.id]).map((e) => {
     if (suma <= 0) return [e.id, 0]
-    let num = 0
-    let den = 0
-    for (const k of DESLIZADORES) {
-      const ns = OBJETIVOS_DE[k].map((o) => { const x = leer(e.valores, o); return x === undefined ? undefined : norm(o, x) }).filter(fin)
-      if (!ns.length) continue
-      num += pesos[k] * (ns.reduce((a, b) => a + b, 0) / ns.length)
-      den += pesos[k]
-    }
-    return [e.id, den > 0 ? num / den : 0]
+    const num = DESLIZADORES.reduce((a, k) => a + pesos[k] * (OBJETIVOS_DE[k].reduce((b, o) => b + norm(o, leer(e.valores, o)!), 0) / OBJETIVOS_DE[k].length), 0)
+    return [e.id, num / suma]
   }))
 }
 
-/** Ids en orden de puntaje descendente; el empate conserva la posición original del documento. */
+/** Ids: primero las completas por puntaje descendente (empate: posición original); después las incompletas en su orden original. */
 export function ordenar(est: { id: string; valores: Valores }[], pesos: Pesos): string[] {
   const s = puntajes(est, pesos)
-  return est.map((e, i) => ({ id: e.id, i })).sort((a, b) => s[b.id] - s[a.id] || a.i - b.i).map((x) => x.id)
+  const con = est.map((e, i) => ({ id: e.id, i })).filter((x) => x.id in s).sort((a, b) => s[b.id] - s[a.id] || a.i - b.i)
+  return [...con.map((x) => x.id), ...est.filter((e) => !(e.id in s)).map((e) => e.id)]
 }
 
 /** Ids de la línea base y el frente de un documento, en el orden que piden las prioridades. */
+const deDocumento = (doc: { linea_base: EstrategiaGemelo; frente: EstrategiaGemelo[] }) => [doc.linea_base, ...doc.frente].map((e) => ({ id: e.id, valores: valoresDe(e) }))
+
+/** Estrategias incompletas de un documento con sus objetivos sin dato. */
+export const faltantesDelDocumento = (doc: { linea_base: EstrategiaGemelo; frente: EstrategiaGemelo[] }) => faltantes(deDocumento(doc))
+
 export const ordenDelDocumento = (doc: { linea_base: EstrategiaGemelo; frente: EstrategiaGemelo[] }, pesos: Pesos): string[] =>
-  ordenar([doc.linea_base, ...doc.frente].map((e) => ({ id: e.id, valores: valoresDe(e) })), pesos)
+  ordenar(deDocumento(doc), pesos)
