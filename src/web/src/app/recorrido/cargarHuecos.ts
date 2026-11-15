@@ -31,9 +31,12 @@ export async function cargarHuecos(idioma: Idioma, pedir: Pedir = (u) => fetch(u
   const intento = async (f: () => Promise<void>) => { try { await f() } catch { /* fuente ausente */ } }
   await Promise.all([
     intento(async () => {
-      const l = await json<{ lotes?: { lote_id: string; unidad_id: string }[] }>(pedir, 'datos/lotes_demo.json')
+      const l = await json<{ lotes?: { lote_id: string; unidad_id: string; nombre?: unknown }[] }>(pedir, 'datos/lotes_demo.json')
       const eeuu = l.lotes?.find((x) => x.lote_id === LOTE_EEUU)
       const col = l.lotes?.find((x) => x.lote_id === LOTE_COL)
+      const nom = (x: unknown) => (typeof x === 'string' && x ? x : undefined)
+      if (nom(eeuu?.nombre)) v.nombre_lote_eeuu = eeuu!.nombre as string
+      if (nom(col?.nombre)) v.nombre_lote_col = col!.nombre as string
       if (eeuu) { v.unidad_lote_eeuu = eeuu.unidad_id; v.lote_eeuu = eeuu.lote_id }
       if (col) { v.unidad_ipiales = col.unidad_id; v.lote_ipiales = col.lote_id }
     }),

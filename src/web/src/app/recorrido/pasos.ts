@@ -37,7 +37,7 @@ export const PASOS: readonly Paso[] = [
   {
     id: '3.1', ruta: 'tierra',
     acciones: [{ fn: 'irAUnidad', unidad: IPIALES }, { fn: 'abrirPestana', nombre: 'Rotaciones' }, { fn: 'activarComparador', activo: false }],
-    texto: 'recorrido.paso_3_1', datos: ['unidad_ipiales', 'hls_validos_ipiales', 'hls_ipiales_min', 'hls_ipiales_max', 'hls_validos_saunders'],
+    texto: 'recorrido.paso_3_1', datos: ['unidad_ipiales', 'hls_validos_ipiales', 'hls_ipiales_min', 'hls_ipiales_max', 'hls_validos_saunders', 'nombre_lote_col', 'nombre_lote_eeuu'],
   },
   { id: '3.2', ruta: 'rotaciones', params: { unidad: IPIALES, lote: { dato: 'lote_ipiales' } }, texto: 'recorrido.paso_3_2', datos: ['unidad_ipiales', 'lote_ipiales', 'n_alternativas'] },
   { id: '3.3', ruta: 'rotaciones', texto: 'recorrido.paso_3_3', datos: ['tarjeta'] },

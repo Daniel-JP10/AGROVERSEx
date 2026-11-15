@@ -238,7 +238,7 @@ export const en = {
   'recorrido.paso_2_2': 'Decades of NASA observations, month by month, from {mes_inicio} to {mes_fin}.',
   'recorrido.paso_2_3': 'Compare two moments side by side.',
   'recorrido.paso_2_4': '{fraccion_unidades_confianza_alta} of farming regions have high confidence. The rest say so.',
-  'recorrido.paso_3_1': 'In Ipiales only {hls_validos_ipiales} of the satellite views of the field are usable (months between {hls_ipiales_min} and {hls_ipiales_max}); in Saunders, {hls_validos_saunders}.',
+  'recorrido.paso_3_1': 'In {nombre_lote_col} only {hls_validos_ipiales} of the satellite views of the field are usable (months between {hls_ipiales_min} and {hls_ipiales_max}); in {nombre_lote_eeuu}, {hls_validos_saunders}.',
   'recorrido.paso_3_2': 'Your current rotation and {n_alternativas} alternatives, each with a range, not a promise.',
   'recorrido.paso_3_3': "Why it is suggested, the evidence, the benefits, what we don't know and what to check locally.",
   'recorrido.paso_3_4': "The farmer knows what the satellite can't: planting dates, soil texture.",

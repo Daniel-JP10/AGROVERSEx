@@ -6,7 +6,7 @@ import { es } from '../src/textos/es'
 import { PASOS } from '../src/app/recorrido/pasos'
 
 const ARCHIVOS: Record<string, unknown> = {
-  '/datos/lotes_demo.json': { lotes: [{ lote_id: 'DEMO-USA-01', unidad_id: 'USA-ADM2-X' }, { lote_id: 'DEMO-COL-01', unidad_id: 'COL-ADM2-Y' }] },
+  '/datos/lotes_demo.json': { lotes: [{ lote_id: 'DEMO-USA-01', unidad_id: 'USA-ADM2-X', nombre: 'Lote uno' }, { lote_id: 'DEMO-COL-01', unidad_id: 'COL-ADM2-Y', nombre: 'Lote dos' }] },
   '/datos/meta.json': { variables: { precip: { meses_disponibles: { desde: '2000-01', hasta: '2026-10' } } } },
   '/datos/lotes/hls_validez_DEMO-COL-01.json': { meses: { '2022-01': { media: 0.1 }, '2022-02': { media: 0 }, '2022-03': { media: 0.2 } } },
   '/datos/lotes/hls_validez_DEMO-USA-01.json': { meses: { '2022-01': { media: 0.6 }, '2022-02': { media: 0.4 } } },
@@ -32,6 +32,14 @@ describe('huecos del guion', () => {
     for (const id of ['2.2', '3.1', '3.2']) for (const n of PASOS.find((p) => p.id === id)!.datos) expect(v[n], `${id} ${n}`).toBeDefined()
     // Web no elige calibración: el paso del agricultor queda sin dato y nunca se pide un archivo de calibración
     for (const n of PASOS.find((p) => p.id === '3.5')!.datos) expect(v[n], n).toBeUndefined()
+  })
+  it('los nombres de los lotes salen de lotes_demo.json y no se escriben a mano', async () => {
+    const a = { ...ARCHIVOS, '/datos/lotes_demo.json': { lotes: [{ lote_id: 'DEMO-USA-01', unidad_id: 'U1', nombre: 'Lote prueba Alfa' }, { lote_id: 'DEMO-COL-01', unidad_id: 'U2', nombre: 'Lote prueba Beta' }] } }
+    const v = await cargarHuecos('en', pedirDe(a))
+    expect([v.nombre_lote_eeuu, v.nombre_lote_col]).toEqual(['Lote prueba Alfa', 'Lote prueba Beta'])
+    expect(PASOS.find((p) => p.id === '3.1')!.datos).toEqual(expect.arrayContaining(['nombre_lote_col', 'nombre_lote_eeuu']))
+    const sin = await cargarHuecos('en', pedirDe({ '/datos/lotes_demo.json': { lotes: [{ lote_id: 'DEMO-COL-01', unidad_id: 'U2', nombre: '' }] } }))
+    expect(sin.nombre_lote_col).toBeUndefined()
   })
   it('una fuente que falta solo deja vacíos sus huecos', async () => {
     const sinHls = { ...ARCHIVOS }

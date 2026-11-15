@@ -245,7 +245,7 @@ export const es: Partial<Record<ClaveTexto, string>> = {
   'recorrido.paso_2_2': 'Décadas de observaciones de NASA, mes a mes, de {mes_inicio} a {mes_fin}.',
   'recorrido.paso_2_3': 'Compara dos momentos lado a lado.',
   'recorrido.paso_2_4': '{fraccion_unidades_confianza_alta} de las regiones agrícolas tiene confianza alta. Las demás lo dicen.',
-  'recorrido.paso_3_1': 'En Ipiales solo sirve el {hls_validos_ipiales} de las vistas del satélite sobre el lote (meses entre {hls_ipiales_min} y {hls_ipiales_max}); en Saunders, el {hls_validos_saunders}.',
+  'recorrido.paso_3_1': 'En {nombre_lote_col} solo sirve el {hls_validos_ipiales} de las vistas del satélite sobre el lote (meses entre {hls_ipiales_min} y {hls_ipiales_max}); en {nombre_lote_eeuu}, el {hls_validos_saunders}.',
   'recorrido.paso_3_2': 'Tu rotación actual y {n_alternativas} alternativas, cada una con un rango y no una promesa.',
   'recorrido.paso_3_3': 'Por qué se sugiere, la evidencia, los beneficios, lo que no sabemos y lo que hay que revisar en el lugar.',
   'recorrido.paso_3_4': 'El agricultor sabe lo que el satélite no: fechas de siembra, textura del suelo.',
