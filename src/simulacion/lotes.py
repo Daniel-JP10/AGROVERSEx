@@ -24,7 +24,6 @@ ZONAS_YAML = Path(__file__).resolve().parent / "zonas_agroversex.yaml"
 # En un worktree los datos viven en el repositorio principal: se sube hasta el primer padre que los tiene
 _RAIZ_DATOS = next((q for q in Path(__file__).resolve().parents if (q / "datos/procesados").exists()), config.RAIZ)
 GPKG_UNIDADES = _RAIZ_DATOS / "datos/procesados/unidades.gpkg"
-GPKG_GADM = _RAIZ_DATOS / "datos/crudos/gadm_extraido/gadm_410-levels.gpkg"
 
 # Pico de NDVI por cultivo. Maíz y soya: FUENTE INV-VEG §8 (INICIAR §13.2). Resto: SUPUESTO, PENDIENTE de ficha
 PICO_NDVI = {"maiz": (0.78, 0.86), "soya": (0.87, 0.91)}
@@ -52,23 +51,17 @@ def cargar_zonas() -> dict:
 
 
 def geometrias_unidades(ids) -> dict:
-    """Geometría de cada unidad: unidades.gpkg con `where` por id; si falta o está bloqueado, el GPKG de GADM."""
+    """Geometría de cada unidad desde unidades.gpkg (CGAZ, D-002). Sin respaldo en GADM: si falta una unidad, error."""
     import pyogrio
     ids = sorted(set(ids))
     lista = ",".join(f"'{i}'" for i in ids)
-    try:
-        out = {}
-        for capa in ("adm0", "adm1", "adm2"):
-            df = pyogrio.read_dataframe(GPKG_UNIDADES, layer=capa, where=f"id IN ({lista})", columns=["id"])
-            out.update(dict(zip(df.id, df.geometry)))
-        if set(ids) <= set(out):
-            return out
-    except Exception:  # archivo ausente o en escritura por la reconstrucción de la fase 1
-        pass
     out = {}
-    for nivel, col in ((1, "GID_1"), (2, "GID_2")):
-        df = pyogrio.read_dataframe(GPKG_GADM, layer=f"ADM_{nivel}", where=f"{col} IN ({lista})", columns=[col])
-        out.update(dict(zip(df[col], df.geometry)))
+    for capa in ("adm0", "adm1", "adm2"):
+        df = pyogrio.read_dataframe(GPKG_UNIDADES, layer=capa, where=f"id IN ({lista})", columns=["id"])
+        out.update(dict(zip(df.id, df.geometry)))
+    faltan = set(ids) - set(out)
+    if faltan:
+        raise KeyError(f"unidades sin geometría en {GPKG_UNIDADES}: {sorted(faltan)[:5]}")
     return out
 
 
