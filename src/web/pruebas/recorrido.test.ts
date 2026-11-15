@@ -7,7 +7,6 @@ import { ejecutar } from '../src/app/recorrido/acciones'
 import { useRecorrido } from '../src/app/recorrido/estado'
 import { PanelRecorrido, Recorrido, TextoPaso } from '../src/app/recorrido/Recorrido'
 import { SECCIONES } from '../src/app/ruta'
-import { Portada } from '../src/secciones/portada/Portada'
 import { rellenar } from '../src/textos/huecos'
 import { en, type ClaveTexto } from '../src/textos/en'
 import { es } from '../src/textos/es'
@@ -168,17 +167,4 @@ describe('panel del recorrido', () => {
   })
 })
 
-describe('portada', () => {
-  it('muestra la idea en dos frases y el botón que arranca el recorrido, en los dos idiomas', () => {
-    enAmbosIdiomas(() => {
-      const html = renderToStaticMarkup(createElement(Portada))
-      expect(html).toContain(`${t('portada.idea_1').replace(/'/g, '&#x27;')}`)
-      expect(html).toContain(`${t('portada.idea_2').replace(/'/g, '&#x27;')}`)
-      expect(html).toMatch(new RegExp(`<button[^>]*>${t('portada.iniciar')}</button>`))
-      expect(html).not.toContain(t('aviso.sin_dato'))
-    })
-  })
-  it('las dos frases no llevan dígitos escritos a mano', () => {
-    for (const k of ['portada.idea_1', 'portada.idea_2'] as const) { expect(en[k]).not.toMatch(/\d/); expect(es[k]).not.toMatch(/\d/) }
-  })
-})
+// La portada de la fase 3 ya no arranca el recorrido: sus pruebas están en portada_entrada.test.ts
