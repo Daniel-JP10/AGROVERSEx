@@ -1,6 +1,10 @@
 // asistido por SI: Claude Code (Anthropic), e2e del universo: recorre las siete rutas y encuentra el globo en #/tierra
 import { resolve } from 'node:path'
 import { expect, test } from '@playwright/test'
+import { ES } from './idioma'
+
+// Estas pruebas leen textos en español: el idioma por defecto es el inglés (C3), así que se siembra el español
+test.use({ storageState: ES })
 
 // Capturas de T-W0 en el árbol principal del repositorio (sale del worktree)
 const CAPTURAS = resolve(process.cwd(), '../../../AGROVERSExz/repo/Docu/web/capturas/T-W0')
