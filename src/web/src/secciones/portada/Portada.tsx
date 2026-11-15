@@ -44,14 +44,15 @@ export interface Raiz { principal: P2[]; ramas: string[]; hojas: { x: number; y:
 export function construirRaiz(n: Nodo, i: number): Raiz {
   const r = azar(97 + i * 131)
   const ang = Math.atan2(n.y - CY, n.x - CX)
-  const S: P2 = [CX + Math.cos(ang) * 205, CY + Math.sin(ang) * 128]
+  const S: P2 = [CX + Math.cos(ang) * 222, CY + Math.sin(ang) * 138]
   const dist = Math.hypot(n.x - S[0], n.y - S[1])
   const E: P2 = [n.x - ((n.x - S[0]) / dist) * 62, n.y - ((n.y - S[1]) / dist) * 62]
   const v: P2 = [E[0] - S[0], E[1] - S[1]], perp: P2 = [-v[1] / dist, v[0] / dist]
   const w1 = (r() - 0.5) * 70, w2 = (r() - 0.5) * 70
   const principal: P2[] = [S, [S[0] + v[0] * 0.35 + perp[0] * w1, S[1] + v[1] * 0.35 + perp[1] * w1], [S[0] + v[0] * 0.7 - perp[0] * w2, S[1] + v[1] * 0.7 - perp[1] * w2], E]
   const ramas: string[] = [], hojas: Raiz['hojas'] = []
-  ;[0.22, 0.4, 0.58, 0.76].forEach((u, k) => {
+  // Las ramas nacen lejos del título para no taparlo
+  ;[0.36, 0.52, 0.68, 0.84].forEach((u, k) => {
     const o = bez(principal, u), tg = tangente(principal, u), lado = k % 2 ? 1 : -1
     const giro = lado * (0.55 + r() * 0.35), largo = 34 + r() * 30
     const dir: P2 = [tg[0] * Math.cos(giro) - tg[1] * Math.sin(giro), tg[0] * Math.sin(giro) + tg[1] * Math.cos(giro)]
@@ -120,8 +121,10 @@ function Raices({ reducido }: { reducido: boolean }) {
           ))}
           {/* Savia luminosa que viaja hacia el nodo; con movimiento reducido no se dibuja */}
           {!reducido && [0, 1].map((k) => (
-            <circle key={`s${k}`} className="savia" r="2.4">
+            <circle key={`s${k}`} className="savia" r="2.4" opacity="0">
               <animateMotion dur={`${3.2 + i * 0.25}s`} begin={`${1.6 + k * 1.7 + i * 0.3}s`} repeatCount="indefinite" path={trazo(r.principal)} />
+              {/* Invisible hasta que arranca y se apaga al llegar: nunca se ve quieta en el origen */}
+              <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur={`${3.2 + i * 0.25}s`} begin={`${1.6 + k * 1.7 + i * 0.3}s`} repeatCount="indefinite" />
             </circle>
           ))}
         </g>
