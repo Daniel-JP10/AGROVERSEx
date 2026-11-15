@@ -5,8 +5,8 @@ import { defineConfig, devices } from '@playwright/test'
 const reducido = process.env.MUNDO_REDUCIDO === '1'
 export default defineConfig({
   testDir: '.', testMatch: 'mundo_tierra.spec.ts', timeout: 150_000, workers: 1, reporter: 'list',
-  webServer: { command: 'node pruebas/build_servidor.mjs dist 5198', port: 5198, reuseExistingServer: true, cwd: '../..' },
-  use: { baseURL: 'http://localhost:5198', headless: true, viewport: { width: 1440, height: 900 }, ...(reducido ? { reducedMotion: 'reduce' as const } : {}) },
+  webServer: { command: 'node pruebas/build_servidor.mjs dist 5320', port: 5320, reuseExistingServer: false, cwd: '../..' },
+  use: { baseURL: 'http://localhost:5320', headless: true, viewport: { width: 1440, height: 900 }, ...(reducido ? { reducedMotion: 'reduce' as const } : {}) },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } },
     { name: 'firefox', use: { ...devices['Desktop Firefox'], viewport: { width: 1440, height: 900 } } },
