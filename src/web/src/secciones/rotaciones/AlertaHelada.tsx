@@ -1,5 +1,6 @@
 // asistido por SI: Claude Code (Anthropic), alerta de helada del gemelo v1.1 §9: avisos primero y estado por estrategia solo junto a ellos
-import { t } from '../../textos/i18n'
+import { idioma, t } from '../../textos/i18n'
+import { nombreEstrategia } from '../lote/datos'
 import type { ClaveTexto } from '../../textos/en'
 import type { EntradaTexto, EstrategiaGemelo } from './gemelo'
 import { traducir, type Catalogo } from './textosGemelo'
@@ -34,7 +35,7 @@ export function AlertaHelada({ alerta, estrategias, catalogo }: { alerta?: Alert
           if (!x?.estado || !x.clave) return null
           return (
             <div key={e.id} data-estado={x.estado}>
-              <dt>{e.nombre} <span className="insignia">{ESTADO[x.estado] ? t(ESTADO[x.estado]) : x.estado}</span></dt>
+              <dt>{idioma() === 'en' ? nombreEstrategia(e) : e.nombre} <span className="insignia">{ESTADO[x.estado] ? t(ESTADO[x.estado]) : x.estado}</span></dt>
               <dd data-texto-gemelo="">{traducir(catalogo, x.clave, x.parametros)}</dd>
             </div>
           )

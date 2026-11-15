@@ -28,6 +28,8 @@ const EXACTAS: Record<string, string> = {
   'Maíz-soya-avena': 'Maize-soybean-oat',
   'Maíz-soya-maíz con avena de cobertura': 'Maize-soybean-maize with an oat cover crop',
 }
+// Parámetros de cultivo del catálogo del gemelo (cultivo.<cultivo>.<parámetro>)
+const PARAMETROS: Record<string, string> = { n_biomasa: 'biomass N concentration', t_base: 'base temperature', t_max: 'maximum temperature', t_opt: 'optimum temperature', rue: 'radiation use efficiency', indice_cosecha: 'harvest index', indice_cosecha_n: 'N harvest index', ndfa: 'share of N fixed from the air (Ndfa)' }
 // Unidades de los paquetes que no pasan por el catálogo
 const UNIDADES: Record<string, string> = { 'índice': 'index', 'temporadas equivalentes/año': 'equivalent seasons/yr', 'kg N/ha/año': 'kg N/ha/yr', 't C/ha/año': 't C/ha/yr', 'mm/año': 'mm/yr', 'días/año': 'days/yr', 'fracción': 'fraction', adimensional: 'dimensionless' }
 
@@ -35,6 +37,8 @@ const UNIDADES: Record<string, string> = { 'índice': 'index', 'temporadas equiv
 export function aIngles(s: string): string {
   if (s in EXACTAS) return EXACTAS[s]
   if (s in UNIDADES) return UNIDADES[s]
+  const p = /^cultivo\.([a-z_]+)\.([a-z_]+)$/.exec(s)
+  if (p && p[1] in CULTIVOS && p[2] in PARAMETROS) return `${CULTIVOS[p[1]]} ${PARAMETROS[p[2]]}`
   let r = s.replace(/NASA POWER diario \((power_[\w-]+_diario\.csv)\); MERRA-2 y CERES, celda 0,5° x 0,625°/, 'NASA POWER daily ($1); MERRA-2 and CERES, 0.5° x 0.625° cell')
   // Listas de cultivos ("avena, frijol, papa") y secuencias ("papa semestre A año 1 -> ...", "maiz principal año 1 -> ...")
   if (/^[a-z_]+(, [a-z_]+)*$/.test(r) || / (semestre [AB]|principal|otono) año \d/.test(r)) {

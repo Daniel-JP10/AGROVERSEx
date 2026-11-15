@@ -20,7 +20,7 @@ describe('restos en español del gemelo en la interfaz inglesa', () => {
       for (const f of readdirSync(join(GEMELO, lote)).filter((n) => /^(optimizacion|simulacion)_.*\.json$/.test(n))) {
         const o = JSON.parse(readFileSync(join(GEMELO, lote, f), 'utf8'))
         for (const e of [...(o.frente ?? []), ...(o.estrategias ?? []), o.linea_base ?? {}]) { if (e.etiqueta) planos.add(e.etiqueta); if (e.nombre) planos.add(e.nombre) }
-        JSON.stringify(o, (k, v) => { if (k === 'parametros' && v && typeof v === 'object') for (const x of Object.values(v)) if (typeof x === 'string' && !x.startsWith('cultivo.')) planos.add(x); return v })
+        JSON.stringify(o, (k, v) => { if (k === 'parametros' && v && typeof v === 'object') for (const x of Object.values(v)) if (typeof x === 'string') planos.add(x); return v })
       }
     }
     expect(planos.size).toBeGreaterThan(5)
