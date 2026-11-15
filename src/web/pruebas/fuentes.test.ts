@@ -2,6 +2,7 @@
 import { readFileSync } from 'node:fs'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { sinRutaLocal } from '../src/secciones/fuentes/rutasLocales'
 import { describe, expect, it } from 'vitest'
 import { Creditos, DeclaracionSI, Fuentes, Glosario } from '../src/secciones/fuentes/Fuentes'
 import { leerTablas, resumenSI } from '../src/secciones/fuentes/tablas'
@@ -84,7 +85,8 @@ describe('créditos: solo las filas en uso de LICENCIAS_TERCEROS.md y de CITAS.m
   it('pinta exactamente las filas en uso, cada una por nombre', () => {
     const html = renderToStaticMarkup(createElement(Creditos))
     expect((html.match(/<tr data-fila/g) ?? []).length).toBe(filas.length)
-    for (const n of filas) expect(html, n).toContain(escapar(n))
+    // Una celda con ruta local se publica vacía (rutasLocales.ts); el resto de nombres aparece tal cual
+    for (const n of filas.filter(sinRutaLocal)) expect(html, n).toContain(escapar(n))
   })
 })
 
@@ -161,10 +163,15 @@ describe('el modo cambia el texto, nunca los datos', () => {
     expect(renderToStaticMarkup(createElement(Glosario, { modo: 'tecnico' }))).toContain(t('aviso.sin_dato'))
     expect(renderToStaticMarkup(createElement(Glosario, { modo: 'agricultor' }))).not.toContain(t('aviso.sin_dato'))
   })
-  it('la sección tiene su h1, el selector de modo con dos opciones y las tres partes', () => {
+  it('la sección tiene su h1 y las tres columnas: fuentes, glosario y créditos (el modo va en la cabecera)', () => {
     const html = renderToStaticMarkup(createElement(Fuentes))
     expect(html).toContain('<h1>Fuentes, glosario y créditos</h1>')
-    expect((html.match(/type="radio"/g) ?? []).length).toBe(2)
-    for (const marca of ['class="glosario"', 'id="creditos"', 'data-testid="declaracion-si"']) expect(html).toContain(marca)
+    expect((html.match(/<section class="tarjeta-hoja"/g) ?? []).length).toBe(3)
+    for (const marca of ['class="glosario"', 'id="creditos"', 'data-testid="declaracion-si"', 'data-credito=""']) expect(html).toContain(marca)
+  })
+  it('créditos: dirección visual de Jostin Colon Ramos y las referencias de diseño declaradas como IA fuera del producto', () => {
+    const html = renderToStaticMarkup(createElement(Fuentes))
+    expect(html).toContain('Dirección visual: Jostin Colon Ramos')
+    expect(html).toContain('Las imágenes de referencia de diseño se generaron con IA y no se usan en el producto')
   })
 })

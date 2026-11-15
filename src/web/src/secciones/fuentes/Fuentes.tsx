@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), sección Fuentes: glosario por modo, créditos generados y declaración de uso de SI
+// asistido por SI: Claude Code (Anthropic), sección Fuentes: glosario por modo, créditos generados y declaración de uso de SI; tres columnas de hoja y créditos de la fase 3
 import { Relleno } from '../../app/Relleno'
 import { TERMINOS } from '../../textos/glosario'
 import { dato, rellenar, type Resolver } from '../../textos/huecos'
@@ -80,25 +80,30 @@ export function DeclaracionSI() {
   )
 }
 
+// Tres columnas de tarjetas hoja: fuentes, glosario y créditos (plan v1 §b, v2 §6); el modo se elige en la cabecera
 export function Fuentes() {
   useIdioma()
-  const { modo, set } = useModo()
   return (
     <main className="seccion fuentes">
       <h1>{t('seccion.fuentes')}</h1>
-      <fieldset className="modo-lectura">
-        <legend>{t('ayuda.modo')}</legend>
-        {(['agricultor', 'tecnico'] as Modo[]).map((m) => (
-          <label key={m}><input type="radio" name="modo-fuentes" checked={modo === m} onChange={() => set(m)} /> {t(`modo.${m}`)}</label>
-        ))}
-        <p>{t('modo.nota')}</p>
-      </fieldset>
-      <h2>{t('ayuda.glosario')}</h2>
-      <Glosario />
-      <h2 id="creditos">{t('fuentes.creditos')}</h2>
-      <Creditos />
-      <h2>{t('fuentes.si_titulo')}</h2>
-      <DeclaracionSI />
+      <p>{t('fuentes.f.intro')}</p>
+      <div className="columnas-fuentes">
+        <section className="tarjeta-hoja" aria-labelledby="f-fuentes">
+          <h2 id="f-fuentes">{t('fuentes.f.fuentes')}</h2>
+          <Creditos />
+        </section>
+        <section className="tarjeta-hoja" aria-labelledby="f-glosario">
+          <h2 id="f-glosario">{t('fuentes.f.glosario')}</h2>
+          <Glosario />
+        </section>
+        <section className="tarjeta-hoja" aria-labelledby="creditos">
+          <h2 id="creditos">{t('fuentes.f.creditos')}</h2>
+          <p data-credito-visual="">{t('fuentes.f.direccion_visual')}</p>
+          <p data-referencias-ia="">{t('fuentes.f.referencias_ia')}</p>
+          <h3>{t('fuentes.si_titulo')}</h3>
+          <DeclaracionSI />
+        </section>
+      </div>
     </main>
   )
 }

@@ -1,20 +1,26 @@
-/* asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón */
-/* Paleta tierra y agua. Contraste de textos verificado por cálculo en pruebas/riel.test.ts (WCAG AA) */
+/* asistido por SI: Claude Code (Anthropic), escritura y revisión de código; tokens de hoja de la fase 3 */
+/* Paleta de hoja. Contraste de textos verificado por cálculo en pruebas/riel.test.ts (WCAG AA) */
 @font-face { font-family: "IBM Plex Sans"; font-weight: 400; font-style: normal; font-display: swap; src: url("/fuentes/ibm-plex-sans-latin-400-normal.woff2") format("woff2"); }
 @font-face { font-family: "IBM Plex Sans"; font-weight: 600; font-style: normal; font-display: swap; src: url("/fuentes/ibm-plex-sans-latin-600-normal.woff2") format("woff2"); }
 
 :root {
-  --fondo: #020305;
-  --panel-base: #11171b;
-  --panel: color-mix(in srgb, var(--panel-base) 86%, transparent);
-  --realce: #232d33;
-  --borde: #2d3a40;
-  --texto: #e9ede8;
-  --suave: #a4b1ab;
-  --acento: #ffb84d;
-  --agua: #5cc8cc;
-  --banda-fondo: #3a2a10;
-  --banda-texto: #ffc870;
+  /* Paleta de hoja (plan fase 3 v1 §e); se retira el café */
+  --fondo: #03100b;
+  --hoja: #0f2a1d;
+  --hoja-borde: #2f6b4a;
+  --tallo: #4caf6e;
+  --acento: #7be0a0;
+  --agua: #4fd1c5;
+  --texto: #e8f3ec;
+  --suave: #a7c4b3;
+  --brillo: rgba(91, 214, 140, 0.35);
+  /* Alias que usa el resto del código: apuntan a la paleta de hoja */
+  --panel-base: #0f2a1d;
+  --panel: color-mix(in srgb, var(--panel-base) 88%, transparent);
+  --realce: #183d2a;
+  --borde: #2f6b4a;
+  --banda-fondo: #0f2a1d;
+  --banda-texto: #7be0a0;
   --radio: 12px;
   --sombra: 0 4px 18px rgba(0, 0, 0, 0.45);
   font-family: "IBM Plex Sans", "Segoe UI", sans-serif;

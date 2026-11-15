@@ -58,10 +58,11 @@ describe('textos', () => {
     expect(detalle('agricultor', 'x', 'y')).toBe('x')
     expect(detalle('tecnico', 'x', 'y')).toBe('x y')
   })
-  it('cabecera: ayuda e idioma son botones con nombre y banda visibles', () => {
+  it('cabecera: ayuda e idioma son botones con nombre y la marca sin SIMULADO ni DEMO', () => {
     const h = renderToStaticMarkup(createElement(Cabecera))
     expect(h).not.toContain('SIMULADO')
-    expect(h).toContain(BANDA)
+    expect(h).not.toContain('DEMO')
+    expect(h).toContain('>AGROVERSEx<')
     expect(h).toMatch(/<button[^>]*aria-label="Help[^"]*"/)
     expect(h).toMatch(/<button[^>]*aria-label="Language[^"]*"/)
   })

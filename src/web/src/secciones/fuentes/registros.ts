@@ -1,5 +1,6 @@
 // asistido por SI: Claude Code (Anthropic), filtro de los registros que publica Fuentes: solo filas "en uso", sin prosa
 // Lo usan tablas.ts en el navegador y registrosPlugin.ts al compilar, para que lo excluido no llegue al JS publicado
+import { sinRutaLocal } from './rutasLocales'
 
 const celdas = (linea: string) => linea.replace(/^\||\|\s*$/g, '').split('|').map((c) => c.trim())
 const separador = (linea: string) => /^\|[-| :]+\|$/.test(linea)
@@ -14,7 +15,9 @@ export function soloEnUso(md: string): string {
     if (!linea.startsWith('|')) { enTabla = false; continue }
     if (separador(linea)) { out.push(linea); continue }
     if (!enTabla) { enTabla = true; estado = celdas(linea).indexOf('Estado'); out.push(linea); continue }
-    if (estado >= 0 && /^en uso\b/i.test(celdas(linea)[estado] ?? '')) out.push(linea)
+    const c = celdas(linea)
+    // Una celda con ruta local (C:/..., /tmp/...) se publica vacía: la ruta no debe llegar al JS (desfase D1)
+    if (estado >= 0 && /^en uso\b/i.test(c[estado] ?? '')) out.push(`| ${c.map((x) => (sinRutaLocal(x) ? x : '')).join(' | ')} |`)
   }
   return out.join('\n')
 }

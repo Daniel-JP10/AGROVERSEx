@@ -2,14 +2,14 @@
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
-import { SECCIONES, aHash, leerRuta } from '../src/app/ruta'
+import { SECCIONES, aHash, esRedireccion, leerRuta } from '../src/app/ruta'
 import { Navegacion } from '../src/app/Navegacion'
 import { enEspanol } from './idioma_es'
 enEspanol()
 
 describe('rutas por hash', () => {
-  it('las siete rutas del contrato §3 se leen y se escriben', () => {
-    const esperado = ['', 'tierra', 'gemelo', 'rotaciones', 'ciencia', 'datos', 'fuentes']
+  it('las siete rutas (fase 3, con #/lote) se leen y se escriben', () => {
+    const esperado = ['', 'tierra', 'lote', 'rotaciones', 'ciencia', 'datos', 'fuentes']
     expect([...SECCIONES].map((s) => aHash({ seccion: s, params: {} }))).toEqual(esperado.map((e) => `#/${e}`))
     SECCIONES.forEach((s, i) => expect(leerRuta(`#/${esperado[i]}`).seccion).toBe(s))
   })
@@ -21,8 +21,16 @@ describe('rutas por hash', () => {
       seccion: 'tierra', params: { unidad: 'COL-ADM1-x', variable: 'sm', mes: '2024-03' },
     })
     expect(leerRuta('#/rotaciones?unidad=USA-ADM2-1&lote=DEMO-USA-01&mes=2024-03').params).toEqual({ unidad: 'USA-ADM2-1', lote: 'DEMO-USA-01' })
-    expect(leerRuta('#/gemelo?lote=DEMO-COL-02').params).toEqual({ lote: 'DEMO-COL-02' })
+    expect(leerRuta('#/lote?lote=DEMO-COL-02').params).toEqual({ lote: 'DEMO-COL-02' })
     expect(leerRuta('#/ciencia?lote=x').params).toEqual({})
+  })
+  it('#/gemelo redirige a #/lote con su lote; las demás rutas no se reescriben', () => {
+    expect(leerRuta('#/gemelo?lote=DEMO-COL-02')).toEqual({ seccion: 'lote', params: { lote: 'DEMO-COL-02' } })
+    expect(leerRuta('#/gemelo/')).toEqual({ seccion: 'lote', params: {} })
+    expect(aHash(leerRuta('#/gemelo?lote=DEMO-USA-01'))).toBe('#/lote?lote=DEMO-USA-01')
+    for (const h of ['#/gemelo', '#/gemelo/', '#/gemelo?lote=x']) expect(esRedireccion(h), h).toBe(true)
+    for (const h of ['#/lote', '#/gemelos', '#/tierra', '#/']) expect(esRedireccion(h), h).toBe(false)
+    expect(leerRuta('#/gemelos').seccion).toBe('portada')
   })
   it('escribir y leer devuelve la misma ruta, con valores codificados', () => {
     const r = { seccion: 'rotaciones' as const, params: { unidad: 'COL-ADM1-a b&c', lote: 'DEMO-COL-01' } }
@@ -32,10 +40,11 @@ describe('rutas por hash', () => {
 })
 
 describe('navegación', () => {
-  it('enlaza las siete secciones y marca solo la actual con aria-current', () => {
-    for (const s of SECCIONES) {
+  it('enlaza las seis secciones (sin el gemelo aparte) y marca solo la actual con aria-current', () => {
+    for (const s of SECCIONES.filter((x) => x !== 'portada')) {
       const html = renderToStaticMarkup(createElement(Navegacion, { actual: s }))
-      expect((html.match(/<a /g) ?? []).length).toBe(7)
+      expect((html.match(/<a /g) ?? []).length).toBe(6)
+      expect(html).not.toContain('#/gemelo')
       expect((html.match(/aria-current="page"/g) ?? []).length).toBe(1)
       expect(html).toMatch(new RegExp(`href="${aHash({ seccion: s, params: {} })}"[^>]*aria-current="page"`))
     }
