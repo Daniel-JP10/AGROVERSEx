@@ -442,8 +442,6 @@ export const es: Partial<Record<ClaveTexto, string>> = {
   'filtros.reg.safrinha': 'Doble cultivo, safrinha',
   'filtros.reg.safrinha.ev': 'prensa',
   'filtros.reg.kharif_rabi': 'Temporadas kharif y rabi',
-  'filtros.reg.lluvia_unica': 'Temporada de lluvias única',
-  'filtros.reg.lluvia_unica.ev': 'Climatología IMERG simulada',
   'filtros.reg.nematodo_papa': 'Nematodo de la papa',
   'filtros.reg.nematodo_papa.resumen': 'resumen',
   'filtros.reg.nematodo_papa.discusion': 'discusión',

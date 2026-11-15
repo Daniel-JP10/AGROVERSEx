@@ -7,6 +7,8 @@ export const PROHIBIDOS: [string, RegExp][] = [
   ['WorldClim', /WorldClim/i],
   ['GAEZ', /\bGAEZ\b/i],
   ['Köppen-Geiger 2023', /K(?:ö|o|oe)ppen[-\s]?Geiger\D{0,40}2023/i],
+  // C-2: evidencia de un filtro que citaba la climatología simulada del prototipo
+  ['climatología IMERG simulada', /Simulated IMERG climatology|Climatolog(?:í|i)a IMERG simulada/i],
 ]
 
 // Devuelve los nombres prohibidos que aparecen; deshace los escapes \uXXXX que puede dejar el empaquetador

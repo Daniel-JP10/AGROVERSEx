@@ -435,8 +435,6 @@ export const en = {
   'filtros.reg.safrinha': 'Double cropping, safrinha',
   'filtros.reg.safrinha.ev': 'press',
   'filtros.reg.kharif_rabi': 'Kharif and rabi seasons',
-  'filtros.reg.lluvia_unica': 'Single rainy season',
-  'filtros.reg.lluvia_unica.ev': 'Simulated IMERG climatology',
   'filtros.reg.nematodo_papa': 'Potato nematode',
   'filtros.reg.nematodo_papa.resumen': 'in the summary',
   'filtros.reg.nematodo_papa.discusion': 'in the discussion',

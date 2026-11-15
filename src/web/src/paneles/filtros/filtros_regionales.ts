@@ -27,7 +27,6 @@ const REGLAS: [{ id: string; evidencia: () => string }, (u: AtributosUnidad) => 
     (u) => u.pendiente !== undefined && u.pendiente > PENDIENTE_MIN && u.cultivo === true],
   [{ id: 'safrinha', evidencia: () => `Embrapa ${t('filtros.reg.y')} ${t('filtros.reg.safrinha.ev')} [INV-ROT §6]` }, (u) => z(u, 'cerrado')],
   [{ id: 'kharif_rabi', evidencia: () => '[INV-ROT §6]' }, (u) => z(u, 'indogang', 'indo_gang')],
-  [{ id: 'lluvia_unica', evidencia: () => t('filtros.reg.lluvia_unica.ev') }, (u) => u.unimodal === true && z(u, 'sahel', 'sabana')],
   [{ id: 'nematodo_papa', evidencia: () => `Globodera pallida, 57 % ${t('filtros.reg.nematodo_papa.resumen')} ${t('filtros.reg.y')} 60 % ${t('filtros.reg.nematodo_papa.discusion')} [INV-ROT §5.2]` }, (u) => z(u, 'andina_colombia')],
   [{ id: 'siembra_enso', evidencia: () => 'MacCarthy 2017' }, (u) => z(u, 'norte_ghana', 'ghana')],
   [{ id: 'fechas_reguladas', evidencia: () => `${t('filtros.reg.fechas_reguladas.ev')} [INV-ROT §6]; ${t('filtros.reg.fechas_reguladas.pdf')}` }, (u) => z(u, 'meta', 'llanos')],

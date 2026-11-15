@@ -26,6 +26,8 @@ describe('textos prohibidos', () => {
     expect(prohibidosEn('Köppen-Geiger (Beck et al. 2023)')).toEqual(['Köppen-Geiger 2023'])
     expect(prohibidosEn('"K\\u00f6ppen-Geiger 2023"')).toEqual(['Köppen-Geiger 2023'])
     expect(prohibidosEn('"K\\xf6ppen-Geiger 2023"')).toEqual(['Köppen-Geiger 2023'])
+    expect(prohibidosEn('Simulated IMERG climatology')).toEqual(['climatología IMERG simulada'])
+    expect(prohibidosEn('"Climatolog\u00eda IMERG simulada"')).toEqual(['climatología IMERG simulada'])
     expect(prohibidosEn('boxes, geoBoundaries CGAZ, NASA GIBS')).toEqual([])
   })
   it('ningún texto visible de Web los contiene: textos, glosario y avisos', () => {
