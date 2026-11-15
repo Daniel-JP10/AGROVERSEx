@@ -1,5 +1,5 @@
-// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
-import { cargarMatriz, nivelDeUnidad, type ProductoMes } from './estatico'
+// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón; serie por país del mundo (S1w)
+import { cargarMatriz, iso3DeUnidad, nivelDeUnidad, type ProductoMes } from './estatico'
 import { N_MESES } from '../tiempo/valor'
 import { t } from '../textos/i18n'
 import type { ClaveTexto } from '../textos/es'
@@ -20,7 +20,7 @@ export async function pedirSerie(id: string, vars: string[], desde = 0, hasta = 
   const meses = Array.from({ length: hasta - desde + 1 }, (_, i) => desde + i)
   const series: Record<string, SerieVar> = {}
   for (const v of vars) {
-    const m = await cargarMatriz(v, nivelDeUnidad(id))
+    const m = await cargarMatriz(v, nivelDeUnidad(id), iso3DeUnidad(id))
     const r = m.ids.indexOf(id)
     if (r < 0) throw new Error(`sin dato real para ${id}`)
     const cut = (a: Num[][]) => meses.map((k) => a[r][k] ?? null)
