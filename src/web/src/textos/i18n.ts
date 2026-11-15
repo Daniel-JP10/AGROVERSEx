@@ -6,16 +6,16 @@ import { es, type ClaveTexto } from './es'
 export type Idioma = 'es' | 'en'
 const LLAVE = 'agroversex-idioma'
 
-// localStorage puede fallar (modo privado, bloqueo)
+// Inglés por defecto (C3, decisión del director); el español es el selector. localStorage puede fallar (modo privado, bloqueo)
 const leer = (): Idioma => {
-  try { return localStorage.getItem(LLAVE) === 'en' ? 'en' : 'es' } catch { return 'es' }
+  try { return localStorage.getItem(LLAVE) === 'es' ? 'es' : 'en' } catch { return 'en' }
 }
 const useIdiomaStore = create<{ idioma: Idioma }>(() => ({ idioma: leer() }))
 
 export const useIdioma = () => useIdiomaStore((s) => s.idioma)
 export const idioma = () => useIdiomaStore.getState().idioma
 export function alternar() {
-  const nuevo: Idioma = idioma() === 'es' ? 'en' : 'es'
+  const nuevo: Idioma = idioma() === 'en' ? 'es' : 'en'
   useIdiomaStore.setState({ idioma: nuevo })
   try { localStorage.setItem(LLAVE, nuevo) } catch { /* sin persistencia */ }
 }

@@ -9,6 +9,8 @@ import { TERMINOS } from '../src/textos/glosario'
 import { en, type ClaveTexto } from '../src/textos/en'
 import { es } from '../src/textos/es'
 import { alternar, idioma, t } from '../src/textos/i18n'
+import { enEspanol } from './idioma_es'
+enEspanol()
 
 const leer = (nombre: string) => readFileSync(new URL(`../../../${nombre}`, import.meta.url), 'utf8')
 const escapar = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;')

@@ -11,6 +11,8 @@ import { Compromisos } from '../src/secciones/rotaciones/Compromisos'
 import { FrentePareto } from '../src/secciones/rotaciones/FrentePareto'
 import { VistaRotaciones } from '../src/secciones/rotaciones/Rotaciones'
 import { t } from '../src/textos/i18n'
+import { enEspanol } from './idioma_es'
+enEspanol()
 
 const doc = ejemplo as unknown as SalidaOptimizacion
 const vista = (fuente: Parameters<typeof VistaRotaciones>[0]['fuente']) => renderToStaticMarkup(h(VistaRotaciones, { fuente }))
