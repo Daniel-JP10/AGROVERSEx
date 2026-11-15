@@ -48,11 +48,13 @@ function Tarjeta({ e, base, tarjeta, catalogo }: P) {
   )
 }
 
-export function ComparadorEstrategias({ linea_base, frente, tarjetas, catalogo }: { linea_base: EstrategiaGemelo; frente: EstrategiaGemelo[]; tarjetas?: Record<string, TTarjeta>; catalogo?: Catalogo }) {
+// orden: ids de las estrategias según las prioridades; sin él, la línea base primero y luego el frente
+export function ComparadorEstrategias({ linea_base, frente, tarjetas, catalogo, orden }: { linea_base: EstrategiaGemelo; frente: EstrategiaGemelo[]; tarjetas?: Record<string, TTarjeta>; catalogo?: Catalogo; orden?: string[] }) {
+  const todas = [linea_base, ...frente]
+  const lista = orden ? orden.map((id) => todas.find((e) => e.id === id)).filter((e): e is EstrategiaGemelo => !!e) : todas
   return (
     <section className="comparador-estrategias" aria-label={t('seccion.rotaciones')}>
-      <Tarjeta e={linea_base} base tarjeta={tarjetas?.[linea_base.id]} catalogo={catalogo} />
-      {frente.map((e) => <Tarjeta key={e.id} e={e} tarjeta={tarjetas?.[e.id]} catalogo={catalogo} />)}
+      {lista.map((e) => <Tarjeta key={e.id} e={e} base={e.id === linea_base.id} tarjeta={tarjetas?.[e.id]} catalogo={catalogo} />)}
     </section>
   )
 }

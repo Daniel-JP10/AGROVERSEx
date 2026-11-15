@@ -26,6 +26,8 @@ export interface EstrategiaGemelo {
   trayectoria_mensual?: Trayectoria
   // Solo en optimización: valor de cada objetivo en unidades naturales (sin banda)
   objetivos?: Record<string, number | null>
+  // Paquete del gemelo v1.2 §4: valor natural de todos los objetivos, con exposicion_erosiva (y el alias obsoleto)
+  metricas?: Record<string, number | null>
   frente_a_linea_base?: FrenteALineaBase
 }
 

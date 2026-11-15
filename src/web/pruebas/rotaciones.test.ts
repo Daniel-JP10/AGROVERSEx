@@ -107,10 +107,12 @@ describe('tarjeta de cinco secciones y partes que esperan al gemelo', () => {
     for (const b of ['porque', 'evidencia', 'beneficios', 'vacios', 'riesgos']) expect(cuenta(s, new RegExp(`data-bloque="${b}"`, 'g'))).toBe(n)
     expect(cuenta(s, new RegExp(t('rotaciones.pendiente_gemelo'), 'g'))).toBeGreaterThanOrEqual(5 * n)
   })
-  it('prioridades, escenarios, alertas y calibración aparecen con su título y como pendientes', () => {
+  it('prioridades (con sus cuatro deslizadores), escenarios, alertas y calibración aparecen con su título', () => {
     const s = conEjemplo()
     for (const k of ['rotaciones.prioridades', 'rotaciones.escenarios', 'rotaciones.alertas', 'rotaciones.calibracion'] as const) expect(s).toContain(t(k))
-    expect(s).not.toContain('type="range"')
+    // decisión e: las prioridades ya no esperan al gemelo; los escenarios y la calibración siguen pendientes
+    expect(cuenta(s, /type="range"/g)).toBe(4)
+    expect(cuenta(s, /class="pendiente"/g)).toBe(2)
   })
   it('aviso de apoyo y revisión local junto a cada estrategia', () => {
     const s = conEjemplo()

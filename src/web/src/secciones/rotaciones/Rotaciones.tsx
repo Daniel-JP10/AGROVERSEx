@@ -1,4 +1,5 @@
 // asistido por SI: Claude Code (Anthropic), sección Rotaciones: lote por la ruta y salida del gemelo v1.1 con sus textos por clave
+import { useState } from 'react'
 import { irA, useRuta } from '../../app/ruta'
 import { idioma, t } from '../../textos/i18n'
 import type { ClaveTexto } from '../../textos/en'
@@ -7,13 +8,15 @@ import { ComparadorEstrategias } from './ComparadorEstrategias'
 import { AlertaHelada } from './AlertaHelada'
 import { Compromisos } from './Compromisos'
 import { FrentePareto } from './FrentePareto'
+import { Deslizadores } from './Deslizadores'
+import { ordenDelDocumento, PESOS_IGUALES, type Pesos } from './ordenPrioridades'
 import type { Fuente, SalidaOptimizacion } from './gemelo'
 import { useFuente } from './lector'
 import { traducir, type Catalogo } from './textosGemelo'
 import './rotaciones.css'
 
 // Partes aún sin conectar: solo título y estado, ningún cálculo propio en Web
-const PENDIENTES: ClaveTexto[] = ['rotaciones.prioridades', 'rotaciones.escenarios', 'rotaciones.calibracion']
+const PENDIENTES: ClaveTexto[] = ['rotaciones.escenarios', 'rotaciones.calibracion']
 
 // Con catálogo, los textos salen de sus claves v1.1; sin él, de los textos en español de la v1
 function textos(doc: SalidaOptimizacion, cat?: Catalogo) {
@@ -30,6 +33,7 @@ function rotulo(f: Extract<Fuente, { estado: 'listo' }>): string {
 }
 
 export function VistaRotaciones({ fuente }: { fuente: Fuente }) {
+  const [pesos, setPesos] = useState<Pesos>(PESOS_IGUALES)
   return (
     <main className="seccion rotaciones">
       <h1>{t('seccion.rotaciones')}</h1>
@@ -48,7 +52,8 @@ export function VistaRotaciones({ fuente }: { fuente: Fuente }) {
           {/* El rótulo lo decide el origen de los datos, no metadatos.naturaleza (en el gemelo siempre vale simulado) */}
           <p className="rotulo" data-testid="rotulo"><strong data-texto-gemelo="">{rotulo(fuente)}</strong></p>
           <Avisos avisos={textos(fuente.doc, fuente.catalogo).avisos} />
-          <ComparadorEstrategias linea_base={fuente.doc.linea_base} frente={fuente.doc.frente} tarjetas={fuente.doc.tarjetas} catalogo={fuente.catalogo} />
+          <Deslizadores pesos={pesos} alCambiar={(k, v) => setPesos((p) => ({ ...p, [k]: v }))} />
+          <ComparadorEstrategias linea_base={fuente.doc.linea_base} frente={fuente.doc.frente} tarjetas={fuente.doc.tarjetas} catalogo={fuente.catalogo} orden={ordenDelDocumento(fuente.doc, pesos)} />
           <FrentePareto objetivos={textos(fuente.doc, fuente.catalogo).objetivos} linea_base={fuente.doc.linea_base} frente={fuente.doc.frente} />
           <Compromisos frente={fuente.doc.frente} compromisos={fuente.doc.compromisos} />
           <section className="alertas" aria-labelledby="h-alertas">
