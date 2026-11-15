@@ -54,7 +54,7 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/simulacion/geo/indice_busqueda.py` | Índice de búsqueda sobre unidades CGAZ y nombres de Natural Earth (T-D1) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/normalizar.py` | Pipeline geoespacial del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/teselas.py` | Teselas y simplificación sobre unidad_id de CGAZ, reducción < 100 MB y es_disputa (T-D1, D-016, D-017) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/simulacion/geo/unidades.py` | Migración de límites GADM a CGAZ: lectura, ids, jerarquía, áreas, GPKG y es_disputa en GeoJSON (T-D1, D-017) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/unidades.py` | Migración de límites a CGAZ (D-002): lectura, ids, jerarquía, áreas, GPKG y es_disputa en GeoJSON (T-D1, D-017) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/zonal.py` | Pipeline geoespacial del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/incertidumbre.py` | Generador y utilidades del prototipo; lo simulado se migra a datos reales | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/lotes.py` | Generador y utilidades del prototipo; lo simulado se migra a datos reales | 2026-11-14 |
@@ -244,7 +244,7 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `datos/extraer_pares_variable_unidad.py` | Extrae los pares (variable, unidad) de serie_mensual para la prueba de paraMostrar | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/paneles_unidad.test.ts` | Prueba de que los paneles muestran error ante una unidad sin conversión | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/zona_disputa.test.ts` y cambios de disputa en `globo/`, `datos/`, `paneles/` | Zonas en disputa con es_disputa = 1 en las tres capas y clave de texto en vez de país (decisión 3) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/web/src/globo/fondos.ts`, `src/web/pruebas/fondos.test.ts`, `src/web/pruebas/e2e/captura.mjs` | Cambio del fondo EOX a NASA GIBS y pruebas de atribución | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/globo/fondos.ts`, `src/web/pruebas/fondos.test.ts`, `src/web/pruebas/e2e/captura.mjs` | Fondo del globo con NASA GIBS (D-020) y pruebas de atribución | 2026-11-14 |
 | Claude Code (Anthropic) | `src/mapa_estatico/__init__.py`, `src/mapa_estatico/construir.py`, `pruebas/mapa/test_construir.py` | Conversión de series mensuales a matrices estáticas comprimidas, copia de lotes_demo.json y manifiesto con sha256 (T-D9, D-027) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/comun/rutas.ts`, `src/web/src/datos/estatico.ts`, `src/web/pruebas/estatico.test.ts` | Lectura de archivos estáticos reales en el globo y paneles sin servidor, y pruebas con datos reales de Colombia (T-D9) | 2026-11-14 |
 | Claude Code (Anthropic) | `contratos/web_datos.md` | Contrato v0 de archivos estáticos para el Mapa y Web con tamaños y sumas SHA-256 (T-D9, T-D7 Parte C) | 2026-11-14 |
