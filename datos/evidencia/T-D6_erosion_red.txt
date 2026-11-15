@@ -1,0 +1,17 @@
+Comando:
+$env:PYTHONPATH="C:\NASA\wt\t-d5-lotes\src"; C:\NASA\AGROVERSEx\.venv\Scripts\pytest.exe "C:\NASA\wt\t-d5-lotes\pruebas\lotes\test_erosion.py" -q
+
+Salida RED (antes de implementar src/lotes_demo/erosion.py):
+=================================== ERRORS ====================================
+_______________ ERROR collecting pruebas/lotes/test_erosion.py ________________
+ImportError while importing test module 'C:\NASA\wt\t-d5-lotes\pruebas\lotes\test_erosion.py'.
+Traceback:
+C:\Users\usuario\AppData\Local\Programs\Python\Python312\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+..\wt\t-d5-lotes\pruebas\lotes\test_erosion.py:6: in <module>
+    from lotes_demo import exposicion_erosiva
+E   ImportError: cannot import name 'exposicion_erosiva' from 'lotes_demo' (C:\NASA\wt\t-d5-lotes\src\lotes_demo\__init__.py)
+=========================== short test summary info ===========================
+ERROR ..\wt\t-d5-lotes\pruebas\lotes\test_erosion.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 1.80s

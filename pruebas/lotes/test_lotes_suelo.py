@@ -1,4 +1,4 @@
-# asistido por SI: Claude Code, pruebas de parametros_suelo.json (T-D5 Parte B)
+# asistido por SI: Claude Code y Antigravity, pruebas de parametros_suelo.json con claves en raíz para el Gemelo (T-D5 Parte B / D-027)
 import json
 from pathlib import Path
 
@@ -11,7 +11,7 @@ RAIZ = Path("C:/NASA/AGROVERSEx/datos/procesados/lotes")
 
 def _capa(vals):
     # vals: lista de (tope, fondo, valor)
-    return {"depths": [{"range": {"top_depth": t, "bottom_depth": b}, "values": {"mean": v}} for t, b, v in vals]}
+    return {"depths": [{"range": {"top_depth": t, "bottom_depth": b}, "values": {"mean": v, "Q0.05": v * 0.5, "Q0.95": v * 1.5}} for t, b, v in vals]}
 
 
 def test_media_ponderada_por_espesor():
@@ -31,7 +31,12 @@ def test_parametros_reales(lote):
     if not p.exists():
         pytest.skip("sin descarga")
     r = parametros_desde_rest(json.loads(p.read_text()), lote)
+    # claves escalares en la raíz exigidas por gemelo.suelo.perfil_desde_parametros_datos (D-027)
+    for k in ("arena", "arcilla", "mo_pct", "cos_t_ha"):
+        assert isinstance(r.get(k), float), f"falta clave escalar {k} en raíz"
+        assert r[k] == pytest.approx(r["parametros"][k]["valor"])
+    assert r.get("profundidad_m") == pytest.approx(1.0)
     for k in ("arena", "arcilla", "mo_pct", "cos_t_ha", "densidad_aparente", "agua_disponible_mm_m"):
         v = r["parametros"][k]
         assert v["rango"][0] <= v["valor"] <= v["rango"][1] or k == "agua_disponible_mm_m", k
-    assert 0 < r["parametros"]["arena"]["valor"] + r["parametros"]["arcilla"]["valor"] < 1
+    assert 0 < r["arena"] + r["arcilla"] < 1

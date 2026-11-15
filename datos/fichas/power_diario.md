@@ -1,26 +1,24 @@
 # Ficha de dataset
 
 - Nombre corto: power_diario
-- Producto oficial y versión: NASA POWER, API temporal diaria de punto, comunidad AG, resolución nativa (`power.larc.nasa.gov/api/temporal/daily/point`). Versión de la API: PENDIENTE (el CSV no la declara). Fuentes internas según la cabecera del CSV (VERIFICADO por lectura): MERRA-2 (PRECTOTCORR, T2M, T2M_MAX, T2M_MIN, RH2M, WS2M) y CERES SYN1deg (ALLSKY_SFC_SW_DWN)
-- Agencia y centro de datos: NASA, Langley Research Center
+- Producto oficial y versión: NASA POWER, API temporal diaria de punto, comunidad AG, resolución nativa (`power.larc.nasa.gov/api/temporal/daily/point`). Fuentes internas según la cabecera del CSV (VERIFICADO por lectura): MERRA-2 (`PRECTOTCORR`, `T2M`, `T2M_MAX`, `T2M_MIN`, `RH2M`, `WS2M`) y CERES SYN1deg (`ALLSKY_SFC_SW_DWN`)
+- Agencia y centro de datos: NASA Langley Research Center (LaRC)
 - Página oficial: https://power.larc.nasa.gov/docs/
-- DOI: PENDIENTE
-- Variable y unidades: PRECTOTCORR mm/día; T2M, T2M_MAX, T2M_MIN °C; RH2M %; ALLSKY_SFC_SW_DWN MJ/m2/día; WS2M m/s. Faltante: -999 (no aparece en estas descargas, VERIFICADO)
-- Resolución espacial nominal: celda de reanálisis MERRA-2 de 0,5 x 0,625 grados (contexto del lote, no medición del lote)
-- Resolución temporal: diaria. La cabecera del CSV dice "in LST" (día de hora solar local); no se convirtió a UTC porque POWER no publica horario. Limitación declarada
-- CRS nativo: WGS 84 lat/lon (EPSG:4326), punto
-- Periodo descargado: 2001-01-01 a 2024-12-31 (8766 días)
-- Área descargada: punto del centro del lote DEMO (3 decimales)
-- Herramienta y consulta exacta de descarga: curl a `https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR,T2M,T2M_MAX,T2M_MIN,RH2M,ALLSKY_SFC_SW_DWN,WS2M&community=AG&longitude=<lon>&latitude=<lat>&start=20010101&end=20241231&format=CSV`; lon/lat en `datos/lotes/lotes_demo.json`
+- DOI: PENDIENTE (el servicio API diario de punto no asigna DOI estático por consulta; se cita el portal oficial NASA POWER y Sparks, 2018 / Stackhouse et al., 2021 en `CITAS.md`)
+- Variable y unidades: `PRECTOTCORR` mm/día; `T2M`, `T2M_MAX`, `T2M_MIN` °C (crudas a la elevación media de la celda MERRA-2); `T2M_CORR`, `T2M_MAX_CORR`, `T2M_MIN_CORR` °C (corregidas a la elevación del lote con el gradiente adiabático estándar troposférico OACI/ISA/FAO-56 de `-0,0065 °C/m`, sin borrar las crudas); `RH2M` %; `ALLSKY_SFC_SW_DWN` MJ/m2/día; `WS2M` m/s. Valor faltante: `-999` (`0` apariciones en 2001-2024, VERIFICADO)
+- Resolución espacial nominal: celda de reanálisis MERRA-2 de `0,5 x 0,625` grados (contexto del lote, no medición dentro del lote)
+- Resolución temporal: diaria en hora solar local (`LST`, declarado en la cabecera del CSV). En `src/lotes_demo/resumen_forzantes.py` y `datos/lotes/comparacion_power_imerg.json` se documenta y evalúa la alineación frente al día UTC de IMERG (`lag = -1, 0, +1` días y combinación ponderada por huso horario `5/24` y `19/24` en `UTC-5` para Ipiales y `6/24` y `18/24` en `UTC-6` para Nebraska)
+- CRS nativo: WGS 84 lat/lon (EPSG:4326), consulta puntual
+- Periodo descargado: 2001-01-01 a 2024-12-31 (`8766` días)
+- Área descargada: punto del centro de cada lote DEMO a 3 decimales (`DEMO-USA-01`: `41.165, -96.477`; `DEMO-COL-01`: `0.842, -77.661`)
+- Herramienta y consulta exacta de descarga: `curl` a `https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR,T2M,T2M_MAX,T2M_MIN,RH2M,ALLSKY_SFC_SW_DWN,WS2M&community=AG&longitude=<lon>&latitude=<lat>&start=20010101&end=20241231&format=CSV` seguido de `actualizar_power_csv_altura` en `src/lotes_demo/forzantes.py`
 - Fecha de descarga: 2026-11-14
-- Banderas de calidad aplicadas: ninguna publicada por POWER en este formato; se prueba Tmin <= Tmax y precipitación >= 0 (`pruebas/lotes/test_forzantes.py`)
-- Fracción de datos válidos en el área: 100 % de los días sin -999 (VERIFICADO por conteo)
-- Transformaciones a la grilla común y método de remuestreo: ninguna; el CSV se guarda tal cual lo entrega la API
-- Requisito del reto y pregunta que atiende: N2, N3, F13; PI-D2, PI-D3
+- Banderas de calidad aplicadas: verificación de ausencia de `-999`, `T2M_MIN <= T2M_MAX`, `T2M_MIN_CORR <= T2M_MAX_CORR` y `PRECTOTCORR >= 0` (`pruebas/lotes/test_forzantes.py`)
+- Fracción de datos válidos en el área: `100 %` de los `8766` días en ambos lotes (VERIFICADO)
+- Transformaciones a la grilla común y método de remuestreo: ninguna espacial; en temperatura se añaden las tres columnas `T2M_CORR`, `T2M_MAX_CORR`, `T2M_MIN_CORR` mediante `T_corr = T_cruda + (-0,0065 °C/m) * (z_lote - z_celda)` (`delta_z = +380,76 m`, `delta_T = -2,4749 °C` en `DEMO-COL-01`; `delta_z = -2,80 m`, `delta_T = +0,0182 °C` en `DEMO-USA-01`)
+- Requisito del reto y pregunta que atiende: N2, N3, F13; PI-D2, PI-D3 (decisión D-027: POWER es la fuente principal de forzantes diarios para los lotes DEMO, como excepción a D-012 acotada a lotes)
 - Limitaciones conocidas:
-  - Elevación en DEMO-COL-01: la celda tiene 2553 m de elevación media (cabecera del CSV) y el lote unos 2934 m según el orquestador (FUENTE), unos 380 m de diferencia, más que los 42 m de la estación de referencia. Temperaturas sin corregir: no hay gradiente citado y verificable.
-  - Es dato de reanálisis a 0,5 grados. En Ipiales la elevación de la celda MERRA-2 que informa el CSV es 2553 m; no se corrige por altura del lote (sin gradiente citado y verificable).
-  - El rol de POWER según D-012 era contraste; aquí es la fuente de clima diario del Gemelo (formato power_csv), por decisión de la tarea T-D5. El director debe confirmarlo.
-  - Licencia: política de datos de NASA, CC0 salvo restricción, según LICENCIAS_TERCEROS.md; sin restricción marcada en el CSV.
-- Responsable: constructor de datos (Claude Code), tarea T-D5 Parte B
+  - En `DEMO-COL-01` (Ipiales), la celda MERRA-2 tiene `2553,24 m` de elevación media y el lote está a `2934 m` (`+380,76 m`). La validación contra la estación terrestre `COM00080370` (Aeropuerto San Luis, `2961 m` / `2976,4 m` GHCN) en 2001-2024 demuestra que `T2M_MIN` cruda tiene un sesgo cálido severo de `+3,51 °C` (MAE `3,52 °C`, RMSE `4,09 °C`) que oculta las heladas, y que `T2M_MIN_CORR` reduce el sesgo a `+1,04 °C` (a `2934 m`) o `+0,86 °C` (a `2961 m`) y baja el MAE a `1,79 °C`. En cambio, para la media diaria `T2M`, la serie cruda tiene menor sesgo (`+0,80 °C`, MAE `1,04 °C`) que `T2M_CORR` (`-1,68 °C`, MAE `1,74 °C`) por el calentamiento radiativo diurno en el altiplano ecuatorial y el peso diurno del reporte sinóptico `H`. Por ello se conservan ambas ternas de columnas en `power_diario.csv`.
+  - Licencia: política de datos abiertos de NASA (dominio público EE. UU. / CC0 salvo restricción), registrada en `LICENCIAS_TERCEROS.md`.
+- Responsable: constructor de datos (Claude Code / Antigravity), tarea T-D5 Parte B y Prioridad 3A/3B (D-027)
 - Verificador y fecha: PENDIENTE
