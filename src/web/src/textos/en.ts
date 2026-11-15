@@ -54,7 +54,7 @@ export const en = {
   'enso.nota': '· events from the event table (marker at the start year) · grey: no data for',
   'enso.real': 'RONI (°C) real',
   'enso.sinDato': 'RONI: no data',
-  'escenario.aviso': 'SIMULATED · DEMO. It only modulates the published rotation effect; it does not recompute climate or write anything.',
+  'escenario.aviso': "What-if reference: the slider stays between this unit's 25th and 75th percentiles for 2000-2026. It does not change the twin's results or recompute climate.",
   'escenario.calculando': 'Computing p25-p75…',
   'escenario.inferencia': '(INFERENCE, monthly series {anios_serie})',
   'escenario.limite': 'The scenario is limited to the p25-p75 range of this unit: outside it there is no support in its data.',
