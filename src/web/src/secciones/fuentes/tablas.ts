@@ -25,10 +25,12 @@ export function leerTablas(md: string): Tabla[] {
 
 /** Archivos distintos por herramienta, en el orden en que aparecen en SI_USO.md. */
 export function resumenSI(md: string): { herramienta: string; archivos: number }[] {
-  const tabla = leerTablas(md)[0]
-  const [h, a] = ['Herramienta', 'Archivo'].map((c) => tabla.columnas.indexOf(c))
   const porHerramienta = new Map<string, Set<string>>()
-  for (const f of tabla.filas) porHerramienta.set(f[h], (porHerramienta.get(f[h]) ?? new Set()).add(f[a]))
+  for (const tabla of leerTablas(md)) {
+    const [h, a] = ['Herramienta', 'Archivo'].map((c) => tabla.columnas.indexOf(c))
+    if (h < 0 || a < 0) continue // otras tablas se ignoran
+    for (const f of tabla.filas) porHerramienta.set(f[h], (porHerramienta.get(f[h]) ?? new Set()).add(f[a]))
+  }
   return [...porHerramienta].map(([herramienta, archivos]) => ({ herramienta, archivos: archivos.size }))
 }
 

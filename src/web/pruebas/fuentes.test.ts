@@ -36,6 +36,31 @@ describe('tablas de markdown', () => {
     const si = '| Herramienta | Archivo | Propósito | Fecha |\n|-|-|-|-|\n| A | `x.ts` | p | d |\n| A | `x.ts` | p | d |\n| A | `y.ts` | p | d |\n| B | `z.ts` | p | d |\n'
     expect(resumenSI(si)).toEqual([{ herramienta: 'A', archivos: 2 }, { herramienta: 'B', archivos: 1 }])
   })
+  it('resumenSI recorre todas las tablas con Herramienta y Archivo e ignora las demás', () => {
+    const enc = '| Herramienta | Archivo | Propósito | Fecha |\n|-|-|-|-|\n'
+    const si = `# Uno\n\n${enc}| A | \`x.ts\` | p | d |\n\n## Otra\n\n| Nota |\n|-|\n| Z |\n\n## Dos\n\n${enc}| A | \`y.ts\` | p | d |\n| B | \`z.ts\` | p | d |\n`
+    expect(resumenSI(si)).toEqual([{ herramienta: 'A', archivos: 2 }, { herramienta: 'B', archivos: 1 }])
+  })
+  it('resumenSI sobre el SI_USO.md real cuenta los pares herramienta+archivo de todas las tablas', () => {
+    // Conteo independiente: recorre las líneas y filtra por encabezado, sin leerTablas
+    const pares = new Set<string>()
+    const primera = new Set<string>()
+    let cols: string[] | null = null
+    let n = 0
+    for (const l of leer('SI_USO.md').split(/\r?\n/)) {
+      if (!l.startsWith('|')) { cols = null; continue }
+      if (/^\|[-| :]+\|$/.test(l)) continue
+      const c = l.replace(/^\||\|\s*$/g, '').split('|').map((x) => x.trim())
+      if (cols === null) { cols = c; n++; continue }
+      const [h, a] = [cols.indexOf('Herramienta'), cols.indexOf('Archivo')]
+      if (h < 0 || a < 0) continue
+      pares.add(`${c[h]}\u0000${c[a]}`)
+      if (n === 1) primera.add(`${c[h]}\u0000${c[a]}`)
+    }
+    const total = resumenSI(leer('SI_USO.md')).reduce((s, r) => s + r.archivos, 0)
+    expect(total).toBe(pares.size)
+    expect(total).toBeGreaterThan(primera.size)
+  })
 })
 
 describe('créditos: solo las filas en uso de LICENCIAS_TERCEROS.md y de CITAS.md', () => {
@@ -63,7 +88,7 @@ describe('créditos: solo las filas en uso de LICENCIAS_TERCEROS.md y de CITAS.m
 
 describe('declaración de uso de SI generada desde SI_USO.md', () => {
   it('lista cada herramienta con el número de archivos contado del archivo', () => {
-    const filas = leerTablas(leer('SI_USO.md'))[0].filas
+    const filas = leerTablas(leer('SI_USO.md')).filter((t) => t.columnas[0] === 'Herramienta' && t.columnas[1] === 'Archivo').flatMap((t) => t.filas)
     const porHerramienta = new Map<string, Set<string>>()
     for (const [h, a] of filas) porHerramienta.set(h, (porHerramienta.get(h) ?? new Set()).add(a))
     expect(porHerramienta.size).toBeGreaterThan(0)

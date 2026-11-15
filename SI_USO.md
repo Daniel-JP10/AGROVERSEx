@@ -327,6 +327,11 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 Notas de procedencia sin generación nueva por este equipo de Gemelo:
 - `src/gemelo/referencias/enso.yaml` y `src/gemelo/referencias/sucesion.yaml` son copias literales de `origin/datos`.
 - La idea científica, alcance, reglas de corte y decisiones (`D-001` a `D-030`) fueron definidas por el equipo humano y aprobadas por el director en `decisiones/registro.md`.
+
+## Datos y Web (continuación)
+
+| Herramienta | Archivo | Propósito | Fecha |
+|-|-|-|-|
 | Claude Code (Anthropic) | `pruebas/lotes/test_erosion_gemelo.py` | Prueba de que la exposición erosiva de Datos y del Gemelo coincide con la misma lluvia POWER y la misma fracción desnuda (director, 20:50) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/app/ruta.ts` | Rutas por hash de las siete secciones, contrato web_componentes §3 | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/app/Navegacion.tsx` | Navegación entre las siete secciones con aria-current | 2026-11-14 |
