@@ -91,7 +91,9 @@ def sensibilidad_lluvia_alterna(ent, doc: dict) -> dict | None:
             "contraste_estacion": {"estacion": c["estacion"], "n_dias_comunes": c["n_dias_comunes_con_pluviometro"],
                                    "anual_equiv_mm": c["anual_equiv_en_dias_comunes_mm"],
                                    "sesgo_relativo_power": c["sesgo_relativo_power_vs_ghcn"],
-                                   "sesgo_relativo_imerg": c["sesgo_relativo_imerg_vs_ghcn"]},
+                                   "sesgo_relativo_imerg": c["sesgo_relativo_imerg_vs_ghcn"],
+                                   **{k: c[k] for k in ("fraccion_dias_usados", "fraccion_dias_con_dato",
+                                                        "totales_mm_en_dias_comunes", "metodo_anual_equiv") if k in c}},
             "fuente_contraste": Path(alt["comparacion"]).name,
             "orden_pesos_iguales": orden,
             "posiciones": {i: {"central": orden["power"].index(i) + 1, "alterna": orden["alterna"].index(i) + 1}
