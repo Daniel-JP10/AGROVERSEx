@@ -64,7 +64,7 @@ export function VistaRotaciones({ fuente: cruda, lote, escenario = 'historico', 
           <ComparadorEstrategias linea_base={fuente.doc.linea_base} frente={fuente.doc.frente} tarjetas={fuente.doc.tarjetas} catalogo={fuente.catalogo} orden={ordenDelDocumento(fuente.doc, pesos)} faltantes={faltantesDelDocumento(fuente.doc)} />
           {lote?.estado === 'listo' && !lote.lote.escenarios[escenario]?.optimizacion && <p className="sin-dato" role="note">{t('rotaciones.pareto_no_esc')}</p>}
           <FrentePareto objetivos={textos(fuente.doc, fuente.catalogo).objetivos} linea_base={fuente.doc.linea_base} frente={fuente.doc.frente} />
-          <Compromisos frente={fuente.doc.frente} compromisos={fuente.doc.compromisos} />
+          <Compromisos frente={fuente.doc.frente} compromisos={fuente.doc.compromisos} objetivos={fuente.doc.objetivos} catalogo={fuente.catalogo} />
           <section className="alertas" aria-labelledby="h-alertas">
             <h2 id="h-alertas">{t('rotaciones.alertas')}</h2>
             <AlertaHelada alerta={fuente.doc.alertas?.helada_etapa_sensible} estrategias={[fuente.doc.linea_base, ...fuente.doc.frente]} catalogo={fuente.catalogo} />

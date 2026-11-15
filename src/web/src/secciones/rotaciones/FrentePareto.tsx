@@ -1,7 +1,9 @@
 // asistido por SI: Claude Code (Anthropic), frente de Pareto de dos objetivos con selector de ejes y línea base marcada
 import { useEffect, useRef, useState } from 'react'
 import * as Plot from '@observablehq/plot'
-import { t } from '../../textos/i18n'
+import { idioma, t } from '../../textos/i18n'
+import { nombreEstrategia } from '../lote/datos'
+import { aIngles } from './correccionEn'
 import { Banda } from './Banda'
 import type { EstrategiaGemelo, Objetivo } from './gemelo'
 
@@ -9,7 +11,10 @@ interface Punto { id: string; nombre: string; base: boolean; x: number; x10: num
 
 const fin = (v: number | null): v is number => typeof v === 'number' && Number.isFinite(v)
 const sentido = (o: Objetivo) => t(o.sentido === 'max' ? 'rotaciones.mayor_mejor' : 'rotaciones.menor_mejor')
-const rotulo = (o: Objetivo, e: EstrategiaGemelo) => `${o.texto} (${e.indicadores[o.indicador]?.unidad ?? ''}), ${sentido(o)}`
+// Unidades y nombres de los paquetes vienen en español: en inglés pasan por aIngles y nombreEstrategia
+const uni = (u: string) => (idioma() === 'en' ? aIngles(u) : u)
+const nombre = (e: EstrategiaGemelo) => (idioma() === 'en' ? nombreEstrategia(e) : e.nombre)
+const rotulo = (o: Objetivo, e: EstrategiaGemelo) => `${o.texto} (${uni(e.indicadores[o.indicador]?.unidad ?? '')}), ${sentido(o)}`
 
 // Solo entran los puntos con p10, p50 y p90 en los dos ejes; los demás quedan fuera sin rellenar
 function puntos(es: EstrategiaGemelo[], base: string, ox: Objetivo, oy: Objetivo): Punto[] {
@@ -17,7 +22,7 @@ function puntos(es: EstrategiaGemelo[], base: string, ox: Objetivo, oy: Objetivo
   for (const e of es) {
     const a = e.indicadores[ox.indicador], b = e.indicadores[oy.indicador]
     if (!a || !b || ![a.p10, a.p50, a.p90, b.p10, b.p50, b.p90].every(fin)) continue
-    out.push({ id: e.id, nombre: e.nombre, base: e.id === base, x: a.p50!, x10: a.p10!, x90: a.p90!, y: b.p50!, y10: b.p10!, y90: b.p90! })
+    out.push({ id: e.id, nombre: nombre(e), base: e.id === base, x: a.p50!, x10: a.p10!, x90: a.p90!, y: b.p50!, y10: b.p10!, y90: b.p90! })
   }
   return out
 }
@@ -69,9 +74,9 @@ export function FrentePareto({ objetivos, linea_base, frente }: { objetivos: Obj
               const base = e.id === linea_base.id
               return (
                 <tr key={e.id} data-testid={base ? 'pareto-linea-base' : undefined}>
-                  <th scope="row">{base ? `${e.nombre} (${t('rotaciones.linea_base')})` : `${e.nombre} (${e.id})`}</th>
-                  <td>{a ? <Banda p10={a.p10} p50={a.p50} p90={a.p90} unidad={a.unidad} /> : <Banda p10={null} p50={null} p90={null} unidad="" />}</td>
-                  <td>{b ? <Banda p10={b.p10} p50={b.p50} p90={b.p90} unidad={b.unidad} /> : <Banda p10={null} p50={null} p90={null} unidad="" />}</td>
+                  <th scope="row">{base ? `${nombre(e)} (${t('rotaciones.linea_base')})` : `${nombre(e)} (${e.id})`}</th>
+                  <td>{a ? <Banda p10={a.p10} p50={a.p50} p90={a.p90} unidad={uni(a.unidad)} /> : <Banda p10={null} p50={null} p90={null} unidad="" />}</td>
+                  <td>{b ? <Banda p10={b.p10} p50={b.p50} p90={b.p90} unidad={uni(b.unidad)} /> : <Banda p10={null} p50={null} p90={null} unidad="" />}</td>
                 </tr>
               )
             })}

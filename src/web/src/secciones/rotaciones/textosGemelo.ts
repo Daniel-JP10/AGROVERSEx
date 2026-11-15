@@ -1,4 +1,5 @@
 // asistido por SI: Claude Code (Anthropic), traducción de las claves de texto del gemelo v1.1 (§3) con su catálogo en.json o es.json
+import { aIngles } from './correccionEn'
 export type Catalogo = Record<string, string>
 
 // Formato de Python que usa el catálogo: {x}, {x:g}, {x:.3g}, {x:+.3g}; '%g' pasa a exponente si exp < -4 o exp >= precisión
@@ -41,6 +42,7 @@ export function traducir(cat: Catalogo, clave: string, parametros: Record<string
       return xs.length <= 2 ? xs.join(` ${y} `) : `${xs.slice(0, -1).join(', ')} ${y} ${xs[xs.length - 1]}`
     }
     if (typeof v === 'number' && spec) return formatoNum(v, spec)
-    return v === null || v === undefined ? todo : String(v)
+    if (v === null || v === undefined) return todo
+    return cat.__en && typeof v === 'string' ? aIngles(v) : String(v)
   })
 }

@@ -5,6 +5,7 @@ import type { ClaveTexto } from '../../textos/en'
 import { Banda } from './Banda'
 import { SECCIONES_TARJETA, type EstrategiaGemelo, type SeccionTarjeta, type Tarjeta as TTarjeta } from './gemelo'
 import { traducir, type Catalogo } from './textosGemelo'
+import { aIngles } from './correccionEn'
 
 // card.benefit.delta del gemelo pone el p10 y p90 ABSOLUTOS de la estrategia junto a una diferencia de medianas: se rotula aparte
 export const entradaTexto = (cat: Catalogo, x: { clave: string; parametros?: Record<string, unknown> }) =>
@@ -21,7 +22,7 @@ function Tarjeta({ e, base, tarjeta, catalogo, faltan }: P) {
   const tr = (clave: string | undefined, plano: string) => (catalogo && clave ? traducir(catalogo, clave) : plano)
   return (
     <article className="estrategia" data-testid="estrategia">
-      <h3>{nombreEstrategia(e)} <span className="etiqueta">{e.etiqueta}</span></h3>
+      <h3>{nombreEstrategia(e)} <span className="etiqueta">{catalogo?.__en ? aIngles(e.etiqueta) : e.etiqueta}</span></h3>
       <p className="insignia">{base ? <span data-testid="linea-base">{t('rotaciones.linea_base')}</span> : t('rotaciones.alternativa')}</p>
       <p><strong>{t('rotaciones.secuencia')}:</strong> {idioma() === 'es' ? e.secuencia.replace(/\s*->\s*/g, ' → ') : e.secuencia.split(/\s*->\s*/).map(nombreCultivo).join(' → ')}</p>
       <p className="juicio" role="note">{t('aviso.juicio')}</p>

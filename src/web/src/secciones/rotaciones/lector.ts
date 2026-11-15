@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useIdioma, type Idioma } from '../../textos/i18n'
 import type { Fuente, SalidaOptimizacion } from './gemelo'
 import type { Catalogo } from './textosGemelo'
+import { corregirCatalogoEn } from './correccionEn'
 
 // gemelo_api v1.1 §5: el id viene de la ruta, así que se valida antes de armar ninguna URL
 export const LOTE_DEMO = /^DEMO-[A-Z]{3}-\d{2}$/
@@ -38,7 +39,7 @@ export async function cargarGemelo(lote: string, idioma: Idioma, pedir: Pedir = 
     if (!ruta || !RUTA_SEGURA.test(ruta) || !rutaTextos || !RUTA_SEGURA.test(rutaTextos)) return { estado: 'sin_dato' }
     const [doc, catalogo] = await Promise.all([json<SalidaOptimizacion>(pedir, GEMELO + ruta), json<Catalogo>(pedir, GEMELO + rutaTextos)])
     if (!doc?.linea_base || !Array.isArray(doc.frente)) return { estado: 'sin_dato' }
-    return { estado: 'listo', origen: 'modelo', doc, catalogo }
+    return { estado: 'listo', origen: 'modelo', doc, catalogo: idioma === 'en' ? corregirCatalogoEn(catalogo) : catalogo }
   } catch {
     return { estado: 'sin_dato' }
   }

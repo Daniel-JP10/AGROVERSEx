@@ -5,6 +5,7 @@ import type { EstrategiaGemelo, Rotulo, EntradaTexto, Tarjeta } from '../rotacio
 import type { AlertaHeladaGemelo } from '../rotaciones/AlertaHelada'
 import type { Catalogo } from '../rotaciones/textosGemelo'
 import { traducir } from '../rotaciones/textosGemelo'
+import { corregirCatalogoEn } from '../rotaciones/correccionEn'
 import { LOTE_DEMO } from '../rotaciones/lector'
 import { UNIDADES_TRAYECTORIA, type VariableTrayectoria } from './unidades'
 
@@ -73,7 +74,7 @@ export async function cargarLote(lote: string, escenario: string, lang: Idioma, 
       opcional(json<{ lotes: Record<string, Relieve> }>(pedir, 'lotes/relieve_lotes.json')), opcional(json<Perfil>(pedir, `lotes/perfil_${lote}.json`)),
     ])
     if (!Array.isArray(sim?.estrategias) || !sim.estrategias.length) return { estado: 'sin_dato' }
-    return { estado: 'listo', lote: l, sim, cat, relieve: rel?.lotes?.[lote], perfil }
+    return { estado: 'listo', lote: l, sim, cat: lang === 'en' ? corregirCatalogoEn(cat) : cat, relieve: rel?.lotes?.[lote], perfil }
   } catch {
     return { estado: 'sin_dato' }
   }

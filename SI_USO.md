@@ -529,3 +529,5 @@ Filas generadas de la cabecera "asistido por SI" de cada archivo nuevo o tocado 
 | Claude Code (Anthropic) | `src/web/src/textos/secciones/portada.ts` | textos de la sección portada (plan fase 3 v2 §10) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/src/textos/secciones/rotaciones.ts` | textos de la sección rotaciones (plan fase 3 v2 §5 y §10) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/src/textos/secciones/tierra.ts` | textos de la sección tierra (plan fase 3 v2 §10) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/correccionEn.ts` | restos en español del catálogo y los paquetes del gemelo en la interfaz inglesa (H-F3-6) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/rotaciones_ingles.test.ts` | prueba de que los restos en español del gemelo salen en inglés | 2026-11-15 |
