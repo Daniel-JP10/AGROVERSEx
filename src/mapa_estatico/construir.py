@@ -257,21 +257,18 @@ def buscar_fugas(dist: Path) -> list[str]:
     return hallazgos
 
 
-# Límites de GitHub Pages para lo que se publica (plan fase 3 v2 §9)
+# Límites de Cloudflare Pages, plan Free (developers.cloudflare.com/pages/platform/limits/, leída 2026-11-15):
+# 20 000 archivos por sitio y 25 MiB por archivo. La página no fija tope total; el de 300 MB no tenía fuente (director 15:27)
 MAX_ARCHIVO = 25 * 1024 * 1024
 MAX_ARCHIVOS = 20_000
-MAX_TOTAL = 300 * 1000 * 1000
 
 
 def revisar_limites(dist: Path, excluir: tuple[str, ...] = ("teselas/",)) -> list[str]:
-    """Archivos de más de 25 MiB, 20 000 archivos o más, o más de 300 MB en total; excluir: prefijos que van a otro alojamiento (D-040)."""
+    """Archivos de más de 25 MiB o 20 000 archivos o más; excluir: prefijos que van a otro alojamiento (D-040)."""
     archivos = [x for x in dist.rglob("*") if x.is_file() and not x.relative_to(dist).as_posix().startswith(excluir)]
     fallos = [f"{x.relative_to(dist).as_posix()} pesa {x.stat().st_size} B" for x in archivos if x.stat().st_size > MAX_ARCHIVO]
     if len(archivos) >= MAX_ARCHIVOS:
         fallos.append(f"{len(archivos)} archivos")
-    total = sum(x.stat().st_size for x in archivos)
-    if total > MAX_TOTAL:
-        fallos.append(f"total {total} B")
     return fallos
 
 

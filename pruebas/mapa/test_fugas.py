@@ -130,6 +130,18 @@ def test_limites_de_pages(tmp_path, monkeypatch):
     assert c.revisar_limites(tmp_path) == ["grande.json pesa 11 B"]
 
 
+def test_limites_cuenta_archivos_y_no_tiene_tope_total(tmp_path, monkeypatch):
+    # Cloudflare Pages no fija tope total: muchos archivos chicos que suman mucho no fallan por peso
+    assert not hasattr(c, "MAX_TOTAL")
+    monkeypatch.setattr(c, "MAX_ARCHIVO", 10)
+    monkeypatch.setattr(c, "MAX_ARCHIVOS", 4)
+    for k in range(3):
+        (tmp_path / f"a{k}.json").write_bytes(b"x" * 10)
+    assert c.revisar_limites(tmp_path) == []
+    (tmp_path / "a3.json").write_bytes(b"x")
+    assert c.revisar_limites(tmp_path) == ["4 archivos"]
+
+
 def test_el_despliegue_falla_si_supera_los_limites(tmp_path, monkeypatch):
     datos = tmp_path / "datos"
     for o in (*c.ARCHIVOS_DESPLIEGUE, "unidades.gpkg"):
