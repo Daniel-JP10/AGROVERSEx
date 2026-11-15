@@ -189,6 +189,12 @@
     "power": 1162.5,
     "imerg": 1598.9
    },
+   "fraccion_dias_usados": 0.499,
+   "totales_mm_en_dias_comunes": {
+    "ghcn_estacion": 11177.8,
+    "power": 13921.0,
+    "imerg": 19147.7
+   },
    "anual_equiv_ghcn_por_climatologia_mensual_mm": 919.3,
    "sesgo_relativo_power_vs_ghcn": 0.2454,
    "sesgo_relativo_imerg_vs_ghcn": 0.713,
