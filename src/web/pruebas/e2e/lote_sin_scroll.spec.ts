@@ -13,10 +13,13 @@ for (const vp of TAMANOS) {
       const m = document.querySelector('main')!, col = document.querySelector('.l-centro')!.getBoundingClientRect()
       const etiquetas = [...document.querySelectorAll('.bloque .l-etiqueta')].map((e) => { const b = e.getBoundingClientRect(); return b.top >= col.top - 1 && b.bottom <= col.bottom + 1 && b.left >= col.left - 1 && b.right <= col.right + 1 })
       const est = document.querySelector('.estrategias')!.getBoundingClientRect()
-      return { desborde: m.scrollWidth - m.clientWidth, scroll: m.scrollHeight - m.clientHeight, etiquetas, estrategiasArriba: est.top < innerHeight }
+      // H-V9-1: ninguna pastilla sobresale de su etiqueta
+      const sobresale = [...document.querySelectorAll('.bloque .l-etiqueta')].map((e) => e.scrollWidth - e.clientWidth > 1)
+      return { desborde: m.scrollWidth - m.clientWidth, scroll: m.scrollHeight - m.clientHeight, etiquetas, sobresale, estrategiasArriba: est.top < innerHeight }
     })
     expect(r.desborde, 'desborde horizontal').toBeLessThanOrEqual(0)
     expect(r.etiquetas, 'cada cifra del bloque entera').toEqual([true, true, true, true])
+    expect(r.sobresale, 'ninguna pastilla sobresale de su etiqueta').toEqual([false, false, false, false])
     if (vp.width >= 1100) {
       expect(r.scroll, 'scroll de página en PC').toBeLessThanOrEqual(0)
       expect(r.estrategiasArriba, 'las estrategias empiezan dentro de la pantalla').toBe(true)
