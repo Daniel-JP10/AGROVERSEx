@@ -280,8 +280,8 @@ export function VistaLote({ estado, loteId, escenario, setEscenario }: { estado:
             </section>
           )}
         </div>
+        {/* Director 17:38: escenario y estrategias primero, para verlos sin scroll; la voz del gemelo debajo (mismo orden en el DOM y en pantalla) */}
         <div className="l-der">
-          <Gemelo d={estado} e={e} />
           <section className="tarjeta escenario" aria-labelledby="h-escenario">
             <h2 id="h-escenario">{t('lote.escenario')}</h2>
             <select aria-labelledby="h-escenario" value={escenario} onChange={(ev) => setEscenario(ev.target.value)}>
@@ -289,6 +289,7 @@ export function VistaLote({ estado, loteId, escenario, setEscenario }: { estado:
             </select>
           </section>
           <Estrategias d={estado} sel={e?.id} setSel={setSel} loteId={loteId} />
+          <Gemelo d={estado} e={e} />
         </div>
       </div>
     </main>

@@ -19,7 +19,7 @@
 
 .rejilla-lote { display: grid; gap: 12px; grid-template-columns: 1fr; }
 @media (min-width: 820px) { .rejilla-lote { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .rejilla-lote .l-centro { grid-column: 1 / -1; } }
-@media (min-width: 1200px) {
+@media (min-width: 1100px) {
   .rejilla-lote { grid-template-columns: 270px minmax(0, 1fr) 330px; }
   .rejilla-lote .l-centro { grid-column: 2; grid-row: 1; }
   .rejilla-lote .l-izq { grid-column: 1; grid-row: 1; }
@@ -120,3 +120,17 @@
 .tablero .deslizador input { width: 100%; min-width: 0; accent-color: var(--acento); }
 .tablero h2 { margin: 0 0 6px; font-size: 16px; }
 @media (max-width: 819px) { .rejilla-lote .l-centro { order: -1; } }
+
+/* Director 17:38: el relieve y la información se ven sin scroll de página.
+   En PC la rejilla ocupa el alto disponible y cada columna se desplaza por dentro; el bloque cabe entero */
+@media (min-width: 1100px) and (min-height: 600px) {
+  main.seccion.lote { display: flex; flex-direction: column; overflow: hidden; }
+  .lote .rejilla-lote { flex: 1; min-height: 0; grid-template-rows: minmax(0, 1fr); }
+  .lote .rejilla-lote > div { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding-right: 4px; }
+  .lote .bloque .l-lienzo img { width: auto; max-width: 100%; max-height: calc(100vh - 420px); }
+}
+/* Un fieldset tiene min-inline-size: min-content por defecto y desbordaba el bloque en móvil (28 px a 390) */
+.lote fieldset { min-width: 0; }
+.lote .bloque, .lote .l-controles { min-width: 0; }
+@media (max-width: 640px) { main.seccion.lote { padding: 12px; } }
+@media (max-width: 640px) { .lote .l-etiqueta { overflow-wrap: anywhere; } .lote .l-etiqueta .banda { white-space: normal; display: inline-block; max-width: 100%; } }
