@@ -48,6 +48,22 @@
   .tierra .leyenda { bottom: 196px; }
 }
 
+/* R1 · director 16:54: en pantalla angosta la información no puede tapar el mapa.
+   Lotes en una tira de una línea, riel y controles pequeños pegados a los bordes, tiempo más bajo y hojas translúcidas */
+@media (max-width: 900px) {
+  .tierra .hoja { background: color-mix(in srgb, var(--hoja, var(--panel)) 78%, transparent); }
+  .tierra .hoja-lotes { top: 58px; left: 8px; width: calc(100% - 16px); grid-template-columns: auto 1fr 1fr; align-items: center; gap: 6px; padding: 5px 8px; }
+  .tierra .hoja-lotes h2 { grid-column: auto; font-size: 12px; white-space: nowrap; }
+  .tierra .hoja-lotes button { padding: 4px 8px; font-size: 12px; line-height: 1.25; }
+  .tierra .riel { top: 104px; left: 8px; flex-direction: column; gap: 2px; padding: 3px; }
+  .tierra .riel button { width: 36px; height: 36px; }
+  .tierra .controles { top: 104px; bottom: auto; left: auto; right: 8px; gap: 4px; }
+  .tierra .controles button { width: 36px; height: 36px; min-width: 36px; font-size: 13px; }
+  .tierra .hoja-tiempo { padding: 0; }
+  .tierra .hoja-tiempo .tiempo { padding: 6px 8px; }
+  .tierra .hoja-tiempo button { min-width: 32px; min-height: 32px; }
+}
+
 /* Atribución de MapLibre (GIBS, geoBoundaries) arriba a la derecha: la hoja de tiempo no la tapa */
 .tierra .maplibregl-ctrl-bottom-right { top: 8px; bottom: auto; max-width: min(520px, 60%); }
 .tierra .maplibregl-ctrl-attrib { font-size: 11px; }
