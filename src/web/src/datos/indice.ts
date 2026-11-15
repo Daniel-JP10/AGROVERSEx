@@ -8,6 +8,7 @@ export interface Unidad {
   nombre: string
   pais: string
   pais_id?: number | string
+  disputa?: boolean
   bbox?: [number, number, number, number]
 }
 
@@ -20,7 +21,7 @@ export function cargarFilas(): Promise<FilaIndice[]> {
   cargado ??= cargarCrudo().then((filas) => {
     for (const x of filas) {
       if (x.nivel > 2) continue
-      porClave.set(claveUnidad(x.nivel, x.id), { id: x.id, nivel: x.nivel, nombre: x.n, pais: x.ctx, pais_id: x.nivel ? x.id.split('.')[0] : x.id })
+      porClave.set(claveUnidad(x.nivel, x.id), { id: x.id, nivel: x.nivel, nombre: x.n, pais: x.ctx, pais_id: x.nivel ? `${x.id.split('-')[0]}-ADM0` : x.id, disputa: x.d === 1 })
     }
     return filas
   })

@@ -5,7 +5,7 @@ import { chromium } from '@playwright/test'
 const b = await chromium.launch({ channel: 'chrome', headless: false, args: ['--ignore-gpu-blocklist', '--enable-gpu-rasterization'] })
 const p = await b.newPage({ viewport: { width: 1400, height: 850 } })
 const malas = []
-p.on('response', (r) => { if (r.url().includes('eox.at') && r.status() >= 400) malas.push(r.status() + ' ' + r.url()) })
+p.on('response', (r) => { if (r.url().includes('gibs.earthdata.nasa.gov') && r.status() >= 400) malas.push(r.status() + ' ' + r.url()) })
 await p.goto('http://localhost:5199/')
 await p.waitForFunction(() => window.__mapa && window.__mapa.loaded(), null, { timeout: 60000 })
 const ir = async (z, c) => { await p.evaluate(([z, c]) => window.__mapa.jumpTo({ zoom: z, center: c }), [z, c]); await p.waitForTimeout(4000) }
@@ -20,5 +20,5 @@ const r = await p.evaluate(async () => {
   dts.shift(); dts.sort((a, b) => a - b)
   return { fps: +(1000 / (dts.reduce((a, c) => a + c, 0) / dts.length)).toFixed(1), p95: dts[Math.floor(dts.length * 0.95)], max: dts.at(-1) }
 })
-console.log(JSON.stringify({ ...r, errores_eox: malas }))
+console.log(JSON.stringify({ ...r, errores_gibs: malas }))
 await b.close()

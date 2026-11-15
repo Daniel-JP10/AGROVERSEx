@@ -3,11 +3,11 @@ import { useEffect, useRef } from 'react'
 import * as maplibregl from 'maplibre-gl'
 import type { Map as MapaGL } from 'maplibre-gl'
 import { construirEstilo } from '../globo/config'
-import { capaPorId, valoresCapa } from '../datos/capas'
+import { capaPorId } from '../datos/capas'
 import { crearRecoloreo } from '../globo/recoloreo'
-import { crearMotorCoropleta, SIN_DATO, type MotorCoropleta } from '../globo/coropleta'
+import { crearMotorCoropleta, SIN_DATO_REAL, type MotorCoropleta } from '../globo/coropleta'
 import { registrarPatron } from '../globo/patron'
-import { clienteDefecto } from '../datos/consultas'
+import { cargarCoropleta } from '../datos/estatico'
 import type { Nivel } from '../datos/tipos'
 import { useEstado } from '../app/estado'
 import { etiquetaMes } from '../tiempo/valor'
@@ -34,16 +34,16 @@ export function Dividida({ mapa, mesB, setMesB }: { mapa: MapaGL; mesB: number; 
     ;(window as unknown as { __mapaB?: MapaGL }).__mapaB = m
     const motores: (MotorCoropleta | undefined)[] = []
     let version = 0
-    const [aplicar, parar] = crearRecoloreo(m, (n, id) => motores[n] ? (motores[n]!.estado(id) ?? SIN_DATO) : undefined) // D-015: solo el nivel activo y cola en gestos
+    const [aplicar, parar] = crearRecoloreo(m, (n, id) => motores[n] ? (motores[n]!.estado(id) ?? SIN_DATO_REAL) : undefined) // D-015: solo el nivel activo y cola en gestos
     const cargar = async (mes: number) => {
       const { filtro, capa: idCapa } = useEstado.getState(), c = capaPorId(idCapa)
       try {
         for (const n of [0, 1, 2] as Nivel[]) {
-          const [ids, d, f] = await Promise.all([clienteDefecto.orden(n), clienteDefecto.coropleta(n, c.id, mes), c.fraccion ? clienteDefecto.coropleta(n, c.fraccion, mes) : undefined])
+          const d = await cargarCoropleta(n, c.id, mes)
           if (mes !== mesRef.current || idCapa !== useEstado.getState().capa) return
           motores[n]?.destruir()
           const mo = crearMotorCoropleta(m, { nivel: n, rango: c.rango })
-          mo.aplicar(valoresCapa(c, d.valores, mes, c.unidadProducto ?? ''), ids, filtro, f?.valores)
+          mo.aplicar(d.valores, d.ids, filtro, d.frac, d)
           motores[n] = mo
         }
         aplicar(++version)

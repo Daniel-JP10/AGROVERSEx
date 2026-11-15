@@ -28,13 +28,13 @@ describe('filtros regionales', () => {
 
 describe('filtros globales', () => {
   const U = [
-    { id: 'a', koppen: '14', igbp: 10, eventos: true, valor: 50, fraccion: 0.9 },
-    { id: 'b', koppen: '26', igbp: 12, eventos: false, valor: 400, fraccion: 0.2 },
+    { id: 'a', igbp: 10, eventos: true, valor: 50, fraccion: 0.9 },
+    { id: 'b', igbp: 12, eventos: false, valor: 400, fraccion: 0.2 },
     { id: 'c', valor: undefined },
   ]
   it('sin filtros todo es visible', () => { expect([...aplicarFiltros(U, {}, 0)]).toEqual(['a', 'b', 'c']) })
-  it('koppen e igbp dejan solo coincidencias; una unidad sin atributo no coincide', () => {
-    expect([...aplicarFiltros(U, { koppen: ['14'] }, 0)]).toEqual(['a'])
+  it('igbp deja solo coincidencias; una unidad sin atributo no coincide', () => {
+    expect([...aplicarFiltros(U, { igbp: [10] }, 0)]).toEqual(['a'])
     expect([...aplicarFiltros(U, { igbp: [12] }, 0)]).toEqual(['b'])
   })
   it('soloEventos y rango; rango no vuelve 0 un hueco: sin valor queda fuera', () => {
@@ -48,7 +48,7 @@ describe('filtros globales', () => {
     expect(aplicarFiltros(U, { enso: 'nina' }, 1, { roni: [0, 0.1], umbral: 0.5 }).size).toBe(0)
   })
   it('las ocultas son las no visibles y una filtrada no es un hueco', () => {
-    const o = ocultasPorFiltros(U, { koppen: ['14'] }, 0)
+    const o = ocultasPorFiltros(U, { igbp: [10] }, 0)
     expect([...o].sort()).toEqual(['b', 'c'])
     const e = estadoUnidad(100, 1, [0, 500], { ocultas: o }, 'b')
     expect(e.ok).toBe(false)

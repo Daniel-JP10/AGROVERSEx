@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { PALETA } from './config'
 import { useEstado } from '../app/estado'
 import { capaPorId } from '../datos/capas'
-import { clienteDefecto } from '../datos/consultas'
+import { cargarMatriz } from '../datos/estatico'
 import { ID_PATRON } from './patron'
 import { t } from '../textos/i18n'
 
@@ -11,12 +11,10 @@ import { t } from '../textos/i18n'
 export function Leyenda() {
   const capa = capaPorId(useEstado((s) => s.capa))
   const [producto, setProducto] = useState(t('leyenda.sinProducto'))
-  // El chip sale de la tabla variable (/api/meta), no de un texto fijo
+  // El chip sale de los productos del archivo estático de la variable (nombre completo: GLDAS lleva MODELO)
   useEffect(() => {
-    clienteDefecto.meta().then((x) => {
-      const v = x.variables.find((q) => q.id === capa.id) as (typeof x.variables[0] & { producto?: string; resolucion_nativa?: string }) | undefined
-      if (v?.producto) setProducto(`${v.producto}${v.resolucion_nativa ? ` · ${v.resolucion_nativa}` : ''}`)
-    }).catch(() => undefined)
+    setProducto(t('leyenda.sinProducto'))
+    cargarMatriz(capa.id, 0).then((m) => setProducto(m.productos.map((p) => `${p.producto} ${p.version}${p.estado === 'provisional' ? ` (${t('bandera.provisional')})` : ''}`).join(' → '))).catch(() => undefined)
   }, [capa.id])
   const grad = `linear-gradient(90deg, ${PALETA.map(([p, c]) => `${c} ${p * 100}%`).join(', ')})`
   return (

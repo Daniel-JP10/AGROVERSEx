@@ -1,0 +1,160 @@
+{
+ "version_contrato": "web_datos v0",
+ "generado_utc": "2026-11-14T22:50:00Z",
+ "paises": [
+  "COL"
+ ],
+ "mes0": "2000-01",
+ "n_meses": 323,
+ "variables": {
+  "precip": {
+   "niveles": [
+    0,
+    1,
+    2
+   ],
+   "meses_disponibles": {
+    "desde": "2000-01",
+    "hasta": "2026-10",
+    "n_meses_con_producto": 322
+   },
+   "productos": [
+    {
+     "producto": "GPM IMERG Final Run, mensual 0,1 grados (GPM_3IMERGM)",
+     "version": "07B",
+     "unidad": "mm/hr",
+     "estado": "final"
+    },
+    {
+     "producto": "GPM IMERG Late Run, diario agregado a mes en UTC (GPM_3IMERGDL)",
+     "version": "07B",
+     "unidad": "mm/day",
+     "estado": "provisional"
+    }
+   ]
+  },
+  "t2m": {
+   "niveles": [
+    0,
+    1,
+    2
+   ],
+   "meses_disponibles": {
+    "desde": "2000-01",
+    "hasta": "2026-09",
+    "n_meses_con_producto": 321
+   },
+   "productos": [
+    {
+     "producto": "MERRA-2 reanálisis, M2TMNXSLV (T2M)",
+     "version": "5.12.4",
+     "unidad": "K",
+     "estado": "final"
+    }
+   ]
+  },
+  "sm_raiz": {
+   "niveles": [
+    0,
+    1,
+    2
+   ],
+   "meses_disponibles": {
+    "desde": "2000-01",
+    "hasta": "2026-07",
+    "n_meses_con_producto": 319
+   },
+   "productos": [
+    {
+     "producto": "GLDAS Noah 0,25 mensual, MODELO de superficie terrestre (GLDAS_NOAH025_M, RootMoist_inst)",
+     "version": "2.1",
+     "unidad": "kg m-2",
+     "estado": "final"
+    }
+   ]
+  },
+  "ndvi": {
+   "niveles": [
+    0,
+    1,
+    2
+   ],
+   "meses_disponibles": {
+    "desde": "2000-02",
+    "hasta": "2026-10",
+    "n_meses_con_producto": 321
+   },
+   "productos": [
+    {
+     "producto": "MODIS Terra MOD13C2 NDVI mensual 0,05 grados",
+     "version": "061",
+     "unidad": "1",
+     "estado": "final"
+    }
+   ]
+  }
+ },
+ "total_bytes": 13028092,
+ "archivos": {
+  "COL/ndvi_0.json.gz": {
+   "bytes": 3207,
+   "sha256": "81f2200a8ab6919986ee10c18605056386166d2919de1252586d6811df340ca3"
+  },
+  "COL/ndvi_1.json.gz": {
+   "bytes": 95518,
+   "sha256": "a0790159ed1418f0fb3a242c98e67509d2a7522b7d6ed0fcc53305e06cba83ba"
+  },
+  "COL/ndvi_2.json.gz": {
+   "bytes": 3085802,
+   "sha256": "8a85f946b57aa9fa6ad8ec3da2affd75c24751dd083bdeae1320ae76feea09d8"
+  },
+  "COL/precip_0.json.gz": {
+   "bytes": 2941,
+   "sha256": "9a7f3ccf721e3e723f2b3b8f02296b20f9333f6ebdcaedcad7cde361f9105c07"
+  },
+  "COL/precip_1.json.gz": {
+   "bytes": 91462,
+   "sha256": "8a027f666b66b62a4636b915df52ba5ca364fc2133397fc1146966a6bbc85577"
+  },
+  "COL/precip_2.json.gz": {
+   "bytes": 3169684,
+   "sha256": "af5072bdfb207b2cfa2f4fc00b297ebedb2ff52693f54d8c0d0692d137c66a48"
+  },
+  "COL/sm_raiz_0.json.gz": {
+   "bytes": 3469,
+   "sha256": "bb7a21b30899b4cfc3bbe75b01692bd45685c764a5012f12871720d4ea32ae6d"
+  },
+  "COL/sm_raiz_1.json.gz": {
+   "bytes": 92896,
+   "sha256": "637d2a66c18d65747c00fee15c32c64bfe401483e74d5d10f5ff48f595727c47"
+  },
+  "COL/sm_raiz_2.json.gz": {
+   "bytes": 3109718,
+   "sha256": "1cd51be2c1111c2a94bd485ffe23df9322ac975351c5a732034af42daeec2dd0"
+  },
+  "COL/t2m_0.json.gz": {
+   "bytes": 2388,
+   "sha256": "cf1630ff573f23658c4798f8a529566cb2ff1d8cab74b8a98c67fc2a139c87b0"
+  },
+  "COL/t2m_1.json.gz": {
+   "bytes": 65054,
+   "sha256": "35a2d84b9c91d061e3aaa71b5eb6bda517a9525e79c88985aab0f772a4054cf4"
+  },
+  "COL/t2m_2.json.gz": {
+   "bytes": 2066514,
+   "sha256": "0fcb0a6730f4f936b537b8fd3402466dc1210923250fc1a1b4b8329c56236b34"
+  },
+  "lotes_demo.json": {
+   "bytes": 1510,
+   "sha256": "b5a815e1e9ebfcc27254fd927d415040379c4d93b5536787387124a021ce5d6a"
+  },
+  "meta.json": {
+   "bytes": 1717,
+   "sha256": "2bb5aa2b56ec6ef010141bc4ec5f66262bdb13706e006a5add24d01152cbf2a2"
+  },
+  "unidades_geo.json.gz": {
+   "bytes": 1236212,
+   "sha256": "fc7df4d0374381c62abffa74d3b7e47d8483045d6bcc8d6d7660b6eff16c272d"
+  }
+ }
+}

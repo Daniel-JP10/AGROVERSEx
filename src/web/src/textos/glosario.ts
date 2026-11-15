@@ -9,5 +9,5 @@ export const GLOSARIO: Termino[] = [
   { termino: 'Condición de la tierra', es: 'Clase que resume el estado de la tierra de una unidad en un periodo.', en: "Class summarizing the state of a unit's land over a period.", tecnico: 'Combinación propia de componentes; cada uno con rango y confianza.', fuente: 'INICIAR §6' },
   { termino: 'RONI', es: 'Medida de El Niño y La Niña.', en: 'Measure of El Niño and La Niña.', tecnico: 'ONI relativo; serie real mostrada bajo la línea de tiempo.', fuente: 'NOAA CPC' },
   { termino: 'SoilGrids', es: 'Mapa mundial de propiedades del suelo.', en: 'Global map of soil properties.', tecnico: 'Solo media agregada, sin intervalo, sin fecha.', fuente: 'ISRIC SoilGrids' },
-  { termino: 'ADM1 / ADM2', es: 'Primer y segundo nivel administrativo (departamento y municipio).', en: 'First and second administrative level (state and county).', tecnico: 'Límites GADM.', fuente: 'GADM' },
+  { termino: 'ADM1 / ADM2', es: 'Primer y segundo nivel administrativo (departamento y municipio).', en: 'First and second administrative level (state and county).', tecnico: 'Límites administrativos.', fuente: 'geoBoundaries CGAZ' },
 ]

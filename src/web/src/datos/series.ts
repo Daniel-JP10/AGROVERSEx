@@ -1,5 +1,6 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
-import type { Fetcher } from './cliente'
+import { cargarMatriz, nivelDeUnidad, type ProductoMes } from './estatico'
+import { N_MESES } from '../tiempo/valor'
 import { t } from '../textos/i18n'
 import type { ClaveTexto } from '../textos/es'
 import { paraMostrar, type Mes } from '../comun/unidades'
@@ -7,21 +8,29 @@ import { paraMostrar, type Mes } from '../comun/unidades'
 export type Num = number | null
 
 export interface SerieVar {
-  valor: Num[]; bandera: number[]; p10?: Num[]; p90?: Num[]
-  unidad_medida: string | null; rango: [number | null, number | null]; etiqueta: string | null; nivel_dato: string | null
+  valor: Num[]; p10: Num[]; p90: Num[]; frac: Num[]
+  /** Unidad del producto de cada mes (null = mes sin producto); IMERG cambia de mm/hr a mm/day en 2025-10 */
+  unidad_mes: (string | null)[]
+  productos: ProductoMes[]; producto_mes: number[]
 }
 export interface RespSerie { meses: number[]; series: Record<string, SerieVar> }
 
-// Cliente de /api/serie/:id (Task 4); con fetcher inyectable para fixtures. Un reintento y luego sube el error.
-export async function pedirSerie(id: string, vars: string[], desde = 0, hasta = 322, f: Fetcher = (u) => fetch(u)): Promise<RespSerie> {
-  const url = `/api/serie/${encodeURIComponent(id)}?vars=${vars.map(encodeURIComponent).join(',')}&desde=${desde}&hasta=${hasta}`
-  for (let i = 0; ; i++) {
-    try {
-      const r = await f(url)
-      if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`)
-      return await r.json()
-    } catch (e) { if (i >= 1) throw e }
+// Serie de una unidad desde los archivos estáticos (datos/estatico.ts); valores en la unidad del producto, sin convertir.
+export async function pedirSerie(id: string, vars: string[], desde = 0, hasta = N_MESES - 1): Promise<RespSerie> {
+  const meses = Array.from({ length: hasta - desde + 1 }, (_, i) => desde + i)
+  const series: Record<string, SerieVar> = {}
+  for (const v of vars) {
+    const m = await cargarMatriz(v, nivelDeUnidad(id))
+    const r = m.ids.indexOf(id)
+    if (r < 0) throw new Error(`sin dato real para ${id}`)
+    const cut = (a: Num[][]) => meses.map((k) => a[r][k] ?? null)
+    series[v] = {
+      valor: cut(m.valor), p10: cut(m.p10), p90: cut(m.p90), frac: cut(m.frac), productos: m.productos,
+      producto_mes: meses.map((k) => m.producto_mes[k] ?? -1),
+      unidad_mes: meses.map((k) => (m.producto_mes[k] >= 0 ? m.productos[m.producto_mes[k]].unidad : null)),
+    }
   }
+  return { meses, series }
 }
 
 // Lluvia (unidad del producto, obligatoria) -> mm/mes del mes dado (la conversión vive en comun/unidades.ts)
@@ -61,8 +70,7 @@ export function segmentar(s: Num[]): { desde: number; valores: number[] }[] {
 }
 
 const CLAVE_VAR: Record<string, ClaveTexto> = {
-  precip: 'capa.precipCorta', t2m: 'capa.t2m', ndvi: 'capa.ndvi', sm_sup: 'capa.sm_sup', sm_raiz: 'capa.sm_raiz',
-  tws: 'capa.twsCorta', rad_sw: 'capa.rad_sw', rh2m: 'capa.rh2m', et: 'capa.et', lst_dia: 'capa.lst_dia',
+  precip: 'capa.precipCorta', t2m: 'capa.t2m', ndvi: 'capa.ndvi', sm_raiz: 'capa.sm_raiz',
 }
 export const nombreVar = (v: string) => (CLAVE_VAR[v] ? t(CLAVE_VAR[v]) : v)
 

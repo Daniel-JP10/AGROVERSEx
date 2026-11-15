@@ -3,13 +3,14 @@ import { useEffect, useState } from 'react'
 import { BandaSerie } from '../graficos/BandaSerie'
 import { anomalia, nombreVar, pedirSerie, tendencia, type RespSerie, type Num, type SerieVar } from '../datos/series'
 import { paraMostrar } from '../comun/unidades'
-import { Chip } from './Chip'
+import { tieneDatoReal } from '../datos/estatico'
 import { CAPAS } from '../datos/capas'
 import { useEstado } from '../app/estado'
 import { t } from '../textos/i18n'
 
 const VARS = CAPAS.map((c) => c.id)
-const CAMBIOS = [{ mes: 180, texto: 'GLDAS → SMAP' }] // ene-2015
+// IMERG Final (mm/hr) pasa a Late provisional (mm/day) en 2025-10 = índice 309; solo la lluvia cambia de fuente
+const CAMBIOS_PRECIP = [{ mes: 309, texto: 'IMERG Final → Late' }]
 const fmt = (x: number) => x.toFixed(3)
 
 export function Series({ id }: { id: string }) {
@@ -17,13 +18,16 @@ export function Series({ id }: { id: string }) {
   const [anom, setAnom] = useState(false)
   const [r, setR] = useState<RespSerie | null>(null)
   const [err, setErr] = useState(false)
-  useEffect(() => { setR(null); setErr(false); pedirSerie(id, VARS).then(setR).catch(() => setErr(true)) }, [id])
+  const real = tieneDatoReal(id)
+  useEffect(() => { setR(null); setErr(false); if (real) pedirSerie(id, VARS).then(setR).catch(() => setErr(true)) }, [id, real])
   const s = r?.series[v]
+  if (!real) return <p role="status">{t('panel.sinDatoReal')}</p>
   if (err) return <p role="status">{t('series.err')}</p>
   if (!s) return <p role="status">{t('series.cargando')}</p>
   const c = convertirSerie(v, s)
-  if (!c) return <p role="alert">{t('unidad.sinConversion')}: {v}/{String(s.unidad_medida)}</p>
-  let { valor, p10, p90 } = c
+  if (!c) return <p role="alert">{t('unidad.sinConversion')}: {v}/{String(s.unidad_mes.find((x) => x !== null))}</p>
+  let { valor } = c
+  let p10: Num[] | undefined = c.p10, p90: Num[] | undefined = c.p90
   const unidad = c.unidad
   if (anom) { valor = anomalia(valor, 0, 191); p10 = undefined; p90 = undefined }
   const tend = tendencia(valor)
@@ -32,17 +36,18 @@ export function Series({ id }: { id: string }) {
     <div>
       <label>{t('series.variable')} <select value={v} onChange={(e) => setV(e.target.value)}>{VARS.map((x) => <option key={x} value={x}>{nombreVar(x)}</option>)}</select></label>
       <label><input type="checkbox" checked={anom} onChange={(e) => setAnom(e.target.checked)} /> {t('series.anomalia')}</label>
-      <BandaSerie valor={valor} p10={p10} p90={p90} variable={v} unidad={unidad} cambiosFuente={CAMBIOS} />
-      <p className="etiqueta"><Chip e="SIMULADO" /> {ok} {t('series.de')} {valor.length} {t('series.mesesConDato')} {p10 ? t('series.delProducto') : t('series.noDisponible')}.</p>
+      <BandaSerie valor={valor} p10={p10} p90={p90} variable={v} unidad={unidad} cambiosFuente={v === 'precip' ? CAMBIOS_PRECIP : []} />
+      <p className="etiqueta">{ok} {t('series.de')} {valor.length} {t('series.mesesConDato')} {p10 ? t('series.delProducto') : t('series.noDisponible')}.</p>
       <p className="etiqueta">{t('series.tendencia')} {fmt(tend.pendiente * 12)} {unidad}{t('series.porAnio')} ({t('series.ic')} {fmt(tend.ic[0] * 12)} {t('series.a')} {fmt(tend.ic[1] * 12)})</p>
     </div>
   )
 }
 
-// Convierte toda la serie para mostrar; null si el par (variable, unidad) no tiene conversión
+// Convierte toda la serie para mostrar con la unidad de cada mes; null si algún par (variable, unidad) no tiene conversión
 export function convertirSerie(v: string, s: SerieVar) {
   try {
-    const cv = (a?: Num[]) => a?.map((x, i) => paraMostrar(v, x, s.unidad_medida, i).valor)
-    return { valor: cv(s.valor)!, p10: cv(s.p10), p90: cv(s.p90), unidad: paraMostrar(v, null, s.unidad_medida, 0).unidad }
+    const cv = (a: Num[]) => a.map((x, i) => (x === null ? null : paraMostrar(v, x, s.unidad_mes[i], i).valor))
+    const u = s.unidad_mes.find((x) => x !== null) ?? null
+    return { valor: cv(s.valor), p10: cv(s.p10), p90: cv(s.p90), unidad: paraMostrar(v, null, u, 0).unidad }
   } catch { return null }
 }

@@ -1,0 +1,12 @@
+       |                                        ^
+     49|   })
+     50| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 6 passed (8)
+   Start at  15:26:36
+   Duration  697ms (transform 48%, import 31%, tests 14%, worker 7%)
+

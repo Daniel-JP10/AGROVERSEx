@@ -71,7 +71,7 @@ export function crearRecoloreo(mapa: MapaGL, leer: (nivel: number, id: string) =
       const s = new Set<string>()
       // querySourceFeatures().state no refleja feature-state en MapLibre 6.16: aquí solo se leen ids
       for (const f of mapa.querySourceFeatures(fuente, { sourceLayer: capa })) {
-        const id = f.properties?.id
+        const id = f.properties?.unidad_id
         if (typeof id !== 'string' || !porClave.has(claveUnidad(nivel, id))) continue
         if (paises && !paises.includes(String(f.properties?.iso3 ?? id))) continue
         s.add(id)

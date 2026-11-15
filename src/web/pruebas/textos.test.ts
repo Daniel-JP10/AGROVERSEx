@@ -6,7 +6,7 @@ import { Cabecera } from '../src/app/Cabecera'
 import { en } from '../src/textos/en'
 import { es } from '../src/textos/es'
 import { GLOSARIO } from '../src/textos/glosario'
-import { AVISO_N7, BANDA, LICENCIAS_NC } from '../src/textos/avisos'
+import { AVISO_N7, BANDA, FUENTES_AYUDA } from '../src/textos/avisos'
 import { alternar, idioma, t } from '../src/textos/i18n'
 import { detalle } from '../src/textos/modos'
 
@@ -30,7 +30,8 @@ describe('textos', () => {
   it('avisos obligatorios y licencias NC', () => {
     expect(BANDA).toContain('SIMULADO · DEMO')
     expect(AVISO_N7).toContain('no reemplaza el criterio del agricultor ni del técnico')
-    for (const l of ['GADM', 'EOX', 'WorldClim', 'Köppen']) expect(LICENCIAS_NC.join(' ')).toContain(l)
+    for (const l of ['geoBoundaries', 'NASA GIBS', 'NASA']) expect(FUENTES_AYUDA.join(' ')).toContain(l)
+    expect(FUENTES_AYUDA.join(' ')).not.toContain('EOX')
   })
   it('ningún texto menciona Google Earth', () => {
     expect(JSON.stringify([es, en, GLOSARIO]).toLowerCase()).not.toContain('google')

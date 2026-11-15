@@ -8,8 +8,8 @@ const FORMATO_UNIDAD = /^([A-Z0-9]{3})-ADM(?:0|([12])-[A-Za-z0-9]+)$/
 
 /**
  * unidad_id (contratos/unidades.md) -> clave interna `nivel:id` del globo.
- * shortcut: las teselas de T-D1 usan unidad_id directamente como id, así que se acepta tal cual;
- * no hay tabla GADM->CGAZ para los ids del prototipo. Subir a tabla si el índice sigue en GADM.
+ * Las teselas CGAZ de T-D1 usan unidad_id como id de entidad (promoteId) y el índice de búsqueda trae los mismos ids:
+ * la clave interna es nivel:unidad_id, sin tabla de traducción.
  */
 export function claveDeUnidadId(unidadId: string): string {
   const m = FORMATO_UNIDAD.exec(unidadId)

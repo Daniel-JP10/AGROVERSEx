@@ -1,0 +1,12 @@
+       |                        ^
+     52|     expect(ATRIBUCION).toContain('Runfola et al. 2020')
+     53|     expect(ATRIBUCION).toMatch(/CC BY 4\.0/)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 8 passed (9)
+   Start at  15:35:17
+   Duration  677ms (transform 47%, import 30%, tests 16%, worker 6%)
+

@@ -6,15 +6,14 @@ import { N_MESES } from './valor'
 import { CALENDARIO, mesIdAEtiqueta, mesesConHueco } from './huecos'
 import { crearReproductor } from './Reproductor'
 import { CintaEnso } from './CintaEnso'
-import { QueryClient } from '@tanstack/react-query'
-import { precargarMeses } from '../datos/consultas'
+import { cargarMatriz } from '../datos/estatico'
 import { capaPorId } from '../datos/capas'
 import { t } from '../textos/i18n'
 
 const VELOCIDAD = 4 // meses por segundo
-const qcPrecarga = new QueryClient()
-// Sin bloquear: no se espera la promesa. shortcut: nivel 1 fijo, el nivel activo del mapa no está en el estado; subir si hace falta.
-const precargar = (a: number, b: number) => { void precargarMeses(1, useEstado.getState().capa, a, b, qcPrecarga) }
+// Sin bloquear. Los archivos estáticos traen todos los meses de una variable, así que precargar es cargar la matriz del nivel 1.
+// shortcut: nivel 1 fijo, el nivel activo del mapa no está en el estado; subir si hace falta.
+const precargar = () => { void cargarMatriz(useEstado.getState().capa, 1).catch(() => undefined) }
 const espera = (ms: number) => new Promise((f) => setTimeout(f, ms))
 
 // Pinta el mes pedido y espera a que el globo termine (reutiliza `pintando`); tope 1,5 s

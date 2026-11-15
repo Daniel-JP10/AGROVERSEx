@@ -4,7 +4,7 @@ import { createElement } from 'react'
 import { renderToString } from 'react-dom/server'
 import type { SerieVar } from '../src/datos/series'
 
-const serie = (unidad: string | null): SerieVar => ({ valor: [123.456], bandera: [0], p10: [100], p90: [150], unidad_medida: unidad, rango: [null, null], etiqueta: null, nivel_dato: null })
+const serie = (unidad: string | null): SerieVar => ({ valor: [123.456], p10: [100], p90: [150], frac: [1], unidad_mes: [unidad], productos: [], producto_mes: [-1] })
 
 let FilaDato: typeof import('../src/paneles/Resumen').FilaDato
 let convertirSerie: typeof import('../src/paneles/Series').convertirSerie

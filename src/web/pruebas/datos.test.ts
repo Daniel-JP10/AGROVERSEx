@@ -1,11 +1,8 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import { describe, expect, it } from 'vitest'
-import { QueryClient } from '@tanstack/react-query'
 import { desescalar, formatearRango, SIN_DATO } from '../src/datos/desescalar'
 import { decodificarCoropleta } from '../src/datos/binario'
 import { BANDERA } from '../src/datos/banderas'
-import { crearCliente } from '../src/datos/cliente'
-import { cargarMes, ultimoMesBueno } from '../src/datos/consultas'
 
 describe('desescalar', () => {
   it('el relleno y null dan null', () => {
@@ -25,31 +22,5 @@ describe('desescalar', () => {
   })
   it('banderas en el orden de la fase 2', () => {
     expect(Object.values(BANDERA)).toEqual([1, 2, 4, 8, 16])
-  })
-})
-
-// Respuesta binaria simulada con las cabeceras de la API.
-const resp = (v: number) => new Response(new Int16Array([v]).buffer, { headers: { 'X-Escala': '0.01', 'X-Desplazamiento': '0', 'X-Rango': '0,50' } })
-
-describe('cliente y caché', () => {
-  it('reintenta una vez y luego falla', async () => {
-    let n = 0
-    const c = crearCliente(async () => { n++; throw new Error('red') })
-    await expect(c.coropleta(1, 'precip', 0)).rejects.toThrow()
-    expect(n).toBe(2)
-  })
-  it('falla en el mes 5: error visible y el mes mostrado sigue siendo el 4', async () => {
-    const c = crearCliente(async (u) => (u.includes('mes=5') ? new Response('x', { status: 500 }) : resp(100)))
-    const qc = new QueryClient()
-    for (let m = 0; m <= 4; m++) await cargarMes(qc, c, 1, 'precip', m)
-    await expect(cargarMes(qc, c, 1, 'precip', 5)).rejects.toThrow()
-    expect(qc.getQueryState(['coropleta', 1, 'precip', 5])?.status).toBe('error')
-    expect(ultimoMesBueno(qc, 1, 'precip', 5)?.mes).toBe(4)
-  })
-  it('conserva a lo sumo 48 meses', async () => {
-    const c = crearCliente(async () => resp(1))
-    const qc = new QueryClient()
-    for (let m = 0; m < 50; m++) await cargarMes(qc, c, 1, 'precip', m)
-    expect(qc.getQueryCache().findAll({ queryKey: ['coropleta', 1, 'precip'] }).length).toBe(48)
   })
 })

@@ -20,15 +20,29 @@ export const FONDOS: FondoConfig[] = [
     atribucion: 'Imágenes NASA GIBS', licencia: 'Dominio público (NASA)',
   },
   {
-    // VERIFICADO 2026-11-09: capa s2cloudless-2024_3857, zoom 21 en el GetCapabilities; se limita a 14 (SUPUESTO, carga)
-    id: 'eox-s2-2024', nombre: 'Sentinel-2 cloudless 2024 (EOX)', maxzoom: 14, requiereToken: false,
-    tiles: ['https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/GoogleMapsCompatible/{z}/{y}/{x}.jpg'],
-    atribucion: 'EOxCloudless https://cloudless.eox.at by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2024)',
-    licencia: 'CC BY-NC-SA 4.0',
+    // VERIFICADO 2026-11-14: BlueMarble_ShadedRelief (relieve con color de tierra), sin Time, Level8, con restos de nubes en los Andes (limitación aceptada); z9 da 400, nativo 8
+    id: 'gibs-relieve', nombre: 'Blue Marble relieve sombreado (NASA GIBS)', maxzoom: 8, requiereToken: false,
+    tiles: [`${GIBS}/BlueMarble_ShadedRelief/default/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg`],
+    atribucion: "We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS).",
+    licencia: 'Datos abiertos de NASA (uso libre con reconocimiento)',
+  },
+  {
+    // Opción seleccionable: Blue Marble Next Generation (compuesto de 2004, con restos de nubes en trópico)
+    id: 'gibs-bluemarble-ng', nombre: 'Blue Marble Next Generation (NASA GIBS)', maxzoom: 8, requiereToken: false,
+    tiles: [`${GIBS}/BlueMarble_NextGeneration/default/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg`],
+    atribucion: "We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS).",
+    licencia: 'Datos abiertos de NASA (uso libre con reconocimiento)',
+  },
+  {
+    // Opción seleccionable, no por defecto: imagen de un solo día, con nubes y franjas. MODIS Terra TrueColor, GoogleMapsCompatible_Level9, jpeg; fecha fija (SUPUESTO: sin nubes aceptables)
+    id: 'gibs-modis-terra', nombre: 'MODIS Terra color verdadero (NASA GIBS)', maxzoom: 9, requiereToken: false,
+    tiles: [`${GIBS}/MODIS_Terra_CorrectedReflectance_TrueColor/default/2024-08-01/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg`],
+    atribucion: "We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS).",
+    licencia: 'Datos abiertos de NASA (uso libre con reconocimiento)',
   },
 ]
 
-export const FONDO_DETALLE = 'eox-s2-2024'
+export const FONDO_DETALLE = 'gibs-relieve'
 export const avisoSinRed = () => t('globo.fondoSinRed')
 /** Zoom en que el fondo de detalle empieza a verse y en que está a pleno. */
 export const ZOOM_DETALLE: [number, number] = [3.5, 5]
