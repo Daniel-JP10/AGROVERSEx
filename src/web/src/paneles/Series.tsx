@@ -7,6 +7,7 @@ import { tieneDatoReal } from '../datos/estatico'
 import { CAPAS } from '../datos/capas'
 import { useEstado } from '../app/estado'
 import { t } from '../textos/i18n'
+import { BASE_ULTIMO_INDICE } from '../textos/cifras'
 
 const VARS = CAPAS.map((c) => c.id)
 // IMERG Final (mm/hr) pasa a Late provisional (mm/day) en 2025-10 = índice 309; solo la lluvia cambia de fuente
@@ -29,7 +30,7 @@ export function Series({ id }: { id: string }) {
   let { valor } = c
   let p10: Num[] | undefined = c.p10, p90: Num[] | undefined = c.p90
   const unidad = c.unidad
-  if (anom) { valor = anomalia(valor, 0, 191); p10 = undefined; p90 = undefined }
+  if (anom) { valor = anomalia(valor, 0, BASE_ULTIMO_INDICE); p10 = undefined; p90 = undefined }
   const tend = tendencia(valor)
   const ok = valor.filter((x) => x !== null).length
   return (

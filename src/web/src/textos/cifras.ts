@@ -1,17 +1,19 @@
 // asistido por SI: Claude Code (Anthropic), cifras de datos de los textos visibles: salen de constantes del código de datos, nunca de en.ts ni es.ts
 
-// Primer mes y número de meses de la serie: los de public/datos/meta.json (mes0, n_meses); la prueba los compara con el archivo.
+import meta from '../../public/datos/meta.json'
+
+// Primer mes y número de meses de la serie: se leen de public/datos/meta.json (mes0, n_meses).
 // No se importa de tiempo/ (frontera con las carpetas de Daniel)
-const MES_INICIO = { anio: 2000, mes: 1 }
-const N_MESES = 323
-// Índice (desde MES_INICIO) del último mes de la línea base: mismo 0..191 que usa paneles/Series.tsx (2000-01 a 2015-12)
-const BASE_ULTIMO_INDICE = 191
-// Fracción válida mínima para publicar un valor (contratos/web_datos.md: null si frac_valida < 0,5)
-const FRACCION_MINIMA = 0.5
-// Error de la esfera de radio medio frente al elipsoide, en % (herramientas/geodesia.ts, shortcut declarado)
-const ERROR_ESFERA_PCT = 0.5
-// Fecha del mosaico Blue Marble del fondo (NASA GIBS, mes y año)
-const FONDO = { anio: 2004, mes: 8 }
+const MES_INICIO = { anio: Number(meta.mes0.slice(0, 4)), mes: Number(meta.mes0.slice(5, 7)) }
+const N_MESES = meta.n_meses
+// Índice (desde MES_INICIO) del último mes de la línea base (2000-01 a 2015-12): definición del método, una sola fuente que usa paneles/Series.tsx
+export const BASE_ULTIMO_INDICE = 191
+// Fracción válida mínima para publicar un valor: UMBRAL_FRAC_VALIDA de src/simulacion/geo/serie_mensual.py (atada por prueba)
+export const FRACCION_MINIMA = 0.5
+// Error de la esfera de radio medio frente al elipsoide, en %: el que declara herramientas/geodesia.ts (atada por prueba)
+export const ERROR_ESFERA_PCT = 0.5
+// Fecha del mosaico Blue Marble del fondo: título oficial de la capa GIBS (datos/evidencia/gibs_fondo.md, atada por prueba)
+export const FONDO = { anio: 2004, mes: 8 }
 
 const anioDe = (indice: number) => MES_INICIO.anio + Math.floor((MES_INICIO.mes - 1 + indice) / 12)
 const dosDig = (n: number) => String(n).padStart(2, '0')

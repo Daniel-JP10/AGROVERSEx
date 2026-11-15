@@ -2,6 +2,8 @@ import { t } from '../textos/i18n'
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 // Geodesia de la herramienta Medir. Puntos en [lon, lat] (grados), como GeoJSON.
 // shortcut: esfera de radio medio (haversine y área esférica), error de hasta ~0,5 % frente al elipsoide; subir a Vincenty/WGS84 si la cifra va a una ficha oficial.
+/** Error máximo declarado de la esfera frente al elipsoide, en %; el texto de Medir lo muestra desde aquí (cifras.ts, atada por prueba) */
+export const ERROR_ESFERA_PCT = 0.5
 
 const R_KM = 6371.0088
 const rad = (g: number) => (g * Math.PI) / 180

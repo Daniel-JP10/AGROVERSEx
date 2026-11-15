@@ -9,15 +9,18 @@ export function ventanaSueloExpuesto(lote: Pick<Lote, 'ventanas'>): { inicio: nu
 }
 
 import { t } from '../../textos/i18n'
+import fichaPower from '../../../../../datos/fichas/power_diario.md?raw'
 import type { ClaveTexto } from '../../textos/en'
 
 /** nombre y nota son claves de texto: se traducen al mostrar */
 export interface Riesgo { id: string; nombre: ClaveTexto; resolucion: string | null; valor: number | null; nota: ClaveTexto }
+// Resolución de POWER: la celda MERRA-2 que declara su ficha (datos/fichas/power_diario.md), no una cifra escrita aquí
+const celdaPower = /celda de reanálisis MERRA-2 de `([\d,]+) x/.exec(fichaPower)?.[1]
 // Valores en NULL: no hay pendiente de 30 m ni validación POWER; no se inventan.
 export const RIESGOS: Record<'erosion' | 'estres' | 'helada', Riesgo> = {
   erosion: { id: 'erosion', nombre: 'lotes.riesgo.erosion', resolucion: null, valor: null, nota: 'lotes.riesgo.erosion.nota' },
   estres: { id: 'estres', nombre: 'lotes.riesgo.estres', resolucion: 'SMAP 9 km', valor: null, nota: 'lotes.riesgo.estres.nota' },
-  helada: { id: 'helada', nombre: 'lotes.riesgo.helada', resolucion: 'POWER ~0,5°', valor: null, nota: 'lotes.riesgo.helada.nota' },
+  helada: { id: 'helada', nombre: 'lotes.riesgo.helada', resolucion: celdaPower ? `POWER ~${celdaPower}°` : 'POWER', valor: null, nota: 'lotes.riesgo.helada.nota' },
 }
 export const rotuloRiesgo = (r: Riesgo) => (r.resolucion ? `${t('lotes.contextoDe')} ${r.resolucion}, ${t('lotes.noDelLote')}` : t('lotes.escalaLote'))
 
