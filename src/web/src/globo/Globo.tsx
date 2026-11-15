@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón; fase 3 sin coordenadas en vivo
 import { useEffect, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
 import type { Map as MapaGL } from 'maplibre-gl'
@@ -18,6 +18,7 @@ import { Leyenda } from './leyenda'
 import { registrarPatron } from './patron'
 import { cargarCoropleta, cargarGeo, textoEstado, type ProductoMes } from '../datos/estatico'
 import { capaPorId } from '../datos/capas'
+import { MARCA_RELLENO, trasPrimerRelleno } from '../datos/primerRelleno'
 import type { Nivel } from '../datos/tipos'
 import { Controles } from './Controles'
 import { idioma, t } from '../textos/i18n'
@@ -50,7 +51,6 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
   const halo = useRef<HTMLCanvasElement>(null)
   const [sinRed, setSinRed] = useState(!navigator.onLine)
   const [mapa, setMapa] = useState<MapaGL | null>(null)
-  const [coords, setCoords] = useState<[number, number] | null>(null)
 
   useEffect(() => {
     if (!protocoloRegistrado) {
@@ -69,6 +69,14 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
     const motores: (MotorCoropleta | undefined)[] = []
     let version = 0
     const [aplicarVersion, pararColor] = crearRecoloreo(m, (n, id) => (motores[n] ? (motores[n]!.estado(id) ?? SIN_DATO_REAL) : undefined), (p) => useEstado.getState().setPintando(p))
+    // Hay relleno cuando alguna unidad del nivel país ya lleva valor en su estado (no basta con que la cola quede vacía)
+    const hayRelleno = () => {
+      const c = NIVELES[0]
+      return m.querySourceFeatures(c.fuente, { sourceLayer: c.capaFuente }).some((f) => f.id !== undefined && m.getFeatureState({ source: c.fuente, sourceLayer: c.capaFuente, id: f.id }).ok === true)
+    }
+    // Primer relleno pintado: cuadro tras el que ya hay valor en el estado; lo mide la prueba de presupuesto (≤ 6 s con red lenta, plan v1 §a)
+    const medirRelleno = () => { if (version > 0 && hayRelleno()) { performance.mark(MARCA_RELLENO); m.off('render', medirRelleno) } }
+    m.on('render', medirRelleno)
     const aplicarMes = (_mes: number) => cargarDatos()
     // Datos reales de archivos estáticos (datos/estatico.ts): una unidad con valor nulo = hueco; una unidad fuera de Colombia no se pinta
     let producto: ProductoMes | null = null
@@ -77,6 +85,8 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       const c = capaPorId(idCapa)
       try {
         for (const n of [0, 1, 2] as Nivel[]) {
+          // Primera carga: los niveles finos (unos MB) esperan al primer relleno para no quitarle red al país y a sus teselas
+          if (n > 0) await trasPrimerRelleno()
           const d = await cargarCoropleta(n, c.id, mes)
           if (mes !== useEstado.getState().mes || idCapa !== useEstado.getState().capa) return // llegó tarde: ya se pidió otro mes o capa
           motores[n]?.destruir()
@@ -84,11 +94,13 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
           mo.aplicar(d.valores, d.ids, filtro, d.frac, d)
           motores[n] = mo
           producto = d.producto
+          aplicarVersion(++version) // cada nivel se pinta al llegar: el país (unos KB) no espera al nivel 2 (unos MB)
         }
-        aplicarVersion(++version)
       } catch { useEstado.getState().setAviso(t('globo.sinBaseCoropleta')) }
     }
-    m.on('style.load', () => { registrarPatron(m); if (!m.hasImage('trama')) m.addImage('trama', trama()) })
+    // El relleno arranca con el estilo: no espera al índice ni a 'load', que aguarda también las teselas del fondo GIBS
+    let arrancado = false
+    m.on('style.load', () => { registrarPatron(m); if (!m.hasImage('trama')) m.addImage('trama', trama()); if (!arrancado) { arrancado = true; cargarDatos() } })
     const texto = (e: Parameters<typeof textoValor>[0]) => { const c = capaPorId(useEstado.getState().capa); return textoValor(e, c.unidad, c.rango) }
     const etiqueta = () => {
       if (!centro.current) return
@@ -146,7 +158,6 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
         ...(est && !est.hueco && producto ? [linea(`${t('globo.fraccionValida')} ${(est.frac ?? NaN).toLocaleString(idioma(), { maximumFractionDigits: 2 })} · ${producto.producto} ${producto.version} · ${textoEstado(producto.estado, useEstado.getState().capa, useEstado.getState().mes)}`)] : []))
     }
     m.on('mousemove', (e) => {
-      setCoords([e.lngLat.lng, e.lngLat.lat])
       ultimo = e
       if (!marco) marco = requestAnimationFrame(procesar)
     })
@@ -202,7 +213,6 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       await cargarIndice()
       const o = useEstado.getState().opacidad
       if (o !== OPACIDAD) for (const c of NIVELES) { m.setPaintProperty(`${c.fuente}-relleno`, 'fill-opacity', opacidadRelleno(c, o) as never); if (c.sinHijo.length) m.setPaintProperty(`${c.fuente}-respaldo`, 'fill-opacity', opacidadRelleno(c, o, true) as never) }
-      cargarDatos() // mes inicial al cargar
       setMapa(m)
       onMapa?.(m)
     })
@@ -221,7 +231,7 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       <Leyenda />
       <div ref={tip} className="tooltip" style={{ display: 'none' }} role="tooltip" />
       <div className="aviso-disputa">{avisoDisputa()}</div>
-      {mapa && <Controles mapa={mapa} coords={coords} />}
+      {mapa && <Controles mapa={mapa} />}
     </div>
   )
 }

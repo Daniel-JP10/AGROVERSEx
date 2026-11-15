@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; fase 3 sin lectura de coordenadas en vivo (plan v2 §3)
 import { useEffect, useState } from 'react'
 import type { Map as MapaGL } from 'maplibre-gl'
 import { useEstado } from '../app/estado'
@@ -14,7 +14,7 @@ function escala(mapa: MapaGL): { px: number; texto: string } {
   return { px: m / mPorPx, texto: m >= 1000 ? `${m / 1000} km` : `${m} m` }
 }
 
-export function Controles({ mapa, coords }: { mapa: MapaGL; coords: [number, number] | null }) {
+export function Controles({ mapa }: { mapa: MapaGL }) {
   const proyeccion = useEstado((s) => s.proyeccion)
   const setProyeccion = useEstado((s) => s.setProyeccion)
   const [rumbo, setRumbo] = useState(0)
@@ -44,7 +44,6 @@ export function Controles({ mapa, coords }: { mapa: MapaGL; coords: [number, num
       <div className="barra-inferior">
         <span className="escala" style={{ width: esc.px }} />
         <span>{esc.texto}</span>
-        <span className="coords">{coords ? `${coords[1].toFixed(3)}°, ${coords[0].toFixed(3)}°` : '—'}</span>
       </div>
     </>
   )

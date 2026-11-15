@@ -1,8 +1,9 @@
-// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón; fase 3: índice tras el primer relleno
 import { useEffect, useRef, useState } from 'react'
 import type { FilaIndice } from '../datos/busqueda'
 import { claveUnidad, cargarFilas, porClave } from '../datos/indice'
 import { useEstado } from '../app/estado'
+import { trasPrimerRelleno } from '../datos/primerRelleno'
 import { nombreNivel } from '../globo/config'
 import { useIdioma, t } from '../textos/i18n'
 
@@ -21,7 +22,8 @@ export function Busqueda() {
     const w = new Worker(new URL('../datos/busqueda.worker.ts', import.meta.url), { type: 'module' })
     w.onmessage = (e: MessageEvent<{ rid: number; res: FilaIndice[] }>) => { if (e.data.rid === rid.current) setRes(e.data.res) }
     worker.current = w
-    void cargarFilas().then((filas) => { w.postMessage({ filas }); setListo(true) })
+    // El índice (1,2 MB) baja después del primer relleno del globo, para no quitarle red (presupuesto ≤ 6 s)
+    void trasPrimerRelleno().then(cargarFilas).then((filas) => { w.postMessage({ filas }); setListo(true) })
     return () => w.terminate()
   }, [])
   useEffect(() => {

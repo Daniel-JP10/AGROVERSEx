@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón; fase 3: detalle con minzoom y atmósfera verde
 import { fondoBase, fondoDetalle, ZOOM_DETALLE } from './fondos'
 import { t } from '../textos/i18n'
 // Configuración centralizada de capas del globo.
@@ -174,16 +174,16 @@ export function construirEstilo(origen: string, enLinea = true): unknown {
   return {
     version: 8,
     projection: { type: 'globe' },
-    // Atmósfera azul en el borde; se apaga al acercarse
+    // Atmósfera verde en el borde, como el brillo del círculo (plan v2 §3); se apaga al acercarse
     sky: {
-      'sky-color': '#2a7fe8', 'horizon-color': '#8fd0ff', 'fog-color': '#2b2a7a',
+      'sky-color': '#1f6b45', 'horizon-color': '#7be0a0', 'fog-color': '#0f2a1d',
       'sky-horizon-blend': 0.7, 'horizon-fog-blend': 0.6, 'fog-ground-blend': 0.3,
       'atmosphere-blend': ['interpolate', ['linear'], ['zoom'], 0, 1, 5, 1, 7, 0],
     },
     sources: fuentes,
     layers: [
       { id: 'bluemarble', type: 'raster', source: 'bluemarble' },
-      ...(det ? [{ id: 'detalle', type: 'raster', source: 'detalle', paint: { 'raster-opacity': ['interpolate', ['linear'], ['zoom'], ZOOM_DETALLE[0], 0, ZOOM_DETALLE[1], 1], 'raster-fade-duration': 300 } }] : []),
+      ...(det ? [{ id: 'detalle', type: 'raster', source: 'detalle', minzoom: ZOOM_DETALLE[0], paint: { 'raster-opacity': ['interpolate', ['linear'], ['zoom'], ZOOM_DETALLE[0], 0, ZOOM_DETALLE[1], 1], 'raster-fade-duration': 300 } }] : []),
       { id: 'truecolor', type: 'raster', source: 'truecolor', layout: { visibility: TRUECOLOR_ACTIVO ? 'visible' : 'none' } },
       ...NIVELES.flatMap(capasNivel),
     ],
