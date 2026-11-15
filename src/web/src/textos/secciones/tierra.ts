@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), textos de la sección tierra (plan fase 3 v2 §10)
+// asistido por SI: Claude Code (Anthropic), textos de la sección tierra (plan fase 3 v2 §10) y ponderación con PI-D1 (S1w)
 // Claves con prefijo 'tierra.'; el español debe tener todas las claves del inglés (lo exige el tipo)
 export const en = {
   'tierra.lotes.titulo': 'Select a lot',
@@ -8,6 +8,13 @@ export const en = {
   'tierra.leyenda.producto': 'Product',
   'tierra.suelo.noDisponible': 'Not available yet',
   'tierra.suelo.nota': 'Soil by unit is not computed yet; soil is shown only for the DEMO plots.',
+  'tierra.sinCultivo': 'No cropland',
+  'tierra.pond.titulo': 'Weighting',
+  'tierra.pond.cultivo': 'Cropland mean',
+  'tierra.pond.area': 'Total area mean',
+  'tierra.pond.pid1': 'Between {min} and {max} % of unit-month pairs change with the definition (PI-D1)',
+  'tierra.pond.fuente': 'Source: pi_d1_mundo.json, registered threshold, without IMERG Late',
+  'tierra.limites': 'Limitations: radiation and crop sensitivity 1 to 5 are PENDING; the IMERG precipitationQualityIndex is not used.',
 } as const
 export const es: Record<keyof typeof en, string> = {
   'tierra.lotes.titulo': 'Elige un lote',
@@ -17,4 +24,11 @@ export const es: Record<keyof typeof en, string> = {
   'tierra.leyenda.producto': 'Producto',
   'tierra.suelo.noDisponible': 'Aún no disponible',
   'tierra.suelo.nota': 'El suelo por unidad aún no se calcula; solo se muestra en los lotes DEMO.',
+  'tierra.sinCultivo': 'Sin cultivo',
+  'tierra.pond.titulo': 'Ponderación',
+  'tierra.pond.cultivo': 'Media sobre cultivo',
+  'tierra.pond.area': 'Media sobre el área total',
+  'tierra.pond.pid1': 'Entre {min} y {max} % de los pares unidad-mes cambian con la definición (PI-D1)',
+  'tierra.pond.fuente': 'Fuente: pi_d1_mundo.json, umbral registrado, sin IMERG Late',
+  'tierra.limites': 'Limitaciones: la radiación y la sensibilidad de cultivo 1 a 5 están PENDIENTES; no se usa el precipitationQualityIndex de IMERG.',
 }

@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón; fase 3 sin coordenadas en vivo
+// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón; fase 3 sin coordenadas en vivo; series del mundo y ponderación (S1w)
 import { useEffect, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
 import type { Map as MapaGL } from 'maplibre-gl'
@@ -13,10 +13,10 @@ import { avisoSinRed } from './fondos'
 import './globo.css'
 import { cargarIndice, claveUnidad, porClave, type Unidad } from '../datos/indice'
 import { useEstado } from '../app/estado'
-import { crearMotorCoropleta, SIN_DATO_REAL, textoValor, type MotorCoropleta } from './coropleta'
+import { crearMotorCoropleta, SIN_CULTIVO, SIN_DATO_REAL, textoValor, type MotorCoropleta } from './coropleta'
 import { Leyenda } from './leyenda'
 import { registrarPatron } from './patron'
-import { cargarCoropleta, cargarGeo, textoEstado, type ProductoMes } from '../datos/estatico'
+import { cargarCoropleta, cargarGeo, cargarMeta, hayMundo, iso3DeUnidad, metaActual, textoEstado, usePonderacion, type ProductoMes } from '../datos/estatico'
 import { capaPorId } from '../datos/capas'
 import { MARCA_RELLENO, trasPrimerRelleno } from '../datos/primerRelleno'
 import type { Nivel } from '../datos/tipos'
@@ -83,18 +83,34 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
     const aplicarMes = (_mes: number) => cargarDatos()
     // Datos reales de archivos estáticos (datos/estatico.ts): una unidad con valor nulo = hueco; una unidad fuera de Colombia no se pinta
     let producto: ProductoMes | null = null
-    const cargarDatos = async () => {
+    // adm2 del mundo: solo los países con teselas adm2 cargadas (cada país pesa unos MB)
+    let paises2: string[] = []
+    const paisesAdm2 = () => {
+      const lista = metaActual().paises_adm2 ?? []
+      const s = new Set<string>()
+      for (const f of m.querySourceFeatures(NIVELES[2].fuente, { sourceLayer: NIVELES[2].capaFuente })) {
+        const p = iso3DeUnidad(String(f.properties?.unidad_id ?? ''))
+        if (lista.includes(p)) s.add(p)
+      }
+      return [...s].sort()
+    }
+    const cargarDatos = async (soloNivel2 = false) => {
+      await cargarMeta().catch(() => undefined)
       const { mes, filtro, capa: idCapa } = useEstado.getState()
+      const pond = usePonderacion.getState().ponderacion
       const c = capaPorId(idCapa)
       try {
-        for (const n of [0, 1, 2] as Nivel[]) {
+        for (const n of (soloNivel2 ? [2] : [0, 1, 2]) as Nivel[]) {
           // Primera carga: los niveles finos (unos MB) esperan al primer relleno para no quitarle red al país y a sus teselas
           if (n > 0) await trasPrimerRelleno()
-          const d = await cargarCoropleta(n, c.id, mes)
-          if (mes !== useEstado.getState().mes || idCapa !== useEstado.getState().capa) return // llegó tarde: ya se pidió otro mes o capa
+          if (n === 2) paises2 = paisesAdm2()
+          const d = await cargarCoropleta(n, c.id, mes, paises2)
+          if (mes !== useEstado.getState().mes || idCapa !== useEstado.getState().capa || pond !== usePonderacion.getState().ponderacion) return // llegó tarde
           motores[n]?.destruir()
-          const mo = crearMotorCoropleta(m, { nivel: n, rango: c.rango })
-          mo.aplicar(d.valores, d.ids, filtro, d.frac, d)
+          const base = crearMotorCoropleta(m, { nivel: n, rango: c.rango })
+          base.aplicar(d.valores, d.ids, filtro, d.frac, d)
+          // Sin cultivo (ponderación de cultivo): ni color ni trama, y el texto lo dice; nunca 0
+          const mo: MotorCoropleta = d.sinCultivo.size ? { ...base, estado: (id) => (d.sinCultivo.has(id) ? SIN_CULTIVO : base.estado(id)) } : base
           motores[n] = mo
           producto = d.producto
           aplicarVersion(++version) // cada nivel se pinta al llegar: el país (unos KB) no espera al nivel 2 (unos MB)
@@ -117,6 +133,9 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       centro.current.textContent = `${nombreUnidad(String(f.properties.nombre ?? id), esDisputa(f.properties))}: ${t}`
     }
     m.on('idle', etiqueta) // tras mover y tras cargar teselas/valores
+    // Al acercarse a otro país, su adm2 se carga
+    m.on('moveend', () => { if (hayMundo() && nivelParaZoom(m.getZoom()) >= 1 && paisesAdm2().join() !== paises2.join()) void cargarDatos(true) })
+    const dejarPond = usePonderacion.subscribe(() => { void cargarDatos() })
     const parar = iniciarEstrellas(lienzo.current!, m)
     const pararHalo = iniciarHalo(halo.current!, m)
     // Si fallan las teselas del fondo de detalle, queda Blue Marble y se avisa
@@ -158,7 +177,7 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       const linea = (txt: string) => { const d = document.createElement('div'); d.textContent = txt; return d }
       caja.replaceChildren(nombre, ...(u?.pais && !disp ? [linea(u.pais)] : []),
         linea(texto(est)),
-        ...(est && !est.hueco && producto ? [linea(`${t('globo.fraccionValida')} ${(est.frac ?? NaN).toLocaleString(idioma(), { maximumFractionDigits: 2 })} · ${producto.producto} ${producto.version} · ${textoEstado(producto.estado, useEstado.getState().capa, useEstado.getState().mes)}`)] : []))
+        ...(est && !est.hueco && !est.sinCultivo && producto ? [linea(`${t('globo.fraccionValida')} ${(est.frac ?? NaN).toLocaleString(idioma(), { maximumFractionDigits: 2 })} · ${producto.producto} ${producto.version} · ${textoEstado(producto.estado, useEstado.getState().capa, useEstado.getState().mes)}`)] : []))
     }
     m.on('mousemove', (e) => {
       ultimo = e
@@ -219,7 +238,7 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       setMapa(m)
       onMapa?.(m)
     })
-    return () => { parar(); pararHalo(); pararColor(); dejarSel(); dejarOtros(); cancelAnimationFrame(marco); m.remove() }
+    return () => { parar(); pararHalo(); pararColor(); dejarSel(); dejarPond(); dejarOtros(); cancelAnimationFrame(marco); m.remove() }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
