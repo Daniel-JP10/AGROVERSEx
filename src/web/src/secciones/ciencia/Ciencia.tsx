@@ -1,6 +1,7 @@
 // asistido por SI: Claude Code (Anthropic), sección Ciencia y validación: una tarjeta por afirmación con cifra, intervalo, periodo, fuente y etiqueta (plan v2 §6)
 import type { ReactNode } from 'react'
 import { idioma, t, useIdioma, type ClaveTodo } from '../../textos/i18n'
+import { rangoPiD1, umbralesRegistrados } from './pi_d1'
 import { ARCHIVOS, PI_D1_MUNDO, bandaHls, erosion, estacion, hls, lluvia2026, piD1, rangoPiD1Mundo, temperatura, type InformePiD1Mundo } from './datos'
 import './ciencia.css'
 
@@ -60,11 +61,15 @@ function GraficoHls({ lote, meses, periodo }: (typeof hls)[number]) {
 
 /** PI-D1 mundial: oculto con "Not available yet" mientras no se pase el informe verificado (plan v2 §7). */
 export function TarjetaPiD1Mundo({ informe = PI_D1_MUNDO }: { informe?: InformePiD1Mundo | null }) {
-  const r = rangoPiD1Mundo(informe)
+  // Umbral registrado de cada variable (5 %; 0,5 K en T2M) y la sensibilidad al 2 % y al 10 %; sin IMERG Late
+  const reg = rangoPiD1(informe, 'registrado'), a2 = rangoPiD1(informe, '2%'), a10 = rangoPiD1(informe, '10%')
+  const r = reg ?? rangoPiD1Mundo(informe)
+  const pc = (x: number) => num(x * 100, 1)
   return (
     <Tarjeta id="pi_d1_mundo" titulo="ciencia.c.pid1m.titulo" etiqueta={r ? 'FUENTE' : null} fuente={r ? ARCHIVOS.piD1Mundo : null}
-      cifra={r ? f('ciencia.c.pid1m.cifra', { min: num(r.min * 100, 1), max: num(r.max * 100, 1) }) : null}
-      intervalo={null} periodo={null} />
+      cifra={r ? f('ciencia.c.pid1m.cifra', { min: pc(r.min), max: pc(r.max) }) : null}
+      intervalo={a2 && a10 ? f('ciencia.c.pid1m.sensibilidad', { u2: '2%', u10: '10%', a: pc(a2.min), b: pc(a2.max), c: pc(a10.min), d: pc(a10.max) }) : null}
+      periodo={reg ? f('ciencia.c.pid1m.umbral', { umbrales: umbralesRegistrados(informe) }) : null} />
   )
 }
 

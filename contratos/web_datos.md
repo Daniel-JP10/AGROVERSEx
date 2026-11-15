@@ -113,3 +113,21 @@ La conversión a unidad de pantalla (`mm/mes` con los días UTC reales de cada m
 - Pruebas automáticas:
   - `pytest pruebas/mapa/test_construir.py` (7/7 en verde)
   - `npx vitest run pruebas/estatico.test.ts` (16/16 en verde, incluida la verificación de SHA-256 de los 15 archivos de `manifiesto.json`)
+
+## 7. Series del mundo con dos ponderaciones (S1w, 2026-11-15)
+
+Las genera `construir --desplegar` en `dist/datos/` desde `AGROVERSEX_DATOS/series_mundo/consolidados/serie_mensual_<variable>_<area|cultivo>.csv.gz` (`construir_mundo` en `src/mapa_estatico/construir.py`). No se versionan; la copia de `public/datos/COL` se queda para las pruebas.
+
+| Ruta en `dist/` | Contenido |
+|-|-|
+| `datos/MUNDO/<variable>_<0\|1>.json.gz` | adm0 o adm1 de todos los países, ponderación por área |
+| `datos/MUNDO/<variable>_<0\|1>_cultivo.json.gz` | lo mismo, ponderación por cultivo |
+| `datos/<ISO3>/<variable>_2.json.gz` y `_2_cultivo.json.gz` | adm2 de un país, por área y por cultivo |
+| `datos/meta.json` | `paises` (con adm0), `paises_adm2`, `mundo`, `ponderaciones` (sufijo por ponderación), `ponderacion_defecto` (`cultivo`), `variables` con productos en inglés (H-F3-1) y `unidades_publicadas` por variable, ponderación y nivel |
+
+- Formato igual al §2 más `sin_cultivo`: ids cuyas filas tienen `motivo = sin_cultivo` en todos los meses. La app dice "No cropland", nunca 0.
+- Cifras: `valor` 6 significativas, `p10` y `p90` 5, `frac` 3 significativas (en v0 eran 3 decimales). gzip nivel 6 con `mtime=0`.
+- Unidades: igual que §2.1. La precipitación del mundo viene en mm/hr (Final) y mm/day (Late); no se convierte en el generador. `comun/unidades.ts` la pasa a mm/mes con los días UTC reales del mes.
+- Late sale con `estado = "provisional"` desde el CSV; enero y febrero de 2026 llevan además "en revisión" (`MESES_EN_REVISION`).
+- Respaldo (director, 15:27): `--adm2-paises COL,USA` o `AGROVERSEX_ADM2_PAISES=COL,USA` deja adm2 solo de esos países; adm0 y adm1 siguen siendo del mundo.
+- La app lee `meta.json` del despliegue al arrancar (`cargarMeta`): `PAISES_CON_DATO` sale de `paises`. Sin `mundo` en meta (desarrollo con `public/`), lee COL por área como en v0.

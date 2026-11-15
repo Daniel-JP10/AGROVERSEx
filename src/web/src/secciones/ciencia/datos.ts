@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), cifras de Ciencia y validación leídas en el build de los archivos de datos (plan v2 §6)
+// asistido por SI: Claude Code (Anthropic), cifras de Ciencia y validación leídas en el build de los archivos de datos (plan v2 §6); PI-D1 mundial de S1 (S1w)
 // Ninguna cifra se escribe a mano: todo sale de estos JSON. Solo se importan los campos agregados que se muestran
 // (las importaciones con nombre dejan fuera del bundle el resto del archivo, por ejemplo las estaciones de S4).
 import comparacionPowerImerg from '../../../../../datos/lotes/comparacion_power_imerg.json'
@@ -8,6 +8,7 @@ import hlsUsa from '../../../../../datos/lotes/hls_validez_DEMO-USA-01.json'
 import { imerg_colombia_adm0_late_frente_a_final as s4Imerg, power as s4Power } from '../../../../../datos/evidencia/S4_hallazgo_lluvia_2026.json'
 import piD1Colombia from '../../../../../datos/evidencia/T-D2_pi_d1_colombia_2019_4var.json'
 import { lotes as erosionLotes } from '../../../../../datos/lotes/exposicion_erosiva_lotes.json'
+import { CAMPO_PI_D1, PI_D1_INFORME, type VarPiD1 } from './pi_d1'
 
 // Archivo y campo de cada tarjeta: se muestran como fuente
 export const ARCHIVOS = {
@@ -16,7 +17,7 @@ export const ARCHIVOS = {
   hls: 'datos/lotes/hls_validez_<lote>.json · meses',
   s4: 'datos/evidencia/S4_hallazgo_lluvia_2026.json · imerg_colombia_adm0_late_frente_a_final, power.anomalia_colombia',
   piD1: 'datos/evidencia/T-D2_pi_d1_colombia_2019_4var.json · fraccion_unidades_con_dif_relativa_mayor_a',
-  piD1Mundo: 'datos/procesados/series_mundo/pi_d1_mundo.json · total.fraccion_mayor_a',
+  piD1Mundo: `datos/procesados/series_mundo/${CAMPO_PI_D1}`,
   erosion: 'datos/lotes/exposicion_erosiva_lotes.json · exposicion_potencial_suelo_desnudo_100pct, sensibilidad_imerg',
 } as const
 
@@ -74,9 +75,9 @@ export const piD1 = VARIABLES_PI_D1.map((v) => {
   return { variable: v, n: d.unidades_mes_con_cultivo_y_valor, meses: d.meses, alto, bajo }
 })
 
-// 6. PI-D1 mundial (S1): oculto hasta que el orquestador lo integre con su verificador (plan v2 §7)
-export type InformePiD1Mundo = Record<string, { total?: { fraccion_mayor_a?: Record<string, number> } }>
-export const PI_D1_MUNDO: InformePiD1Mundo | null = null
+// 6. PI-D1 mundial (S1, verificado en V7 y V8): se lee de pi_d1_mundo.json al umbral registrado, al 2 % y al 10 % (datos/pi_d1.ts)
+export type InformePiD1Mundo = Record<string, { total?: { fraccion_mayor_a?: Record<string, number> }; todos_los_meses?: VarPiD1 }>
+export const PI_D1_MUNDO: InformePiD1Mundo | null = PI_D1_INFORME
 /** Rango entre variables de la fracción de unidades-mes que cambia, para el umbral más alto y el más bajo del informe. */
 export function rangoPiD1Mundo(informe: InformePiD1Mundo | null): { min: number; max: number; umbralAlto: number; umbralBajo: number } | null {
   if (!informe) return null

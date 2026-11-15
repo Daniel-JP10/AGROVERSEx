@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón; estado sin cultivo (S1w)
 import type { Map as MapaGL } from 'maplibre-gl'
 import { registrarPatron } from './patron'
 import { idioma, t } from '../textos/i18n'
@@ -16,8 +16,10 @@ export const SIN_DATO = { v: 0, ok: false, hueco: true, valor: NaN }
 /** p10 y p90 son la dispersión entre celdas de la unidad (tipo_rango espacial), en la unidad de pantalla; frac es frac_valida */
 // Unidad sin dato real (fuera de Colombia): ni color ni trama; el tooltip dice "sin dato real todavía"
 export const SIN_DATO_REAL = { v: 0, ok: false, hueco: false, valor: NaN }
+// Unidad sin cultivo en la ponderación de cultivo: ni color ni trama; el texto dice "No cropland", nunca 0
+export const SIN_CULTIVO = { v: 0, ok: false, hueco: false, valor: NaN, sinCultivo: true }
 
-export interface EstadoUnidad { v: number; ok: boolean; hueco: boolean; valor: number; p10?: number; p90?: number; frac?: number }
+export interface EstadoUnidad { v: number; ok: boolean; hueco: boolean; valor: number; p10?: number; p90?: number; frac?: number; sinCultivo?: boolean }
 export interface Extra { p10?: number; p90?: number }
 
 export const OPACIDAD_DEFECTO = 62
@@ -65,6 +67,7 @@ const f2 = (n: number) => n.toLocaleString(idioma(), { maximumFractionDigits: 1 
 // Nunca un número solo: valor + unidad + rango p10 a p90 entre celdas si el dato lo trae; si no, el rango de la escala
 export function textoValor(e: EstadoUnidad | undefined, unidad: string, rango: [number, number]): string {
   if (!e) return t('globo.sinCargados')
+  if (e.sinCultivo) return t('tierra.sinCultivo')
   if (e.hueco) return t('globo.sinDatoProducto')
   const dispersion = Number.isFinite(e.p10) && Number.isFinite(e.p90)
   const txt = dispersion

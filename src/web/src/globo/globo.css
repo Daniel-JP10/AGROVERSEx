@@ -1,6 +1,10 @@
-/* asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón */
+/* asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón; leyenda con desplazamiento en móvil (S1w) */
 /* Estilos propios del módulo del globo */
 .globo .halo { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 /* El aviso va sobre el contador de fps (abajo a la izquierda), sin tocarlo */
 .globo .aviso-disputa { left: 12px; bottom: 96px; white-space: nowrap; }
 .globo .aviso-red { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); z-index: 4; font-size: 11px; padding: 3px 8px; border-radius: 6px; background: #000a; color: #e8d9a8; pointer-events: none; }
+/* S1w: en móvil la leyenda de Technical (ponderación, PI-D1, limitaciones) no sube bajo la búsqueda ni los lotes; se desplaza dentro */
+@media (max-width: 600px) { .globo .leyenda { max-height: max(140px, calc(100dvh - 650px)); overflow-y: auto; } }
+/* Orquestador: abierta, la leyenda no sube hasta los controles del mapa (bottom 200 px en tierra.css); el resto se desplaza dentro */
+@media (min-width: 601px) { .globo .leyenda { max-height: 180px; overflow-y: auto; } }
