@@ -174,15 +174,25 @@
   },
   "contraste_estacion_ghcn_com00080370": {
    "estacion": "COM00080370 SAN LUIS (Ipiales)",
+   "n_dias_calendario": 8766,
+   "fraccion_dias_con_dato": {
+    "PRCP": 0.499,
+    "TMIN": 0.5914,
+    "TMAX": 0.0019,
+    "TAVG": 0.723
+   },
+   "relleno": "ninguno",
    "n_dias_comunes_con_pluviometro": 4374,
+   "metodo_anual_equiv": "media diaria de los días comunes con dato de las tres fuentes x 365,25; supone que los días sin dato se parecen a los días con dato",
    "anual_equiv_en_dias_comunes_mm": {
     "ghcn_estacion": 933.4,
     "power": 1162.5,
     "imerg": 1598.9
    },
+   "anual_equiv_ghcn_por_climatologia_mensual_mm": 919.3,
    "sesgo_relativo_power_vs_ghcn": 0.2454,
    "sesgo_relativo_imerg_vs_ghcn": 0.713,
-   "nota": "En los 4374 días con dato de pluviómetro en San Luis (933,4 mm/año equiv.), POWER (1162,5 mm/año equiv.) queda más cerca del régimen del altiplano que IMERG 0,1° (1598,9 mm/año equiv., sesgado por desborde amazónico/oriental y topes fríos convectivos)."
+   "nota": "En los 4374 días con dato de pluviómetro en San Luis (49.9% de los días de 2001 a 2024, sin relleno), la estación suma 933.4 mm/año equivalentes, POWER 1162.5 e IMERG 0,1° 1598.9. Equivalente = media diaria de esos días x 365,25."
   }
  }
 ]

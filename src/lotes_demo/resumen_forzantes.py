@@ -121,17 +121,26 @@ def resumir(raiz: Path, lote: str, ini: str, fin: str, ruta_ghcn: Path | None = 
     if lote == "DEMO-COL-01" and ruta_ghcn is not None and ruta_ghcn.exists():
         gh, _ = cargar_ghcn_diario(ruta_ghcn, ini=ini, fin=fin)
         jg = pd.concat([gh["PRCP"].rename("GHCN"), j["IMERG"], j["POWER"]], axis=1, join="inner").dropna()
+        # fracción de días calendario con dato válido, sin relleno: el día sin dato queda fuera
+        cal = pd.date_range(ini, fin)
+        frac = {v: round(float(gh[v].reindex(cal).notna().mean()), 4) for v in ("PRCP", "TMIN", "TMAX", "TAVG")}
+        anual = {k: round(float(jg[c].mean() * 365.25), 1) for k, c in (("ghcn_estacion", "GHCN"), ("power", "POWER"), ("imerg", "IMERG"))}
+        p = gh["PRCP"].dropna()
+        clim = round(float(sum(p[p.index.month == m].mean() * pd.Period(f"2001-{m:02d}").days_in_month for m in range(1, 13))), 1)
         out["contraste_estacion_ghcn_com00080370"] = dict(
             estacion="COM00080370 SAN LUIS (Ipiales)",
+            n_dias_calendario=int(len(cal)),
+            fraccion_dias_con_dato=frac,
+            relleno="ninguno",
             n_dias_comunes_con_pluviometro=int(len(jg)),
-            anual_equiv_en_dias_comunes_mm=dict(
-                ghcn_estacion=round(float(jg["GHCN"].mean() * 365.25), 1),
-                power=round(float(jg["POWER"].mean() * 365.25), 1),
-                imerg=round(float(jg["IMERG"].mean() * 365.25), 1),
-            ),
+            metodo_anual_equiv="media diaria de los días comunes con dato de las tres fuentes x 365,25; supone que los días sin dato se parecen a los días con dato",
+            anual_equiv_en_dias_comunes_mm=anual,
+            anual_equiv_ghcn_por_climatologia_mensual_mm=clim,
             sesgo_relativo_power_vs_ghcn=round(float((jg["POWER"].sum() - jg["GHCN"].sum()) / jg["GHCN"].sum()), 4),
             sesgo_relativo_imerg_vs_ghcn=round(float((jg["IMERG"].sum() - jg["GHCN"].sum()) / jg["GHCN"].sum()), 4),
-            nota="En los 4374 días con dato de pluviómetro en San Luis (933,4 mm/año equiv.), POWER (1162,5 mm/año equiv.) queda más cerca del régimen del altiplano que IMERG 0,1° (1598,9 mm/año equiv., sesgado por desborde amazónico/oriental y topes fríos convectivos).",
+            nota=(f"En los {len(jg)} días con dato de pluviómetro en San Luis ({frac['PRCP']:.1%} de los días de {ini[:4]} a {fin[:4]}, sin relleno), "
+                  f"la estación suma {anual['ghcn_estacion']:.1f} mm/año equivalentes, POWER {anual['power']:.1f} e IMERG 0,1° {anual['imerg']:.1f}. "
+                  "Equivalente = media diaria de esos días x 365,25."),
         )
     return out
 
