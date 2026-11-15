@@ -5,7 +5,7 @@ import type { EstrategiaGemelo, Rotulo, EntradaTexto, Tarjeta } from '../rotacio
 import type { AlertaHeladaGemelo } from '../rotaciones/AlertaHelada'
 import type { Catalogo } from '../rotaciones/textosGemelo'
 import { traducir } from '../rotaciones/textosGemelo'
-import { corregirCatalogoEn } from '../rotaciones/correccionEn'
+import { aIngles, corregirCatalogoEn } from '../rotaciones/correccionEn'
 import { LOTE_DEMO } from '../rotaciones/lector'
 import { UNIDADES_TRAYECTORIA, type VariableTrayectoria } from './unidades'
 
@@ -110,7 +110,7 @@ const CULTIVOS = ['papa', 'avena', 'frijol', 'maiz', 'soya']
 const cultivo = (c: string) => (CULTIVOS.includes(c) ? t(`lote.cultivo_${c}` as ClaveTodo) : c)
 /** En inglés, la secuencia traducida; en español, el nombre del paquete. */
 export const nombreEstrategia = (e: Pick<EstrategiaGemelo, 'nombre' | 'secuencia'>) =>
-  idioma() === 'es' ? e.nombre : e.secuencia.split(/\s*->\s*/).map(cultivo).join(' → ')
+  idioma() === 'es' ? e.nombre : e.secuencia ? e.secuencia.split(/\s*->\s*/).map(cultivo).join(' → ') : aIngles(e.nombre) // sin secuencia: el nombre corregido
 export const nombreCultivo = cultivo
 
 /** Unidad visible de una variable de la trayectoria; sale de UNIDADES_TRAYECTORIA (atada al contrato). */
