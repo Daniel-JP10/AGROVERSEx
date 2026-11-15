@@ -24,7 +24,10 @@ export interface Matriz {
 export async function leerGz<T>(ruta: string, f: typeof fetch = fetch): Promise<T> {
   const r = await f(ruta)
   if (!r.ok) throw new Error(`${ruta}: HTTP ${r.status}`)
-  return new Response(r.body!.pipeThrough(new DecompressionStream('gzip'))).json() as Promise<T>
+  // Si el servidor manda Content-Encoding: gzip (Vite en desarrollo, algunos alojamientos), el navegador ya lo descomprimió
+  const b = new Uint8Array(await r.arrayBuffer())
+  if (b[0] !== 0x1f || b[1] !== 0x8b) return JSON.parse(new TextDecoder().decode(b)) as T
+  return new Response(new Blob([b]).stream().pipeThrough(new DecompressionStream('gzip'))).json() as Promise<T>
 }
 
 const memoria = new Map<string, Promise<unknown>>()

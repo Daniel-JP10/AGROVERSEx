@@ -7,7 +7,8 @@ import { readFileSync } from 'node:fs'
 vi.stubGlobal('localStorage', { getItem: () => null, setItem: () => {}, removeItem: () => {} })
 const { cargarCoropleta, cargarMatriz, tieneDatoReal, nivelDeUnidad, PAISES_CON_DATO } = await import('../src/datos/estatico')
 const { paraMostrar } = await import('../src/comun/unidades')
-const { textoValor, SIN_DATO_REAL } = await import('../src/globo/coropleta')
+const { textoValor, SIN_DATO_REAL, estadoUnidad } = await import('../src/globo/coropleta')
+const { capaPorId } = await import('../src/datos/capas')
 const { SIN_ADM2 } = await import('../src/globo/config')
 const { rutaPublica } = await import('../src/comun/rutas')
 
@@ -91,6 +92,42 @@ describe('el mapa de Colombia con datos reales', () => {
     const razon = mostrado('2025-10') / (oct.reduce((a, b) => a + b, 0) / oct.length)
     expect(razon).toBeGreaterThan(0.5); expect(razon).toBeLessThan(2) // un factor 24 o 30 quedaría muy fuera
   })
+  // El color sale de estadoUnidad con la escala de la capa (capas.ts) sobre el valor ya pasado por paraMostrar.
+  // Criterio de "colores variados": al menos 5 de 10 tramos de la escala ocupados y menos del 20 % pegado a un extremo.
+  const colores = (vals: Float32Array, rango: [number, number]) => {
+    const v = Array.from(vals).filter((x) => !Number.isNaN(x)).map((x) => estadoUnidad(x, 1, rango, {}).v)
+    return { tramos: new Set(v.map((x) => Math.min(9, Math.floor(x * 10)))).size, extremos: v.filter((x) => x <= 0 || x >= 1).length / v.length, mediana: v.sort((a, b) => a - b)[v.length >> 1] }
+  }
+  const variados = (c: ReturnType<typeof colores>) => c.tramos >= 5 && c.extremos < 0.2
+  it.each([['2015-01', 'mm/hr', 'final'], ['2026-01', 'mm/day', 'provisional']])('lluvia %s (%s): colores variados con la escala en mm/mes y el crudo no lo lograría', async (aaaamm, unidad, estado) => {
+    const d = await cargarCoropleta(2, 'precip', mes(aaaamm)), m = await cargarMatriz('precip', 2)
+    expect(d.producto).toMatchObject({ unidad, estado }); expect(d.unidad).toBe('mm/mes')
+    expect(variados(colores(d.valores, capaPorId('precip').rango)), aaaamm).toBe(true)
+    // control: la misma escala sobre el valor sin convertir queda casi de un solo color
+    const crudo = Float32Array.from(m.valor, (f) => f[mes(aaaamm)] ?? NaN)
+    expect(variados(colores(crudo, capaPorId('precip').rango))).toBe(false)
+  })
+  // Sin salto en el empalme: cada mes de Late (2025-10 a 2026-10) frente a la mediana del mismo mes con Final 2001-2024,
+  // en tramos de color. La mediana de esas razones debe quedar entre 0,5 y 2; un error de unidades da ~24 o ~0,04.
+  // No se compara 2015-01 con 2026-01 directo: enero de 2026 es una anomalía húmeda (~3,8 veces su climatología).
+  it('la lluvia no salta en el empalme: Late frente a la climatología de Final del mismo mes, en la escala de color', async () => {
+    const r = capaPorId('precip').rango
+    const med = (a: number[]) => a.slice().sort((x, y) => x - y)[a.length >> 1]
+    const color = async (i: number) => colores((await cargarCoropleta(2, 'precip', i)).valores, r).mediana
+    const razones: number[] = []
+    for (let i = mes('2025-10'); i <= mes('2026-10'); i++) {
+      const clima = med(await Promise.all(Array.from({ length: 24 }, (_, k) => color((2001 + k - 2000) * 12 + (i % 12)))))
+      razones.push((await color(i)) / clima)
+    }
+    expect(med(razones)).toBeGreaterThan(0.5); expect(med(razones)).toBeLessThan(2)
+  })
+  it('la temperatura se pinta en °C dentro de su escala y en kelvin no lo lograría', async () => {
+    const d = await cargarCoropleta(2, 't2m', mes('2015-01')), m = await cargarMatriz('t2m', 2), r = capaPorId('t2m').rango
+    const ok = Array.from(d.valores).filter((x) => !Number.isNaN(x))
+    expect(d.unidad).toBe('°C'); expect(Math.min(...ok)).toBeGreaterThanOrEqual(r[0]); expect(Math.max(...ok)).toBeLessThanOrEqual(r[1])
+    expect(variados(colores(d.valores, r))).toBe(true)
+    expect(variados(colores(Float32Array.from(m.valor, (f) => f[mes('2015-01')] ?? NaN), r))).toBe(false)
+  })
   it('un mes sin producto da NaN y sin unidad, no un valor inventado', async () => {
     const d = await cargarCoropleta(0, 'ndvi', 0) // NDVI empieza en 2000-02
     expect(Number.isNaN(d.valores[0])).toBe(true); expect(d.unidad).toBe(''); expect(d.producto).toBeNull()
@@ -130,5 +167,9 @@ describe('contratos y rutas', () => {
     const buf = gzipSync(Buffer.from(JSON.stringify({ a: 1 })))
     const { leerGz: leer } = await import('../src/datos/estatico')
     expect(await leer<{ a: number }>('x', async () => new Response(buf))).toEqual({ a: 1 })
+  })
+  it('leerGz acepta el archivo ya descomprimido por el navegador (Content-Encoding: gzip en Vite o en el alojamiento)', async () => {
+    const { leerGz: leer } = await import('../src/datos/estatico')
+    expect(await leer<{ a: number }>('x', async () => new Response(JSON.stringify({ a: 1 })))).toEqual({ a: 1 })
   })
 })
