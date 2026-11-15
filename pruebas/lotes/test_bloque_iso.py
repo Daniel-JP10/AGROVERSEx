@@ -6,7 +6,9 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from lotes_demo import bloque_iso as b
+# Pillow está en requirements-gemelo.lock.txt, no en el entorno geo: estas pruebas corren con la .venv del gemelo
+pytest.importorskip("PIL", reason="sin Pillow: correr con la .venv de C:/NASA/gemelo (requirements-gemelo.lock.txt)")
+from lotes_demo import bloque_iso as b  # noqa: E402
 
 RAIZ = Path(__file__).resolve().parents[2]
 CRUDOS = Path(os.environ.get("AGROVERSEX_NASADEM", RAIZ / "datos/crudos/nasadem"))
