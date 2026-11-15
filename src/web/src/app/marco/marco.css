@@ -1,0 +1,58 @@
+/* asistido por SI: Claude Code (Anthropic), marco común de la fase 3: retícula, cabecera hoja, hojas de esquina y pie */
+.app {
+  position: relative; isolation: isolate;
+  background-color: var(--fondo);
+  /* Retícula de 48 px al 4 % (plan v1 §b) */
+  background-image: linear-gradient(rgba(232, 243, 236, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(232, 243, 236, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Hojas decorativas: debajo de todo, sin eventos ni foco */
+.decoracion { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.hoja-esquina { position: absolute; width: min(28vw, 300px); height: auto; opacity: 0.22; pointer-events: none; }
+.hoja-esquina .limbo { fill: var(--hoja); stroke: var(--hoja-borde); stroke-width: 1.5; }
+.hoja-esquina .nervio { fill: none; stroke: var(--tallo); stroke-width: 1.5; }
+.hoja-esquina .fino { stroke-width: 0.8; }
+.hoja-esquina.arriba-izquierda { left: -40px; top: -40px; transform: rotate(180deg) scaleX(-1); }
+.hoja-esquina.abajo-derecha { right: -40px; bottom: -40px; }
+
+/* Cabecera hoja */
+.cabecera-hoja { position: relative; z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 64px; margin: 0 8px; padding: 6px 300px 12px; color: var(--texto); }
+.cabecera-contorno { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+.cabecera-contorno path { fill: var(--hoja); stroke: var(--hoja-borde); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.cabecera-hoja .marca { color: var(--acento); font-size: 20px; font-weight: 600; letter-spacing: 0.04em; text-decoration: none; padding: 0 8px; border-radius: 8px; }
+.cabecera-hoja .nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 6px; margin: 0; padding: 0; font-size: 14px; }
+.cabecera-hoja .nav a { color: var(--texto); text-decoration: none; padding: 3px 12px; border: 1px solid transparent; border-radius: 14px 3px 14px 3px; }
+.cabecera-hoja .nav a:hover { border-color: var(--hoja-borde); }
+/* La sección activa va en una hoja resaltada */
+.cabecera-hoja .nav a[aria-current="page"] { color: var(--acento); background: var(--realce); border-color: var(--acento); }
+.cabecera-hoja .acciones { position: absolute; right: 64px; top: 10px; display: flex; align-items: center; gap: 6px; }
+.cabecera-hoja .acciones button { min-height: 28px; padding: 2px 8px; border-radius: 8px; border: 1px solid var(--hoja-borde); background: var(--fondo); color: var(--texto); font-size: 12px; }
+.cabecera-hoja .selector { display: flex; }
+.cabecera-hoja .selector button { border-radius: 0; }
+.cabecera-hoja .selector button:first-child { border-radius: 8px 0 0 8px; }
+.cabecera-hoja .selector button:last-child { border-radius: 0 8px 8px 0; border-left: none; }
+.cabecera-hoja .selector button[aria-pressed="true"] { background: var(--realce); color: var(--acento); border-color: var(--acento); }
+.cabecera-hoja .idioma span { color: var(--suave); padding: 0 2px; }
+.cabecera-hoja .idioma span[data-activo] { color: var(--acento); font-weight: 600; }
+.cabecera-hoja a:focus-visible, .cabecera-hoja button:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+.cabecera-hoja .ayuda { position: absolute; top: 100%; right: 0; z-index: 30; width: min(420px, 94vw); max-height: 70vh; overflow: auto; text-align: left; font-size: 13px; padding: 12px 14px; background: var(--panel-base); color: var(--texto); border: 1px solid var(--borde); border-radius: var(--radio); box-shadow: var(--sombra); }
+.cabecera-hoja .ayuda dt { font-weight: 600; color: var(--acento); }
+.cabecera-hoja .ayuda dd { margin: 0 0 6px; }
+.cabecera-hoja .ayuda small { color: var(--suave); }
+.cabecera-hoja .ayuda a { color: var(--agua); }
+
+/* Pie fino con el aviso de apoyo y la atribución */
+.app > .pie { margin: 0 8px; padding: 4px 12px; font-size: 12px; color: var(--suave); text-align: center; background: var(--panel-base); border: 1px solid var(--borde); border-radius: var(--radio); }
+.pie p { margin: 0; }
+.pie .atribucion { font-size: 11px; }
+
+@media (max-width: 1100px) {
+  .cabecera-hoja { padding: 6px 16px 14px; }
+  .cabecera-hoja .acciones { position: static; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+}
+@media (max-width: 480px) {
+  .cabecera-hoja .nav { font-size: 13px; }
+  .cabecera-hoja .nav a { padding: 3px 8px; }
+  .hoja-esquina { width: 120px; }
+}

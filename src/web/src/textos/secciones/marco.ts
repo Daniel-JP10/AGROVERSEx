@@ -1,4 +1,42 @@
 // asistido por SI: Claude Code (Anthropic), textos de la sección marco (plan fase 3 v2 §10)
 // Claves con prefijo 'marco.'; el español debe tener todas las claves del inglés (lo exige el tipo)
-export const en = {} as const
-export const es: Record<keyof typeof en, string> = {}
+export const en = {
+  'marco.inicio': 'AGROVERSEx, home',
+  'marco.nav.etiqueta': 'Sections',
+  'marco.nav.tierra': 'Earth',
+  'marco.nav.lote': 'Your field',
+  'marco.nav.rotaciones': 'Rotations',
+  'marco.nav.ciencia': 'Science and validation',
+  'marco.nav.datos': 'Open data',
+  'marco.nav.fuentes': 'Sources',
+  'marco.menu': 'Menu',
+  'marco.idioma.grupo': 'Language',
+  'marco.idioma.en': 'English',
+  'marco.idioma.es': 'Spanish',
+  'marco.modo.grupo': 'Reading mode',
+  'marco.modo.agricultor': 'Farmer',
+  'marco.modo.tecnico': 'Technical',
+  'marco.pie.atribucion': 'Map data',
+  'marco.lote.cargando': 'Loading your field…',
+  'marco.lote.pronto': 'Your field: this view is not available yet.',
+} as const
+export const es: Record<keyof typeof en, string> = {
+  'marco.inicio': 'AGROVERSEx, inicio',
+  'marco.nav.etiqueta': 'Secciones',
+  'marco.nav.tierra': 'Tierra',
+  'marco.nav.lote': 'Tu lote',
+  'marco.nav.rotaciones': 'Rotaciones',
+  'marco.nav.ciencia': 'Ciencia y validación',
+  'marco.nav.datos': 'Datos abiertos',
+  'marco.nav.fuentes': 'Fuentes',
+  'marco.menu': 'Menú',
+  'marco.idioma.grupo': 'Idioma',
+  'marco.idioma.en': 'Inglés',
+  'marco.idioma.es': 'Español',
+  'marco.modo.grupo': 'Modo de lectura',
+  'marco.modo.agricultor': 'Agricultor',
+  'marco.modo.tecnico': 'Técnico',
+  'marco.pie.atribucion': 'Datos del mapa',
+  'marco.lote.cargando': 'Cargando tu lote…',
+  'marco.lote.pronto': 'Tu lote: esta vista todavía no está disponible.',
+}
