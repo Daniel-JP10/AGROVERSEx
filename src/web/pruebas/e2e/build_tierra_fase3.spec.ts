@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), E2E de Earth en fase 3 sobre el build estático: Soil sin base simulada, lotes DEMO, leyenda, reduced-motion y presupuesto (plan v2 §3 y §7.5)
+// asistido por SI: Claude Code (Anthropic), E2E de Earth en fase 3 sobre el build estático: Soil sin base simulada, lotes DEMO, leyenda, reduced-motion y presupuesto (plan v2 §3 y §7.5); leyenda plegable con versiones agrupadas (S1w)
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { gunzipSync } from 'node:zlib'
@@ -63,7 +63,17 @@ for (const L of IDIOMAS) {
       await page.goto('/#/tierra')
       const ley = page.getByRole('group', { name: /legend|leyenda/i })
       await expect(ley).toBeVisible({ timeout: 60_000 })
-      for (const p of meta.variables.precip.productos) await expect(ley).toContainText(`${p.producto} ${p.version}`)
+      // S1w: la leyenda es plegable; se abre antes de comprobar
+      const det = ley.locator(':scope > details')
+      if (await det.count()) await det.evaluate((e) => { (e as HTMLDetailsElement).open = true })
+      // Cada producto con su nombre y cada una de sus versiones: las del mismo producto van agrupadas con "/" en una línea
+      for (const p of meta.variables.precip.productos as { producto: string; version: string }[]) {
+        const linea = ley.locator('.chip').filter({ hasText: p.producto })
+        await expect(linea.first()).toBeVisible()
+        const textos = await linea.allInnerTexts()
+        const versiones = textos.flatMap((x) => x.slice(x.indexOf(p.producto) + p.producto.length).trim().split(' ')[0].split('/'))
+        expect(versiones, p.producto).toContain(p.version)
+      }
       await expect(ley).toContainText(/No product data|Sin dato del producto/)
       await expect(page.getByRole('slider')).toBeVisible()
     })
