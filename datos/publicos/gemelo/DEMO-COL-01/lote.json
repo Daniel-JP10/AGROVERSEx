@@ -24,6 +24,7 @@
   "enso_nino": {
    "simulacion": "DEMO-COL-01/simulacion_enso_nino.json",
    "anios_analogos": [
+    2002,
     2015,
     2019,
     2023
@@ -42,6 +43,9 @@
   "enso_neutra": {
    "simulacion": "DEMO-COL-01/simulacion_enso_neutra.json",
    "anios_analogos": [
+    2001,
+    2003,
+    2004,
     2005,
     2006,
     2009,
@@ -62,17 +66,17 @@
  "lat": 0.842,
  "lon": -77.661,
  "clima_tipo": "tropical",
- "huella_parametros": "50d4824b96141342",
+ "huella_parametros": "c814b7ccf1e41bae",
  "rotulo": {
   "clave": "label.model_simulation",
   "parametros": {
    "fuentes": [
     "source.nasa_power",
-    "source.soilgrids"
+    "source.datos_soil"
    ]
   },
-  "en": "Model simulation with NASA POWER and SoilGrids 2.0 data",
-  "es": "Simulación del modelo con datos NASA POWER y SoilGrids 2.0"
+  "en": "Model simulation with NASA POWER and AGROVERSEx soil parameters data",
+  "es": "Simulación del modelo con datos NASA POWER y parámetros de suelo de AGROVERSEx"
  },
  "conjunto_comparable": {
   "estrategias": [
@@ -310,5 +314,5 @@
    "archivo": "DEMO-COL-01/calibracion/suelo_humedo_al_inicio.json"
   }
  ],
- "generado_utc": "2026-11-14T21:15:35+00:00"
+ "generado_utc": "2026-11-15T00:42:01+00:00"
 }

@@ -1,0 +1,2 @@
+# Copias byte a byte de los forzantes de Datos: sin conversión de fin de línea, para que sus SHA256 coincidan
+datos/referencia/lotes/** -text
