@@ -1,17 +1,19 @@
 // asistido por SI: Claude Code (Anthropic), prueba O1: ninguna cifra de datos escrita a mano en los textos visibles; salen de huecos {…}
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
+import { areaKm2 } from '../src/herramientas/geodesia'
+import { resumen } from '../src/herramientas/Medir'
+import { tendencia } from '../src/datos/series'
 import { cifra, conCifras } from '../src/textos/cifras'
 import { en } from '../src/textos/en'
 import { es } from '../src/textos/es'
 
-// Excepciones reconocidas, clave -> tokens permitidos: nomenclatura de interfaz, no cifras de datos
+// Excepciones: definiciones fijas del método, cada una atada por una prueba de este archivo al valor que usa el código o el dato (D-039.3)
 const PERMITIDOS: Record<string, string[]> = {
-  'capa.t2m': ['2'], // altura de la variable (a 2 m)
-  'filtros.fraccion': ['0', '1'], // rango del campo numérico
-  'medir.anillo': ['3'], 'medir.min2': ['2'], 'medir.min3': ['3'], // cuántos puntos pide la herramienta
-  'series.ic': ['95'], // nivel convencional del intervalo de confianza
-  ...Object.fromEntries(['arcilla', 'arena', 'carbono', 'cic', 'densidad', 'limo', 'nitrogeno', 'ph'].map((k) => [`suelo.${k}`, ['0-30']])), // capa de profundidad del producto
+  'capa.t2m': ['2'], // altura del producto: la variable t2m (temperatura a 2 m)
+  'medir.anillo': ['3'], 'medir.min2': ['2'], 'medir.min3': ['3'], // puntos mínimos que exige la herramienta
+  'series.ic': ['95'], // nivel del intervalo: z = 1,96 de datos/series.ts
+  ...Object.fromEntries(['arcilla', 'arena', 'carbono', 'cic', 'densidad', 'limo', 'nitrogeno', 'ph'].map((k) => [`suelo.${k}`, ['0-30']])), // capa 0-30 cm de SoilGrids
 }
 // Identificadores y nombres de producto (D-001, FAO-56, Sentinel-2) no cuentan como cifras
 const SIN_NOMBRES = /\b[A-Za-z]+-\d+\b/g
@@ -55,5 +57,48 @@ describe('cifras de datos en los textos', () => {
     const [a0, m0] = meta.mes0.split('-').map(Number)
     expect(cifra('anios_serie', 'en')).toBe(`${a0}-${a0 + Math.floor((m0 - 1 + meta.n_meses - 1) / 12)}`)
     expect(cifra('anios_serie', 'en')).toBe(`${Math.min(...m)}-${Math.max(...m)}`)
+  })
+})
+
+// Pruebas que atan cada excepción al valor del código o del dato
+describe('excepciones atadas a su fuente', () => {
+  const unico = (txt: string) => txt.match(/\d[\d-]*/g)!.join(',')
+  it('95 % es el nivel del intervalo que calcula tendencia(): su z = 1,96 deja 95 % de la normal', () => {
+    const y = [1, 3, 2, 5, 4, 7, 6, 9, 8, 12, 10, 13]
+    const { pendiente, ic } = tendencia(y)
+    const n = y.length, xm = (n - 1) / 2, ym = y.reduce((a, b) => a + b) / n
+    const sxx = y.reduce((a, _, i) => a + (i - xm) ** 2, 0)
+    const rss = y.reduce((a, v, i) => a + (v - ym - pendiente * (i - xm)) ** 2, 0)
+    const se = Math.sqrt(rss / (n - 2) / sxx)
+    const z = (ic[1] - pendiente) / se
+    expect(z).toBeCloseTo(1.96, 2)
+    const cobertura = (zz: number) => { let s = 0; for (let t = 0; t < 1; t += 1e-5) s += Math.exp(-((t * zz) ** 2) / 2) * zz * 1e-5; return 2 * s / Math.sqrt(2 * Math.PI) }
+    expect(Math.round(cobertura(z) * 100)).toBe(Number(unico(en['series.ic'])))
+    expect(unico(es['series.ic']!)).toBe(unico(en['series.ic']))
+  })
+  it('0-30 cm es la capa que declaran los parámetros de suelo y la que suman las tres capas de SoilGrids', () => {
+    for (const lote of ['DEMO-COL-01', 'DEMO-USA-01']) {
+      const j = JSON.parse(readFileSync(new URL(`../../../datos/referencia/lotes/parametros_suelo_${lote}.json`, import.meta.url), 'utf8')) as { parametros: Record<string, { profundidad_cm: [number, number] }> }
+      expect(j.parametros.cos_t_ha.profundidad_cm, lote).toEqual([0, 30])
+    }
+    const zonal = readFileSync(new URL('../../../src/simulacion/geo/zonal.py', import.meta.url), 'utf8')
+    const m = zonal.match(/\((\d+) \* v_0_5 \+ (\d+) \* v_5_15 \+ (\d+) \* v_15_30\) \/ (\d+)/)!
+    expect(Number(m[1]) + Number(m[2]) + Number(m[3])).toBe(Number(m[4]))
+    for (const k of Object.keys(PERMITIDOS).filter((x) => x.startsWith('suelo.'))) {
+      expect(en[k as keyof typeof en], k).toContain(`0-${m[4]}`)
+      expect(es[k as keyof typeof es], k).toContain(`0-${m[4]}`)
+    }
+  })
+  it('los puntos mínimos de Medir salen de lo que la herramienta realmente exige', () => {
+    const p: [number, number][] = [[0, 0], [1, 0], [1, 1], [0, 1]]
+    const minimo = (f: (n: number) => boolean) => [1, 2, 3, 4].find(f)!
+    expect(minimo((n) => resumen('distancia', p.slice(0, n)) !== en['medir.min2'])).toBe(Number(unico(en['medir.min2'])))
+    expect(minimo((n) => resumen('area', p.slice(0, n)) !== en['medir.min3'])).toBe(Number(unico(en['medir.min3'])))
+    expect(minimo((n) => { try { areaKm2(p.slice(0, n)); return true } catch { return false } })).toBe(Number(unico(en['medir.anillo'])))
+    for (const k of ['medir.min2', 'medir.min3', 'medir.anillo'] as const) expect(unico(es[k]!)).toBe(unico(en[k]))
+  })
+  it('2 m de capa.t2m es el 2 del identificador de la variable t2m', () => {
+    expect(unico(en['capa.t2m'])).toBe('t2m'.match(/\d+/)![0])
+    expect(unico(es['capa.t2m']!)).toBe('2')
   })
 })

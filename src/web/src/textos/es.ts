@@ -71,7 +71,7 @@ export const es: Partial<Record<ClaveTexto, string>> = {
   'filtros.cargando': 'Cargando atributos…',
   'filtros.errAtributos': 'No se pudieron cargar los atributos de las unidades.',
   'filtros.eventos': 'Solo unidades con eventos',
-  'filtros.fraccion': 'Fracción válida mínima (0 a 1)',
+  'filtros.fraccion': 'Fracción válida mínima',
   'filtros.maximo': 'Máximo',
   'filtros.minimo': 'Mínimo',
   'filtros.neutro': 'Solo meses neutros',

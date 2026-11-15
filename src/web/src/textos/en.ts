@@ -64,7 +64,7 @@ export const en = {
   'filtros.cargando': 'Loading attributes…',
   'filtros.errAtributos': 'Could not load the unit attributes.',
   'filtros.eventos': 'Only units with events',
-  'filtros.fraccion': 'Minimum valid fraction (0 to 1)',
+  'filtros.fraccion': 'Minimum valid fraction',
   'filtros.maximo': 'Maximum',
   'filtros.minimo': 'Minimum',
   'filtros.neutro': 'Neutral months only',
