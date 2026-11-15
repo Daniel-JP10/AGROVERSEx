@@ -531,3 +531,40 @@ Filas generadas de la cabecera "asistido por SI" de cada archivo nuevo o tocado 
 | Claude Code (Anthropic) | `src/web/src/textos/secciones/tierra.ts` | textos de la sección tierra (plan fase 3 v2 §10) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/correccionEn.ts` | restos en español del catálogo y los paquetes del gemelo en la interfaz inglesa (H-F3-6) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/pruebas/rotaciones_ingles.test.ts` | prueba de que los restos en español del gemelo salen en inglés | 2026-11-15 |
+
+## Fase 3 · S1w (series del mundo) y R1 (rediseño)
+
+| Herramienta | Archivo | Propósito | Fecha |
+|-|-|-|-|
+| Claude Code (Anthropic) | `pruebas/mapa/test_mundo_series.py` | prueba de las series del mundo con dos ponderaciones (traspaso S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/mapa_estatico/construir.py` | convierte las series mensuales csv.gz en archivos estáticos para el globo (T-D9, contratos/web_datos.md v0) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/herramientas/mapa_puntos.py` | mapa del mundo en puntos para el fondo de la entrada, desde Natural Earth 1:10m land (dominio público) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/playwright.r1.config.ts` | E2E del marco y la entrada de R1 en su propio puerto (C-F3-15) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/playwright.r1tierra.config.ts` | E2E de Earth (W2) sobre el build de R1 en su propio puerto (C-F3-15) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/ciencia_tarjetas.test.ts` | pruebas de Ciencia y validación (plan v2 §6): cifras leídas de los archivos, campos completos, PI-D1 mundial oculto | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/build_tierra_fase3.spec.ts` | E2E de Earth en fase 3 sobre el build estático: Soil sin base simulada, lotes DEMO, leyenda, reduced-motion y presupuesto (plan v2 §3 y §7.5); leyenda plegable con versiones agrupadas (S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/marco_ayuda.ts` | ayudas de los E2E de W1: idioma sembrado, contraste medido sobre el fondo real y textos prohibidos | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/mundo_playwright.config.ts` | E2E de las series del mundo sobre dist desplegado, en Chromium, Firefox y WebKit (S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/mundo_tierra.spec.ts` | E2E de las series del mundo en el build desplegado: relleno fuera de COL en 3 niveles, ponderación y PI-D1 (S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/mundo_tierra_w2.config.ts` | copia del config E2E de Earth de W2 sobre el dist del mundo, puerto 5321 propio (S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/mundo_ponderacion.test.ts` | pruebas de las series del mundo, la ponderación y PI-D1 (S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/mundo_productos_ingles.test.ts` | los nombres de producto que ve el usuario van en inglés (H-F3-1, S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/portada_entrada.test.ts` | pruebas de la entrada #/ (plan v2 §2): frase, raíces, seis nodos navegables y Start | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/tiempo_sin_play.test.ts` | la línea de tiempo pública sin reproducción automática (director 16:54; medición en prueba_reproduccion_tiempo.json) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/app/marco/marco.css` | marco común de la fase 3: retícula, cabecera hoja, hojas de esquina y pie | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/datos/estatico.ts` | lectura de los archivos estáticos de datos reales (contratos/web_datos.md v0, T-D9) y series del mundo con dos ponderaciones (S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/datos/series.ts` | escritura y revisión de código; base del prototipo migrada en el hackatón; serie por país del mundo (S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/globo/Globo.tsx` | escritura y revisión de código; base del prototipo migrada en el hackatón; fase 3 sin coordenadas en vivo; series del mundo y ponderación (S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/globo/coropleta.ts` | escritura y revisión de código; base del prototipo migrada en el hackatón; estado sin cultivo (S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/globo/globo.css` | escritura y revisión de código; base del prototipo migrada en el hackatón; leyenda con desplazamiento en móvil (S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/globo/leyenda.tsx` | leyenda en hoja: variable, unidad, producto con sus versiones agrupadas, estado de meta.json, trama sin dato, y ponderación con PI-D1 en Technical (plan v2 §3, S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/ciencia/Ciencia.tsx` | sección Ciencia y validación: una tarjeta por afirmación con cifra, intervalo, periodo, fuente y etiqueta (plan v2 §6) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/ciencia/datos.ts` | cifras de Ciencia y validación leídas en el build de los archivos de datos (plan v2 §6); PI-D1 mundial de S1 (S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/ciencia/pi_d1.ts` | lectura de PI-D1 mundial al umbral registrado, al 2 % y al 10 % (S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/portada/Portada.tsx` | entrada #/ rediseñada (R1): mapa de puntos, halo, raíces orgánicas con savia, nodos con volumen y Start con brillo | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/portada/iconos.tsx` | íconos e ilustraciones SVG propios de los nodos de la entrada (R1: volumen, gradientes y brillo; sin recursos de terceros) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/portada/portada.css` | entrada rediseñada (R1): mapa de puntos con viñeta, halo de circuito, raíces vivas, nodos con volumen y Start con brillo (main.portada gana a la regla vieja de estilos.css) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/tierra/tierra.css` | Earth dentro del marco: hojas, órbitas y llamada a los lotes (plan v2 §3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/textos/secciones/ciencia.ts` | textos de la sección ciencia (plan fase 3 v2 §10) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/textos/secciones/tierra.ts` | textos de la sección tierra (plan fase 3 v2 §10) y ponderación con PI-D1 (S1w) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/tiempo/LineaTiempo.tsx` | escritura y revisión de código; base del prototipo migrada en el hackatón | 2026-11-15 |
