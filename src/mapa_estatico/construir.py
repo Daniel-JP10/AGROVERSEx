@@ -226,25 +226,52 @@ def _metadatos_pmtiles(contenido: bytes) -> bytes:
     return contenido[:127] + meta
 
 
+# Extensiones que se leen como texto; en las demás (imágenes, binarios) no se busca la letra de unidad (V5)
+TEXTO = {".js", ".mjs", ".css", ".html", ".json", ".txt", ".md", ".svg", ".map", ".xml", ".csv", ".webmanifest"}
+# Rutas locales sin re.I (V5): Unix, carpetas de usuario, rutas de red y la carpeta de herramientas del despliegue
+_COMUNES = r"""/home/|/Users/|/mnt/|/tmp/|/root/|\\{1,2}Users\\{1,2}|(?<=["'`\s(])\\{2,4}[A-Za-z][A-Za-z0-9._-]{2,}\\{1,2}[A-Za-z][A-Za-z0-9._$-]|herramientas-despliegue"""
+# Letra de unidad con / o \ (C:/, X:\), sin letra, cifra, punto ni $ delante, para no confundirla con código minificado
+_UNIDAD = r"(?<![A-Za-z0-9_$.])[A-Z]:(?:/|\\{1,2})[A-Za-z]"
+
+
 def buscar_fugas(dist: Path) -> list[str]:
-    """Archivos de dist con rutas locales (/home/, /Users/, \\Users\\, C:\\) o el usuario de la máquina como segmento de ruta."""
+    """Archivos de dist con rutas locales, de red, la carpeta de herramientas o el usuario de la máquina como segmento de ruta."""
     usuario = re.escape(getpass.getuser())
-    # barra invertida simple o escapada (\\ dentro de JSON o JS)
-    patron = re.compile(rf"/home/|/Users/|\\{{1,2}}Users\\{{1,2}}|\b[A-Za-z]:\\{{1,2}}[A-Za-z]|[/\\]{usuario}[/\\]", re.I)
+    comun = re.compile(rf"{_COMUNES}|[/\\]{usuario}[/\\]")
+    unidad = re.compile(_UNIDAD)
     hallazgos = []
     for p in sorted(x for x in dist.rglob("*") if x.is_file()):
-        contenido = p.read_bytes()
+        contenido, es_texto = p.read_bytes(), p.suffix.lower() in TEXTO
         if p.suffix == ".pmtiles":
-            contenido = _metadatos_pmtiles(contenido)
+            contenido, es_texto = _metadatos_pmtiles(contenido), True
         elif p.suffix == ".gz":
             try:
-                contenido = gzip.decompress(contenido)
+                contenido, es_texto = gzip.decompress(contenido), True
             except OSError:
                 pass
-        m = patron.search(contenido.decode("utf-8", errors="replace"))
+        texto = contenido.decode("utf-8", errors="replace")
+        m = comun.search(texto) or (unidad.search(texto) if es_texto else None)
         if m:
             hallazgos.append(f"{p.relative_to(dist).as_posix()}: {m.group(0)}")
     return hallazgos
+
+
+# Límites de GitHub Pages para lo que se publica (plan fase 3 v2 §9)
+MAX_ARCHIVO = 25 * 1024 * 1024
+MAX_ARCHIVOS = 20_000
+MAX_TOTAL = 300 * 1000 * 1000
+
+
+def revisar_limites(dist: Path, excluir: tuple[str, ...] = ("teselas/",)) -> list[str]:
+    """Archivos de más de 25 MiB, 20 000 archivos o más, o más de 300 MB en total; excluir: prefijos que van a otro alojamiento (D-040)."""
+    archivos = [x for x in dist.rglob("*") if x.is_file() and not x.relative_to(dist).as_posix().startswith(excluir)]
+    fallos = [f"{x.relative_to(dist).as_posix()} pesa {x.stat().st_size} B" for x in archivos if x.stat().st_size > MAX_ARCHIVO]
+    if len(archivos) >= MAX_ARCHIVOS:
+        fallos.append(f"{len(archivos)} archivos")
+    total = sum(x.stat().st_size for x in archivos)
+    if total > MAX_TOTAL:
+        fallos.append(f"total {total} B")
+    return fallos
 
 
 def desplegar(dist: Path, entorno=None) -> dict:
@@ -254,6 +281,11 @@ def desplegar(dist: Path, entorno=None) -> dict:
         raise ErrorDespliegue(f"no existe {dist}: corre primero npm run build en src/web")
     tam = {}
     limpias = (os.environ if entorno is None else entorno).get("AGROVERSEX_TESELAS")
+    if limpias:
+        # V5: un AGROVERSEX_TESELAS mal puesto debe fallar con un mensaje claro, no con un FileNotFoundError
+        faltan = [Path(o).name for o in ARCHIVOS_DESPLIEGUE if o.endswith(".pmtiles") and not (Path(limpias) / Path(o).name).is_file()]
+        if faltan:
+            raise ErrorDespliegue(f"AGROVERSEX_TESELAS={limpias} no tiene {', '.join(faltan)}: debe ser la carpeta con las copias limpias de los .pmtiles")
     for origen, destino in ARCHIVOS_DESPLIEGUE.items():
         (dist / destino).parent.mkdir(parents=True, exist_ok=True)
         # AGROVERSEX_TESELAS: carpeta con las copias limpias de los .pmtiles (metadatos sin rutas internas)
@@ -266,6 +298,8 @@ def desplegar(dist: Path, entorno=None) -> dict:
     # Ningún archivo publicado puede llevar rutas locales ni el usuario de la máquina (director, 10:00)
     fugas = buscar_fugas(dist)
     if fugas:
+        # V5: no queda un dist con fugas listo para subir por error
+        shutil.rmtree(dist)
         raise ErrorDespliegue("dist contiene rutas locales o el usuario de la máquina: " + "; ".join(fugas[:10]))
     return tam
 
