@@ -24,8 +24,7 @@ _NMAX = np.array([.75, .85, .72, .82, .80, .60, .35, .65, .60, .65, .60, .84, .3
 _NMIN = np.array([.60, .80, .30, .35, .50, .30, .15, .35, .30, .25, .30, .20, .20, .30, .00, .05, -.05])
 SIGMA_NDVI = 0.04          # SUPUESTO: dispersión para la banda p10-p90
 SD_ANUAL, SD_MES = 0.02, 0.015  # SUPUESTO: ruido interanual y mensual
-PAISES_GREENING = ("IND",)
-GREENING = 0.05            # FUENTE (Chen 2019, ficha EV-CLI-011): +5 % de área foliar; aplicada al NDVI es SUPUESTO
+# LIMITACIÓN (D-024): sin ajuste de greening en ningún país; se retiró el coeficiente de Chen 2019 y no hay reemplazo
 ET_MAX_8D = 12.0 * 8       # SUPUESTO: tope físico de 12 mm/día (brief, §5.4)
 SD_REL_ET = 0.15           # SUPUESTO: banda relativa de ET
 P_HUECO_GF, P_HUECO_2026 = 0.01, 0.15  # SUPUESTO: MOD16A2GF rellena huecos; MOD16A2 de 2026 no
@@ -49,7 +48,7 @@ def generar_ndvi(clima, bloque: slice, geo: pd.DataFrame, estatico: pd.DataFrame
     """geo: DataFrame completo de unidades; ids = geo.index[bloque], alineados con las filas de `clima`."""
     g = geo.iloc[bloque]
     ids = list(g.index)
-    cob = cobertura_simulada(g, g.koppen, estatico)
+    cob = cobertura_simulada(g, g.get("koppen", -1), estatico)
     dom = cob.igbp_dominante.to_numpy() - 1
     t, p = np.nan_to_num(clima.t2m), np.nan_to_num(clima.precip)
     crec = np.minimum(np.clip((t - 5) / 15, 0, 1), np.clip(p / 60, 0, 1))
@@ -57,10 +56,6 @@ def generar_ndvi(clima, bloque: slice, geo: pd.DataFrame, estatico: pd.DataFrame
     z = np.stack([rng_unidad(u, "ndvi").standard_normal((2, N)) for u in ids]) if ids else np.zeros((0, 2, N))
     anio = np.arange(N) // 12
     ndvi = nmin + (nmax - nmin) * crec + SD_ANUAL * z[:, 0, :27][:, anio] + SD_MES * z[:, 1]
-    # Greening de cultivos (Chen 2019): India siempre; neutro en el resto (China quitada, §5.1)
-    iso = g.iso3.to_numpy()
-    verde = np.isin(dom, [11, 13]) & np.isin(iso, PAISES_GREENING)
-    ndvi = ndvi * (1 + np.where(verde, GREENING, 0.0)[:, None] * (np.arange(N) / N)[None, :])
     ndvi = np.clip(ndvi, -0.2, 1.0)
     p10, p90 = banda_p10_p90(ndvi, SIGMA_NDVI)
     p10, p90 = np.clip(p10, -0.2, 1.0), np.clip(p90, -0.2, 1.0)

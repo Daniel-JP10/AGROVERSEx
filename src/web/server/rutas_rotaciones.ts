@@ -41,7 +41,7 @@ export function rotaciones(db: DatabaseSync, id: string, q: URLSearchParams): Re
 const ZONA_REGION: Record<string, [string, string?]> = {
   corn_belt: ['corn belt', 'ee. uu.'], pampa: ['pampa'], cerrado: ['cerrado'], llanos: ['llanos'], andina_colombia: ['andina colombia'],
   indo_gangetica: ['indo-gangetica'], sahel: ['sahel'], africa_oriental: ['africa oriental'], francia: ['europa (francia)', 'francia'],
-  australia: ['australia'], north_china_plain: ['llanura del norte de china', 'china'],
+  australia: ['australia'],
 }
 
 /** /api/rotaciones?unidad=<id>: la zona sale de zona_demo; sin zona, vacío con motivo. */

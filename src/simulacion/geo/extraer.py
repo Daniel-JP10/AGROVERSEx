@@ -7,7 +7,6 @@ from simulacion.config import CRUDOS, RAIZ
 # (zip descargado, carpeta destino): lo que el runbook de docu.md hacía a mano
 EXTRACCIONES = [
     (CRUDOS / "gmted/mn30_grd.zip", CRUDOS / "gmted_extraido"),
-    (CRUDOS / "koppen/koppen_geiger_tif.zip", CRUDOS / "koppen"),
     (CRUDOS / "go-pmtiles_1.31.2_Windows_x86_64.zip", RAIZ / "herramientas/bin"),
 ]
 

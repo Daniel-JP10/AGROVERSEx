@@ -95,7 +95,7 @@ def generar_lotes(zona: str, n: int = 50, *, geo: pd.DataFrame | None = None,
     geometrias = geometrias or geometrias_unidades(ids)
     # Peso por fracción de cultivo simulada; sin ninguna, reparto uniforme
     g = geo.loc[ids]
-    cob = cobertura_simulada(g, g.koppen)
+    cob = cobertura_simulada(g, g.get("koppen", -1))
     w = cob[[f"igbp_{i + 1}" for i in CULTIVOS_FRAC]].sum(1).to_numpy() + 1e-3
     rng = rng_unidad(zona, "lotes")
     asigna = rng.choice(len(ids), size=n, p=w / w.sum())

@@ -1,0 +1,18 @@
+# Ficha de evidencia: signo de ENSO en el Cuerno y el sur de África (reemplaza a Cai 2025, D-024)
+# asistido por SI: Claude Code (Anthropic), verificación de texto de la página
+id: CPC-ASSESS97-AFRICA
+fuente: NOAA Climate Prediction Center, "Africa" (Assessment of the 1997 rainy seasons)
+url: https://www.cpc.ncep.noaa.gov/products/assessments/assess_97/africa.html
+consultada: 2026-11-14
+fecha_publicacion: no figura en la página
+etiqueta: FUENTE   # una sola página de CPC; cita a Ropelewski y Halpert 1987, 1989
+frases_literales:
+  Cuerno de África (África oriental, OND):
+    "with above-normal rainfall observed during Pacific warm episodes and below-normal rainfall observed during Pacific cold episodes"
+  Sureste de África (África austral, temporada de lluvias):
+    "with below-normal rainfall normally observed during Pacific warm episodes and above-normal rainfall observed during Pacific cold episodes"
+nota: la página da OND solo para el este; para el sur dice "rainy season" sin meses. Sin magnitud (SUPUESTO).
+cai_2025:
+  referencia: Cai W. et al. 2025, Nature Reviews Earth & Environment 6, 503-520, doi 10.1038/s43017-025-00705-7
+  afiliaciones_verificadas: autor principal y de correspondencia Wenju Cai, Ocean University of China, Xiamen University y Laoshan Laboratory (Qingdao); otros coautores en Chinese Academy of Sciences, Beijing Normal University; también NOAA PMEL, CSIRO, UNSW. Fuente: manuscrito en https://repository.library.noaa.gov/view/noaa/71705
+  estado: retirado del producto; no se usa

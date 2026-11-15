@@ -321,3 +321,27 @@ def test_sucesion_transcripcion():
     for f, r in zip(filas, real):
         assert (r["cultivo_o_familia"], r["enfermedad"], r["intervalo_texto"]) == (f[0], f[1], f[2])
         assert r["fuente_texto"] == f[3]
+
+
+def test_africa_enso_sin_cai_2025_y_con_cita_cpc():
+    # D-024: el signo de ENSO en África sale de NOAA CPC, no de Cai 2025
+    txt = (Path(ref.__file__).parent / "teleconexiones.yaml").read_text(encoding="utf-8")
+    assert "Cai 2025" not in txt and "EV-ENS-009" not in txt
+    t = ref.cargar_teleconexiones().set_index("macroregion")
+    for r in ("Sureste de África", "Cuerno de África"):
+        assert "CPC-ASSESS97-AFRICA" in t.loc[r, "fuentes"]
+    assert "Cai 2025" not in (Path(config.RAIZ) / "src/simulacion/clima.py").read_text(encoding="utf-8")
+
+
+def test_africa_nina_apagada_con_limitacion_declarada():
+    t = ref.cargar_teleconexiones().set_index("macroregion")
+    for r in ("Sureste de África", "Cuerno de África"):
+        assert not t.loc[r, "nina_aplica"]
+    txt = (Path(ref.__file__).parent / "teleconexiones.yaml").read_text(encoding="utf-8")
+    assert "LIMITACIÓN" in txt and "docu.md §6.1" in txt
+
+
+def test_kluger_citado_como_preprint_fuente():
+    citas = (Path(config.RAIZ) / "CITAS.md").read_text(encoding="utf-8")
+    assert "arXiv:2506.02384v2" in citas and "preprint, no revisado por pares" in citas
+    assert "lo que dependa solo de esta fuente no sale al pitch" in citas

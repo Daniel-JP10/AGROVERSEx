@@ -29,7 +29,6 @@ PROFUNDIDADES = ("0-5cm", "5-15cm", "15-30cm")
 RUTA_SOIL = CRUDOS / "soilgrids/{prop}_{prof}_mean_1000.tif"
 # GMTED con el mar (0) declarado como NoData; lo crea gmted_tierra.py
 RUTA_ELEV = CRUDOS / "gmted_extraido/mn30_tierra.tif"
-RUTA_KOPPEN = CRUDOS / "koppen/1991_2020/koppen_geiger_0p00833333.tif"
 RUTA_SQL_ESQUEMA = Path(__file__).parent / "esquema_geo.sql"
 
 FUENTES = [
@@ -38,9 +37,6 @@ FUENTES = [
     ("gmted2010", "Danielson y Gesch 2011, GMTED2010 mn30 (USGS), DOI 10.5066/F7J38R2N",
      "https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/topo/downloads/GMTED/Grid_ZipFiles/mn30_grd.zip",
      "Dominio publico (USGS)", "datos/fichas/elevacion.md"),
-    ("koppen_beck2023", "Beck et al. 2023, Scientific Data 10, 724, 1991-2020 a 0,00833 grados",
-     "https://doi.org/10.6084/m9.figshare.21789074.v2", "CC BY 4.0 (figshare); uso interno por D-003",
-     "datos/fichas/koppen_beck2023.md"),
 ]
 
 
@@ -57,7 +53,7 @@ def _variable(id_, nombre, unidad, prod, version, doi, res, crs, fuente, etiquet
             None, None, "real_contexto", etiqueta, fuente)
 
 
-COMPONENTES = ("suelo", "relieve", "koppen")
+COMPONENTES = ("suelo", "relieve")
 PRIMEROS = ["RUS", "CAN", "USA", "BRA", "CHN", "AUS"]  # los más pesados arrancan primero
 TAM_LOTE = 1000
 
@@ -139,11 +135,6 @@ def _relieve_lote(u: gpd.GeoDataFrame) -> list[tuple]:
     return filas
 
 
-def _koppen_lote(u: gpd.GeoDataFrame) -> list[tuple]:
-    f = fracciones_clase(RUTA_KOPPEN, u, set(range(1, 31)))
-    return [(r.id, "koppen", str(r.clase), float(r.fraccion)) for r in f.itertuples()]
-
-
 def _variables() -> list[tuple]:
     vs = []
     for prop, (_, um) in PROPIEDADES.items():
@@ -163,7 +154,7 @@ def calcular(u: gpd.GeoDataFrame, comps=COMPONENTES, solo_cruzan: bool = False) 
         u = u[shapely.intersects(u.geometry.values, _CORTES)]
     est = (_soilgrids_lote(u) if "suelo" in comps and len(u) else [])
     est += (_relieve_lote(u) if "relieve" in comps and len(u) else [])
-    return {"estatico": est, "koppen": _koppen_lote(u) if "koppen" in comps and len(u) else [], "n": len(u)}
+    return {"estatico": est, "n": len(u)}
 
 
 def _trabajo(args):
@@ -190,27 +181,23 @@ def _tareas_gb(un, validos):
 
 
 def unir_partes(ruta_sqlite: Path, partes: Path, comps=COMPONENTES) -> dict:
-    # une todo en una transacción: reemplaza estatico (relieve y suelo), clase_fraccion koppen,
+    # une todo en una transacción: reemplaza estatico (relieve y suelo),
     # variable y fuente
-    est, kop = [], []
+    est = []
     for f in sorted(Path(partes).glob("*.pkl")):
         r = pickle.loads(f.read_bytes())
         est += r["estatico"]
-        kop += r["koppen"]
     con = sqlite3.connect(ruta_sqlite)
     try:
         con.executescript(RUTA_SQL_ESQUEMA.read_text(encoding="utf-8"))
         con.execute("BEGIN")
         # se borran solo las filas de las unidades recalculadas y de los componentes pedidos
         con.execute("CREATE TEMP TABLE recalc(id TEXT PRIMARY KEY)")
-        con.executemany("INSERT OR IGNORE INTO recalc VALUES (?)", {(f[0],) for f in est} | {(f[0],) for f in kop})
+        con.executemany("INSERT OR IGNORE INTO recalc VALUES (?)", {(f[0],) for f in est})
         for comp, patron in (("suelo", "*_0_30"), ("relieve", "elev_*")):
             if comp in comps:
                 con.execute("DELETE FROM estatico WHERE variable_id GLOB ? AND unidad_id IN (SELECT id FROM recalc)", (patron,))
-        if "koppen" in comps:
-            con.execute("DELETE FROM clase_fraccion WHERE esquema = 'koppen' AND unidad_id IN (SELECT id FROM recalc)")
         con.executemany("INSERT OR REPLACE INTO estatico VALUES (?,?,?,?,?,?,?)", est)
-        con.executemany("INSERT INTO clase_fraccion VALUES (?,?,?,?)", kop)
         con.executemany("INSERT OR REPLACE INTO variable VALUES (" + ",".join("?" * 18) + ")", _variables())
         con.executemany("INSERT OR REPLACE INTO fuente VALUES (?,?,?,?,?)", FUENTES)
         con.commit()
@@ -257,7 +244,7 @@ def construir_estaticos(ruta_sqlite: Path, iso3: str | None = None, workers: int
             print(f"tarea {k + 1}/{len(todas)}: {hechas}/{total} unidades, {time.time() - t0:.0f} s", flush=True)
     r = unir_partes(ruta_sqlite, partes, comps)
     insumos = {x.id: x.sha256 for x in cargar_manifiesto(MANIFIESTO)
-               if x.id.startswith("soilgrids_") or x.id in ("gmted2010_mn30", "koppen_beck2023")}
+               if x.id.startswith("soilgrids_") or x.id in ("gmted2010_mn30",)}
     escribir_metadatos(ruta_sqlite, {"estaticos_fecha": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                                      "estaticos_workers": workers, "estaticos_componentes": list(comps),
                                      "estaticos_sha256_insumos": insumos})
@@ -271,7 +258,7 @@ if __name__ == "__main__":
     ap.add_argument("--iso3")
     ap.add_argument("--workers", type=int, default=1)
     ap.add_argument("--partes", type=Path)
-    ap.add_argument("--componentes", default="suelo,relieve,koppen")
+    ap.add_argument("--componentes", default="suelo,relieve")
     ap.add_argument("--solo-cruzan", action="store_true")
     ap.add_argument("--reanudar", action="store_true", help="reutiliza las partes ya calculadas (por defecto se vacían)")
     a = ap.parse_args()

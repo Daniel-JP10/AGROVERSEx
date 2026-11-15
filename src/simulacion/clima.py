@@ -40,17 +40,15 @@ Z95 = 1.645
 COEF_LLUVIA_DOS_FUENTES = 0.10
 # Colombia Caribe y Andina, dos fuentes (EV-ENS-008 IDEAM/PNUD 2014, Bogotá-Cund.: lluvia hasta -60 % y T hasta
 # +0,5 °C con El Niño; EV-ENS-015). Las fichas dan el máximo, no el coeficiente: -0,25/°C y +0,20 °C/°C son SUPUESTO
-# (RONI máximo ~2,3). Es la única rama con coeficiente propio; el resto usa COEF_LLUVIA_DOS_FUENTES o Cai 2025.
+# (RONI máximo ~2,3). Es la única rama con coeficiente propio; el resto usa COEF_LLUVIA_DOS_FUENTES.
 COLOMBIA = "Colombia (Caribe y Andina)"
 COEF_COLOMBIA = (-0.25, 0.20)
 
 
-def _leyenda() -> dict[int, str]:
-    d = yaml.safe_load((AQUI / "koppen_leyenda.yaml").read_text(encoding="utf-8"))
-    return {n: c["codigo"] for n, c in d["clases"].items()}
+# Clases climáticas internas (30, sistema Köppen-Geiger como clasificación). D-025: el recurso de Beck et al. 2023 salió
+# del producto; la clase de cada unidad sale de temperatura y latitud (_clase_respaldo), nunca de ese mapa.
+_COD = {i + 1: c for i, c in enumerate(['Af', 'Am', 'Aw', 'BWh', 'BWk', 'BSh', 'BSk', 'Csa', 'Csb', 'Csc', 'Cwa', 'Cwb', 'Cwc', 'Cfa', 'Cfb', 'Cfc', 'Dsa', 'Dsb', 'Dsc', 'Dsd', 'Dwa', 'Dwb', 'Dwc', 'Dwd', 'Dfa', 'Dfb', 'Dfc', 'Dfd', 'ET', 'EF'])}
 
-
-_COD = _leyenda()
 _IDX = {c: i for i, c in enumerate(_COD[n] for n in sorted(_COD))}  # código -> índice 0..29
 
 
@@ -76,7 +74,7 @@ _P_ANUAL, _P_EST, _P_INV, _DTR, _CONT = _tabla_koppen()
 
 
 def _clase_respaldo(tm, lat):
-    # Respaldo, sin Köppen (SUPUESTO): por temperatura media y latitud
+    # Clase por temperatura media y latitud (SUPUESTO): por temperatura media y latitud
     cod = np.select([tm < -10, tm < 0, tm < 10, (tm >= 18) & (np.abs(lat) < 23.5), tm >= 18, tm >= 10],
                     ["EF", "ET", "Dfc", "Aw", "Cfa", "Cfb"], "Cfb")
     return np.array([_IDX[c] for c in cod])
@@ -240,9 +238,9 @@ def imprimir_eventos(precip, t2m, unidad_ids, eventos, iso3=None, adm1=None) -> 
 
 
 def cargar_geo(ruta=None) -> pd.DataFrame:
-    """Índice id; columnas iso3, punto_lat, elev_media, koppen (clase moda 1..30, -1 sin Köppen).
+    """Índice id; columnas iso3, punto_lat, punto_lon, adm1, elev_media. Sin clase climática (D-025).
 
-    Solo lectura. Ruta: argumento, o AGROVERSEX_GEO_SQLITE, o config.GEO_SQLITE; si no tiene clase_fraccion, el respaldo.
+    Solo lectura. Ruta: argumento, o AGROVERSEX_GEO_SQLITE, o config.GEO_SQLITE; si falla, el respaldo.
     """
     ruta = Path(ruta or os.environ.get("AGROVERSEX_GEO_SQLITE") or config.GEO_SQLITE)
     candidatas = [ruta, ruta.with_name(ruta.name + ".bak_prereconstruccion")]
@@ -250,9 +248,6 @@ def cargar_geo(ruta=None) -> pd.DataFrame:
         try:
             con = sqlite3.connect(f"file:{r.as_posix()}?mode=ro", uri=True)
             try:
-                kop = pd.read_sql("SELECT unidad_id, clase, fraccion FROM clase_fraccion WHERE esquema='koppen'", con)
-                if kop.empty:
-                    continue
                 u = pd.read_sql("SELECT id, nivel, iso3, padre_id, nombre, punto_lat, punto_lon FROM unidad", con)
                 el = pd.read_sql("SELECT unidad_id AS id, media AS elev_media FROM estatico "
                                  "WHERE variable_id='elev_media'", con)
@@ -260,12 +255,10 @@ def cargar_geo(ruta=None) -> pd.DataFrame:
                 con.close()
         except sqlite3.Error:
             continue
-        moda = kop.sort_values("fraccion").groupby("unidad_id").clase.last().astype(int)
         # ADM1 de cada unidad: ella misma en nivel 1, su padre en nivel 2, nada en nivel 0
         n1 = u[u.nivel == 1].set_index("id").nombre
         u["adm1"] = np.where(u.nivel == 1, u.nombre, u.padre_id.map(n1))
         df = u.merge(el, on="id", how="left").set_index("id")[["iso3", "punto_lat", "punto_lon", "adm1", "elev_media"]]
-        df["koppen"] = moda.reindex(df.index).fillna(-1).astype(int)
         return df
     raise FileNotFoundError(f"sin geo.sqlite utilizable en {ruta} ni su respaldo")
 
@@ -324,7 +317,8 @@ def generar_clima(unidad_ids: list[str], bloque: slice, geo: pd.DataFrame | None
     g = (geo if geo is not None else cargar_geo()).reindex(ids)
     lat, iso3 = g.punto_lat.to_numpy(float), g.iso3.to_numpy()
     adm1 = g["adm1"].to_numpy(object) if "adm1" in g else None
-    cls = g.koppen.fillna(-1).to_numpy(int) - 1  # 1..30 -> índice 0..29; -1 sin Köppen queda en -2
+    # columna koppen opcional (solo pruebas); sin ella la clase sale del respaldo por T y latitud (D-025)
+    cls = np.broadcast_to(np.asarray(g.get("koppen", -1), float), (len(g),)).astype(int) - 1
     cls = np.where(cls < 0, -1, cls)
     t_cl, p_cl, dtr, resp = _clim(lat, g.elev_media.to_numpy(float), cls)
     dtr = np.repeat(dtr[:, None], 12, 1)

@@ -182,17 +182,12 @@ def test_respaldo_sin_koppen(geo):
     assert not clima.climatologia_unidad(4.7, 2600.0, 15)["respaldo"]
 
 
-def test_leyenda_koppen_30_clases():
-    ley = yaml.safe_load((AQUI / "koppen_leyenda.yaml").read_text(encoding="utf-8"))
-    assert len(ley["clases"]) == 30 and "Beck" in ley["fuente"]
-    legend = PRINCIPAL / "datos/crudos/koppen/legend.txt"
-    if not legend.exists():
-        pytest.skip("legend.txt no está")
-    for n, cod in ((int(l.split(":")[0]), l.split()[1]) for l in legend.read_text(encoding="utf-8").splitlines()
-                   if l.strip()[:1].isdigit()):
-        assert ley["clases"][n]["codigo"] == cod
+def test_clases_internas_30_sin_koppen_beck():
+    assert len(clima._COD) == 30 and "Af" in clima._COD.values()
+    assert not (AQUI / "koppen_leyenda.yaml").exists()
 
 
+@pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa")
 @pytest.mark.datos_reales
 def test_colombia_real():
     import time
@@ -207,3 +202,10 @@ def test_colombia_real():
     anual = np.nanmean(c.t2m[:, :312].reshape(len(ids), 26, 12).mean(2), axis=0)
     assert abs(np.polyfit(np.arange(26), anual, 1)[0] * 10 - 0.24) <= 0.06
     assert np.nanmin(c.rh2m) >= 0 and np.nanmax(c.rad_sw) <= 35
+
+
+def test_sin_dataset_koppen_en_el_producto():
+    # D-025: ni el loader ni estaticos leen el mapa de Beck et al. 2023
+    import inspect
+    assert "clase_fraccion" not in inspect.getsource(clima.cargar_geo)
+    assert "koppen" not in (Path(config.RAIZ) / "src/simulacion/geo/estaticos.py").read_text(encoding="utf-8").lower()
