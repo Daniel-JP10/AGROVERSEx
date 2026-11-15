@@ -1,0 +1,10 @@
+# RED de pruebas/test_registros.py. Comando:
+# cd C:\NASA\wt\f2-s4-analisis && C:\NASA\AGROVERSEx\.venv\Scripts\python.exe datos/evidencia/S4_registros_red.py
+# GREEN: C:\NASA\AGROVERSEx\.venv\Scripts\pytest.exe pruebas/test_registros.py -q  (9 passed, registros reales)
+
+S4_registros_con_filas_sueltas.md -> 3 filas sueltas [(11, 'fila sin encabezado y separador antes'), (14, 'fila sin encabezado y separador antes'), (16, 'fila sin encabezado y separador antes')]
+SI_USO.md -> 0 filas sueltas []
+
+# RED real: SI_USO.md de be73c74 (67 filas sin encabezado, lineas 330-396), una vez pasado por filas_sueltas:
+# git show be73c74:SI_USO.md  -> 1 bloque suelto desde la linea 330 (fila sin encabezado y separador antes)
+# SI_USO.md de 37627a2 (corregido) -> 0
