@@ -393,6 +393,9 @@ Notas de procedencia sin generación nueva por este equipo de Gemelo:
 | Claude Code (Anthropic) | `src/web/src/app/recorrido/cargarHuecos.ts` | Huecos del guion leídos de lotes_demo, meta, HLS y el paquete del gemelo | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/cargar_huecos.test.ts` | Pruebas de los huecos del guion con fetch falso | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/lotes_nombre.test.ts` | Prueba de que ningún texto de interfaz lleva escrito a mano el lugar de un lote de lotes_demo.json (D-036 f) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/lotes_demo/helada_estacion.py` | Climatología mensual de heladas de la estación GHCN como resumen derivado, sin redistribuir el CSV (D-038) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/lotes_demo/descargar_ghcn.py` | Descarga del CSV de una estación GHCN-Daily a C:/NASA/compartir, fuera del repositorio (D-038) | 2026-11-15 |
+| Claude Code (Anthropic) | `pruebas/lotes/test_helada_estacion.py` | Pruebas del resumen derivado de heladas y de que no haya crudos de GHCN en el repo | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registros.ts` | Filtro de filas en uso de los registros de Fuentes | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registrosPlugin.ts` | Plugin de Vite que filtra los registros al compilar | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/AlertaHelada.tsx` | Alerta de helada del gemelo con sus avisos | 2026-11-14 |

@@ -7,17 +7,17 @@ version_contrato: 1
 lote:
   id: DEMO-COL-01
   # Nombre, punto, unidad y clima se leen de lotes_demo.json de Datos (no se escriben a mano)
-  catalogo: ../datos/referencia/lotes/lotes_demo.json
+  catalogo: ../datos/lotes/lotes_demo.json
 
 clima:
-  # Forzantes de Datos (T-D5, forzantes_gemelo.md v1, SHA256 en datos/referencia/lotes/SHA256SUMS.txt).
+  # Forzantes de Datos (T-D5, forzantes_gemelo.md v1, SHA256 en datos/lotes/SHA256SUMS.txt).
   # La física usa T2M crudo (media y ET0); T2M_MIN_CORR solo para heladas (§4.3).
   fuente: power_csv
-  archivo: ../datos/referencia/lotes/power_DEMO-COL-01_diario.csv
+  archivo: ../datos/lotes/power_DEMO-COL-01_diario.csv
   # Lluvia IMERG: sensibilidad solo en modo técnico, nunca escenario equivalente (sobrestima frente a la estación)
   precipitacion_alterna:
-    archivo: ../datos/referencia/lotes/imerg_DEMO-COL-01_diario.csv
-    comparacion: ../datos/referencia/lotes/comparacion_power_imerg.json
+    archivo: ../datos/lotes/imerg_DEMO-COL-01_diario.csv
+    comparacion: ../datos/lotes/comparacion_power_imerg.json
   # Alternativa con la base de la rama datos (mensual desagregado a diario):
   # fuente: sqlite_mensual
   # ruta: ../datos/agroversex.sqlite
@@ -26,7 +26,7 @@ clima:
 
 suelo:
   fuente: parametros_suelo_json
-  archivo: ../datos/referencia/lotes/parametros_suelo_DEMO-COL-01.json
+  archivo: ../datos/lotes/parametros_suelo_DEMO-COL-01.json
   # Suelo volcánico (MO ~8 %): fuera del dominio de Saxton y Rawls; con un análisis local:
   # fuente: manual
   # arena: 0.45
@@ -41,16 +41,16 @@ alertas:
   helada:
     umbral_c: 0.0
     provisional: true
-    validacion: ../datos/referencia/lotes/validacion_temperatura_ipiales.json
+    validacion: ../datos/lotes/validacion_temperatura_ipiales.json
     # Estación cercana (criterio del director: <= 5 km y <= 100 m de desnivel): si la serie no genera heladas,
     # la alerta usa su climatología observada (combinación propia)
-    estacion: ../datos/referencia/lotes/COM00080370.csv
+    estacion: ../datos/lotes/validacion_temperatura_ipiales.json
     estacion_max_km: 5
     estacion_max_desnivel_m: 100
 
 # Pendiente NASADEM y K de Williams del lote para exposicion_erosiva de Datos (T-D6, una sola definición)
 erosion:
-  archivo: ../datos/referencia/lotes/exposicion_erosiva_lotes.json
+  archivo: ../datos/lotes/exposicion_erosiva_lotes.json
 
 escenario:
   tipo: historico

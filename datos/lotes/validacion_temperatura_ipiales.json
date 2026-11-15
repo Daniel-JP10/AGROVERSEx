@@ -424,5 +424,94 @@
   "power_corr_2934m_dias_le_2c": 1,
   "power_corr_2934m_dias_le_4c": 62
  },
- "recomendacion_contrato": "Usar T2M_MIN_CORR para alertas de helada y temperaturas mínimas en DEMO-COL-01 (reduce el sesgo cálido de +3,51 °C a +1,04 °C y el MAE de 3,52 °C a 1,79 °C frente a GHCN COM00080370). Para temperatura media diaria (T2M) la columna cruda tiene menor sesgo (+0,80 °C, MAE 1,04 °C) que T2M_CORR (-1,68 °C, MAE 1,74 °C) porque el calentamiento radiativo diurno en el altiplano ecuatorial y el reporte sinóptico diurno (atributo H) compensan la diferencia de altitud en las horas de sol; se entregan ambas columnas (crudas y *_CORR) en power_diario.csv."
+ "recomendacion_contrato": "Usar T2M_MIN_CORR para alertas de helada y temperaturas mínimas en DEMO-COL-01 (reduce el sesgo cálido de +3,51 °C a +1,04 °C y el MAE de 3,52 °C a 1,79 °C frente a GHCN COM00080370). Para temperatura media diaria (T2M) la columna cruda tiene menor sesgo (+0,80 °C, MAE 1,04 °C) que T2M_CORR (-1,68 °C, MAE 1,74 °C) porque el calentamiento radiativo diurno en el altiplano ecuatorial y el reporte sinóptico diurno (atributo H) compensan la diferencia de altitud en las horas de sol; se entregan ambas columnas (crudas y *_CORR) en power_diario.csv.",
+ "climatologia_helada_estacion": {
+  "fuente_csv": "COM00080370.csv",
+  "estacion": "COM00080370",
+  "lat": 0.862,
+  "lon": -77.672,
+  "elevacion_m": 2976.4,
+  "periodo": [
+   "2001-01-01",
+   "2024-12-31"
+  ],
+  "rechazados_bandera_tmin": 0,
+  "por_umbral_c": {
+   "0.0": [
+    {
+     "mes": 1,
+     "dias_periodo": 744,
+     "dias_con_dato": 458,
+     "dias_helada": 2
+    },
+    {
+     "mes": 2,
+     "dias_periodo": 678,
+     "dias_con_dato": 395,
+     "dias_helada": 1
+    },
+    {
+     "mes": 3,
+     "dias_periodo": 744,
+     "dias_con_dato": 425,
+     "dias_helada": 0
+    },
+    {
+     "mes": 4,
+     "dias_periodo": 720,
+     "dias_con_dato": 416,
+     "dias_helada": 2
+    },
+    {
+     "mes": 5,
+     "dias_periodo": 744,
+     "dias_con_dato": 431,
+     "dias_helada": 0
+    },
+    {
+     "mes": 6,
+     "dias_periodo": 720,
+     "dias_con_dato": 445,
+     "dias_helada": 0
+    },
+    {
+     "mes": 7,
+     "dias_periodo": 744,
+     "dias_con_dato": 443,
+     "dias_helada": 1
+    },
+    {
+     "mes": 8,
+     "dias_periodo": 744,
+     "dias_con_dato": 449,
+     "dias_helada": 5
+    },
+    {
+     "mes": 9,
+     "dias_periodo": 720,
+     "dias_con_dato": 398,
+     "dias_helada": 5
+    },
+    {
+     "mes": 10,
+     "dias_periodo": 744,
+     "dias_con_dato": 434,
+     "dias_helada": 1
+    },
+    {
+     "mes": 11,
+     "dias_periodo": 720,
+     "dias_con_dato": 436,
+     "dias_helada": 0
+    },
+    {
+     "mes": 12,
+     "dias_periodo": 744,
+     "dias_con_dato": 454,
+     "dias_helada": 0
+    }
+   ]
+  }
+ },
+ "aviso_uso": "GHCN-Daily: dato de estación fuera de EE. UU. intercambiado bajo la Resolución 40 de la OMM. Solo agregados derivados, para uso no comercial (investigación y educación). El CSV crudo no se redistribuye y este resumen queda fuera de la licencia abierta del repositorio (D-038)."
 }

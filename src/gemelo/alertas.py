@@ -15,7 +15,6 @@ import math
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
 
 from gemelo.clima import MES_DE_DIA
 from gemelo.incertidumbre import resumir
@@ -89,33 +88,28 @@ def _wilson(k: int, n: int) -> tuple[float, float]:
     return max(c - h, 0.0), min(c + h, 1.0)
 
 
-def leer_estacion(ruta: str | Path, periodo: list[str]) -> dict:
-    """TMIN diaria de un CSV de acceso GHCN-Daily (décimas de °C). Se descartan los días con bandera de calidad."""
-    df = pd.read_csv(Path(ruta), usecols=["STATION", "DATE", "LATITUDE", "LONGITUDE", "ELEVATION", "TMIN",
-                                          "TMIN_ATTRIBUTES"], dtype={"TMIN_ATTRIBUTES": str})
-    meta = df.iloc[0]
-    df["DATE"] = pd.to_datetime(df["DATE"])
-    df = df[(df.DATE >= periodo[0]) & (df.DATE <= periodo[1])]
-    q = df.TMIN_ATTRIBUTES.fillna(",,").str.split(",").str[1].str.strip()
-    rechazados = int((df.TMIN.notna() & (q != "")).sum())
-    df = df[df.TMIN.notna() & (q == "")]
-    return {"estacion": str(meta.STATION), "lat": float(meta.LATITUDE), "lon": float(meta.LONGITUDE),
-            "elevacion_m": float(meta.ELEVATION), "periodo": list(periodo), "rechazados_bandera": rechazados,
-            "fechas": df.DATE, "tmin_c": df.TMIN.to_numpy(float) / 10.0, "fuente": Path(ruta).name}
+def leer_estacion(ruta: str | Path) -> dict:
+    """Estación desde el resumen derivado de Datos (bloque climatologia_helada_estacion). El CSV crudo de GHCN no
+    se versiona ni se redistribuye (Resolución 40 de la OMM, D-038)."""
+    b = json.loads(Path(ruta).read_text(encoding="utf-8"))["climatologia_helada_estacion"]
+    return {"estacion": b["estacion"], "lat": b["lat"], "lon": b["lon"], "elevacion_m": b["elevacion_m"],
+            "periodo": list(b["periodo"]), "rechazados_bandera": b["rechazados_bandera_tmin"],
+            "fuente": b["fuente_csv"], "por_umbral_c": b["por_umbral_c"]}
 
 
 def climatologia_mensual(est: dict, umbral_c: float) -> list[dict]:
     """Por mes: días del periodo, días con dato, días con TMIN <= umbral, frecuencia, IC de Wilson y cobertura."""
-    todos = pd.date_range(est["periodo"][0], est["periodo"][1], freq="D")
-    meses = est["fechas"].dt.month.to_numpy()
+    clave = f"{float(umbral_c):.1f}"
+    if clave not in est["por_umbral_c"]:
+        raise KeyError(f"el resumen de la estación no trae el umbral {clave} °C: Datos debe regenerarlo con "
+                       f"lotes_demo.helada_estacion")
     filas = []
-    for m in range(1, 13):
-        n = int((meses == m).sum())
-        k = int(((meses == m) & (est["tmin_c"] <= umbral_c)).sum())
+    for f in est["por_umbral_c"][clave]:
+        n, k = f["dias_con_dato"], f["dias_helada"]
         lo, hi = _wilson(k, n)
-        filas.append({"mes": m, "dias_periodo": int((todos.month == m).sum()), "dias_con_dato": n, "dias_helada": k,
+        filas.append({"mes": f["mes"], "dias_periodo": f["dias_periodo"], "dias_con_dato": n, "dias_helada": k,
                       "frecuencia": k / n if n else None, "frecuencia_ic95": [lo, hi],
-                      "cobertura": n / int((todos.month == m).sum())})
+                      "cobertura": n / f["dias_periodo"]})
     return filas
 
 
@@ -235,8 +229,7 @@ def bloque(entrada, programas) -> dict:
     cfg = (entrada.alertas or {}).get("helada", {})
     serie = "t2m_min_corr" if "t2m_min_corr" in entrada.clima.datos else "t2m_min"
     val = leer_validacion(cfg["validacion"], serie) if cfg.get("validacion") else None
-    est = leer_estacion(cfg["estacion"], val["periodo"] if val else cfg["periodo_estacion"]) \
-        if cfg.get("estacion") else None
+    est = leer_estacion(cfg["estacion"]) if cfg.get("estacion") else None
     return {"helada_etapa_sensible": helada_etapa_sensible(
                 entrada.clima, entrada.escenario, programas, float(cfg.get("umbral_c", UMBRAL_C)),
                 bool(cfg.get("provisional", False)), val, est, float(cfg.get("estacion_max_km", 5.0)),
