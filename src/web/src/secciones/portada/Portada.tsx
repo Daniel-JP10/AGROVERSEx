@@ -44,7 +44,8 @@ export interface Raiz { principal: P2[]; hebra: P2[]; ramas: string[]; hojas: { 
 export function construirRaiz(n: Nodo, i: number): Raiz {
   const r = azar(97 + i * 131)
   const ang = Math.atan2(n.y - CY, n.x - CX)
-  const S: P2 = [CX + Math.cos(ang) * 222, CY + Math.sin(ang) * 138]
+  // Arranque fuera de la caja del título: su brillo no puede quedar detrás de las letras (contraste AA medido)
+  const S: P2 = [CX + Math.cos(ang) * 250, CY + Math.sin(ang) * 158]
   const dist = Math.hypot(n.x - S[0], n.y - S[1])
   const E: P2 = [n.x - ((n.x - S[0]) / dist) * 62, n.y - ((n.y - S[1]) / dist) * 62]
   const v: P2 = [E[0] - S[0], E[1] - S[1]], perp: P2 = [-v[1] / dist, v[0] / dist]
