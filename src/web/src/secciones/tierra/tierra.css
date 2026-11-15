@@ -1,0 +1,61 @@
+/* asistido por SI: Claude Code (Anthropic), Earth dentro del marco: hojas, órbitas y llamada a los lotes (plan v2 §3) */
+/* Usa las variables del tema; --hoja y --hoja-borde son de W1 y caen al panel actual si aún no existen */
+.tierra .hoja { background: var(--hoja, var(--panel)); border: 1px solid var(--hoja-borde, var(--borde)); border-radius: 18px 4px 18px 4px; box-shadow: var(--sombra); backdrop-filter: blur(8px); }
+
+/* Órbitas decorativas detrás del globo */
+.tierra .globo { z-index: 1; }
+
+/* Hoja de búsqueda arriba a la izquierda */
+.tierra .busqueda input { background: var(--hoja, var(--panel)); border-color: var(--hoja-borde, var(--borde)); border-radius: 18px 4px 18px 4px; }
+
+/* Leyenda abajo a la derecha */
+.tierra .leyenda { right: 12px; bottom: 12px; width: 260px; padding: 10px 12px; font-size: 12px; }
+.tierra .leyenda dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; margin: 6px 0; }
+.tierra .leyenda dt { color: var(--suave); }
+.tierra .leyenda dd { margin: 0; display: grid; gap: 2px; }
+.tierra .leyenda .chip { border: none; padding: 0; margin: 0; }
+.tierra .controles { bottom: 200px; }
+
+/* Línea de tiempo abajo al centro */
+.tierra .hoja-tiempo { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); width: min(760px, calc(100% - 600px)); z-index: 4; padding: 2px; }
+.tierra .hoja-tiempo .tiempo { margin: 0; border: none; background: none; box-shadow: none; }
+.tierra .hoja-tiempo .fila { flex-wrap: wrap; row-gap: 6px; }
+.tierra .barra-inferior { right: auto; background: none; bottom: 4px; }
+
+/* Llamada "Select a lot" y sus líneas finas */
+.tierra .hoja-lotes { position: absolute; right: 24px; top: 16%; width: 230px; padding: 10px 12px; z-index: 4; display: grid; gap: 6px; }
+.tierra .hoja-lotes h2 { margin: 0; font-size: 15px; color: var(--acento); }
+.tierra .hoja-lotes p { margin: 0; font-size: 12px; }
+.tierra .hoja-lotes button { text-align: left; padding: 6px 10px; border-radius: 10px 3px 10px 3px; border: 1px solid var(--hoja-borde, var(--borde)); background: var(--realce); }
+.tierra .hoja-lotes button:hover { border-color: var(--acento); }
+.tierra .lotes-lineas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; overflow: visible; }
+.tierra .lotes-lineas line { stroke: var(--acento); stroke-width: 1; stroke-opacity: 0.7; }
+.tierra .lotes-lineas circle { fill: var(--acento); }
+
+/* Pantalla angosta: tiempo a lo ancho abajo, leyenda encima, lotes bajo la búsqueda */
+@media (max-width: 900px) {
+  .tierra .hoja-tiempo { left: 8px; right: 8px; width: auto; transform: none; bottom: 8px; }
+  .tierra .leyenda { bottom: 112px; right: 8px; width: 190px; font-size: 10px; padding: 6px 8px; }
+  .tierra .hoja-tiempo .cinta { display: none; }
+  .tierra .hoja-tiempo .fila { gap: 6px; }
+  .tierra .busqueda { width: calc(100% - 24px); }
+  .tierra .hoja-lotes { top: 60px; right: auto; left: 12px; width: calc(100% - 24px); grid-template-columns: 1fr 1fr; }
+  .tierra .hoja-lotes h2, .tierra .hoja-lotes p, .tierra .hoja-lotes [role="alert"] { grid-column: 1 / -1; }
+  .tierra .hoja-lotes p { display: none; }
+  .tierra .riel { top: 178px; left: 12px; transform: none; flex-direction: row; }
+  .tierra .riel .etq { display: none; }
+  .tierra .controles { bottom: auto; top: 246px; right: auto; left: 12px; }
+  .tierra .leyenda { bottom: 196px; }
+}
+
+/* Atribución de MapLibre (GIBS, geoBoundaries) arriba a la derecha: la hoja de tiempo no la tapa */
+.tierra .maplibregl-ctrl-bottom-right { top: 8px; bottom: auto; max-width: min(520px, 60%); }
+.tierra .maplibregl-ctrl-attrib { font-size: 11px; }
+/* Atribución con los tokens del tema, no la caja blanca de MapLibre */
+.tierra .maplibregl-ctrl.maplibregl-ctrl-attrib { background: var(--panel-base); color: var(--texto); border: 1px solid var(--borde); border-radius: var(--radio); }
+.tierra .maplibregl-ctrl-attrib a { color: var(--acento); }
+.tierra .maplibregl-ctrl-attrib-button { background-color: var(--texto); border-radius: 50%; }
+@media (max-width: 900px) {
+  .tierra .maplibregl-ctrl-bottom-right { top: auto; bottom: 126px; left: 8px; right: 8px; max-width: none; z-index: 5; }
+  .tierra .maplibregl-ctrl-attrib { font-size: 10px; line-height: 1.25; }
+}

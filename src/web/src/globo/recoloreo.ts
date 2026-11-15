@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón; fase 3 sin esperar al índice
 import type { Map as MapaGL } from 'maplibre-gl'
 import { NIVELES, ESTADO_VALOR, nivelParaZoom } from './config'
 import { claveUnidad, porClave } from '../datos/indice'
@@ -72,7 +72,8 @@ export function crearRecoloreo(mapa: MapaGL, leer: (nivel: number, id: string) =
       // querySourceFeatures().state no refleja feature-state en MapLibre 6.16: aquí solo se leen ids
       for (const f of mapa.querySourceFeatures(fuente, { sourceLayer: capa })) {
         const id = f.properties?.unidad_id
-        if (typeof id !== 'string' || !porClave.has(claveUnidad(nivel, id))) continue
+        // Sin índice aún (1,2 MB), no se filtra: el relleno no espera a la búsqueda (presupuesto de primer relleno, plan v1 §a)
+        if (typeof id !== 'string' || (porClave.size > 0 && !porClave.has(claveUnidad(nivel, id)))) continue
         if (paises && !paises.includes(String(f.properties?.iso3 ?? id))) continue
         s.add(id)
       }

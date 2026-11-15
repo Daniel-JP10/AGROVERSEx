@@ -1,8 +1,10 @@
-// asistido por SI: Claude Code (Anthropic), interfaz del globo para el resto del universo (contrato web_componentes §4)
+// asistido por SI: Claude Code (Anthropic), interfaz del globo para el resto del universo (contrato web_componentes §4); fase 3: atribución para el pie
 import { useEstado } from '../../app/estado'
 import { porClave } from '../../datos/indice'
 import { capaPorId } from '../../datos/capas'
 import { MES_INICIO } from '../../tiempo/valor'
+// Atribución de GIBS y geoBoundaries para el pie del marco (W1); config.ts no arrastra MapLibre
+export { ATRIBUCION } from '../../globo/config'
 
 const FORMATO_UNIDAD = /^([A-Z0-9]{3})-ADM(?:0|([12])-[A-Za-z0-9]+)$/
 

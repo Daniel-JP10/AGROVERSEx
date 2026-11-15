@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), sección Tierra: compone el globo que antes montaba App.tsx
+// asistido por SI: Claude Code (Anthropic), sección Tierra: globo en círculo, hojas de búsqueda, leyenda y tiempo, y llamada a los lotes (plan v2 §3)
 import { useEffect, useState } from 'react'
 import type { Map as MapaGL } from 'maplibre-gl'
 import { Globo } from '../../globo/Globo'
@@ -9,7 +9,8 @@ import { Busqueda } from '../../paneles/Busqueda'
 import { PanelRegion } from '../../paneles/PanelRegion'
 import { LineaTiempo } from '../../tiempo/LineaTiempo'
 import { PanelCapas } from '../../paneles/PanelCapas'
-import { Fps } from './Fps'
+import { SeleccionLote } from './SeleccionLote'
+import './tierra.css'
 import { Riel } from './Riel'
 import { Dividida } from '../../comparar/Dividida'
 import { Escenario } from '../../comparar/Escenario'
@@ -25,12 +26,13 @@ export function Tierra() {
   const [mapa, setMapa] = useState<MapaGL | null>(null)
   const proyeccion = useEstado((s) => s.proyeccion)
   const [mesB, setMesB] = useState(120)
+  const sel = useEstado((s) => s.seleccion)
   // La ruta manda al abrir y al cambiar el hash; espera al mapa para que la selección encuentre las teselas
   const { params } = useRuta()
   useEffect(() => { if (mapa) void aplicarParams(params) }, [mapa, params.unidad, params.variable, params.mes]) // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <>
-      <div className="centro">
+      <div className="centro tierra">
         <main className="zona-mapa">
           <Globo onMapa={setMapa} />
           <Busqueda />
@@ -41,10 +43,11 @@ export function Tierra() {
           {mapa && activa === 'medir' && <Medir mapa={mapa} />}
           {mapa && <AvisoZoom mapa={mapa} proyeccion={proyeccion} />}
           <PanelRegion />
-          {import.meta.env.DEV && <Fps />}
+          {/* La llamada cede su sitio al panel de unidad, que ocupa la derecha */}
+          {mapa && !sel && <SeleccionLote mapa={mapa} />}
+          <div className="hoja hoja-tiempo"><LineaTiempo /></div>
         </main>
       </div>
-      <LineaTiempo />
     </>
   )
 }
