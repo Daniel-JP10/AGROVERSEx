@@ -38,20 +38,25 @@ export function faltantes(est: { id: string; valores: Valores }[]): Record<strin
   return f
 }
 
-/**
- * Puntajes S de las estrategias completas: normaliza cada objetivo entre las estrategias del mismo documento
- * (solo con los valores que existen), promedia por deslizador y pondera. Las incompletas no tienen puntaje.
- */
-export function puntajes(est: { id: string; valores: Valores }[], pesos: Pesos): Record<string, number> {
+/** Normalizado de cada objetivo entre todas las estrategias del documento que tienen valor en ese objetivo (C-4, D-039). */
+function normalizador(est: { valores: Valores }[]) {
   const rango: Record<string, [number, number]> = {}
   for (const o of Object.keys(SENTIDO)) {
     const xs = est.map((e) => leer(e.valores, o)).filter(fin)
     if (xs.length) rango[o] = [Math.min(...xs), Math.max(...xs)]
   }
-  const norm = (o: string, x: number) => {
+  return (o: string, x: number) => {
     const [mn, mx] = rango[o]
     return mx === mn ? 0.5 : SENTIDO[o] === 'max' ? (x - mn) / (mx - mn) : (mx - x) / (mx - mn)
   }
+}
+
+/**
+ * Puntajes S de las estrategias completas: normaliza cada objetivo (normalizador), promedia por deslizador y pondera.
+ * Las incompletas no tienen puntaje.
+ */
+export function puntajes(est: { id: string; valores: Valores }[], pesos: Pesos): Record<string, number> {
+  const norm = normalizador(est)
   const suma = DESLIZADORES.reduce((a, k) => a + pesos[k], 0)
   const falta = faltantes(est)
   return Object.fromEntries(est.filter((e) => !falta[e.id]).map((e) => {
@@ -61,11 +66,19 @@ export function puntajes(est: { id: string; valores: Valores }[], pesos: Pesos):
   }))
 }
 
-/** Ids: primero las completas por puntaje descendente (empate: posición original); después las incompletas en su orden original. */
+/**
+ * Ids: primero las completas por puntaje descendente (empate: posición original). Después las incompletas (C-4, D-039):
+ * menos objetivos faltantes, luego mayor suma de normalizados disponibles, luego id, para que sea determinista.
+ */
 export function ordenar(est: { id: string; valores: Valores }[], pesos: Pesos): string[] {
   const s = puntajes(est, pesos)
   const con = est.map((e, i) => ({ id: e.id, i })).filter((x) => x.id in s).sort((a, b) => s[b.id] - s[a.id] || a.i - b.i)
-  return [...con.map((x) => x.id), ...est.filter((e) => !(e.id in s)).map((e) => e.id)]
+  const norm = normalizador(est)
+  const falta = faltantes(est)
+  const sumaDisponible = (v: Valores) => Object.keys(SENTIDO).reduce((a, o) => { const x = leer(v, o); return x === undefined ? a : a + norm(o, x) }, 0)
+  const sin = est.filter((e) => !(e.id in s)).map((e) => ({ id: e.id, n: falta[e.id].length, suma: sumaDisponible(e.valores) }))
+    .sort((a, b) => a.n - b.n || b.suma - a.suma || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+  return [...con.map((x) => x.id), ...sin.map((x) => x.id)]
 }
 
 /** Ids de la línea base y el frente de un documento, en el orden que piden las prioridades. */

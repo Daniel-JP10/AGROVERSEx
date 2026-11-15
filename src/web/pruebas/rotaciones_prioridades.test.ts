@@ -39,7 +39,11 @@ describe('orden por prioridades (gemelo_api §4 v1.2)', () => {
     expect([...iguales].sort()).toEqual([...ids].sort())
     // el ejemplo v1.1 no trae riego, fertilizante ni demás objetivos: todas incompletas, orden del documento y nada imputado
     expect(Object.keys(faltantesDelDocumento(doc)).sort()).toEqual([...ids].sort())
-    expect(ordenDelDocumento(doc, { agua: 0, suelo: 5, insumos: 0, estabilidad_climatica: 0 })).toEqual(ids)
+    // C-4 (director, 08:55): las incompletas se ordenan por objetivos faltantes, suma de normalizados y id (antes: orden del documento)
+    const orden = ordenDelDocumento(doc, { agua: 0, suelo: 5, insumos: 0, estabilidad_climatica: 0 })
+    expect([...orden].sort()).toEqual([...ids].sort())
+    const nf = faltantesDelDocumento(doc)
+    for (let i = 1; i < orden.length; i++) expect(nf[orden[i]].length).toBeGreaterThanOrEqual(nf[orden[i - 1]].length)
   })
 })
 
@@ -65,5 +69,22 @@ describe('objetivo de prioridad sin valor (D-039.4)', () => {
     const cero = { ...C, valores: { ...C.valores, fertilizante: 0 } }
     expect(faltantes([...completas, cero])).toEqual({})
     expect(ordenar([...completas, cero], { agua: 0, suelo: 0, insumos: 5, estabilidad_climatica: 0 })[0]).toBe('C')
+  })
+})
+
+describe('C-4: normalización y orden interno de las incompletas (D-039, director 08:55)', () => {
+  const A = { id: 'A', valores: { riego: 0, deficit: 0.2, carbono: 0.1, exposicion_erosiva: 20, fertilizante: 100, riesgo_produccion: 0.3 } }
+  const B = { id: 'B', valores: { riego: 0, deficit: 0.3, carbono: -0.1, exposicion_erosiva: 30, fertilizante: 150, riesgo_produccion: 0.25 } }
+  it('la normalización de cada objetivo usa todas las estrategias con valor en ese objetivo, también las incompletas', () => {
+    const Z = { id: 'Z', valores: { riego: null, deficit: 0.9, carbono: 2, exposicion_erosiva: 1, fertilizante: 300, riesgo_produccion: 0.1 } }
+    expect(puntajes([A, B, Z], PESOS_IGUALES).A).not.toBe(puntajes([A, B], PESOS_IGUALES).A)
+  })
+  it('incompletas: primero menos objetivos faltantes, luego mayor suma de normalizados disponibles, luego id', () => {
+    const D = { id: 'D', valores: { riego: null, deficit: 0.1, carbono: 0.5, exposicion_erosiva: 5, fertilizante: null, riesgo_produccion: 0.9 } }
+    const E = { id: 'E', valores: { riego: 0, deficit: 0.3, carbono: -0.1, exposicion_erosiva: 30, fertilizante: null, riesgo_produccion: 0.25 } }
+    const F = { id: 'F', valores: { riego: 0, deficit: 0.1, carbono: 0.5, exposicion_erosiva: 5, fertilizante: null, riesgo_produccion: 0.9 } }
+    const G = { id: 'G', valores: { ...F.valores } }
+    // D le faltan 2; E, F y G les falta 1. F y G empatan en suma: decide el id
+    expect(ordenar([D, G, E, A, F, B], PESOS_IGUALES)).toEqual([...ordenar([A, B], PESOS_IGUALES), 'F', 'G', 'E', 'D'])
   })
 })
