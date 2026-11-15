@@ -1,0 +1,24 @@
+{
+ "generador": "src/lotes_demo/bloque_iso.py",
+ "remuestreo": "bilineal",
+ "celda_m": 30.0,
+ "exageracion_vertical": 3.0,
+ "lotes": {
+  "DEMO-COL-01": {
+   "entrada_sha256": "425a865d368f9d0b0fa80d5273cf3ec4370998775a0a1255f744f4b052f6a132",
+   "archivos": {
+    "bloque_DEMO-COL-01.webp": "cfc54ce55dc005daba48c564e400f1697126c150afc9bd71ef55fa44689b8897",
+    "bloque_DEMO-COL-01_pendiente.webp": "438fd1b4d648ec8ee0256c6f3d1758b956a279de54635111a6dcf24234a76c1b",
+    "perfil_DEMO-COL-01.json": "4110e9dc535c39b1703dcf1f7d5b48100553f3f1d1a134b7f80103476f3be8cb"
+   }
+  },
+  "DEMO-USA-01": {
+   "entrada_sha256": "b722bd28567035a035c357f514fc713fdb4190c775aa0ac70f8453070d2992a4",
+   "archivos": {
+    "bloque_DEMO-USA-01.webp": "596465cebc818cf5e74cccb6e7e6f9bee02d511e4fdcd6ba2f5116a494f5a788",
+    "bloque_DEMO-USA-01_pendiente.webp": "140b1baef7bc0b625a98e27d1d6bb5f7bd5133f5643eb673c6136d45901fa8d7",
+    "perfil_DEMO-USA-01.json": "e1b525437ce18f4650a8ae97a0c4c5829dc784fae4a9e4e23c28257d0546004c"
+   }
+  }
+ }
+}
