@@ -1,8 +1,9 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+import { t } from '../textos/i18n'
+import type { ClaveTexto } from '../textos/en'
 import { N_MESES } from './valor'
 
-const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
-export const mesIdAEtiqueta = (mes: number) => `${MESES[mes % 12]}-${2000 + Math.floor(mes / 12)}`
+export const mesIdAEtiqueta = (mes: number) => `${t(`mes.corto.${(mes % 12) + 1}` as ClaveTexto)}-${2000 + Math.floor(mes / 12)}`
 
 export interface Producto {
   nombre: string
@@ -32,11 +33,11 @@ export const CALENDARIO: Record<string, Producto> = {
   },
   power: { nombre: 'NASA POWER', inicio: 0, fin: N_MESES - 1 },
   merra2: { nombre: 'MERRA-2', inicio: 0, fin: id(2026, 9) },
-  gldas: { nombre: 'GLDAS Noah (modelo)', inicio: 0, fin: id(2026, 7) },
+  gldas: { get nombre() { return t('producto.gldas') }, inicio: 0, fin: id(2026, 7) },
   mod13: { nombre: 'MODIS MOD13', inicio: id(2000, 2), fin: id(2026, 10) },
   mod16: { nombre: 'MODIS MOD16', inicio: 0, fin: N_MESES - 1, provisionalDesde: id(2026, 1) },
   mod11: { nombre: 'MODIS MOD11', inicio: id(2000, 2), fin: N_MESES - 1 },
-  imerg: { nombre: 'IMERG (Late provisional desde oct-2025)', inicio: 0, fin: N_MESES - 1, provisionalDesde: id(2025, 10) },
+  imerg: { get nombre() { return t('producto.imerg') }, inicio: 0, fin: N_MESES - 1, provisionalDesde: id(2025, 10) },
 }
 
 /** Meses del eje 0..322 sin dato: fuera de [inicio, fin] o dentro de un hueco entero. */

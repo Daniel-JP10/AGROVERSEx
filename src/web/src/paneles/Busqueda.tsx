@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { FilaIndice } from '../datos/busqueda'
 import { claveUnidad, cargarFilas, porClave } from '../datos/indice'
 import { useEstado } from '../app/estado'
-import { NOMBRE_NIVEL } from '../globo/config'
+import { nombreNivel } from '../globo/config'
 import { useIdioma, t } from '../textos/i18n'
 
 export function Busqueda() {
@@ -53,7 +53,7 @@ export function Busqueda() {
         <ul role="listbox" id="res-busqueda">
           {res.map((f, i) => (
             <li key={f.id} id={`res-${i}`} role="option" aria-selected={i === activo} className={i === activo ? 'activo' : ''} onMouseDown={() => elegir(f)}>
-              {f.d === 1 ? t('unidad.disputa') : (lengua === 'en' ? f.en : f.es) ?? f.n} <small>{f.d === 1 ? '' : f.nivel === 0 ? NOMBRE_NIVEL[0] : f.ctx}</small>
+              {f.d === 1 ? t('unidad.disputa') : (lengua === 'en' ? f.en : f.es) ?? f.n} <small>{f.d === 1 ? '' : f.nivel === 0 ? nombreNivel(0) : f.ctx}</small>
             </li>
           ))}
         </ul>

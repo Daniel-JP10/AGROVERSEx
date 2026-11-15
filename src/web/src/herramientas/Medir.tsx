@@ -13,10 +13,10 @@ export function resumen(modo: Modo, puntos: [number, number][]): string {
     if (puntos.length < 2) return t('medir.min2')
     let total = 0
     for (let i = 1; i < puntos.length; i++) total += distanciaKm(puntos[i - 1], puntos[i])
-    return `${total.toFixed(1)} km (línea recta, geodésica)`
+    return `${total.toFixed(1)} km ${t('medir.sufDistancia')}`
   }
   if (puntos.length < 3) return t('medir.min3')
-  return `${areaKm2(puntos).toFixed(1)} km² (área esférica)`
+  return `${areaKm2(puntos).toFixed(1)} km² ${t('medir.sufArea')}`
 }
 
 export function Medir({ mapa }: { mapa: MapaGL }) {
@@ -47,7 +47,7 @@ export function Medir({ mapa }: { mapa: MapaGL }) {
         <button type="button" onClick={() => setPuntos([])}>{t('medir.borrar')}</button>
       </div>
       <p role="status" aria-live="polite" className="medir-resultado">
-        {resumen(modo, puntos)} · {puntos.length} puntos
+        {resumen(modo, puntos)} · {puntos.length} {t('medir.puntos')}
       </p>
       <p className="etiqueta">{t('medir.aviso')}</p>
     </aside>

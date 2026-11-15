@@ -20,7 +20,7 @@ import { cargarCoropleta, cargarGeo, textoEstado, type ProductoMes } from '../da
 import { capaPorId } from '../datos/capas'
 import type { Nivel } from '../datos/tipos'
 import { Controles } from './Controles'
-import { t } from '../textos/i18n'
+import { idioma, t } from '../textos/i18n'
 
 // MapLibre 6 trae el worker como módulo aparte; Vite debe darle su URL
 maplibregl.setWorkerUrl(workerUrl)
@@ -143,7 +143,7 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       const linea = (txt: string) => { const d = document.createElement('div'); d.textContent = txt; return d }
       caja.replaceChildren(nombre, ...(u?.pais && !disp ? [linea(u.pais)] : []),
         linea(texto(est)),
-        ...(est && !est.hueco && producto ? [linea(`${t('globo.fraccionValida')} ${(est.frac ?? NaN).toLocaleString('es', { maximumFractionDigits: 2 })} · ${producto.producto} ${producto.version} · ${textoEstado(producto.estado, useEstado.getState().capa, useEstado.getState().mes)}`)] : []))
+        ...(est && !est.hueco && producto ? [linea(`${t('globo.fraccionValida')} ${(est.frac ?? NaN).toLocaleString(idioma(), { maximumFractionDigits: 2 })} · ${producto.producto} ${producto.version} · ${textoEstado(producto.estado, useEstado.getState().capa, useEstado.getState().mes)}`)] : []))
     }
     m.on('mousemove', (e) => {
       setCoords([e.lngLat.lng, e.lngLat.lat])

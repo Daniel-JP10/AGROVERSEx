@@ -5,10 +5,10 @@ import { paraMostrar } from '../comun/unidades'
 import { tieneDatoReal, textoEstado } from '../datos/estatico'
 import { CAPAS } from '../datos/capas'
 import { useEstado } from '../app/estado'
-import { t } from '../textos/i18n'
+import { idioma, t } from '../textos/i18n'
 
 const VARS = CAPAS.map((c) => c.id)
-const num = (x: number) => x.toLocaleString('es', { maximumFractionDigits: 2 })
+const num = (x: number) => x.toLocaleString(idioma(), { maximumFractionDigits: 2 })
 
 export function Resumen({ id }: { id: string }) {
   const mes = useEstado((s) => s.mes)

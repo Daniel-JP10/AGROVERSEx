@@ -2,6 +2,9 @@
 import { describe, expect, it } from 'vitest'
 import { parsearWkt } from '../src/datos/wkt'
 import { ventanaSueloExpuesto, rotuloRiesgo, RIESGOS } from '../src/paneles/lotes/modelo'
+import { enEspanol } from './idioma_es'
+
+enEspanol() // las aserciones son en español y el idioma por defecto es el inglés (D-039)
 
 describe('lotes', () => {
   it('parsearWkt devuelve un polígono cerrado', () => {

@@ -1,4 +1,5 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+import { idioma } from '../textos/i18n'
 import { paraMostrar, type Mes } from '../comun/unidades'
 
 export const SIN_DATO = -32768 // relleno del producto: nunca es un valor válido
@@ -10,7 +11,7 @@ export function desescalar(entero: number | null, escala: number, desplazamiento
 
 // Nunca un número solo: siempre con su rango p05-p95 y su unidad.
 export function formatearRango(p05: number, p50: number, p95: number, unidad: string): string {
-  const f = (n: number) => n.toLocaleString('es', { maximumFractionDigits: 2 })
+  const f = (n: number) => n.toLocaleString(idioma(), { maximumFractionDigits: 2 })
   return `${f(p50)} ${unidad} (rango ${f(p05)} a ${f(p95)} ${unidad})`
 }
 

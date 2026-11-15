@@ -30,7 +30,7 @@ export function CintaEnso({ producto, mes }: { producto: Producto; mes: number }
   const linea = d?.enso.map((p) => `${x(p.mes)},${y(p.roni)}`).join(' ')
   return (
     <div className="cinta">
-      <svg viewBox={`0 0 ${N_MESES} ${H}`} preserveAspectRatio="none" role="img" aria-label={`RONI, eventos y meses sin dato de ${producto.nombre}`}>
+      <svg viewBox={`0 0 ${N_MESES} ${H}`} preserveAspectRatio="none" role="img" aria-label={`${t('tiempo.cintaAria')} ${producto.nombre}`}>
         {mesesConHueco(producto).map((m) => <rect key={m} className="hueco" x={m} y={0} width={1} height={H} />)}
         {(producto.parciales ?? []).map((m) => <rect key={m} className="parcial" x={m} y={0} width={1} height={H} />)}
         {producto.provisionalDesde !== undefined && <rect className="prov" x={producto.provisionalDesde} y={H - 4} width={N_MESES - producto.provisionalDesde} height={4} />}

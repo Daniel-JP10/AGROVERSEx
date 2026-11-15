@@ -1,7 +1,7 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import type { Map as MapaGL } from 'maplibre-gl'
 import { registrarPatron } from './patron'
-import { t } from '../textos/i18n'
+import { idioma, t } from '../textos/i18n'
 
 // Motor de datos de la coropleta. El pintado por rebanadas, la cola durante gestos y el límite
 // de niveles viven en recoloreo.ts (D-015, medido en la PoC); este motor solo calcula el estado
@@ -61,7 +61,7 @@ export function crearMotorCoropleta(map: Pick<MapaGL, 'hasImage' | 'addImage'>, 
   }
 }
 
-const f2 = (n: number) => n.toLocaleString('es', { maximumFractionDigits: 1 })
+const f2 = (n: number) => n.toLocaleString(idioma(), { maximumFractionDigits: 1 })
 // Nunca un número solo: valor + unidad + rango p10 a p90 entre celdas si el dato lo trae; si no, el rango de la escala
 export function textoValor(e: EstadoUnidad | undefined, unidad: string, rango: [number, number]): string {
   if (!e) return t('globo.sinCargados')

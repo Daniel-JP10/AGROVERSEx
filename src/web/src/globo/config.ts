@@ -58,7 +58,9 @@ export function nivelParaZoom(zoom: number): number {
   return n
 }
 
-export const NOMBRE_NIVEL = ['País', 'Departamento', 'Municipio'] as const
+const CLAVE_NIVEL = ['nivel.pais', 'nivel.departamento', 'nivel.municipio'] as const
+/** Nombre del nivel administrativo en el idioma activo (0 país, 1 departamento, 2 municipio) */
+export const nombreNivel = (nivel: number): string => t(CLAVE_NIVEL[nivel])
 
 // Fondo: NASA GIBS WMTS, EPSG:3857, dominio público.
 const GIBS = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best'
@@ -70,7 +72,7 @@ export function urlTrueColor(fecha: string): string {
 export const TRUECOLOR_ACTIVO = false
 export const FECHA_TRUECOLOR = '2024-06-15'
 
-export const ATRIBUCION = `${fondoDetalle(true)!.atribucion} · Límites: geoBoundaries CGAZ, CC BY 4.0 (derivados bajo ODbL, D-015); Runfola et al. 2020, PLoS ONE 15(4): e0231866`
+export const ATRIBUCION = `${fondoDetalle(true)!.atribucion} · Boundaries: geoBoundaries CGAZ, CC BY 4.0 (derivados bajo ODbL, D-015); Runfola et al. 2020, PLoS ONE 15(4): e0231866`
 
 /** Capas con las que se interactúa en un nivel: su relleno y los respaldos de los niveles superiores. */
 export function capasInteractivas(nivel: number): string[] {

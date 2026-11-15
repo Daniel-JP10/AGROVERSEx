@@ -2,6 +2,9 @@
 import { describe, expect, it, vi } from 'vitest'
 import { crearReproductor } from '../src/tiempo/Reproductor'
 import { CALENDARIO, mesIdAEtiqueta, mesesConHueco } from '../src/tiempo/huecos'
+import { enEspanol } from './idioma_es'
+
+enEspanol() // las aserciones son en español y el idioma por defecto es el inglés (D-039)
 
 describe('etiquetas y huecos', () => {
   it('mesIdAEtiqueta', () => {
