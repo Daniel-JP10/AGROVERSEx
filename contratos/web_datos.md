@@ -99,6 +99,17 @@ La conversión a unidad de pantalla (`mm/mes` con los días UTC reales de cada m
     --pais COL \
     --generado-utc 2026-11-14T22:50:00Z
   ```
+- Despliegue del build público (D-037 C2.2, D-040; director 10:00): después de `npm run build` en `src/web`,
+  ```bash
+  AGROVERSEX_DATOS=C:/NASA/AGROVERSEx/datos/procesados \
+  AGROVERSEX_TESELAS=C:/NASA/teselas_publicas \
+  PYTHONPATH=src python -m mapa_estatico.construir --desplegar src/web/dist
+  ```
+  copia a `dist/teselas/` los `adm0/1/2.pmtiles` y el índice de búsqueda, y construye `dist/datos/unidades_geo.json.gz`.
+  - `AGROVERSEX_DATOS` es obligatoria: carpeta con `teselas/`, `indice_busqueda.json.gz` y `unidades.gpkg`. Si falta, o falta o está vacío un archivo, el paso termina con `ERROR de despliegue: ...`.
+  - `AGROVERSEX_TESELAS`: carpeta con las copias limpias de los `.pmtiles` (metadatos sin rutas internas; teselas idénticas byte a byte). Si está definida, los `.pmtiles` salen de ahí en vez de `AGROVERSEX_DATOS/teselas/`.
+  - Al terminar se revisa todo `dist` (texto, `.gz` y metadatos de `.pmtiles`): si aparece una ruta local (`/home/`, `/Users/`, `\Users\`, `C:\`) o el usuario de la máquina como segmento de ruta, el despliegue falla. Con las teselas originales falla; con las copias limpias pasa.
+  - Las mismas teselas limpias se publican en el repo público `Daniel-JP10/agroversex-teselas` (GitHub Pages, D-040); la app aún no las lee de ahí.
 - Pruebas automáticas:
   - `pytest pruebas/mapa/test_construir.py` (7/7 en verde)
   - `npx vitest run pruebas/estatico.test.ts` (16/16 en verde, incluida la verificación de SHA-256 de los 15 archivos de `manifiesto.json`)
