@@ -61,7 +61,7 @@
    ]
   }
  },
- "nombre": "Lote demostrativo Ipiales (Nariño)",
+ "nombre": "Lote DEMO Ipiales (Nariño)",
  "unidad_id": "COL-ADM2-7082276B52108893597118",
  "lat": 0.842,
  "lon": -77.661,
@@ -314,5 +314,5 @@
    "archivo": "DEMO-COL-01/calibracion/suelo_humedo_al_inicio.json"
   }
  ],
- "generado_utc": "2026-11-15T00:42:01+00:00"
+ "generado_utc": "2026-11-15T02:25:39+00:00"
 }
