@@ -1,6 +1,10 @@
 // asistido por SI: Claude Code (Anthropic), e2e de la portada, el recorrido completo con teclado y la sección Fuentes
 import { resolve } from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
+import { ES } from './idioma'
+
+// Estas pruebas leen textos en español: el idioma por defecto es el inglés (C3), así que se siembra el español
+test.use({ storageState: ES })
 
 // Capturas de T-W1 y T-W3 en el árbol principal del repositorio (sale del worktree)
 const CAPTURAS = resolve(process.cwd(), '../../../AGROVERSExz/repo/Docu/web/capturas/T-W1_T-W3')

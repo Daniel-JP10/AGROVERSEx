@@ -39,7 +39,7 @@ export function Cabecera() {
             {GLOSARIO.map((g) => (
               <div key={g.termino}>
                 <dt>{g.termino}</dt>
-                <dd>{detalle(modo, g[lang], g.tecnico)} <small>({g.fuente})</small></dd>
+                <dd>{detalle(modo, g[lang], lang === 'en' ? g.tecnico_en : g.tecnico)} <small>({g.fuente})</small></dd>
               </div>
             ))}
           </dl>

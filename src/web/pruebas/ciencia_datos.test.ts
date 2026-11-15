@@ -8,6 +8,8 @@ import { en } from '../src/textos/en'
 import { es } from '../src/textos/es'
 import { alternar, idioma } from '../src/textos/i18n'
 import { useModo } from '../src/textos/modos'
+import { enEspanol } from './idioma_es'
+enEspanol()
 
 afterEach(() => { useModo.getState().set('agricultor'); if (idioma() === 'en') alternar() })
 

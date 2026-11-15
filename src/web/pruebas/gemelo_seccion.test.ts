@@ -12,6 +12,8 @@ import { en } from '../src/textos/en'
 import { es } from '../src/textos/es'
 import { alternar, idioma } from '../src/textos/i18n'
 import { useModo } from '../src/textos/modos'
+import { enEspanol } from './idioma_es'
+enEspanol()
 
 const [BASE, ALT] = ESTRATEGIAS_EJEMPLO
 const vista = (p: Parameters<typeof GemeloVista>[0]) => renderToStaticMarkup(createElement(GemeloVista, p))

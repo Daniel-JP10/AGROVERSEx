@@ -4,6 +4,8 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import { SECCIONES, aHash, leerRuta } from '../src/app/ruta'
 import { Navegacion } from '../src/app/Navegacion'
+import { enEspanol } from './idioma_es'
+enEspanol()
 
 describe('rutas por hash', () => {
   it('las siete rutas del contrato §3 se leen y se escriben', () => {

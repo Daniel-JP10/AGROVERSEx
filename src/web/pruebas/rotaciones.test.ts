@@ -11,6 +11,8 @@ import { Compromisos } from '../src/secciones/rotaciones/Compromisos'
 import { FrentePareto } from '../src/secciones/rotaciones/FrentePareto'
 import { VistaRotaciones } from '../src/secciones/rotaciones/Rotaciones'
 import { t } from '../src/textos/i18n'
+import { enEspanol } from './idioma_es'
+enEspanol()
 
 const doc = ejemplo as unknown as SalidaOptimizacion
 const vista = (fuente: Parameters<typeof VistaRotaciones>[0]['fuente']) => renderToStaticMarkup(h(VistaRotaciones, { fuente }))
@@ -105,10 +107,20 @@ describe('tarjeta de cinco secciones y partes que esperan al gemelo', () => {
     for (const b of ['porque', 'evidencia', 'beneficios', 'vacios', 'riesgos']) expect(cuenta(s, new RegExp(`data-bloque="${b}"`, 'g'))).toBe(n)
     expect(cuenta(s, new RegExp(t('rotaciones.pendiente_gemelo'), 'g'))).toBeGreaterThanOrEqual(5 * n)
   })
-  it('prioridades, escenarios, alertas y calibración aparecen con su título y como pendientes', () => {
+  it('prioridades (con sus cuatro deslizadores), escenarios, alertas y calibración aparecen con su título', () => {
     const s = conEjemplo()
     for (const k of ['rotaciones.prioridades', 'rotaciones.escenarios', 'rotaciones.alertas', 'rotaciones.calibracion'] as const) expect(s).toContain(t(k))
-    expect(s).not.toContain('type="range"')
+    // decisión e: las prioridades ya no esperan al gemelo; los escenarios y la calibración siguen pendientes
+    expect(cuenta(s, /type="range"/g)).toBe(4)
+    expect(cuenta(s, /class="pendiente"/g)).toBe(2)
+  })
+  it('una estrategia sin algún objetivo de prioridad lo dice con «sin dato» y se marca incompleta, sin valor inventado', () => {
+    const s = conEjemplo()
+    const n = cuenta(s, /data-testid="estrategia"/g)
+    // el ejemplo v1.1 trae carbono y erosión, pero no riego, déficit, fertilizante ni riesgo de producción
+    expect(cuenta(s, /data-testid="incompleta"/g)).toBe(n)
+    expect(cuenta(s, new RegExp(`<li[^>]*data-objetivo="riego"[^>]*>[^<]*<span[^>]*>${t('comun.sinDato')}`, 'g'))).toBe(n)
+    expect(s).toContain(t('prioridades.incompleta'))
   })
   it('aviso de apoyo y revisión local junto a cada estrategia', () => {
     const s = conEjemplo()

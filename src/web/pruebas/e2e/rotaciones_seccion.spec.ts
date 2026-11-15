@@ -1,6 +1,10 @@
 // asistido por SI: Claude Code (Anthropic), e2e de #/rotaciones con y sin lote; el ejemplo solo con VITE_EJEMPLOS=1
 import { resolve } from 'node:path'
 import { expect, test } from '@playwright/test'
+import { ES } from './idioma'
+
+// Estas pruebas leen textos en español: el idioma por defecto es el inglés (C3), así que se siembra el español
+test.use({ storageState: ES })
 
 const CAPTURAS = resolve(process.cwd(), '../../../AGROVERSExz/repo/Docu/web/capturas/T-W2')
 const CON_EJEMPLO = process.env.VITE_EJEMPLOS === '1'

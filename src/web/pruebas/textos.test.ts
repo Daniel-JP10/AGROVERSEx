@@ -26,7 +26,7 @@ describe('textos', () => {
   it('t() cambia con el idioma', () => {
     const antes = t('ayuda.titulo')
     alternar()
-    expect(idioma()).toBe('en')
+    expect(idioma()).toBe('es')
     expect(t('ayuda.titulo')).not.toBe(antes)
     alternar()
   })
@@ -38,7 +38,7 @@ describe('textos', () => {
   it('avisos obligatorios y ninguna licencia NC listada en los avisos', () => {
     // web_componentes §9: SIMULADO va por variable o por valor, nunca en la cabecera
     expect(BANDA).not.toContain('SIMULADO')
-    expect(t('aviso.apoyo')).toContain('no reemplaza el criterio del agricultor ni del técnico')
+    expect(es['aviso.apoyo']).toContain('no reemplaza el criterio del agricultor ni del técnico')
     // EOX y Köppen-Geiger salieron por decisión del director; GADM y WorldClim antes (D-002, D-004)
     expect(JSON.stringify(avisos)).not.toMatch(/EOX|K[öo]ppen/i)
   })
@@ -62,7 +62,7 @@ describe('textos', () => {
     const h = renderToStaticMarkup(createElement(Cabecera))
     expect(h).not.toContain('SIMULADO')
     expect(h).toContain(BANDA)
-    expect(h).toMatch(/<button[^>]*aria-label="Ayuda[^"]*"/)
-    expect(h).toMatch(/<button[^>]*aria-label="Idioma[^"]*"/)
+    expect(h).toMatch(/<button[^>]*aria-label="Help[^"]*"/)
+    expect(h).toMatch(/<button[^>]*aria-label="Language[^"]*"/)
   })
 })
