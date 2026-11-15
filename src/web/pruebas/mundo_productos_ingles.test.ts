@@ -13,7 +13,8 @@ describe('productos en inglés', () => {
     expect(ESPANOL.test('GPM IMERG Late Run, diario agregado a mes en UTC (GPM_3IMERGDL)')).toBe(true)
     expect(ESPANOL.test('MERRA-2 reanálisis, M2TMNXSLV (T2M)')).toBe(true)
   })
-  const carpetas = [join(__dirname, '..', 'public', 'datos'), join(__dirname, '..', 'dist', 'datos')]
+  // public siempre; dist solo con PROHIBIDOS_DIST, como las demás pruebas sobre el build (un dist sin desplegar todavía trae los nombres viejos)
+  const carpetas = [join(__dirname, '..', 'public', 'datos'), ...(process.env.PROHIBIDOS_DIST ? [join(process.env.PROHIBIDOS_DIST, 'datos')] : [])]
   for (const c of carpetas) for (const n of ['meta.json', 'manifiesto.json']) {
     const ruta = join(c, n)
     it.runIf(existsSync(ruta))(`${ruta.split(/[\\/]/).slice(-3).join('/')} sin español`, () => {
