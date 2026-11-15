@@ -1,4 +1,6 @@
 /* asistido por SI: Claude Code (Anthropic), entrada rediseñada (R1): mapa de puntos con viñeta, halo de circuito, raíces vivas, nodos con volumen y Start con brillo (main.portada gana a la regla vieja de estilos.css) */
+/* Peso fino del mismo paquete IBM Plex Sans (OFL, @fontsource 5.3.0 ya registrado): título más ligero y orgánico */
+@font-face { font-family: "IBM Plex Sans"; font-weight: 200; font-style: normal; font-display: swap; src: url("/fuentes/ibm-plex-sans-latin-200-normal.woff2") format("woff2"); }
 main.portada { position: relative; isolation: isolate; max-width: none; margin: 0 8px; min-height: 0; overflow: auto; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; align-content: start; gap: 8px; padding: 4px 0 16px; }
 
 /* Fondo: mapa del mundo en puntos (Natural Earth) con viñeta y una deriva lenta */
@@ -37,6 +39,12 @@ main.portada { position: relative; isolation: isolate; max-width: none; margin: 
 /* Centro */
 .portada .p-centro { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 40%; padding: 16px; text-align: center; border-radius: 50%; background: radial-gradient(closest-side, var(--fondo) 72%, transparent); }
 .portada .p-centro h1 { margin: 0 0 6px; font-size: clamp(34px, 5.4vw, 72px); font-weight: 600; letter-spacing: 0.03em; color: var(--texto); text-shadow: 0 0 18px var(--brillo), 0 0 42px rgba(111, 227, 154, 0.35); }
+/* width: max-content: el degradado (background-clip: text) cubre todas las letras, ninguna queda fuera de la caja */
+.portada .p-centro h1.titulo-marca { width: max-content; max-width: none; margin: 0 auto 6px; padding: 0 0.08em; font-size: clamp(32px, 5vw, 66px); font-weight: 200; letter-spacing: 0.06em; white-space: nowrap; color: #e9f9ee; text-shadow: none;
+  background: linear-gradient(180deg, #f6fff9 8%, #c9f9d8 52%, #86e4aa 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(111, 227, 154, 0.45)) drop-shadow(0 0 28px rgba(111, 227, 154, 0.25)); }
+/* La x de la marca, más pequeña que las demás letras */
+.portada .titulo-marca .x { font-size: 0.7em; letter-spacing: 0; margin-left: 0.06em; }
 .portada .p-centro p { margin: 4px 0; font-size: clamp(14px, 1.35vw, 18px); line-height: 1.45; color: var(--texto); }
 
 /* Nodos con volumen: disco de luz detrás, flotación lenta y elevación al pasar */
@@ -62,10 +70,20 @@ main.portada { position: relative; isolation: isolate; max-width: none; margin: 
 @keyframes comenzar-brilla { 0%, 100% { box-shadow: 0 0 0 1px rgba(255, 184, 77, 0.25), 0 0 16px rgba(255, 184, 77, 0.22), inset 0 0 14px rgba(255, 184, 77, 0.1); } 50% { box-shadow: 0 0 0 1px rgba(255, 184, 77, 0.45), 0 0 30px rgba(255, 184, 77, 0.4), inset 0 0 22px rgba(255, 184, 77, 0.18); } }
 @keyframes comenzar-destello { 0% { left: -40%; } 60%, 100% { left: 120%; } }
 
+/* Racimos de hojas en las cuatro esquinas de la entrada */
+.portada .racimos { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.portada .racimo { position: absolute; width: min(24vw, 280px); height: auto; opacity: 0.55; }
+.portada .racimo.sup-izq { left: -2%; top: 2%; transform: rotate(18deg); }
+.portada .racimo.sup-der { right: -2%; top: 2%; transform: scaleX(-1) rotate(18deg); }
+.portada .racimo.inf-izq { left: -2%; bottom: 4%; transform: rotate(-22deg); }
+.portada .racimo.inf-der { right: -2%; bottom: 4%; transform: scaleX(-1) rotate(-22deg); }
+.portada .racimo-tallo { fill: none; stroke: #3f9c63; stroke-width: 2; stroke-linecap: round; opacity: 0.8; }
+.portada .racimo-hoja { fill: #4fbf7a; stroke: #2f8a52; stroke-width: 0.6; opacity: 0.85; transform-box: fill-box; transform-origin: 0% 50%; animation: hoja-mece 5s ease-in-out infinite alternate; animation-delay: calc(var(--r) * -4s); }
+
 /* Movimiento reducido: todo quieto y ya crecido, igual de rico (la savia no se dibuja desde Portada.tsx) */
 @media (prefers-reduced-motion: reduce) {
   .portada .mapa-puntos, .portada .halo-luz, .portada .circuito, .portada .raiz, .portada .raiz-luz, .portada .hebra, .portada .rama, .portada .hoja-r,
-  .portada .nodo .figura, .portada .nodo .figura::before, .portada .comenzar, .portada .comenzar::after { animation: none; }
+  .portada .nodo .figura, .portada .nodo .figura::before, .portada .comenzar, .portada .comenzar::after, .portada .racimo-hoja { animation: none; }
   .portada .raiz-brillo { animation: none; opacity: 0.32; }
   .portada .comenzar::after { display: none; }
   .portada .nodo .figura { transition: none; }
@@ -76,6 +94,7 @@ main.portada { position: relative; isolation: isolate; max-width: none; margin: 
   .portada .mapa-puntos { background-size: 260% auto; background-position: center 30%; }
   .portada .lienzo { width: 100%; aspect-ratio: auto; display: grid; gap: 16px; padding: 0 8px; }
   .portada .raices { display: none; }
+  .portada .racimo { width: 38vw; opacity: 0.4; }
   .portada .p-centro { position: static; transform: none; width: auto; border-radius: 0; background: none; }
   .portada .nodos { position: static; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .portada .nodo { position: static; transform: none; width: auto; }

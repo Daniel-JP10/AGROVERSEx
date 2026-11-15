@@ -14,7 +14,8 @@ const esc = (s: string) => s.replace(/'/g, '&#x27;')
 describe('entrada', () => {
   it('AGROVERSEx al centro con la frase del director, en inglés por defecto y en español', () => {
     let h = html()
-    expect(h).toContain('<h1>AGROVERSEx</h1>')
+    // R1: la x va en un span más pequeño; el nombre accesible sigue siendo AGROVERSEx
+    expect(h).toContain('<h1 class="titulo-marca">AGROVERSE<span class="x">x</span></h1>')
     expect(h).toContain('Your land through NASA open data, from space down to your field.')
     expect(h).toContain('Compare rotations with a digital twin that shows ranges, not promises.')
     alternar()

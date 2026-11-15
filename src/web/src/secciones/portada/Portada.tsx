@@ -145,16 +145,34 @@ function Figura({ nodo }: { nodo: Nodo }) {
   return <img className="figura-nodo" src={`${import.meta.env.BASE_URL}${nodo.imagen}`} alt="" width={128} height={128} decoding="async" onError={() => setFallo(true)} />
 }
 
+// Racimo de hojas para las esquinas de la entrada (decoración, se mece despacio)
+function Racimo({ className }: { className: string }) {
+  const hojas = [[0, 0, 0, 1.6], [14, -6, -28, 1.2], [8, 12, 26, 1.3], [30, -2, -8, 1.0], [24, 18, 38, 0.9], [42, 6, 12, 0.8], [6, -20, -52, 0.9]]
+  return (
+    <svg className={`racimo ${className}`} viewBox="-10 -60 160 120" aria-hidden="true" focusable="false">
+      <path className="racimo-tallo" d="M-10 0 C 30 -4 70 4 140 -8 M30 -2 C 44 -20 52 -34 60 -50 M60 2 C 78 18 90 30 104 44" />
+      {hojas.map(([x, y, a, s], k) => (
+        <g key={k} transform={`translate(${x * 2.4} ${y * 1.6}) rotate(${a}) scale(${s})`}>
+          <path className="racimo-hoja" d={HOJA} style={{ ['--r' as string]: (k / 7).toFixed(2) }} />
+        </g>
+      ))}
+    </svg>
+  )
+}
+
 export function Portada() {
   useIdioma()
   const reducido = useMovimientoReducido()
   return (
     <main className="portada">
+      <div className="racimos" aria-hidden="true">
+        <Racimo className="sup-izq" /><Racimo className="sup-der" /><Racimo className="inf-izq" /><Racimo className="inf-der" />
+      </div>
       <div className="mapa-puntos" aria-hidden="true" style={{ backgroundImage: `url(${import.meta.env.BASE_URL}portada/mundo_puntos.svg)` }} />
       <div className="lienzo">
         <Raices reducido={reducido} />
         <div className="p-centro">
-          <h1>AGROVERSEx</h1>
+          <h1 className="titulo-marca">AGROVERSE<span className="x">x</span></h1>
           <p>{t('portada.universo')}</p>
           <p>{t('portada.universo_2')}</p>
         </div>
