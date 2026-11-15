@@ -28,7 +28,7 @@ async function pintar(m: number) {
 
 
 // Sin reproducción automática en la versión pública: se traba con las series del mundo (ver alTeclado)
-export const REPRODUCCION_AUTOMATICA = false
+export const REPRODUCCION_AUTOMATICA: boolean = false
 export function LineaTiempo() {
   const mes = useEstado((s) => s.mes)
   const reproduciendo = useEstado((s) => s.reproduciendo)
@@ -69,7 +69,7 @@ export function LineaTiempo() {
       ArrowRight: () => setMes(mes + d), ArrowUp: () => setMes(mes + d),
       ArrowLeft: () => setMes(mes - d), ArrowDown: () => setMes(mes - d),
       Home: () => setMes(0), End: () => setMes(N_MESES - 1),
-      ...(REPRODUCCION_AUTOMATICA && { ' ': () => setReproduciendo(!reproduciendo) }),
+      ...(REPRODUCCION_AUTOMATICA ? { ' ': () => setReproduciendo(!reproduciendo) } : {}),
     }
     if (e.key === ' ' && t.tagName === 'BUTTON') return // el botón ya reacciona al espacio
     if (acciones[e.key]) { e.preventDefault(); acciones[e.key]() }
