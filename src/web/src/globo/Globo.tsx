@@ -143,7 +143,7 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       const linea = (txt: string) => { const d = document.createElement('div'); d.textContent = txt; return d }
       caja.replaceChildren(nombre, ...(u?.pais && !disp ? [linea(u.pais)] : []),
         linea(texto(est)),
-        ...(est && !est.hueco && producto ? [linea(`${t('globo.fraccionValida')} ${(est.frac ?? NaN).toLocaleString('es', { maximumFractionDigits: 2 })} · ${producto.producto} ${producto.version} · ${textoEstado(producto.estado)}`)] : []))
+        ...(est && !est.hueco && producto ? [linea(`${t('globo.fraccionValida')} ${(est.frac ?? NaN).toLocaleString('es', { maximumFractionDigits: 2 })} · ${producto.producto} ${producto.version} · ${textoEstado(producto.estado, useEstado.getState().capa, useEstado.getState().mes)}`)] : []))
     }
     m.on('mousemove', (e) => {
       setCoords([e.lngLat.lng, e.lngLat.lat])

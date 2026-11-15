@@ -6,7 +6,7 @@ import { N_MESES } from './valor'
 import { CALENDARIO, mesIdAEtiqueta, mesesConHueco } from './huecos'
 import { crearReproductor } from './Reproductor'
 import { CintaEnso } from './CintaEnso'
-import { cargarMatriz } from '../datos/estatico'
+import { cargarMatriz, enRevision, textoEstado } from '../datos/estatico'
 import { capaPorId } from '../datos/capas'
 import { t } from '../textos/i18n'
 
@@ -61,7 +61,7 @@ export function LineaTiempo() {
     if (acciones[e.key]) { e.preventDefault(); acciones[e.key]() }
   }
 
-  const nota = sinDato.has(mes) ? `${t('tiempo.sinDato')} · ${producto.nombre}` : producto.provisionalDesde !== undefined && mes >= producto.provisionalDesde ? t('bandera.provisional') : producto.parciales?.includes(mes) ? t('tiempo.huecos') : ''
+  const nota = sinDato.has(mes) ? `${t('tiempo.sinDato')} · ${producto.nombre}` : enRevision(idCapa, mes) ? textoEstado('provisional', idCapa, mes) : producto.provisionalDesde !== undefined && mes >= producto.provisionalDesde ? t('bandera.provisional') : producto.parciales?.includes(mes) ? t('tiempo.huecos') : ''
 
   return (
     <div className="tiempo" onKeyDown={alTeclado}>
