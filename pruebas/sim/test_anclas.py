@@ -111,6 +111,10 @@ def _tendencia_pais(t2m_anual):
     return float(np.polyfit(np.arange(2000, 2026), t2m_anual, 1)[0] * 10)
 
 
+SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+
+
+@SIN_GEO_PROTOTIPO
 def test_eventos_calor_nacionales_no_inflan_tendencia():
     """ev04 (EE. UU.) y ev07 (Australia): con y sin el evento, la tendencia del país no sube más de 0,06 °C/década."""
     from simulacion import clima
@@ -173,6 +177,7 @@ SITIOS_BAJOS = [pytest.param(s, id=s[0], marks=pytest.mark.xfail(reason="ESCALA/
                 for s in SITIOS if s[3] < TIERRA_BAJA]
 
 
+@SIN_GEO_PROTOTIPO
 @pytest.mark.parametrize("sitio", SITIOS_BAJOS)
 def test_climatologia_22_sitios_tierra_baja(sitios, sitio):
     nombre, _, _, _, t_ref, p_ref = sitio
@@ -183,6 +188,7 @@ def test_climatologia_22_sitios_tierra_baja(sitios, sitio):
     assert abs(dp) <= 0.25, f"{nombre}: dP={dp:+.1%}"
 
 
+@SIN_GEO_PROTOTIPO
 def test_climatologia_22_sitios_relieve(sitios):
     # En relieve el patrón es IDEAM/NCEI (INV-CLI §8.2); POWER erra hasta 7,9 °C y +152 % en los Andes, así que
     # un acuerdo mejor que ese error no es exigible: se reporta el desfase frente a POWER y frente a la observación.
@@ -199,6 +205,7 @@ def test_climatologia_22_sitios_relieve(sitios):
     assert filas
 
 
+@SIN_GEO_PROTOTIPO
 def test_normales_ideam(sitios):
     # Ciudades de Colombia con observación IDEAM (INV-CLI §8.2): se reporta; se declara si el generador supera a POWER
     filas = {}
@@ -319,6 +326,7 @@ def test_enso_real_literal(con):
 
 # --- ids contra teselas ---
 
+@SIN_GEO_PROTOTIPO
 @pytest.mark.parametrize("capa,niveles", [("adm0", (0, 9)), ("adm1", (1,)), ("adm2", (2,))])
 def test_ids_contra_teselas(con, capa, niveles):
     """Los ids de `unidad` coinciden con los de la capa: igualdad exacta con el GeoJSON que alimentó tippecanoe,

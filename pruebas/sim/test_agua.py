@@ -150,6 +150,10 @@ def test_integracion_et(sim):
     assert 0 < np.nanmean(a.et_real) < 300  # mm/mes
 
 
+SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+
+
+@SIN_GEO_PROTOTIPO
 @pytest.mark.datos_reales
 def test_datos_reales_colombia():
     geo = clima.cargar_geo()

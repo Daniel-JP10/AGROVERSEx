@@ -120,6 +120,10 @@ def test_riesgos_rotulados():
     assert r["erosion"]["valor"] is None  # PENDIENTE: sin pendiente de 30 m
 
 
+SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+
+
+@SIN_GEO_PROTOTIPO
 @pytest.mark.datos_reales
 def test_datos_reales_contencion_y_zonas():
     from simulacion.clima import cargar_geo

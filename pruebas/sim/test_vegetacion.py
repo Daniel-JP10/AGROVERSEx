@@ -114,6 +114,10 @@ def test_lst_rango_y_cobertura(sim):
     assert e["lst_frac"][:, 0].max() == 0
 
 
+SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+
+
+@SIN_GEO_PROTOTIPO
 @pytest.mark.datos_reales
 def test_colombia_real():
     geo = cargar_geo(PRINCIPAL / "datos/procesados/geo.sqlite")

@@ -76,12 +76,14 @@ def test_ningun_valido_coincide_con_relleno(var):
     assert a_entero(np.array([1.0]), var).dtype == np.int32
 
 
+SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+
+
+@SIN_GEO_PROTOTIPO
 def test_ids_no_chocan_con_los_de_la_fase_1():
     # el worktree no trae datos: se busca en el checkout principal
     ruta = next((p / "datos/procesados/geo.sqlite"
                  for p in (config.RAIZ, *config.RAIZ.parents) if (p / "datos/procesados/geo.sqlite").exists()), None)
-    if ruta is None:
-        pytest.skip("sin geo.sqlite")
     ro = sqlite3.connect(f"file:{ruta.as_posix()}?mode=ro", uri=True)
     ids = {r[0] for r in ro.execute("SELECT id FROM variable")}
     assert not ids & set(VARIABLES)

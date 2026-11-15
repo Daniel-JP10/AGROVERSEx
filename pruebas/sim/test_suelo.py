@@ -91,6 +91,10 @@ def test_relieve_gmted_rotulado():
     assert all("relieve de GMTED2010" in v.etiqueta for v in sl.VARIABLES_ANUAL.values())
 
 
+SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+
+
+@SIN_GEO_PROTOTIPO
 @pytest.mark.datos_reales
 def test_colombia_real():
     ruta = PRINCIPAL / "datos/procesados/geo.sqlite"
@@ -110,6 +114,7 @@ def test_dias_suelo_mensual_forma():
     assert np.isnan(sl.dias_suelo_mensual(nd, None)[0][1]).all()
 
 
+@SIN_GEO_PROTOTIPO
 @pytest.mark.datos_reales
 def test_erosion_anclas_borrelli_global():
     from simulacion import config, condicion  # noqa: F401

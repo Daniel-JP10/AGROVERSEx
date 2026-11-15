@@ -155,6 +155,7 @@ def test_contra_exactextract_directo_en_municipios_de_colombia():
     from pathlib import Path
 
     import pyogrio
+    pytest.importorskip("exactextract")  # no está en Windows
     from exactextract import exact_extract
     from exactextract.raster import NumPyRasterSource
 

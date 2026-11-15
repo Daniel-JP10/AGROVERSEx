@@ -15,8 +15,6 @@ pytestmark = pytest.mark.datos_reales
 
 @pytest.fixture(scope="module")
 def agroversex_db(tmp_path_factory):
-    if not GEO.exists():
-        pytest.skip("sin geo.sqlite de respaldo")
     ruta = tmp_path_factory.mktemp("agroversex") / "agroversex.sqlite"
     r = construir_agroversex(GEO, ruta, muestra=40, tam_bloque=7, con_lotes=False)
     return ruta, r
@@ -26,6 +24,10 @@ def _con(ruta):
     return sqlite3.connect(f"file:{ruta.as_posix()}?mode=ro", uri=True)
 
 
+SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+
+
+@SIN_GEO_PROTOTIPO
 def test_rangos_y_coherencia(agroversex_db):
     con = _con(agroversex_db[0])
     for col, v in VARIABLES.items():
@@ -39,6 +41,7 @@ def test_rangos_y_coherencia(agroversex_db):
     assert malas == 0
 
 
+@SIN_GEO_PROTOTIPO
 def test_tipos_y_nulos(agroversex_db):
     con = _con(agroversex_db[0])
     for col in ("precip", "t2m", "ndvi", "bandera_motivo", "dias_calor"):
@@ -48,6 +51,7 @@ def test_tipos_y_nulos(agroversex_db):
     assert con.execute("SELECT count(*) FROM mensual WHERE precip IN (0) AND precip_frac IS NULL").fetchone()[0] == 0
 
 
+@SIN_GEO_PROTOTIPO
 def test_indices_cubrientes(agroversex_db):
     con = _con(agroversex_db[0])
     plan = " ".join(r[3] for r in con.execute("EXPLAIN QUERY PLAN SELECT unidad_id, precip FROM mensual "
@@ -55,6 +59,7 @@ def test_indices_cubrientes(agroversex_db):
     assert "COVERING INDEX" in plan
 
 
+@SIN_GEO_PROTOTIPO
 def test_padres_y_variables(agroversex_db):
     con = _con(agroversex_db[0])
     assert con.execute("SELECT count(*) FROM unidad WHERE nivel=2 AND padre_id IS NULL AND cruce_ambiguo<>1"
@@ -63,14 +68,14 @@ def test_padres_y_variables(agroversex_db):
     assert con.execute("SELECT valor FROM metadatos WHERE clave='hash_contenido'").fetchone()[0] == agroversex_db[1]["hash"]
 
 
+@SIN_GEO_PROTOTIPO
 def test_reproducible_y_bloque(agroversex_db, tmp_path):
     r = construir_agroversex(GEO, tmp_path / "b.sqlite", muestra=40, tam_bloque=40, con_lotes=False)
     assert r["hash"] == agroversex_db[1]["hash"] == hash_contenido(tmp_path / "b.sqlite")
 
 
+@SIN_GEO_PROTOTIPO
 def test_invariancia_bloque_300(tmp_path):
-    if not GEO.exists():
-        pytest.skip("sin geo.sqlite de respaldo")
     a = construir_agroversex(GEO, tmp_path / "a.sqlite", muestra=300, tam_bloque=50, con_lotes=False)
     b = construir_agroversex(GEO, tmp_path / "b.sqlite", muestra=300, tam_bloque=200, con_lotes=False)
     assert a["hash"] == b["hash"]

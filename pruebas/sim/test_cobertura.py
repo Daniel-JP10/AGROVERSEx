@@ -50,6 +50,10 @@ def test_determinista_por_unidad():
                        b.drop(columns="igbp_dominante").to_numpy())
 
 
+SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+
+
+@SIN_GEO_PROTOTIPO
 @pytest.mark.datos_reales
 def test_cobertura_real_colombia():
     geo = cargar_geo(PRINCIPAL / "datos/procesados/geo.sqlite")

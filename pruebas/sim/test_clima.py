@@ -187,7 +187,10 @@ def test_clases_internas_30_sin_koppen_beck():
     assert not (AQUI / "koppen_leyenda.yaml").exists()
 
 
-@pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa")
+SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+
+
+@SIN_GEO_PROTOTIPO
 @pytest.mark.datos_reales
 def test_colombia_real():
     import time
