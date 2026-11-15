@@ -2,6 +2,7 @@
 import { readFileSync } from 'node:fs'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { sinRutaLocal } from '../src/secciones/fuentes/rutasLocales'
 import { describe, expect, it } from 'vitest'
 import { Creditos, DeclaracionSI, Fuentes, Glosario } from '../src/secciones/fuentes/Fuentes'
 import { leerTablas, resumenSI } from '../src/secciones/fuentes/tablas'
@@ -84,7 +85,8 @@ describe('créditos: solo las filas en uso de LICENCIAS_TERCEROS.md y de CITAS.m
   it('pinta exactamente las filas en uso, cada una por nombre', () => {
     const html = renderToStaticMarkup(createElement(Creditos))
     expect((html.match(/<tr data-fila/g) ?? []).length).toBe(filas.length)
-    for (const n of filas) expect(html, n).toContain(escapar(n))
+    // Una celda con ruta local se publica vacía (rutasLocales.ts); el resto de nombres aparece tal cual
+    for (const n of filas.filter(sinRutaLocal)) expect(html, n).toContain(escapar(n))
   })
 })
 
