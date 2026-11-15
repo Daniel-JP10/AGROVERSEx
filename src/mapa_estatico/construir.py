@@ -6,11 +6,13 @@ estado van por mes porque IMERG Final (mm/hr) y Late (mm/day) se empalman en 202
 """
 import argparse
 from datetime import datetime, timezone
+import getpass
 import gzip
 import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import sys
 
@@ -211,19 +213,60 @@ def raiz_datos(entorno=None) -> Path:
     return raiz
 
 
+def _metadatos_pmtiles(contenido: bytes) -> bytes:
+    """Cabecera y metadatos JSON de un PMTiles v3 (sin los datos de teselas)."""
+    if contenido[:7] != b"PMTiles" or len(contenido) < 127:
+        return contenido
+    off, largo = int.from_bytes(contenido[24:32], "little"), int.from_bytes(contenido[32:40], "little")
+    meta = contenido[off:off + largo]
+    try:
+        meta = gzip.decompress(meta)
+    except OSError:
+        pass
+    return contenido[:127] + meta
+
+
+def buscar_fugas(dist: Path) -> list[str]:
+    """Archivos de dist con rutas locales (/home/, /Users/, \\Users\\, C:\\) o el usuario de la máquina como segmento de ruta."""
+    usuario = re.escape(getpass.getuser())
+    # barra invertida simple o escapada (\\ dentro de JSON o JS)
+    patron = re.compile(rf"/home/|/Users/|\\{{1,2}}Users\\{{1,2}}|\b[A-Za-z]:\\{{1,2}}[A-Za-z]|[/\\]{usuario}[/\\]", re.I)
+    hallazgos = []
+    for p in sorted(x for x in dist.rglob("*") if x.is_file()):
+        contenido = p.read_bytes()
+        if p.suffix == ".pmtiles":
+            contenido = _metadatos_pmtiles(contenido)
+        elif p.suffix == ".gz":
+            try:
+                contenido = gzip.decompress(contenido)
+            except OSError:
+                pass
+        m = patron.search(contenido.decode("utf-8", errors="replace"))
+        if m:
+            hallazgos.append(f"{p.relative_to(dist).as_posix()}: {m.group(0)}")
+    return hallazgos
+
+
 def desplegar(dist: Path, entorno=None) -> dict:
     """Copia teselas e índice a dist/ y construye dist/datos/unidades_geo.json.gz (D-033e: no se versionan)."""
     raiz = raiz_datos(entorno)
     if not dist.is_dir():
         raise ErrorDespliegue(f"no existe {dist}: corre primero npm run build en src/web")
     tam = {}
+    limpias = (os.environ if entorno is None else entorno).get("AGROVERSEX_TESELAS")
     for origen, destino in ARCHIVOS_DESPLIEGUE.items():
         (dist / destino).parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(raiz / origen, dist / destino)
+        # AGROVERSEX_TESELAS: carpeta con las copias limpias de los .pmtiles (metadatos sin rutas internas)
+        fuente = Path(limpias) / Path(origen).name if limpias and origen.endswith(".pmtiles") else raiz / origen
+        shutil.copyfile(fuente, dist / destino)
         tam[destino] = (dist / destino).stat().st_size
-        if tam[destino] != (raiz / origen).stat().st_size:
+        if tam[destino] != fuente.stat().st_size:
             raise ErrorDespliegue(f"copia incompleta de {origen}")
     tam["datos/unidades_geo.json.gz"] = construir_geo(raiz / "unidades.gpkg", dist / "datos")
+    # Ningún archivo publicado puede llevar rutas locales ni el usuario de la máquina (director, 10:00)
+    fugas = buscar_fugas(dist)
+    if fugas:
+        raise ErrorDespliegue("dist contiene rutas locales o el usuario de la máquina: " + "; ".join(fugas[:10]))
     return tam
 
 

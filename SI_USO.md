@@ -419,6 +419,7 @@ Notas de procedencia sin generación nueva por este equipo de Gemelo:
 | Claude Code (Anthropic) | `src/web/pruebas/ingles_visible.test.ts` | Prueba de que unidades, pestañas del panel, aria de la serie y aviso de zoom salen en inglés por defecto (C-1) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/pruebas/cifras_fuente.test.ts` | Prueba de que cada cifra de los textos sale de los datos o queda atada a su fuente (O1, C-3) | 2026-11-15 |
 | Claude Code (Anthropic) | `pruebas/gemelo/test_objetivos_completos.py` | Prueba de que el Gemelo nunca emite estrategias con objetivos de prioridad faltantes (D-039, C-4) | 2026-11-15 |
+| Claude Code (Anthropic) | `pruebas/mapa/test_fugas.py` | Prueba de que el despliegue falla si dist o los metadatos de un .pmtiles llevan rutas locales o el usuario de la máquina | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registros.ts` | Filtro de filas en uso de los registros de Fuentes | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registrosPlugin.ts` | Plugin de Vite que filtra los registros al compilar | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/AlertaHelada.tsx` | Alerta de helada del gemelo con sus avisos | 2026-11-14 |
