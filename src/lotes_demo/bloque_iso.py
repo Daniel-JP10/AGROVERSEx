@@ -194,7 +194,8 @@ def construir(lote_id: str, zip_path: Path, lotes_demo: Path, exposicion: Path, 
         "nota_pendiente": "capa visual sobre la grilla UTM; la erosión usa relieve_nasadem_30m.pendiente_media_m_m",
     }
     ruta_perfil = salida / f"perfil_{lote_id}.json"
-    ruta_perfil.write_text(json.dumps(perfil, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    # LF explícito: con CRLF de Windows git cambiaría los bytes y el SHA-256 del manifiesto dejaría de valer
+    ruta_perfil.write_bytes((json.dumps(perfil, ensure_ascii=False, indent=1) + "\n").encode("utf-8"))
     archivos[ruta_perfil.name] = ruta_perfil
     return {"entrada_sha256": _sha(zip_path), "archivos": {n: _sha(r) for n, r in archivos.items()}}
 
@@ -272,7 +273,7 @@ def main(argv=None):
                   "exageracion_vertical": EXAGERACION, "lotes": {}}
     for lote_id, zip_nombre in ZIPS.items():
         manifiesto["lotes"][lote_id] = construir(lote_id, a.crudos / zip_nombre, a.lotes, a.exposicion, a.salida)
-    (a.salida / "manifiesto_bloques.json").write_text(json.dumps(manifiesto, indent=1) + "\n", encoding="utf-8")
+    (a.salida / "manifiesto_bloques.json").write_bytes((json.dumps(manifiesto, indent=1) + "\n").encode("utf-8"))
     return manifiesto
 
 

@@ -73,3 +73,14 @@ def test_centro_del_perfil_igual_a_datos(lote, tmp_path):
     rel = json.loads(EXPOSICION.read_text(encoding="utf-8"))["lotes"][lote]["relieve_nasadem_30m"]
     assert perfil["distancia_m"][perfil["indice_centro"]] == 0
     assert abs(perfil["elevacion_centro_m"] - rel["elevacion_centro_m"]) <= 1.0
+
+
+def test_manifiesto_publicado_coincide_con_los_archivos():
+    # el SHA-256 del manifiesto vale para los bytes que quedan en public/lotes (fin de línea LF)
+    import hashlib
+    carpeta = RAIZ / "src/web/public/lotes"
+    man = json.loads((carpeta / "manifiesto_bloques.json").read_text(encoding="utf-8"))
+    for lote in man["lotes"].values():
+        for nombre, sha in lote["archivos"].items():
+            assert hashlib.sha256((carpeta / nombre).read_bytes()).hexdigest() == sha, nombre
+    assert b"\r\n" not in (carpeta / "manifiesto_bloques.json").read_bytes()
