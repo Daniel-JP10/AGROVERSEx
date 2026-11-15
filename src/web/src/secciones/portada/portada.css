@@ -20,10 +20,11 @@ main.portada { position: relative; isolation: isolate; max-width: none; margin: 
 @keyframes circuito-gira { to { transform: rotate(360deg); } }
 
 /* Raíces: crecen al cargar (stroke-dashoffset sobre pathLength = 1) y luego respiran */
-.portada .raiz-brillo { fill: none; stroke: #6fe39a; stroke-width: 9; stroke-linecap: round; opacity: 0; animation: brillo-aparece 0.6s ease-out 1.2s both, raiz-respira 5s ease-in-out 1.8s infinite; animation-delay: 1.2s, calc(1.8s + var(--i) * 0.4s); }
-.portada .raiz { fill: none; stroke: url(#g-tallo); stroke-width: 3.4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; animation: raiz-crece 1.4s ease-out both; animation-delay: calc(var(--i) * 0.08s); }
+.portada .raiz-brillo { fill: none; stroke: #6fe39a; stroke-width: 14; stroke-linecap: round; opacity: 0; animation: brillo-aparece 0.6s ease-out 1.2s both, raiz-respira 5s ease-in-out 1.8s infinite; animation-delay: 1.2s, calc(1.8s + var(--i) * 0.4s); }
+.portada .raiz { fill: none; stroke: url(#g-tallo); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; animation: raiz-crece 1.4s ease-out both; animation-delay: calc(var(--i) * 0.08s); }
 .portada .raiz-luz { fill: none; stroke: #d9ffe6; stroke-width: 1; stroke-linecap: round; opacity: 0.7; stroke-dasharray: 1; animation: raiz-crece 1.4s ease-out both; animation-delay: calc(var(--i) * 0.08s); }
-.portada .rama { fill: none; stroke: url(#g-tallo); stroke-width: 1.7; stroke-linecap: round; stroke-dasharray: 1; animation: raiz-crece 0.7s ease-out both; animation-delay: calc(0.7s + var(--k) * 0.07s); }
+.portada .hebra { fill: none; stroke: url(#g-tallo); stroke-width: 2.2; stroke-linecap: round; opacity: 0.8; stroke-dasharray: 1; animation: raiz-crece 1.6s ease-out both; animation-delay: calc(0.2s + var(--i) * 0.08s); }
+.portada .rama { fill: none; stroke: url(#g-tallo); stroke-width: 2.1; stroke-linecap: round; stroke-dasharray: 1; animation: raiz-crece 0.7s ease-out both; animation-delay: calc(0.7s + var(--k) * 0.07s); }
 .portada .hoja-r { fill: url(#g-hoja); stroke: #2f8a52; stroke-width: 0.6; transform-box: fill-box; transform-origin: 0% 50%;
   animation: hoja-abre 0.5s ease-out both, hoja-mece 4s ease-in-out infinite alternate; animation-delay: 1.2s, calc(1.7s + var(--r) * 2s); }
 .portada .savia { fill: #eafff1; filter: drop-shadow(0 0 4px #7be0a0) drop-shadow(0 0 8px #7be0a0); }
@@ -63,7 +64,7 @@ main.portada { position: relative; isolation: isolate; max-width: none; margin: 
 
 /* Movimiento reducido: todo quieto y ya crecido, igual de rico (la savia no se dibuja desde Portada.tsx) */
 @media (prefers-reduced-motion: reduce) {
-  .portada .mapa-puntos, .portada .halo-luz, .portada .circuito, .portada .raiz, .portada .raiz-luz, .portada .rama, .portada .hoja-r,
+  .portada .mapa-puntos, .portada .halo-luz, .portada .circuito, .portada .raiz, .portada .raiz-luz, .portada .hebra, .portada .rama, .portada .hoja-r,
   .portada .nodo .figura, .portada .nodo .figura::before, .portada .comenzar, .portada .comenzar::after { animation: none; }
   .portada .raiz-brillo { animation: none; opacity: 0.32; }
   .portada .comenzar::after { display: none; }

@@ -38,7 +38,7 @@ const trazo = (p: P2[]) => `M${p[0][0].toFixed(1)} ${p[0][1].toFixed(1)} C ${p.s
 // Hoja con la base en (0,0) apuntando a +x; se coloca con translate, rotate y scale
 const HOJA = 'M0 0 C 6 -7 16 -7 24 0 C 16 7 6 7 0 0 Z'
 
-export interface Raiz { principal: P2[]; ramas: string[]; hojas: { x: number; y: number; a: number; s: number; r: number }[] }
+export interface Raiz { principal: P2[]; hebra: P2[]; ramas: string[]; hojas: { x: number; y: number; a: number; s: number; r: number }[] }
 
 /** Raíz del anillo del centro al nodo: tronco curvo, ramas que se abren, ramitas y hojas. */
 export function construirRaiz(n: Nodo, i: number): Raiz {
@@ -54,7 +54,7 @@ export function construirRaiz(n: Nodo, i: number): Raiz {
   // Las ramas nacen lejos del título para no taparlo
   ;[0.36, 0.52, 0.68, 0.84].forEach((u, k) => {
     const o = bez(principal, u), tg = tangente(principal, u), lado = k % 2 ? 1 : -1
-    const giro = lado * (0.55 + r() * 0.35), largo = 34 + r() * 30
+    const giro = lado * (0.55 + r() * 0.35), largo = 44 + r() * 38
     const dir: P2 = [tg[0] * Math.cos(giro) - tg[1] * Math.sin(giro), tg[0] * Math.sin(giro) + tg[1] * Math.cos(giro)]
     const fin: P2 = [o[0] + dir[0] * largo, o[1] + dir[1] * largo]
     ramas.push(trazo([o, [o[0] + tg[0] * largo * 0.4, o[1] + tg[1] * largo * 0.4], [fin[0] - dir[0] * largo * 0.3 + tg[0] * 6, fin[1] - dir[1] * largo * 0.3 + tg[1] * 6], fin]))
@@ -68,7 +68,10 @@ export function construirRaiz(n: Nodo, i: number): Raiz {
     const ot = bez(principal, u + 0.08), tt = tangente(principal, u + 0.08)
     hojas.push({ x: ot[0], y: ot[1], a: (Math.atan2(tt[1], tt[0]) * 180) / Math.PI - lado * 60, s: 0.4 + r() * 0.2, r: r() })
   })
-  return { principal, ramas, hojas }
+  // Segunda hebra que se separa del tronco y vuelve: da cuerpo orgánico sin tapar el título
+  const sep = 9 + r() * 6
+  const hebra: P2[] = [principal[0], [principal[1][0] + perp[0] * sep * 2, principal[1][1] + perp[1] * sep * 2], [principal[2][0] - perp[0] * sep * 1.4, principal[2][1] - perp[1] * sep * 1.4], principal[3]]
+  return { principal, hebra, ramas, hojas }
 }
 const RAICES = NODOS.map(construirRaiz)
 
@@ -113,6 +116,7 @@ function Raices({ reducido }: { reducido: boolean }) {
           <path className="raiz-brillo" d={trazo(r.principal)} filter="url(#f-brillo)" />
           <path className="raiz" pathLength={1} d={trazo(r.principal)} />
           <path className="raiz-luz" pathLength={1} d={trazo(r.principal)} />
+          <path className="hebra" pathLength={1} d={trazo(r.hebra)} />
           {r.ramas.map((rd, k) => <path key={k} className="rama" pathLength={1} d={rd} style={{ ['--k' as string]: k }} />)}
           {r.hojas.map((h, k) => (
             <g key={`h${k}`} transform={`translate(${h.x.toFixed(1)} ${h.y.toFixed(1)}) rotate(${h.a.toFixed(0)}) scale(${h.s.toFixed(2)})`}>
