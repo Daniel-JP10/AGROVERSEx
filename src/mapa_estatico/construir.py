@@ -1,4 +1,4 @@
-# asistido por SI: Claude Code, convierte las series mensuales csv.gz en archivos estáticos para el globo (T-D9, contratos/web_datos.md v0)
+# asistido por SI: Claude Code (Anthropic), convierte las series mensuales csv.gz en archivos estáticos para el globo (T-D9, contratos/web_datos.md v0)
 """Una matriz por variable y nivel: filas = unidades, columnas = meses 2000-01 a 2026-11.
 
 Valores en la unidad del producto (nunca convertidos); la unidad, el producto, la versión y el
@@ -29,6 +29,14 @@ VARIABLES = {
 }
 # El csv trae U+FFFD donde iba la tilde (hallazgo de T-D2): se repone solo aquí, sin tocar la fuente
 CORRECCION_TEXTO = {"rean\ufffdlisis": "reanálisis"}
+# H-F3-1: la app va en inglés; el nombre del producto se traduce aquí, nunca a mano en meta.json
+PRODUCTO_EN = {
+    "GPM IMERG Final Run, mensual 0,1 grados (GPM_3IMERGM)": "GPM IMERG Final Run, monthly 0.1° (GPM_3IMERGM)",
+    "GPM IMERG Late Run, diario agregado a mes en UTC (GPM_3IMERGDL)": "GPM IMERG Late Run, daily aggregated to month in UTC (GPM_3IMERGDL)",
+    "MERRA-2 reanálisis, M2TMNXSLV (T2M)": "MERRA-2 reanalysis, M2TMNXSLV (T2M)",
+    "MODIS Terra MOD13C2 NDVI mensual 0,05 grados": "MODIS Terra MOD13C2 NDVI, monthly 0.05°",
+    "GLDAS Noah 0,25 mensual, MODELO de superficie terrestre (GLDAS_NOAH025_M, RootMoist_inst)": "GLDAS Noah 0.25° monthly, land surface MODEL (GLDAS_NOAH025_M, RootMoist_inst)",
+}
 
 
 def indice_mes(mes: str) -> int:
@@ -46,7 +54,7 @@ def _texto(s: str) -> str:
         s = s.replace(mal, bien)
     if "\ufffd" in s:
         raise ValueError(f"texto con carácter de reemplazo sin corregir: {s!r}")
-    return s
+    return PRODUCTO_EN.get(s, s)
 
 
 def _cargar(carpeta: Path, archivos: list[str]) -> pd.DataFrame:
@@ -155,6 +163,148 @@ def construir_series(carpeta: Path, salida: Path, pais: str) -> dict:
             "productos": m.get("productos", []),
         }
     _escribir_json_lf(salida / "meta.json", meta)
+    return tam
+
+
+# Series del mundo (S1, traspaso S1w): se escriben al desplegar en dist/datos, no se versionan
+# Sufijo del archivo por ponderación: área conserva el nombre de v0 y cultivo lleva _cultivo
+PONDERACIONES = {"area": "", "cultivo": "_cultivo"}
+MUNDO = "MUNDO"  # adm0 y adm1 de todos los países van en un archivo por variable; adm2 va por país
+_COLS_MUNDO = {
+    "unidad_id": "category", "nivel": "int8", "mes": "category", "valor": "float32", "p10": "float32", "p90": "float32",
+    "frac_valida": "float32", "producto": "category", "version": "category", "estado": "category", "unidad": "category", "motivo": "category",
+}
+
+
+def _leer_mundo(carpeta: Path, archivos: list[str], pond: str) -> pd.DataFrame:
+    partes = [pd.read_csv(carpeta / f"serie_mensual_{a}_{pond}.csv.gz", usecols=list(_COLS_MUNDO), dtype=_COLS_MUNDO, encoding="utf-8") for a in archivos]
+    if len(partes) == 1:
+        return partes[0]
+    # Final y Late traen categorías distintas: se unen para no volver a texto (memoria)
+    d = {}
+    for col, tipo in _COLS_MUNDO.items():
+        if tipo == "category":
+            d[col] = pd.api.types.union_categoricals([p[col] for p in partes], sort_categories=True)
+        else:
+            d[col] = pd.concat([p[col] for p in partes], ignore_index=True)
+    return pd.DataFrame(d)
+
+
+def _filas_json(m, fmt: str) -> str:
+    # NaN es null; formato fijo de cifras significativas (6 en valor, 5 en p10 y p90, 3 en frac)
+    return "[" + ",".join("[" + ",".join("null" if v != v else format(v, fmt) for v in fila) + "]" for fila in m.tolist()) + "]"
+
+
+def _trabajo_mundo(args) -> dict:
+    """Una variable y una ponderación: escribe MUNDO/<cid>_<0|1><suf>.json.gz y <ISO3>/<cid>_2<suf>.json.gz."""
+    import numpy as np
+    carpeta, salida, cid, archivos, pond, adm2_paises = args
+    suf = PONDERACIONES[pond]
+    d = _leer_mundo(Path(carpeta), archivos, pond)
+    if d["unidad_id"].cat.categories.str.contains("�").any():
+        raise ValueError("unidad_id con carácter de reemplazo")
+    meses = d["mes"].cat.categories
+    i = np.array([indice_mes(m) for m in meses], dtype=np.int32)[d["mes"].cat.codes.to_numpy()]
+    if i.min() < 0 or i.max() >= N_MESES:
+        raise ValueError("mes fuera del eje 2000-01 a 2026-11")
+    uc = d["unidad_id"].cat.codes.to_numpy().astype(np.int64)
+    if len(np.unique(uc * N_MESES + i)) != len(uc):
+        raise ValueError("unidad y mes repetidos entre archivos (Final y Late no deben traslaparse)")
+    # producto, versión, unidad y estado únicos por mes (como en matriz)
+    cols = ["producto", "version", "unidad", "estado"]
+    pm_df = pd.DataFrame({c: d[c].astype(str) for c in cols}).assign(i=i).drop_duplicates()
+    if pm_df["i"].duplicated().any():
+        raise ValueError("un mes trae más de un producto, versión, unidad o estado")
+    productos: list[dict] = []
+    producto_mes = [-1] * N_MESES
+    for f in pm_df.sort_values("i").itertuples(index=False):
+        p = {"producto": _texto(f.producto), "version": f.version, "unidad": f.unidad, "estado": f.estado}
+        if p not in productos:
+            productos.append(p)
+        producto_mes[int(f.i)] = productos.index(p)
+    cats = np.asarray(d["unidad_id"].cat.categories, dtype=object)
+    iso = np.array([c.split("-")[0] for c in cats], dtype=object)
+    nivel = d["nivel"].to_numpy()
+    sin_c = (d["motivo"].astype(str) == "sin_cultivo").to_numpy()
+    vals = {k: d[k].to_numpy() for k in ("valor", "p10", "p90", "frac_valida")}
+    fmts = {"valor": ".6g", "p10": ".5g", "p90": ".5g", "frac_valida": ".3g"}
+    sal = Path(salida)
+    tam, cuenta = {}, {}
+
+    def escribir(filas, n: int, ruta: str):
+        cod = uc[filas]
+        ids_cod = np.unique(cod)  # categorías ordenadas: ids en orden alfabético, como en matriz
+        r, c = np.searchsorted(ids_cod, cod), i[filas]
+        mats = {}
+        for k in vals:
+            m = np.full((len(ids_cod), N_MESES), np.nan, dtype=np.float32)
+            m[r, c] = vals[k][filas]
+            mats[k] = m
+        # Sin cultivo en todos sus meses: la app dice "No cropland", nunca 0
+        n_sc, n_tot = np.bincount(r, weights=sin_c[filas], minlength=len(ids_cod)), np.bincount(r, minlength=len(ids_cod))
+        sin_cultivo = [str(x) for x in cats[ids_cod[(n_sc == n_tot) & (n_tot > 0)]]]
+        cab = {
+            "formato": "web_datos v0", "variable": cid, "nivel": n, "ponderacion": pond, "mes0": "2000-01", "n_meses": N_MESES,
+            "ids": [str(x) for x in cats[ids_cod]], "productos": productos, "producto_mes": producto_mes, "tipo_rango": "espacial",
+            "sin_cultivo": sin_cultivo,
+        }
+        txt = json.dumps(cab, ensure_ascii=False, separators=(",", ":"))[:-1]
+        txt += "".join(f',"{k}":{_filas_json(mats[k0], fmts[k0])}' for k, k0 in (("valor", "valor"), ("p10", "p10"), ("p90", "p90"), ("frac", "frac_valida"))) + "}"
+        dest = sal / ruta
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        with open(dest, "wb") as f, gzip.GzipFile(fileobj=f, mode="wb", mtime=0, compresslevel=6) as z:
+            z.write(txt.encode("utf-8"))
+        tam[ruta] = dest.stat().st_size
+        con_valor = int((~np.isnan(mats["valor"])).any(axis=1).sum())
+        a = cuenta.setdefault(str(n), {"ids": 0, "con_valor": 0, "sin_cultivo": 0, "archivos": 0})
+        a["ids"] += len(ids_cod); a["con_valor"] += con_valor; a["sin_cultivo"] += len(sin_cultivo); a["archivos"] += 1
+
+    for n in (0, 1):
+        escribir(np.flatnonzero(nivel == n), n, f"{MUNDO}/{cid}_{n}{suf}.json.gz")
+    filas2 = np.flatnonzero(nivel == 2)
+    por_pais = pd.Series(filas2).groupby(iso[uc[filas2]]).indices
+    for p, pos in sorted(por_pais.items()):
+        if adm2_paises is None or p in adm2_paises:
+            escribir(filas2[pos], 2, f"{p}/{cid}_2{suf}.json.gz")
+    idx = [k for k, x in enumerate(producto_mes) if x >= 0]
+    return {
+        "cid": cid, "pond": pond, "tam": tam, "cuenta": cuenta, "productos": productos,
+        "paises": sorted(set(iso[np.unique(uc[nivel == 0])])), "adm2": sorted(p for p in por_pais if adm2_paises is None or p in adm2_paises),
+        "meses": {"desde": mes_a_texto(idx[0]) if idx else None, "hasta": mes_a_texto(idx[-1]) if idx else None, "n_meses_con_producto": len(idx)},
+    }
+
+
+def construir_mundo(carpeta: Path, salida: Path, adm2_paises: set[str] | None = None, procesos: int = 4) -> dict:
+    """Series de S1 de todos los países con las dos ponderaciones y meta.json con los países con dato."""
+    from concurrent.futures import ProcessPoolExecutor
+    trabajos = [(str(carpeta), str(salida), cid, archivos, pond, adm2_paises) for cid, (_v, archivos) in VARIABLES.items() for pond in PONDERACIONES]
+    faltan = [f"serie_mensual_{a}_{t[4]}.csv.gz" for t in trabajos for a in t[3] if not (carpeta / f"serie_mensual_{a}_{t[4]}.csv.gz").is_file()]
+    if faltan:
+        raise ErrorDespliegue(f"en {carpeta} faltan: {', '.join(faltan)}")
+    if procesos > 1:
+        with ProcessPoolExecutor(max_workers=procesos) as ex:
+            res = list(ex.map(_trabajo_mundo, trabajos))
+    else:
+        res = [_trabajo_mundo(t) for t in trabajos]
+    meta = {
+        "formato": "web_datos v0",
+        "mes0": "2000-01",
+        "n_meses": N_MESES,
+        "paises": sorted(set().union(*(r["paises"] for r in res))),
+        "paises_adm2": sorted(set().union(*(r["adm2"] for r in res))),
+        "mundo": MUNDO,
+        "ponderaciones": PONDERACIONES,
+        "ponderacion_defecto": "cultivo",
+        "variables": {},
+        "unidades_publicadas": {},
+    }
+    tam = {}
+    for r in res:
+        tam.update(r["tam"])
+        meta["unidades_publicadas"].setdefault(r["cid"], {})[r["pond"]] = r["cuenta"]
+        if r["pond"] == "area":
+            meta["variables"][r["cid"]] = {"niveles": [0, 1, 2], "meses_disponibles": r["meses"], "productos": r["productos"]}
+    tam["meta.json"] = _escribir_json_lf(salida / "meta.json", meta)
     return tam
 
 
@@ -272,9 +422,15 @@ def revisar_limites(dist: Path, excluir: tuple[str, ...] = ("teselas/",)) -> lis
     return fallos
 
 
-def desplegar(dist: Path, entorno=None) -> dict:
-    """Copia teselas e índice a dist/ y construye dist/datos/unidades_geo.json.gz (D-033e: no se versionan)."""
+def desplegar(dist: Path, entorno=None, adm2_paises: set[str] | None = None) -> dict:
+    """Copia teselas e índice a dist/, construye dist/datos/unidades_geo.json.gz (D-033e: no se versionan) y las series del mundo.
+
+    adm2_paises: respaldo del director (adm2 solo de esos países, por ejemplo COL y USA); None = todos.
+    """
     raiz = raiz_datos(entorno)
+    env = os.environ if entorno is None else entorno
+    if adm2_paises is None and env.get("AGROVERSEX_ADM2_PAISES"):
+        adm2_paises = {x.strip().upper() for x in env["AGROVERSEX_ADM2_PAISES"].split(",") if x.strip()}
     if not dist.is_dir():
         raise ErrorDespliegue(f"no existe {dist}: corre primero npm run build en src/web")
     tam = {}
@@ -293,6 +449,10 @@ def desplegar(dist: Path, entorno=None) -> dict:
         if tam[destino] != fuente.stat().st_size:
             raise ErrorDespliegue(f"copia incompleta de {origen}")
     tam["datos/unidades_geo.json.gz"] = construir_geo(raiz / "unidades.gpkg", dist / "datos")
+    # Series del mundo (S1) desde AGROVERSEX_DATOS/series_mundo/consolidados; sin esa carpeta el build queda con COL de public/
+    series = raiz / "series_mundo" / "consolidados"
+    if series.is_dir():
+        tam.update({f"datos/{k}": v for k, v in construir_mundo(series, dist / "datos", adm2_paises).items()})
     # Ningún archivo publicado puede llevar rutas locales ni el usuario de la máquina (director, 10:00)
     fugas = buscar_fugas(dist)
     if fugas:
@@ -368,10 +528,16 @@ def principal():
     p.add_argument("--salida", type=Path)
     p.add_argument("--pais", default="COL")
     p.add_argument("--generado-utc", default=None)
+    p.add_argument("--adm2-paises", default=None, help="respaldo: adm2 solo de estos ISO3 separados por coma (por ejemplo COL,USA)")
     a = p.parse_args()
     if a.desplegar:
         try:
-            print(json.dumps(desplegar(a.desplegar), indent=1))
+            import time
+            t0 = time.perf_counter()
+            adm2 = {x.strip().upper() for x in a.adm2_paises.split(",") if x.strip()} if a.adm2_paises else None
+            tam = desplegar(a.desplegar, adm2_paises=adm2)
+            print(json.dumps({k: v for k, v in tam.items() if not k.startswith("datos/") or k.count("/") < 2 or "/MUNDO/" in k}, indent=1))
+            print(f"archivos: {len(tam)}, MB: {sum(tam.values()) / 1e6:.1f}, segundos: {time.perf_counter() - t0:.0f}")
         except ErrorDespliegue as e:
             sys.exit(f"ERROR de despliegue: {e}")
         return
