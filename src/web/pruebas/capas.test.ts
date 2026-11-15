@@ -13,10 +13,10 @@ describe('capas', () => {
   })
   it('un id desconocido cae en la capa inicial', () => expect(capaPorId('nada').id).toBe('precip'))
   it('la lluvia pasa de mm/h a mm/mes con los días del mes y el resto no cambia', () => {
-    const ene = valoresCapa(capaPorId('precip'), new Float32Array([1]), 0)
+    const ene = valoresCapa(capaPorId('precip'), new Float32Array([1]), 0, 'mm/h')
     expect(ene[0]).toBeCloseTo(744)
     const v = new Float32Array([0.5])
-    expect(valoresCapa(capaPorId('ndvi'), v, 0)).toBe(v)
+    expect(valoresCapa(capaPorId('ndvi'), v, 0, '')).toBe(v)
   })
 })
 

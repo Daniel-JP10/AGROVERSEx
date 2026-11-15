@@ -1,3 +1,4 @@
+import { t } from '../textos/i18n'
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 // Bits de bandera_motivo, en el orden real de la fase 2 (simulacion/variables.py).
 export const BANDERA = {
@@ -11,9 +12,9 @@ export const BANDERA = {
 // Calidad baja (bit 5) es decisión técnica del controlador; se rotula aparte.
 export const BANDERA_CALIDAD_BAJA = 1 << 5
 
-const ROTULOS: [number, string][] = [
-  [BANDERA.HUECO_PRODUCTO, 'hueco del producto'], [BANDERA.NUBE, 'nube'], [BANDERA.NIEVE, 'nieve'],
-  [BANDERA.PROVISIONAL, 'provisional'], [BANDERA.FUERA_COBERTURA, 'fuera de cobertura'], [BANDERA_CALIDAD_BAJA, 'calidad baja'],
+const rotulos = (): [number, string][] => [
+  [BANDERA.HUECO_PRODUCTO, t('bandera.hueco')], [BANDERA.NUBE, t('bandera.nube')], [BANDERA.NIEVE, t('bandera.nieve')],
+  [BANDERA.PROVISIONAL, t('bandera.provisional')], [BANDERA.FUERA_COBERTURA, t('bandera.cobertura')], [BANDERA_CALIDAD_BAJA, t('bandera.calidad')],
 ]
 
 // bandera_motivo es por unidad y mes, común a todos los productos: con valor presente no aplican los
@@ -24,4 +25,4 @@ export function rotulosDeVariable(v: string, b: number | null, hayValor: boolean
   return rotulosBandera((b ?? 0) & propios)
 }
 
-export const rotulosBandera = (b: number | null): string[] => ROTULOS.filter(([bit]) => ((b ?? 0) & bit) !== 0).map(([, t]) => t)
+export const rotulosBandera = (b: number | null): string[] => rotulos().filter(([bit]) => ((b ?? 0) & bit) !== 0).map(([, r]) => r)

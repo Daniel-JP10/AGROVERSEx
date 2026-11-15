@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import type { Map as MapaGL } from 'maplibre-gl'
 import { useEstado } from '../app/estado'
+import { t } from '../textos/i18n'
 
 /** Longitud "redonda" de barra de escala (m) que cabe en ~100 px. */
 function escala(mapa: MapaGL): { px: number; texto: string } {
@@ -29,16 +30,16 @@ export function Controles({ mapa, coords }: { mapa: MapaGL; coords: [number, num
   return (
     <>
       <div className="controles">
-        <button aria-label="Orientar al norte" title="Orientar al norte" onClick={() => mapa.easeTo({ bearing: 0, pitch: 0 })}>
+        <button aria-label={t('globo.norte')} title={t('globo.norte')} onClick={() => mapa.easeTo({ bearing: 0, pitch: 0 })}>
           <svg viewBox="0 0 24 24" width="20" height="20" style={{ transform: `rotate(${-rumbo}deg)` }}>
             <path d="M12 3l4 9h-8z" fill="#ff8a5c" /><path d="M12 21l-4-9h8z" fill="#8aa0b4" />
           </svg>
         </button>
-        <button onClick={() => setProyeccion(proyeccion === 'globe' ? 'mercator' : 'globe')} aria-label="Cambiar entre vista 2D y 3D">
+        <button onClick={() => setProyeccion(proyeccion === 'globe' ? 'mercator' : 'globe')} aria-label={t('globo.vista')}>
           {proyeccion === 'globe' ? '2D' : '3D'}
         </button>
-        <button aria-label="Acercar" onClick={() => mapa.zoomIn()}>+</button>
-        <button aria-label="Alejar" onClick={() => mapa.zoomOut()}>−</button>
+        <button aria-label={t('globo.acercar')} onClick={() => mapa.zoomIn()}>+</button>
+        <button aria-label={t('globo.alejar')} onClick={() => mapa.zoomOut()}>−</button>
       </div>
       <div className="barra-inferior">
         <span className="escala" style={{ width: esc.px }} />

@@ -9,6 +9,7 @@ import { CintaEnso } from './CintaEnso'
 import { QueryClient } from '@tanstack/react-query'
 import { precargarMeses } from '../datos/consultas'
 import { capaPorId } from '../datos/capas'
+import { t } from '../textos/i18n'
 
 const VELOCIDAD = 4 // meses por segundo
 const qcPrecarga = new QueryClient()
@@ -61,24 +62,24 @@ export function LineaTiempo() {
     if (acciones[e.key]) { e.preventDefault(); acciones[e.key]() }
   }
 
-  const nota = sinDato.has(mes) ? `sin dato · ${producto.nombre}` : producto.provisionalDesde !== undefined && mes >= producto.provisionalDesde ? 'provisional' : producto.parciales?.includes(mes) ? 'con huecos' : ''
+  const nota = sinDato.has(mes) ? `${t('tiempo.sinDato')} · ${producto.nombre}` : producto.provisionalDesde !== undefined && mes >= producto.provisionalDesde ? t('bandera.provisional') : producto.parciales?.includes(mes) ? t('tiempo.huecos') : ''
 
   return (
     <div className="tiempo" onKeyDown={alTeclado}>
       <div className="fila">
-        <button onClick={() => setMes(mes - paso)} aria-label="Mes anterior">◀</button>
-        <button onClick={() => setReproduciendo(!reproduciendo)} aria-label={reproduciendo ? 'Pausar' : 'Reproducir'}>{reproduciendo ? '❚❚' : '▶'}</button>
-        <button onClick={() => setMes(mes + paso)} aria-label="Mes siguiente">▶|</button>
+        <button onClick={() => setMes(mes - paso)} aria-label={t('tiempo.anterior')}>◀</button>
+        <button onClick={() => setReproduciendo(!reproduciendo)} aria-label={reproduciendo ? t('tiempo.pausar') : t('tiempo.reproducir')}>{reproduciendo ? '❚❚' : '▶'}</button>
+        <button onClick={() => setMes(mes + paso)} aria-label={t('tiempo.siguiente')}>▶|</button>
         <span className="ext">{mesIdAEtiqueta(0)}</span>
-        <input type="range" min={0} max={N_MESES - 1} value={mes} onChange={(e) => setMes(+e.target.value)} aria-label="Mes" aria-valuetext={mesIdAEtiqueta(mes)} />
+        <input type="range" min={0} max={N_MESES - 1} value={mes} onChange={(e) => setMes(+e.target.value)} aria-label={t('tiempo.mesEtiqueta')} aria-valuetext={mesIdAEtiqueta(mes)} />
         <span className="ext">{mesIdAEtiqueta(N_MESES - 1)}</span>
         <strong className="mes" data-testid="mes">{mesIdAEtiqueta(mes)}</strong>
-        <select value={paso} onChange={(e) => setPaso(+e.target.value as 1 | 12)} aria-label="Paso de las flechas"><option value={1}>mes</option><option value={12}>año</option></select>
-        <select value={clave} onChange={(e) => setClave(e.target.value)} aria-label="Producto activo">
+        <select value={paso} onChange={(e) => setPaso(+e.target.value as 1 | 12)} aria-label={t('tiempo.paso')}><option value={1}>{t('tiempo.mes')}</option><option value={12}>{t('tiempo.anio')}</option></select>
+        <select value={clave} onChange={(e) => setClave(e.target.value)} aria-label={t('tiempo.producto')}>
           {Object.entries(CALENDARIO).map(([k, p]) => <option key={k} value={k}>{p.nombre}</option>)}
         </select>
         {/* El mapa solo muestra este mes cuando no hay "pintando…" */}
-        {pintando && <span role="status" className="aviso-t">pintando… el mapa aún no muestra {mesIdAEtiqueta(mes)}</span>}
+        {pintando && <span role="status" className="aviso-t">{t('tiempo.pintando')} {mesIdAEtiqueta(mes)}</span>}
         {nota && <span className="aviso-t" data-testid="nota">{nota}</span>}
       </div>
       <CintaEnso producto={producto} mes={mes} />

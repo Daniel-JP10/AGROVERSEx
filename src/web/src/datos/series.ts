@@ -1,5 +1,8 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import type { Fetcher } from './cliente'
+import { t } from '../textos/i18n'
+import type { ClaveTexto } from '../textos/es'
+import { paraMostrar, type Mes } from '../comun/unidades'
 
 export type Num = number | null
 
@@ -21,8 +24,8 @@ export async function pedirSerie(id: string, vars: string[], desde = 0, hasta = 
   }
 }
 
-// Lluvia: la base guarda mm/h; para mostrar, mm/mes (730,5 h por mes medio).
-export const mmPorMes = (mmh: number, mes?: number) => mmh * (mes === undefined ? 730.5 : new Date(Date.UTC(2000, mes + 1, 0)).getUTCDate() * 24)
+// Lluvia (unidad del producto, obligatoria) -> mm/mes del mes dado (la conversión vive en comun/unidades.ts)
+export const mmPorMes = (v: number, mes: Mes, unidad: string) => paraMostrar('precip', v, unidad, mes).valor as number
 
 // Resta la media de la base [baseDesde, baseHasta] (índices incluidos), ignorando null.
 export function anomalia(s: Num[], baseDesde: number, baseHasta: number): Num[] {
@@ -57,15 +60,9 @@ export function segmentar(s: Num[]): { desde: number; valores: number[] }[] {
   return out
 }
 
-export const NOMBRE_VAR: Record<string, string> = {
-  precip: 'Lluvia', t2m: 'Temperatura a 2 m', ndvi: 'NDVI', sm_sup: 'Humedad superficial', sm_raiz: 'Humedad en la raíz',
-  tws: 'Agua almacenada', rad_sw: 'Radiación solar', rh2m: 'Humedad relativa', et: 'Evapotranspiración', lst_dia: 'Temperatura de la superficie',
+const CLAVE_VAR: Record<string, ClaveTexto> = {
+  precip: 'capa.precipCorta', t2m: 'capa.t2m', ndvi: 'capa.ndvi', sm_sup: 'capa.sm_sup', sm_raiz: 'capa.sm_raiz',
+  tws: 'capa.twsCorta', rad_sw: 'capa.rad_sw', rh2m: 'capa.rh2m', et: 'capa.et', lst_dia: 'capa.lst_dia',
 }
-export const nombreVar = (v: string) => NOMBRE_VAR[v] ?? v
+export const nombreVar = (v: string) => (CLAVE_VAR[v] ? t(CLAVE_VAR[v]) : v)
 
-// Valor y unidad para mostrar, según la variable real: lluvia mm/h -> mm/mes; el resto conserva su unidad.
-export function paraMostrar(v: string, x: number | null | undefined, unidadApi: string | null, mes?: number): { valor: number | null; unidad: string } {
-  const u = unidadApi === 'C' ? '°C' : unidadApi === 'adim' || !unidadApi ? (v === 'ndvi' || unidadApi === 'adim' ? 'adimensional' : '') : unidadApi
-  if (v === 'precip') return { valor: x == null ? null : mmPorMes(x, mes), unidad: 'mm/mes' }
-  return { valor: x == null ? null : x, unidad: u }
-}

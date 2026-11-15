@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useEstado } from '../../app/estado'
 import { ocultasPorFiltros, UMBRAL_RONI, type AtributosUnidad, type FiltrosGlobales } from '../../datos/filtrar'
 import { filtrosRegionalesPara } from './filtros_regionales'
+import { t } from '../../textos/i18n'
 
 interface Atributos { zona_demo: boolean; unidades: AtributosUnidad[] }
 const NIVELES = [0, 1, 2]
@@ -57,32 +58,32 @@ export function Filtros() {
   const regionales = propia ? filtrosRegionalesPara(propia) : []
 
   return (
-    <aside className="panel panel-herr" aria-label="Filtros">
-      <h2>Filtros</h2>
-      <label>Mínimo ({unidadCapa})<input type="number" value={filtro.min ?? ''} onChange={(e) => setFiltro({ ...filtro, min: num(e.target.value) })} /></label>
-      <label>Máximo ({unidadCapa})<input type="number" value={filtro.max ?? ''} onChange={(e) => setFiltro({ ...filtro, max: num(e.target.value) })} /></label>
-      <label>Fracción válida mínima (0 a 1)<input type="number" min={0} max={1} step={0.1} value={filtro.fraccionMin ?? ''} onChange={(e) => setFiltro({ ...filtro, fraccionMin: num(e.target.value) })} /></label>
-      {error && <p role="alert">No se pudieron cargar los atributos de las unidades.</p>}
+    <aside className="panel panel-herr" aria-label={t('filtros.titulo')}>
+      <h2>{t('filtros.titulo')}</h2>
+      <label>{t('filtros.minimo')} ({unidadCapa})<input type="number" value={filtro.min ?? ''} onChange={(e) => setFiltro({ ...filtro, min: num(e.target.value) })} /></label>
+      <label>{t('filtros.maximo')} ({unidadCapa})<input type="number" value={filtro.max ?? ''} onChange={(e) => setFiltro({ ...filtro, max: num(e.target.value) })} /></label>
+      <label>{t('filtros.fraccion')}<input type="number" min={0} max={1} step={0.1} value={filtro.fraccionMin ?? ''} onChange={(e) => setFiltro({ ...filtro, fraccionMin: num(e.target.value) })} /></label>
+      {error && <p role="alert">{t('filtros.errAtributos')}</p>}
       <Grupo nombre="Clima de Köppen (clase)" opciones={distintos<string>(us, 'koppen')} sel={globales.koppen} alCambiar={(koppen) => cambiar({ ...globales, koppen })} />
       <Grupo nombre="Cobertura IGBP (clase)" opciones={distintos<number>(us, 'igbp')} sel={globales.igbp} alCambiar={(igbp) => cambiar({ ...globales, igbp })} />
       <Grupo nombre="Condición de la tierra" opciones={distintos<string>(us, 'condicion')} sel={globales.clase} alCambiar={(clase) => cambiar({ ...globales, clase })} />
-      {attrs && !attrs.zona_demo && <p>Zona DEMO: sin datos en esta base (sin tabla zona_demo).</p>}
+      {attrs && !attrs.zona_demo && <p>{t('filtros.sinDemo')}</p>}
       <Grupo nombre="Zona DEMO" opciones={distintos<string>(us, 'zona')} sel={globales.zona} alCambiar={(zona) => cambiar({ ...globales, zona })} />
-      <label><input type="checkbox" checked={!!globales.soloEventos} onChange={(e) => cambiar({ ...globales, soloEventos: e.target.checked || undefined })} /> Solo unidades con eventos</label>
+      <label><input type="checkbox" checked={!!globales.soloEventos} onChange={(e) => cambiar({ ...globales, soloEventos: e.target.checked || undefined })} /> {t('filtros.eventos')}</label>
       <label>ENSO
         <select aria-describedby="enso-umbral" value={globales.enso ?? ''} onChange={(e) => cambiar({ ...globales, enso: (e.target.value || undefined) as FiltrosGlobales['enso'] })}>
-          <option value="">Todos los meses</option>
-          <option value="nino">Solo meses de El Niño</option>
-          <option value="nina">Solo meses de La Niña</option>
-          <option value="neutro">Solo meses neutros</option>
+          <option value="">{t('filtros.todos')}</option>
+          <option value="nino">{t('filtros.nino')}</option>
+          <option value="nina">{t('filtros.nina')}</option>
+          <option value="neutro">{t('filtros.neutro')}</option>
         </select>
       </label>
-      <p id="enso-umbral" className="etiqueta">SUPUESTO: |RONI| ≥ {String(UMBRAL_RONI).replace('.', ',')} °C (convención de NOAA para el ONI, aplicada al RONI). Fuera de esos meses el mapa se apaga.</p>
-      <p>Las unidades filtradas se ven apagadas con su valor; la trama rayada marca unidades sin dato.</p>
+      <p id="enso-umbral" className="etiqueta">{t('filtros.supuestoA')} {String(UMBRAL_RONI).replace('.', ',')} {t('filtros.supuestoB')}</p>
+      <p>{t('filtros.nota')}</p>
       {seleccion && (
-        <section aria-label="Filtros regionales">
-          <h3>Regionales de {seleccion.nombre}</h3>
-          {!attrs ? <p role="status">Cargando atributos…</p> : !propia ? <p>Sin atributos para esta unidad.</p> : regionales.length === 0 ? <p>Ningún filtro regional aplica a esta unidad.</p> : (
+        <section aria-label={t('filtros.regionales')}>
+          <h3>{t('filtros.regionalesDe')} {seleccion.nombre}</h3>
+          {!attrs ? <p role="status">{t('filtros.cargando')}</p> : !propia ? <p>{t('filtros.sinAtributos')}</p> : regionales.length === 0 ? <p>{t('filtros.ningunoAplica')}</p> : (
             <ul>{regionales.map((r) => <li key={r.id}><strong>{r.nombre}</strong> <small>FUENTE: {r.evidencia}</small></li>)}</ul>
           )}
         </section>

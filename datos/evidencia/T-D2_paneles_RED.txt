@@ -1,0 +1,8 @@
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  pruebas/paneles_unidad.test.ts > paneles ante una unidad sin conversión > Resumen con unidad null muestra el estado de error y no el valor
+Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+ FAIL  pruebas/paneles_unidad.test.ts > paneles ante una unidad sin conversión > Resumen con unidad válida sí muestra el valor
+Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+ FAIL  pruebas/paneles_unidad.test.ts > paneles ante una unidad sin conversión > Series: unidad null da null (el panel muestra el error) y una válida convierte
+TypeError: convertirSerie is not a function
+      Tests  3 failed (3)

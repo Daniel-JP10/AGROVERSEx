@@ -234,3 +234,12 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `contratos/forzantes_gemelo.md` y fichas `datos/fichas/power_diario.md`, `hls_v2.md`, `imerg_diario.md` | Redacción del contrato y las fichas (T-D5 B) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/sin_procedencia_china.test.ts`, `datos/evidencia/CPC-ASSESS97-AFRICA.yaml` | Prueba de procedencia en server y paneles; ficha de CPC que reemplaza a Cai 2025 (D-024) | 2026-11-14 |
 | Claude Code (Anthropic) | `datos/evidencia/kluger_afiliaciones.md`, `datos/evidencia/koppen_beck2023_licencia.md` | Evidencia de afiliaciones de Kluger y de licencia de Köppen-Geiger (D-024) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/tierra/interfaz.ts` | Interfaz del globo para Web, contrato web_componentes §4 | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/tierra/Tierra.tsx` | Sección Tierra: compone el globo que montaba App.tsx | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/interfaz.test.ts` | Pruebas de la interfaz del globo | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/comun/unidades.ts` | Conversión única paraMostrar con días reales del mes, contrato web_componentes §5 | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/unidades.test.ts` | Pruebas de paraMostrar y sus tres llamadores | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/textos_tierra.test.ts` | Pruebas de textos por clave de la sección Tierra | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/comun/unidades.ts`, `src/web/pruebas/empalme_imerg.test.ts` | Conversión mm/day de IMERG Late en paraMostrar y prueba del empalme 2025-09 a 2025-10 (D-023) | 2026-11-14 |
+| Claude Code (Anthropic) | `datos/extraer_pares_variable_unidad.py` | Extrae los pares (variable, unidad) de serie_mensual para la prueba de paraMostrar | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/paneles_unidad.test.ts` | Prueba de que los paneles muestran error ante una unidad sin conversión | 2026-11-14 |

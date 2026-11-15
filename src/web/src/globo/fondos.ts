@@ -1,3 +1,4 @@
+import { t } from '../textos/i18n'
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 // Fondos raster del globo. Blue Marble (local/respaldo) abajo; el fondo de detalle va encima.
 export interface FondoConfig {
@@ -28,7 +29,7 @@ export const FONDOS: FondoConfig[] = [
 ]
 
 export const FONDO_DETALLE = 'eox-s2-2024'
-export const AVISO_SIN_RED = 'Fondo de detalle no disponible sin red'
+export const avisoSinRed = () => t('globo.fondoSinRed')
 /** Zoom en que el fondo de detalle empieza a verse y en que está a pleno. */
 export const ZOOM_DETALLE: [number, number] = [3.5, 5]
 
