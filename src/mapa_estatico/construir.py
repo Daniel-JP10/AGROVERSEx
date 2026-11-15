@@ -30,13 +30,36 @@ VARIABLES = {
 # El csv trae U+FFFD donde iba la tilde (hallazgo de T-D2): se repone solo aquí, sin tocar la fuente
 CORRECCION_TEXTO = {"rean\ufffdlisis": "reanálisis"}
 # H-F3-1: la app va en inglés; el nombre del producto se traduce aquí, nunca a mano en meta.json
+# Nombre oficial de la colección (GES DISC, LP DAAC), sin la versión, que va en su propio campo
 PRODUCTO_EN = {
-    "GPM IMERG Final Run, mensual 0,1 grados (GPM_3IMERGM)": "GPM IMERG Final Run, monthly 0.1° (GPM_3IMERGM)",
-    "GPM IMERG Late Run, diario agregado a mes en UTC (GPM_3IMERGDL)": "GPM IMERG Late Run, daily aggregated to month in UTC (GPM_3IMERGDL)",
-    "MERRA-2 reanálisis, M2TMNXSLV (T2M)": "MERRA-2 reanalysis, M2TMNXSLV (T2M)",
-    "MODIS Terra MOD13C2 NDVI mensual 0,05 grados": "MODIS Terra MOD13C2 NDVI, monthly 0.05°",
-    "GLDAS Noah 0,25 mensual, MODELO de superficie terrestre (GLDAS_NOAH025_M, RootMoist_inst)": "GLDAS Noah 0.25° monthly, land surface MODEL (GLDAS_NOAH025_M, RootMoist_inst)",
+    "GPM IMERG Final Run, mensual 0,1 grados (GPM_3IMERGM)": "GPM IMERG Final Precipitation L3 1 month 0.1 degree x 0.1 degree (GPM_3IMERGM)",
+    "GPM IMERG Late Run, diario agregado a mes en UTC (GPM_3IMERGDL)": "GPM IMERG Late Precipitation L3 1 day 0.1 degree x 0.1 degree (GPM_3IMERGDL), daily values aggregated to month in UTC",
+    "MERRA-2 reanálisis, M2TMNXSLV (T2M)": "MERRA-2 tavgM_2d_slv_Nx: 2d, Monthly mean, Single-Level Diagnostics (M2TMNXSLV, T2M)",
+    "MODIS Terra MOD13C2 NDVI mensual 0,05 grados": "MODIS/Terra Vegetation Indices Monthly L3 Global 0.05Deg CMG (MOD13C2, NDVI)",
+    "GLDAS Noah 0,25 mensual, MODELO de superficie terrestre (GLDAS_NOAH025_M, RootMoist_inst)": "GLDAS Noah Land Surface Model L4 monthly 0.25 x 0.25 degree (GLDAS_NOAH025_M, RootMoist_inst)",
 }
+# Señales de texto en español en un nombre de producto (H-F3-1): tildes o palabras sueltas
+ESPANOL = re.compile(r"[áéíóúñÁÉÍÓÚÑ]|\b(mensual|diario|agregado|grados|rean[aá]lisis|superficie|terrestre|modelo|mes|en)\b", re.I)
+
+
+def traducir_productos(carpeta: Path) -> list[str]:
+    """Pasa a inglés los productos de meta.json y manifiesto.json de una carpeta datos/ (H-F3-1); el manifiesto sigue al meta nuevo."""
+    hechos = []
+    for nombre in ("meta.json", "manifiesto.json"):
+        ruta = carpeta / nombre
+        if not ruta.is_file():
+            continue
+        d = json.loads(ruta.read_text(encoding="utf-8"))
+        for v in d.get("variables", {}).values():
+            for prod in v.get("productos", []):
+                prod["producto"] = _texto(prod["producto"])
+        if nombre == "manifiesto.json" and "meta.json" in d.get("archivos", {}):
+            b = (carpeta / "meta.json").read_bytes()
+            d["archivos"]["meta.json"] = {"bytes": len(b), "sha256": hashlib.sha256(b).hexdigest()}
+            d["total_bytes"] = sum(f["bytes"] for f in d["archivos"].values())
+        _escribir_json_lf(ruta, d)
+        hechos.append(nombre)
+    return hechos
 
 
 def indice_mes(mes: str) -> int:
@@ -456,6 +479,7 @@ def desplegar(dist: Path, entorno=None, adm2_paises: set[str] | None = None) -> 
     series = raiz / "series_mundo" / "consolidados"
     if series.is_dir():
         tam.update({f"datos/{k}": v for k, v in construir_mundo(series, dist / "datos", adm2_paises).items()})
+    traducir_productos(dist / "datos")
     # Ningún archivo publicado puede llevar rutas locales ni el usuario de la máquina (director, 10:00)
     fugas = buscar_fugas(dist)
     if fugas:
@@ -531,8 +555,12 @@ def principal():
     p.add_argument("--salida", type=Path)
     p.add_argument("--pais", default="COL")
     p.add_argument("--generado-utc", default=None)
+    p.add_argument("--traducir", type=Path, metavar="DATOS", help="pasa a inglés los productos de DATOS/meta.json y DATOS/manifiesto.json (H-F3-1)")
     p.add_argument("--adm2-paises", default=None, help="respaldo: adm2 solo de estos ISO3 separados por coma (por ejemplo COL,USA)")
     a = p.parse_args()
+    if a.traducir:
+        print(traducir_productos(a.traducir))
+        return
     if a.desplegar:
         try:
             import time

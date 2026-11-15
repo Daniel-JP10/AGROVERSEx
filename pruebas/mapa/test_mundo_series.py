@@ -4,7 +4,7 @@ import json
 
 import pandas as pd
 
-from mapa_estatico.construir import N_MESES, construir_mundo, indice_mes
+from mapa_estatico.construir import ESPANOL, N_MESES, PRODUCTO_EN, construir_mundo, indice_mes, traducir_productos
 
 COLS = ["unidad_id", "nivel", "variable", "mes", "valor", "p10", "p90", "tipo_rango", "frac_valida", "ponderacion", "producto", "version", "estado", "unidad", "motivo"]
 FINAL = "GPM IMERG Final Run, mensual 0,1 grados (GPM_3IMERGM)"
@@ -61,8 +61,8 @@ def test_meta_paises_productos_en_ingles_y_conteo(tmp_path):
     meta = json.loads((sal / "meta.json").read_text(encoding="utf-8"))
     assert meta["paises"] == ["ATA", "KEN"] and meta["paises_adm2"] == ["KEN", "USA"] and meta["ponderacion_defecto"] == "cultivo"
     nombres = [p["producto"] for p in meta["variables"]["precip"]["productos"]]
-    assert "GPM IMERG Final Run, monthly 0.1° (GPM_3IMERGM)" in nombres
-    assert meta["variables"]["t2m"]["productos"][0]["producto"] == "MERRA-2 reanalysis, M2TMNXSLV (T2M)"
+    assert "GPM IMERG Final Precipitation L3 1 month 0.1 degree x 0.1 degree (GPM_3IMERGM)" in nombres
+    assert meta["variables"]["t2m"]["productos"][0]["producto"] == "MERRA-2 tavgM_2d_slv_Nx: 2d, Monthly mean, Single-Level Diagnostics (M2TMNXSLV, T2M)"
     u = meta["unidades_publicadas"]["precip"]
     assert u["area"]["2"] == {"ids": 3, "con_valor": 3, "sin_cultivo": 0, "archivos": 2}
     assert u["cultivo"]["0"] == {"ids": 2, "con_valor": 1, "sin_cultivo": 1, "archivos": 1}
@@ -72,3 +72,25 @@ def test_respaldo_adm2_solo_de_los_paises_pedidos(tmp_path):
     sal = preparar(tmp_path, {"USA"})
     assert not (sal / "KEN").exists() and (sal / "USA/precip_2.json.gz").is_file()
     assert (sal / "MUNDO/precip_1.json.gz").is_file()
+
+
+def test_nombres_de_producto_sin_espanol():
+    # H-F3-1: la prueba distingue los nombres viejos de los nuevos
+    for viejo, nuevo in PRODUCTO_EN.items():
+        assert ESPANOL.search(viejo), viejo
+        assert not ESPANOL.search(nuevo), nuevo
+
+
+def test_traducir_meta_y_manifiesto(tmp_path):
+    import hashlib
+    meta = {"variables": {"precip": {"productos": [{"producto": "GPM IMERG Late Run, diario agregado a mes en UTC (GPM_3IMERGDL)", "version": "07B"}]}}}
+    (tmp_path / "meta.json").write_text(json.dumps(meta), encoding="utf-8")
+    man = {"variables": meta["variables"], "archivos": {"meta.json": {"bytes": 1, "sha256": "x"}, "COL/a.json.gz": {"bytes": 5, "sha256": "y"}}, "total_bytes": 6}
+    (tmp_path / "manifiesto.json").write_text(json.dumps(man), encoding="utf-8")
+    assert traducir_productos(tmp_path) == ["meta.json", "manifiesto.json"]
+    for n in ("meta.json", "manifiesto.json"):
+        d = json.loads((tmp_path / n).read_text(encoding="utf-8"))
+        assert not ESPANOL.search(d["variables"]["precip"]["productos"][0]["producto"])
+    m = json.loads((tmp_path / "manifiesto.json").read_text(encoding="utf-8"))
+    b = (tmp_path / "meta.json").read_bytes()
+    assert m["archivos"]["meta.json"] == {"bytes": len(b), "sha256": hashlib.sha256(b).hexdigest()} and m["total_bytes"] == len(b) + 5
