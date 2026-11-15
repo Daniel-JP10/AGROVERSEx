@@ -6,7 +6,7 @@ export const en = {
   'fuentes.f.fuentes': 'Sources and licenses',
   'fuentes.f.glosario': 'Glossary',
   'fuentes.f.creditos': 'Credits',
-  'fuentes.f.direccion_visual': 'Visual direction: Jostin Colon Ramos',
+  'fuentes.f.direccion_visual': 'Visual direction: Jostin Andres Colon Ramos',
   'fuentes.f.referencias_ia': 'The visual design was drawn by hand by the team: every chart, icon and illustration on screen is our own SVG or our own rendering of our data.',
 } as const
 export const es: Record<keyof typeof en, string> = {
@@ -14,6 +14,6 @@ export const es: Record<keyof typeof en, string> = {
   'fuentes.f.fuentes': 'Fuentes y licencias',
   'fuentes.f.glosario': 'Glosario',
   'fuentes.f.creditos': 'Créditos',
-  'fuentes.f.direccion_visual': 'Dirección visual: Jostin Colon Ramos',
+  'fuentes.f.direccion_visual': 'Dirección visual: Jostin Andres Colon Ramos',
   'fuentes.f.referencias_ia': 'El diseño visual lo dibujó a mano el equipo: cada gráfico, ícono e ilustración en pantalla es un SVG nuestro o una representación nuestra de nuestros datos.',
 }
