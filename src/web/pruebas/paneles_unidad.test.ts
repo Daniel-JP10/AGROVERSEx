@@ -3,6 +3,9 @@ import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { createElement } from 'react'
 import { renderToString } from 'react-dom/server'
 import type { SerieVar } from '../src/datos/series'
+import { enEspanol } from './idioma_es'
+
+enEspanol() // las aserciones son en español y el idioma por defecto es el inglés (D-039)
 
 const serie = (unidad: string | null): SerieVar => ({ valor: [123.456], p10: [100], p90: [150], frac: [1], unidad_mes: [unidad], productos: [], producto_mes: [-1] })
 

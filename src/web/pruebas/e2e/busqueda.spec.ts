@@ -1,5 +1,8 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import { expect, test } from '@playwright/test'
+import { ES } from './idioma'
+
+test.use({ storageState: ES }) // asserta español y el idioma por defecto es el inglés (D-039)
 
 // Se ejecuta con playwright.busqueda.config.ts
 test('Colombia › Meta › Acacías por búsqueda, subida por miga y Escape', async ({ page }) => {
