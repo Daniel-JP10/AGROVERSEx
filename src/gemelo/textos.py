@@ -198,6 +198,28 @@ _BASE: dict[str, tuple[str, str]] = {
                                "referencia sí registró heladas; los datos no permiten descartar heladas en etapa "
                                "sensible (p10 de la mínima de la etapa: {tmin_p10} °C, {fraccion:.0%} de las "
                                "temporadas en los datos)."),
+    "alert.frost.station_activa": ("Station frost climatology: about {dias} frost days per season in sensitive stages "
+                                   "(95 % range {dias_lo} to {dias_hi}); months with observed frost in those stages: "
+                                   "{meses}. Probability of at least one: {prob:.0%}.",
+                                   "Climatología de heladas de la estación: unos {dias} días de helada por temporada "
+                                   "en etapas sensibles (rango 95 % {dias_lo} a {dias_hi}); meses con helada observada "
+                                   "en esas etapas: {meses}. Probabilidad de al menos una: {prob:.0%}."),
+    "alert.frost.station_sin_alerta": ("Station frost climatology: no frost observed in the months of the sensitive "
+                                       "stages (95 % upper range {dias_hi} days per season).",
+                                       "Climatología de heladas de la estación: sin heladas observadas en los meses de "
+                                       "las etapas sensibles (rango 95 % superior {dias_hi} días por temporada)."),
+    "alert.frost.station_climatology": ("Own combination: the frost alert uses station {estacion} ({km} km, {dz} m "
+                                        "height difference), which recorded {dias} days at or below {umbral} °C in "
+                                        "{dias_dato} days with data ({cobertura:.0%} coverage, {desde}-{hasta}), "
+                                        "because the NASA POWER series cannot produce the frosts.",
+                                        "Combinación propia: la alerta de helada usa la estación {estacion} ({km} km, "
+                                        "{dz} m de desnivel), que registró {dias} días con {umbral} °C o menos en "
+                                        "{dias_dato} días con dato (cobertura {cobertura:.0%}, {desde}-{hasta}), porque "
+                                        "la serie de NASA POWER no puede generar las heladas."),
+    "card.gap.frost_threshold_assumed": ("Frost threshold of {cultivos}: {umbral} °C SUPUESTO (the crop catalogue has "
+                                         "no frost tolerance with a source).",
+                                         "Umbral de helada de {cultivos}: {umbral} °C SUPUESTO (el catálogo de cultivos "
+                                         "no tiene la tolerancia a helada con fuente)."),
     "alert.frost.sin_alerta": ("No past season reached {umbral} °C in a sensitive stage, even allowing for the known "
                                "bias (p10 of the stage minimum: {tmin_p10} °C).",
                                "Ninguna temporada pasada llegó a {umbral} °C en etapa sensible, aun contando el sesgo "

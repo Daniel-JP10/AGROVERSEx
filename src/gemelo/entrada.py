@@ -1,6 +1,7 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
-# asistido por SI: Claude Code (Opus 5.5), bloque 2: alerta de helada D-032, lluvia alterna IMERG y avisos del suelo calibrado
+# asistido por SI: Claude Code (Opus 5.5), bloque 2: alerta de helada D-032, lluvia alterna IMERG y avisos del suelo calibrado; lote desde lotes_demo.json
 """Lectura del escenario de entrada (YAML o dict con el esquema de contratos/gemelo_api.md) a objetos del gemelo."""
+import json
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -21,6 +22,22 @@ def validar_lote_demo(lote_id: str) -> str:
     if not LOTE_DEMO.match(lote_id):
         raise ValueError(f"lote.id {lote_id!r}: un lote DEMO se identifica como DEMO-{{iso3}}-{{nn}}, p. ej. DEMO-COL-01")
     return lote_id
+
+
+CAMPOS_CATALOGO = ("nombre", "lat", "lon", "unidad_id", "clima_tipo", "area_ha")
+
+
+def lote_desde_catalogo(lo: dict, ruta: Path) -> dict:
+    """Completa el lote con lotes_demo.json de Datos (nombre, punto, unidad, clima). Un valor del YAML que lo
+    contradiga es error: el nombre y el punto del lote no se escriben a mano."""
+    lotes = json.loads(Path(ruta).read_text(encoding="utf-8"))["lotes"]
+    fila = next((x for x in lotes if x["lote_id"] == lo.get("id")), None)
+    if fila is None:
+        raise ValueError(f"lote {lo.get('id')!r} no está en {Path(ruta).name}")
+    choques = [k for k in CAMPOS_CATALOGO if k in lo and k in fila and lo[k] != fila[k]]
+    if choques:
+        raise ValueError(f"lote {lo['id']}: {choques} contradicen {Path(ruta).name}")
+    return {**lo, **{k: fila[k] for k in CAMPOS_CATALOGO if k in fila}}
 
 
 @dataclass
@@ -108,6 +125,8 @@ def leer_entrada(fuente: str | Path | dict, base: Path | None = None) -> Entrada
     if int(v) > VERSION_CONTRATO:
         raise ValueError(f"version_contrato {v} más nueva que la que entiende este gemelo ({VERSION_CONTRATO})")
     lo = d.get("lote", {})
+    if lo.get("catalogo"):
+        lo = lote_desde_catalogo(lo, _ruta(lo["catalogo"], base))
     if lo.get("zona_demo") or str(lo.get("id", "")).upper().startswith("DEMO"):
         validar_lote_demo(str(lo.get("id", "")))
     lote = Lote(str(lo.get("id", "lote")), lo.get("nombre", ""), float(lo.get("lat", 0.0)), float(lo.get("lon", 0.0)),
@@ -122,8 +141,9 @@ def leer_entrada(fuente: str | Path | dict, base: Path | None = None) -> Entrada
                     float(e.get("delta_temp_c", 0.0)), e.get("max_miembros"),
                     str(_ruta(e["enso_archivo"], base)) if e.get("enso_archivo") else None)
     alertas = {k: dict(v) for k, v in (d.get("alertas") or {}).items()}
-    if alertas.get("helada", {}).get("validacion"):
-        alertas["helada"]["validacion"] = str(_ruta(alertas["helada"]["validacion"], base))
+    for k in ("validacion", "estacion"):
+        if alertas.get("helada", {}).get(k):
+            alertas["helada"][k] = str(_ruta(alertas["helada"][k], base))
     alt = d["clima"].get("precipitacion_alterna")
     alt = {k: str(_ruta(v, base)) for k, v in alt.items()} if alt else None
     estrategias = [estrategia_desde_dict(x) for x in d.get("estrategias", [])]

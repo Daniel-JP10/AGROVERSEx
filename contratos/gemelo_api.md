@@ -234,7 +234,7 @@ Casos de prueba (`prioridades.casos_prueba` y `pruebas/gemelo/test_prioridades.p
 
 ### 5. Identificador del lote
 
-`lote.id` de un lote DEMO = `DEMO-{iso3}-{nn}` (regex `^DEMO-[A-Z]{3}-\d{2}$`). Se valida cuando el id empieza por `DEMO`, cuando hay `zona_demo` y siempre en el paquete; otro formato es error.
+`lote.id` de un lote DEMO = `DEMO-{iso3}-{nn}` (regex `^DEMO-[A-Z]{3}-\d{2}$`). Con `lote.catalogo` (ruta a `lotes_demo.json` de Datos), `nombre`, `lat`, `lon`, `unidad_id`, `clima_tipo` y `area_ha` se leen de ese archivo; un valor del YAML que lo contradiga es error. Se valida cuando el id empieza por `DEMO`, cuando hay `zona_demo` y siempre en el paquete; otro formato es error.
 
 ### 6. Erosión: una sola definición
 
@@ -268,13 +268,14 @@ Bloque aditivo `alertas` en todos los documentos. En la v1.1 entra solo `alertas
 | Campo | Contenido |
 |-|-|
 | `serie_temperatura` | `T2M_MIN_CORR` si el CSV la trae (`forzantes_gemelo.md` §4.3); si no, `T2M_MIN`. La media, la ET0 y la suma térmica siguen con `T2M` crudo |
-| `umbral_c`, `etapa_sensible` | 0 °C y etapas des y med de FAO-56 de los cultivos que se cosechan; ambos `SUPUESTO` (`umbral_etiqueta`, `etapa_etiqueta`) |
+| `umbral_c`, `umbrales_cultivo`, `etapa_sensible` | Umbral por cultivo (`t_helada` del catálogo) donde tenga fuente; si no, `umbral_c` = 0 °C `SUPUESTO`, listado en `cultivos_umbral_supuesto` y declarado en la tarjeta (`card.gap.frost_threshold_assumed`). Etapa: des y med de FAO-56 de los cultivos cosechados, `SUPUESTO` |
 | `validacion` | Sesgo de la mínima frente a la estación, leído del JSON de Datos (`alertas.helada.validacion` en el YAML); `null` sin validación |
 | `margen_sesgo_c` | Cota superior del IC 95 % del sesgo; `0` sin validación |
 | `estrategias.<id>.fraccion_temporadas_con_helada` | `{valor, cota_baja, cota_alta}`: temporadas cosechadas con al menos un día con mínima ≤ umbral en etapa sensible; la cota alta resta `margen_sesgo_c` a la mínima |
 | `estrategias.<id>.dias_helada_etapa_sensible_anio`, `tmin_minima_etapa_sensible_c` | p10, p50, p90 sobre las ventanas |
 | `estrategias.<id>.estado`, `clave`, `parametros` | `activa` (cota baja > 0), `vigilancia` (cota alta > 0, o `serie_no_resuelve_heladas`: la serie nunca baja del umbral y la estación sí registró días ≤ 0 °C; clave `alert.frost.unresolved`), `sin_alerta` |
-| `provisional`, `avisos` | `provisional: true` en `DEMO-COL-01`; `avisos` lleva `alert.frost.warm_bias` (sesgo e IC de Datos) y `alert.frost.provisional` |
+| `metodo`, `metodo_etiqueta`, `estacion_cercana` | `serie_power` (lo anterior) o `climatologia_estacion` (`combinacion_propia`): si la serie no resuelve heladas y hay estación a ≤ `estacion_max_km` (5) y ≤ `estacion_max_desnivel_m` (100 m) del lote, se usa la frecuencia mensual de días con TMIN ≤ umbral de la estación (`climatologia_mensual`: días con dato, días de helada, frecuencia con IC de Wilson al 95 %, cobertura), cruzada con los días de etapa sensible. Por estrategia: `dias_helada_esperados_temporada` y `probabilidad_al_menos_una_temporada` (`{valor, cota_baja, cota_alta}`), `meses_sensibles_con_helada_observada`, claves `alert.frost.station_activa` o `alert.frost.station_sin_alerta`. Sin estación cercana queda `vigilancia` |
+| `provisional`, `avisos` | `provisional: true` en `DEMO-COL-01`; `avisos` lleva `alert.frost.station_climatology` (estación, distancia, desnivel, días de helada, días con dato y cobertura, leídos del CSV de la estación), `alert.frost.warm_bias` (sesgo e IC de Datos) y `alert.frost.provisional` |
 
 La tarjeta lleva en `vacios` la entrada `card.gap.frost_underestimated` cuando el sesgo es cálido.
 

@@ -5,11 +5,8 @@ version_contrato: 1
 
 lote:
   id: DEMO-USA-01
-  nombre: Lote DEMO Saunders (Nebraska)
-  lat: 41.165
-  lon: -96.477
-  unidad_id: USA-ADM2-52423323B480079355264
-  clima_tipo: templado            # activa las reglas de sucesión de clima templado
+  # Nombre, punto, unidad y clima se leen de lotes_demo.json de Datos (no se escriben a mano)
+  catalogo: ../datos/referencia/lotes/lotes_demo.json
 
 clima:
   # Forzantes de Datos (T-D5, forzantes_gemelo.md v1, SHA256 en datos/referencia/lotes/SHA256SUMS.txt)

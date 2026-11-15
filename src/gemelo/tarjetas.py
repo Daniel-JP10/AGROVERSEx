@@ -138,7 +138,13 @@ def _vacios(e: dict, doc: dict, sens: dict | None) -> list[dict]:
                               [p["referencia"]] if p.get("referencia") else []))
         if not out:
             out.append(_e("card.gap.none_changes"))
-    v = ((doc.get("alertas") or {}).get("helada_etapa_sensible") or {}).get("validacion")
+    hel = (doc.get("alertas") or {}).get("helada_etapa_sensible") or {}
+    u = (hel.get("estrategias", {}).get(e["id"]) or {}).get("umbrales", {})
+    sup = sorted(c for c, x in u.items() if x["etiqueta"] == "SUPUESTO")
+    if sup:
+        out.append(_e("card.gap.frost_threshold_assumed", {"cultivos": ", ".join(sup), "umbral": u[sup[0]]["valor"]},
+                      {"cultivos": sup}))
+    v = hel.get("validacion")
     if v and v["sesgo_c"] > 0:
         out.append(_e("card.gap.frost_underestimated", {"estacion": v["estacion"], "sesgo": v["sesgo_c"],
                                                          "lo": v["sesgo_c_ic95"][0], "hi": v["sesgo_c_ic95"][1]},
