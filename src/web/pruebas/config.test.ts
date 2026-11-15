@@ -10,11 +10,19 @@ describe('tres niveles reales', () => {
       expect(c.propId).toBe('unidad_id')
     }
   })
-  it('rangos de las teselas: 0-6, 2-9, 5-12', () => {
-    expect(NIVELES.map((c) => [c.zoomDesde, c.zoomHasta])).toEqual([[0, 6], [2, 9], [6, 12]])
+  it('rangos de las teselas: 0-6, 2-9, 6-11 (adm2 llega a z10 por D-016, más un nivel de margen)', () => {
+    expect(NIVELES.map((c) => [c.zoomDesde, c.zoomHasta])).toEqual([[0, 6], [2, 9], [6, 11]])
+  })
+  it('adm2 se apaga por opacidad al pasar z11 y la capa se corta un nivel después', () => {
+    const r = capasNivel(NIVELES[2]).find((l) => l.id === 'adm2-relleno') as unknown as { maxzoom: number; paint: Record<string, unknown[]> }
+    expect(r.maxzoom).toBe(12)
+    const op = r.paint['fill-opacity'] as unknown[]
+    const paradas = op.slice(3).filter((_, i) => i % 2 === 0)
+    expect(paradas.slice(-2)).toEqual([10.5, 11])
+    expect(JSON.stringify(op.at(-1))).toContain(',0,0]') // a z11 el relleno vale 0
   })
   it('se solapan sin dejar zooms sin nivel', () => {
-    for (let z = 0; z <= 12; z += 0.25) expect(NIVELES.some((c) => z >= c.zoomDesde && z <= c.zoomHasta)).toBe(true)
+    for (let z = 0; z <= 11; z += 0.25) expect(NIVELES.some((c) => z >= c.zoomDesde && z <= c.zoomHasta)).toBe(true)
     NIVELES.forEach((c, i) => { if (i) expect(c.zoomDesde).toBeLessThanOrEqual(NIVELES[i - 1].zoomHasta) })
   })
   it('nivel de interacción por zoom (color de ADM2 desde 7, D-015)', () => {

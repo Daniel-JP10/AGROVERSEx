@@ -36,11 +36,11 @@ const TESELAS = `${import.meta.env.BASE_URL}teselas/`
 export const NIVELES: NivelConfig[] = [
   { nivel: 0, fuente: 'adm0', archivo: `${TESELAS}adm0.pmtiles`, capaFuente: 'adm0', propId: 'unidad_id', zoomDesde: 0, zoomHasta: 6, fundido: 0, sinHijo: SIN_ADM1 },
   { nivel: 1, fuente: 'adm1', archivo: `${TESELAS}adm1.pmtiles`, capaFuente: 'adm1', propId: 'unidad_id', zoomDesde: 2, zoomHasta: 9, fundido: 0.5, sinHijo: SIN_ADM2 },
-  { nivel: 2, fuente: 'adm2', archivo: `${TESELAS}adm2.pmtiles`, capaFuente: 'adm2', propId: 'unidad_id', zoomDesde: 6, zoomHasta: 12, fundido: 1, sinHijo: [] },
+  { nivel: 2, fuente: 'adm2', archivo: `${TESELAS}adm2.pmtiles`, capaFuente: 'adm2', propId: 'unidad_id', zoomDesde: 6, zoomHasta: 11, fundido: 1, sinHijo: [] }, // teselas hasta z10 (D-016) + un nivel de margen
 ]
 
 /** Zona en disputa: es_disputa = 1 en adm0, adm1 y adm2 (nivel normal, iso3 111..129 o ESH). */
-// Las teselas CGAZ no llevan es_disputa (solo unidad_id, nombre, nivel, iso3, padre_id): se deriva de iso3 (111..129 o ESH)
+// Desde D-016 (9a9be79) las tres capas de teselas traen es_disputa: es la regla. iso3 (111..129 o ESH) queda solo de resguardo para teselas viejas
 export const ISO3_DISPUTA = [...Array.from({ length: 19 }, (_, i) => String(111 + i)), 'ESH']
 export const esDisputa = (p?: { es_disputa?: unknown; iso3?: unknown } | null) =>
   Number(p?.es_disputa) === 1 || ISO3_DISPUTA.includes(String(p?.iso3))
@@ -97,7 +97,8 @@ function paradas(c: NivelConfig): [number, number][] {
   const sig = NIVELES[c.nivel + 1]
   const alEntrar: [number, number][] = c.zoomDesde === 0 ? [[0, 1]] : [[c.zoomDesde, 0], [c.zoomDesde + c.fundido, 1]]
   // El nivel saliente sigue a pleno hasta que el siguiente ya tiene color (D-015: ADM2 se pinta desde z7)
-  const salida: [number, number][] = sig ? [[sig.zoomDesde + sig.fundido - 0.02, 1], [sig.zoomDesde + sig.fundido, 0]] : []
+  // El último nivel se apaga por opacidad al pasar su zoomHasta (las teselas ya no tienen más detalle)
+  const salida: [number, number][] = sig ? [[sig.zoomDesde + sig.fundido - 0.02, 1], [sig.zoomDesde + sig.fundido, 0]] : [[c.zoomHasta - 0.5, 1], [c.zoomHasta, 0]]
   return [...alEntrar, ...salida]
 }
 // Cada parada vale k*tope solo si la unidad cumple la condición (ok pinta color, hueco pinta trama)
@@ -114,7 +115,7 @@ export function capasNivel(c: NivelConfig) {
   const sig = NIVELES[c.nivel + 1]
   const base = { source: c.fuente, 'source-layer': c.capaFuente }
   // +1: MapLibre filtra capas por el zoom entero de la tesela; a z6,5-7 ya usa teselas 7 y un tope en 7 las descartaría. La opacidad ya es 0 pasado el relevo
-  const rango = { ...base, minzoom: c.zoomDesde, maxzoom: sig ? sig.zoomDesde + sig.fundido + 1 : 24 }
+  const rango = { ...base, minzoom: c.zoomDesde, maxzoom: sig ? sig.zoomDesde + sig.fundido + 1 : c.zoomHasta + 1 }
   const rl = { ...base, minzoom: c.zoomDesde, maxzoom: 24 } // los contornos no desaparecen al acercar
   const en = estadoBool
   const sinDisputa = ['!', exprDisputa]
