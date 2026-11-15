@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), leyenda en hoja: variable, unidad, producto, versión y estado de meta.json, trama sin dato, y ponderación con PI-D1 en Technical (plan v2 §3, S1w)
+// asistido por SI: Claude Code (Anthropic), leyenda en hoja: variable, unidad, producto con sus versiones agrupadas, estado de meta.json, trama sin dato, y ponderación con PI-D1 en Technical (plan v2 §3, S1w)
 import { useEffect, useState } from 'react'
 import metaBuild from '../../public/datos/meta.json'
 import { PALETA } from './config'
@@ -33,7 +33,12 @@ export function Leyenda() {
   const { ponderacion, set } = usePonderacion()
   const [, setMeta] = useState(0)
   useEffect(() => { cargarMeta().then(() => setMeta((n) => n + 1)).catch(() => undefined) }, [])
-  const productos = productosDe(capa.id)
+  // Una línea por producto y estado: las versiones del mismo producto (en meta.json) van juntas, separadas por /
+  const productos = Object.values(productosDe(capa.id).reduce<Record<string, ProductoMeta>>((acc, p) => {
+    const k = `${p.producto}|${p.estado}`
+    acc[k] = acc[k] ? { ...acc[k], version: `${acc[k].version}/${p.version}` } : { ...p }
+    return acc
+  }, {}))
   const mundo = hayMundo()
   const pond = mundo ? ponderacion : 'area'
   const linea = lineaPiD1()
