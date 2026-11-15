@@ -25,7 +25,9 @@
 .cabecera-hoja .nav a { color: var(--texto); text-decoration: none; padding: 3px 12px; border: 1px solid transparent; border-radius: 14px 3px 14px 3px; }
 .cabecera-hoja .nav a:hover { border-color: var(--hoja-borde); }
 /* La sección activa va en una hoja resaltada */
-.cabecera-hoja .nav a[aria-current="page"] { color: var(--acento); background: var(--realce); border-color: var(--acento); }
+.cabecera-hoja .nav a[aria-current="page"] { position: relative; color: var(--acento); background: var(--realce); border-color: var(--acento); box-shadow: 0 0 14px rgba(255, 184, 77, 0.25); }
+/* Muesca luminosa bajo la pestaña activa (R1, referencia inicio.png) */
+.cabecera-hoja .nav a[aria-current="page"]::after { content: ''; position: absolute; left: 50%; bottom: -7px; width: 12px; height: 12px; transform: translateX(-50%) rotate(45deg); background: var(--realce); border-right: 1px solid var(--acento); border-bottom: 1px solid var(--acento); box-shadow: 3px 3px 8px rgba(255, 184, 77, 0.25); pointer-events: none; }
 .cabecera-hoja .acciones { position: absolute; right: 64px; top: 10px; display: flex; align-items: center; gap: 6px; }
 .cabecera-hoja .acciones button { min-height: 28px; padding: 2px 8px; border-radius: 8px; border: 1px solid var(--hoja-borde); background: var(--fondo); color: var(--texto); font-size: 12px; }
 .cabecera-hoja .selector { display: flex; }

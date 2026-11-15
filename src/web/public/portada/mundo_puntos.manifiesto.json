@@ -1,0 +1,8 @@
+{
+ "archivo": "mundo_puntos.svg",
+ "sha256": "41540df2cd554a773cc80990138e525ef60f49dfbb7193e46497284e6fcea41e",
+ "puntos": 3724,
+ "paso_grados": 2.0,
+ "fuente": "Natural Earth 1:10m land 5.1.1 (dominio público)",
+ "script": "src/web/herramientas/mapa_puntos.py"
+}

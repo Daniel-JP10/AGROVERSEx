@@ -38,7 +38,10 @@ describe('entrada', () => {
     const h = html()
     expect(h).toMatch(/<img class="figura-nodo" src="\/portada\/globo\.webp" alt=""/)
     expect(h).toMatch(/<img class="figura-nodo" src="\/lotes\/bloque_DEMO-COL-01\.webp" alt=""/)
-    expect((h.match(/<svg[^>]*class="icono-nodo"/g) ?? []).length + (h.match(/<svg aria-hidden="true" focusable="false" class="icono-nodo"/g) ?? []).length).toBeGreaterThanOrEqual(4)
+    // R1: los otros cuatro nodos llevan ilustraciones SVG con volumen, todas decorativas
+    const ilus = h.match(/<svg[^>]*class="ilustracion"[^>]*>/g) ?? []
+    expect(ilus).toHaveLength(4)
+    for (const s of ilus) expect(s).toContain('aria-hidden="true"')
   })
   it('raíces SVG decorativas, una por nodo, y Start a #/tierra', () => {
     const h = html()
@@ -54,8 +57,23 @@ describe('entrada', () => {
   it('las raíces crecen con stroke-dashoffset y no se animan con prefers-reduced-motion', () => {
     const css = readFileSync(new URL('../src/secciones/portada/portada.css', import.meta.url), 'utf8')
     expect(css).toMatch(/@keyframes raiz-crece \{ from \{ stroke-dashoffset: 1; \}/)
-    expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\) \{\s*\.portada \.raiz, \.portada \.hojita \{ animation: none; \}/)
+    // R1: el bloque de movimiento reducido detiene raíces, ramas, hojas, halo y flotación
+    const reducido = css.slice(css.indexOf('@media (prefers-reduced-motion: reduce)'))
+    for (const sel of ['.portada .raiz,', '.portada .rama,', '.portada .hoja-r,', '.portada .halo-luz,', '.portada .nodo .figura,']) expect(reducido.split('animation: none')[0], sel).toContain(sel)
     expect(css).toMatch(/\.portada \.raices \{[^}]*pointer-events: none/)
+  })
+  it('la savia luminosa se dibuja con movimiento y no con prefers-reduced-motion', () => {
+    expect((html().match(/class="savia"/g) ?? []).length).toBe(12)
+    const original = globalThis.matchMedia
+    globalThis.matchMedia = ((q: string) => ({ matches: q.includes('reduce'), addEventListener() {}, removeEventListener() {} })) as unknown as typeof matchMedia
+    try { expect(html()).not.toContain('class="savia"') } finally { globalThis.matchMedia = original }
+  })
+  it('la ilustración de Ciencia dibuja las 36 barras de la fracción HLS válida, leídas del archivo', async () => {
+    const { BARRAS_HLS } = await import('../src/secciones/portada/iconos')
+    const hls = JSON.parse(readFileSync(new URL('../../../datos/lotes/hls_validez_DEMO-USA-01.json', import.meta.url), 'utf8'))
+    expect(BARRAS_HLS).toEqual(Object.keys(hls.meses).sort().map((m) => hls.meses[m].media))
+    expect(BARRAS_HLS).toHaveLength(36)
+    expect(html()).toContain('data-fuente="datos/lotes/hls_validez_DEMO-USA-01.json · meses.*.media"')
   })
   it('textos de la portada: EN y ES con las mismas claves y sin dígitos', () => {
     expect(Object.keys(portada.es).sort()).toEqual(Object.keys(portada.en).sort())
