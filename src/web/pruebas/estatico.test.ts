@@ -116,6 +116,7 @@ describe('el mapa de Colombia con datos reales', () => {
   // HALLAZGO registrado (bitácora de Datos, 19:3x; director 19:5x): la prueba original, con su aserción sin cambiar, falla
   // porque 2026-01 (Late) queda 0,354 por encima de 2015-01 en la escala. Causa PENDIENTE (enero y febrero de 2026 salen
   // 3,8 y 3,0 veces su climatología de Final). it.fails: se vuelve roja cuando la causa se resuelva y obliga a revisarla.
+  // Contraste de S4 (datos/evidencia/S4_hallazgo_lluvia_2026.md): enero, exceso real en dirección (POWER también); febrero, no concluyente.
   it.fails('la lluvia no salta de color entre 2015-01 (Final) y 2026-01 (Late): medianas a menos de 0,3 en la escala', async () => {
     const r = capaPorId('precip').rango
     const a = colores((await cargarCoropleta(2, 'precip', mes('2015-01'))).valores, r), b = colores((await cargarCoropleta(2, 'precip', mes('2026-01'))).valores, r)
