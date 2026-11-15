@@ -1,11 +1,12 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import { t } from '../textos/i18n'
 import type { ClaveTexto } from '../textos/en'
-import { N_MESES, idDeMes } from './valor'
+import { MES_INICIO, N_MESES, idDeMes } from './valor'
 import meta from '../../public/datos/meta.json'
 import type { Matriz } from '../datos/estatico'
 
-export const mesIdAEtiqueta = (mes: number) => `${t(`mes.corto.${(mes % 12) + 1}` as ClaveTexto)}-${2000 + Math.floor(mes / 12)}`
+// el año sale de meta.mes0 (MES_INICIO), no de una cifra escrita a mano
+export const mesIdAEtiqueta = (mes: number) => { const k = MES_INICIO.mes - 1 + mes; return `${t(`mes.corto.${(k % 12) + 1}` as ClaveTexto)}-${MES_INICIO.anio + Math.floor(k / 12)}` }
 
 export interface Producto {
   nombre: string
@@ -27,27 +28,13 @@ export function provisionalDesdeDe(m: Pick<Matriz, 'productos' | 'producto_mes'>
   return i < 0 ? undefined : i
 }
 
-const id = (a: number, m: number) => (a - 2000) * 12 + m - 1
 const rango = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i)
 
-// DEUDA: duplica src/simulacion/productos.py (COBERTURAS, fase 2), sin endpoint de calendario.
-// Si cambia allí, cambia aquí; lo ideal es servirlo desde la API.
+// Solo productos con archivo estático y meta (director, 08:55): lo disponible es lo del manifiesto y meta.json
 export const CALENDARIO: Record<string, Producto> = {
-  smap_l3: { nombre: 'SMAP L3', inicio: id(2015, 3), fin: N_MESES - 1, parciales: [id(2019, 6), id(2019, 7), id(2022, 8), id(2022, 9)] },
-  grace: {
-    nombre: 'GRACE / GRACE-FO', inicio: id(2002, 4), fin: id(2026, 8),
-    huecos: [
-      [2002, 6], [2002, 7], [2003, 6], [2011, 1], [2011, 6], [2012, 5], [2012, 10], [2013, 3], [2013, 8], [2013, 9],
-      [2014, 2], [2014, 7], [2014, 12], [2015, 6], [2015, 10], [2015, 11], [2016, 4], [2016, 9], [2016, 10], [2017, 2],
-      ...rango(7, 12).map((m) => [2017, m]), ...rango(1, 5).map((m) => [2018, m]), [2018, 8], [2018, 9],
-    ].map(([a, m]) => id(a, m)),
-  },
-  power: { nombre: 'NASA POWER', inicio: 0, fin: N_MESES - 1 },
   merra2: { nombre: 'MERRA-2', ...disponible('t2m') },
   gldas: { get nombre() { return t('producto.gldas') }, ...disponible('sm_raiz') },
   mod13: { nombre: 'MODIS MOD13', ...disponible('ndvi') },
-  mod16: { nombre: 'MODIS MOD16', inicio: 0, fin: N_MESES - 1, provisionalDesde: id(2026, 1) },
-  mod11: { nombre: 'MODIS MOD11', inicio: id(2000, 2), fin: N_MESES - 1 },
   imerg: { get nombre() { return t('producto.imerg') }, ...disponible('precip') }, // provisionalDesde: provisionalDesdeDe(matriz)
 }
 

@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { N_MESES } from '../src/tiempo/valor'
 import { crearReproductor } from '../src/tiempo/Reproductor'
 import { CALENDARIO, mesIdAEtiqueta, mesesConHueco } from '../src/tiempo/huecos'
+import { CAPAS } from '../src/datos/capas'
+import meta from '../public/datos/meta.json'
 import { enEspanol } from './idioma_es'
 
 enEspanol() // las aserciones son en español y el idioma por defecto es el inglés (D-039)
@@ -12,17 +14,14 @@ describe('etiquetas y huecos', () => {
     expect(mesIdAEtiqueta(0)).toBe('ene-2000')
     expect(mesIdAEtiqueta(322)).toBe('nov-2026')
   })
-  it('SMAP: feb-2015 (mes 181) sin dato, mar-2015 (182) con dato, hueco jun-2019', () => {
-    const h = mesesConHueco(CALENDARIO.smap_l3)
-    expect(h).toContain(181)
-    expect(h).not.toContain(182)
-    expect(h).not.toContain(233) // jun-2019 es parcial: no se sombrea entero
-    expect(h.filter((m) => m < 182)).toHaveLength(182)
+  // Director 08:55 (O1/C-3): un producto sin meta no se ofrece; lo disponible es lo del manifiesto y meta.json
+  // (sustituye a las pruebas de SMAP y GRACE, que afirmaban cotas escritas a mano de productos sin archivo)
+  it('el calendario solo ofrece productos con meta: los de las capas con archivo estático', () => {
+    expect(Object.keys(CALENDARIO).sort()).toEqual([...new Set(CAPAS.map((c) => c.calendario))].sort())
+    for (const c of CAPAS) expect(Object.keys(meta.variables), c.id).toContain(c.id)
   })
-  it('GRACE: 33 meses sin solución dentro de su rango', () => {
-    const g = CALENDARIO.grace
-    const dentro = mesesConHueco(g).filter((m) => m >= g.inicio && m <= g.fin)
-    expect(dentro).toHaveLength(33)
+  it('la etiqueta del primer mes sale de meta.mes0', () => {
+    expect(mesIdAEtiqueta(0).endsWith(`-${meta.mes0.slice(0, 4)}`)).toBe(true)
   })
   // O1 (D-037): el mes provisional de IMERG ya no está escrito a mano; sale de la matriz (309 = oct-2025, ver tierra_disponibilidad.test.ts)
   it('IMERG: sin sombrear y sin mes provisional fijo en el calendario', () => {
