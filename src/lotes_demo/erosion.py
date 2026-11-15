@@ -231,6 +231,7 @@ def exposicion_erosiva(
 
 def resumir_lotes_demo(raiz_procesados: Path, raiz_crudos: Path, ruta_lotes_json: Path) -> dict:
     # calcula umbrales P90 semanales, pendiente NASADEM, K de Williams y exposición erosiva de ambos lotes DEMO
+    from lotes_demo.forzantes import leer_power_csv
     from lotes_demo.suelo import media_ponderada
 
     lotes_info = {x["lote_id"]: x for x in json.loads(ruta_lotes_json.read_text(encoding="utf-8"))["lotes"]}
@@ -241,6 +242,10 @@ def resumir_lotes_demo(raiz_procesados: Path, raiz_crudos: Path, ruta_lotes_json
     salida = {"version": 1, "rotulo": "combinacion_propia", "lotes": {}}
     for lote_id in ("DEMO-USA-01", "DEMO-COL-01"):
         info = lotes_info[lote_id]
+        # D-033f: POWER es la base de la lluvia de los lotes; IMERG va solo como sensibilidad rotulada
+        pw = leer_power_csv(raiz_procesados / lote_id / "power_diario.csv")
+        f_pw = pd.to_datetime([f"{int(y)}-{int(d)}" for y, d in zip(pw["YEAR"], pw["DOY"])], format="%Y-%j")
+        p_pw = np.asarray(pw["PRECTOTCORR"], dtype=float)
         im = pd.read_csv(raiz_procesados / lote_id / "imerg_diario.csv", parse_dates=["FECHA_UTC"])
         rest = json.loads((raiz_procesados / lote_id / "soilgrids_rest.json").read_text(encoding="utf-8"))
         capas = {c["name"]: c for c in rest["properties"]["layers"]}
@@ -255,36 +260,25 @@ def resumir_lotes_demo(raiz_procesados: Path, raiz_crudos: Path, ruta_lotes_json
             info["lat"],
             info["lon"],
         )
-        hls = json.loads((raiz_procesados / lote_id / "hls_validez.json").read_text(encoding="utf-8"))
-        f_valida_mes = {}
-        for m in range(1, 13):
-            vals = [v["media"] for k, v in hls["meses"].items() if k.endswith(f"-{m:02d}") and v.get("media") is not None]
-            f_valida_mes[m] = round(float(np.mean(vals)), 4) if vals else 0.0
-        # cota potencial (100 % descubierto) y rango acotado por visibilidad satelital HLS (Fmask)
-        fechas = pd.to_datetime(im["FECHA_UTC"])
-        p = im["IMERG_PRECIP_MM_DIA"].to_numpy(dtype=float)
         pot = exposicion_erosiva(
-            p,
-            fechas,
-            desnudo=np.ones(len(p)),
+            p_pw,
+            f_pw,
+            desnudo=np.ones(len(p_pw)),
             pendiente_m_m=relieve["pendiente_media_m_m"],
             k_erodabilidad=k_williams,
         )
-        cota_baja_hls = np.array([f_valida_mes[int(m)] for m in fechas.dt.month], dtype=float)
-        cota_alta_hls = np.ones(len(p), dtype=float)
-        acotada_hls = exposicion_erosiva(
-            p,
-            fechas,
-            desnudo=0.5 * (cota_baja_hls + cota_alta_hls),
+        p_im = im["IMERG_PRECIP_MM_DIA"].to_numpy(dtype=float)
+        sens_imerg = exposicion_erosiva(
+            p_im,
+            pd.to_datetime(im["FECHA_UTC"]),
+            desnudo=np.ones(len(p_im)),
             pendiente_m_m=relieve["pendiente_media_m_m"],
             k_erodabilidad=k_williams,
-            desnudo_cota_baja=cota_baja_hls,
-            desnudo_cota_alta=cota_alta_hls,
-            umbrales_p90=pot["umbrales_p90_semanal_mm_dia"],
         )
         salida["lotes"][lote_id] = dict(
             lote_id=lote_id,
-            periodo=[str(im["FECHA_UTC"].min())[:10], str(im["FECHA_UTC"].max())[:10]],
+            periodo=[str(f_pw.min())[:10], str(f_pw.max())[:10]],
+            fuente_lluvia="NASA POWER diario (PRECTOTCORR), base de los lotes (D-033f)",
             relieve_nasadem_30m=relieve,
             erodabilidad_k_williams_0_30cm=dict(
                 valor=round(k_williams, 6),
@@ -298,9 +292,14 @@ def resumir_lotes_demo(raiz_procesados: Path, raiz_crudos: Path, ruta_lotes_json
                     soc_g_kg=round(soc_30, 2),
                 ),
             ),
-            fraccion_hls_valida_media_mensual=f_valida_mes,
             exposicion_potencial_suelo_desnudo_100pct=pot,
-            exposicion_acotada_por_visibilidad_hls=acotada_hls,
+            sensibilidad_imerg=dict(
+                rotulo="sensibilidad a la fuente de lluvia: IMERG Final V07 diario, día UTC; sobrestima frente a la estación en Ipiales (comparacion_power_imerg.json)",
+                exposicion_potencial_suelo_desnudo_100pct=sens_imerg,
+            ),
+            # PENDIENTE: la exposición con suelo desnudo real necesita el reloj de suelo desnudo de T-D6 (cota con cobertura en los huecos).
+            # La visibilidad HLS no es suelo desnudo, así que ya no se usa como cota (director, 20:50).
+            exposicion_con_suelo_desnudo_real="PENDIENTE",
         )
     return salida
 
