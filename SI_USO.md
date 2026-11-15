@@ -248,7 +248,7 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/web/pruebas/paneles_unidad.test.ts` | Prueba de que los paneles muestran error ante una unidad sin conversión | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/zona_disputa.test.ts` y cambios de disputa en `globo/`, `datos/`, `paneles/` | Zonas en disputa con es_disputa = 1 en las tres capas y clave de texto en vez de país (decisión 3) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/globo/fondos.ts`, `src/web/pruebas/fondos.test.ts`, `src/web/pruebas/e2e/captura.mjs` | Fondo del globo con NASA GIBS (D-020) y pruebas de atribución | 2026-11-14 |
-| Claude Code (Anthropic) | `src/mapa_estatico/__init__.py`, `src/mapa_estatico/construir.py`, `pruebas/mapa/test_construir.py` | Conversión de series mensuales a matrices estáticas comprimidas, copia de lotes_demo.json y manifiesto con sha256 (T-D9, D-027) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/mapa_estatico/__init__.py`, `src/mapa_estatico/construir.py`, `pruebas/mapa/test_construir.py` | Conversión de series mensuales a matrices estáticas comprimidas, copia de lotes_demo.json y manifiesto con sha256 (T-D9, D-027); despliegue --desplegar que copia teselas e índice y falla claro sin datos (S2) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/comun/rutas.ts`, `src/web/src/datos/estatico.ts`, `src/web/pruebas/estatico.test.ts` | Lectura de archivos estáticos reales en el globo y paneles sin servidor, y pruebas con datos reales de Colombia (T-D9) | 2026-11-14 |
 | Claude Code (Anthropic) | `contratos/web_datos.md` | Contrato v0 de archivos estáticos para el Mapa y Web con tamaños y sumas SHA-256 (T-D9, T-D7 Parte C) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/rutas_base.test.ts` | Prueba de que teselas e índice respetan la base de publicación (BASE_URL) | 2026-11-14 |
@@ -400,6 +400,13 @@ Notas de procedencia sin generación nueva por este equipo de Gemelo:
 | Claude Code (Anthropic) | `pruebas/test_registros.py` | Prueba de filas de tabla fuera de una tabla con encabezado en los registros (S4) | 2026-11-15 |
 | Claude Code (Anthropic) | `datos/evidencia/S4_registros_red.py` | RED de la prueba de registros (S4) | 2026-11-15 |
 | Claude Code (Anthropic) | `datos/evidencia/S4_grafo_importaciones.py` | Grafo estático de importaciones para la decisión i (S4) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/tierra/aplicarRuta.ts` | Aplica unidad, variable y mes de la ruta al globo (S2) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/tierra_ruta.test.ts` | Prueba de aplicarParams de la ruta de Tierra (S2) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/tierra_disponibilidad.test.ts` | Prueba de N_MESES y disponibilidad desde meta.json y el manifiesto (S2) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/build_servidor.mjs` | Servidor estático con Range para probar dist/ sin servidor de desarrollo (S2) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/playwright.estatico.config.ts` | Configuración del E2E sobre el build estático (S2) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/build_tierra.spec.ts` | E2E del build estático: búsqueda, ruta y cero llamadas a /api/ (S2) | 2026-11-15 |
+| Claude Code (Anthropic) | `pruebas/mapa/test_despliegue.py` | Prueba de que el despliegue falla claro sin AGROVERSEX_DATOS, teselas o índice (S2) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registros.ts` | Filtro de filas en uso de los registros de Fuentes | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registrosPlugin.ts` | Plugin de Vite que filtra los registros al compilar | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/AlertaHelada.tsx` | Alerta de helada del gemelo con sus avisos | 2026-11-14 |
