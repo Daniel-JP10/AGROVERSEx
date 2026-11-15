@@ -25,7 +25,9 @@
 .cabecera-hoja .nav a { color: var(--texto); text-decoration: none; padding: 3px 12px; border: 1px solid transparent; border-radius: 14px 3px 14px 3px; }
 .cabecera-hoja .nav a:hover { border-color: var(--hoja-borde); }
 /* La sección activa va en una hoja resaltada */
-.cabecera-hoja .nav a[aria-current="page"] { color: var(--acento); background: var(--realce); border-color: var(--acento); }
+.cabecera-hoja .nav a[aria-current="page"] { position: relative; color: var(--acento); background: var(--realce); border-color: var(--acento); box-shadow: 0 0 14px rgba(255, 184, 77, 0.25); }
+/* Muesca luminosa bajo la pestaña activa (R1, referencia inicio.png) */
+.cabecera-hoja .nav a[aria-current="page"]::after { content: ''; position: absolute; left: 50%; bottom: -7px; width: 12px; height: 12px; transform: translateX(-50%) rotate(45deg); background: var(--realce); border-right: 1px solid var(--acento); border-bottom: 1px solid var(--acento); box-shadow: 3px 3px 8px rgba(255, 184, 77, 0.25); pointer-events: none; }
 .cabecera-hoja .acciones { position: absolute; right: 64px; top: 10px; display: flex; align-items: center; gap: 6px; }
 .cabecera-hoja .acciones button { min-height: 28px; padding: 2px 8px; border-radius: 8px; border: 1px solid var(--hoja-borde); background: var(--fondo); color: var(--texto); font-size: 12px; }
 .cabecera-hoja .selector { display: flex; }
@@ -74,3 +76,37 @@
 @media (max-width: 480px) { .tarjeta-hoja dl > div { grid-template-columns: 1fr; gap: 2px; } }
 .columnas-fuentes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 16px; align-items: start; margin-top: 12px; }
 .columnas-fuentes .tarjeta-hoja h3 { margin: 14px 0 6px; font-size: 15px; }
+
+/* R1 · director 16:55: Ciencia, Datos abiertos y Fuentes con detalle visual (decoración, sin datos nuevos) */
+/* Fondo de la sección: mapa de puntos tenue, viñeta verde y hojas en las esquinas (todo en capas de fondo, sin eventos) */
+main.seccion.ciencia, main.seccion.datos, main.seccion.fuentes { position: relative; isolation: isolate;
+  background:
+    radial-gradient(ellipse 60% 40% at 15% 0%, rgba(111, 227, 154, 0.10), transparent 70%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, rgba(255, 184, 77, 0.05), transparent 70%),
+    var(--panel); }
+main.seccion.ciencia::before, main.seccion.datos::before, main.seccion.fuentes::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 260px; z-index: -1; pointer-events: none;
+  background: url("/portada/mundo_puntos.svg") center 30% / 1100px auto no-repeat; opacity: 0.12;
+  -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent); }
+main.seccion.ciencia::after, main.seccion.datos::after, main.seccion.fuentes::after { content: ''; position: absolute; top: 6px; right: 10px; width: 220px; height: 120px; z-index: -1; pointer-events: none; opacity: 0.5;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 120'><path d='M220 20 C 160 24 110 40 40 90' fill='none' stroke='%233f9c63' stroke-width='2'/><g fill='%234fbf7a'><path d='M170 26 c 6 -14 22 -18 30 -12 c -8 12 -20 16 -30 12z'/><path d='M140 34 c -2 -16 10 -26 20 -24 c -2 14 -10 22 -20 24z'/><path d='M120 46 c 8 12 6 26 -2 30 c -6 -12 -6 -22 2 -30z'/><path d='M90 58 c -4 -14 6 -26 16 -26 c 0 14 -8 22 -16 26z'/><path d='M70 72 c 10 8 12 22 6 28 c -8 -8 -10 -18 -6 -28z'/></g></svg>") no-repeat right top / contain; }
+/* Título de la sección con subrayado luminoso */
+main.seccion.ciencia > h1, main.seccion.datos > h1, main.seccion.fuentes > h1 { position: relative; display: inline-block; padding-bottom: 8px; font-size: 26px; letter-spacing: 0.01em; text-shadow: 0 0 18px rgba(111, 227, 154, 0.25); }
+main.seccion.ciencia > h1::after, main.seccion.datos > h1::after, main.seccion.fuentes > h1::after { content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--acento), #6fe39a 40%, transparent); box-shadow: 0 0 10px rgba(111, 227, 154, 0.5); }
+
+/* Tarjetas con relieve: degradado interior, borde con brillo, hoja junto al título y nervadura en la esquina */
+.tarjeta-hoja { overflow: hidden; background: linear-gradient(160deg, color-mix(in srgb, var(--hoja) 88%, #6fe39a 12%) 0%, var(--hoja) 38%, color-mix(in srgb, var(--hoja) 92%, #000 8%) 100%);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(201, 255, 216, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  animation: tarjeta-entra 0.6s ease-out both; }
+.tarjetas > .tarjeta-hoja:nth-child(2), .columnas-fuentes > .tarjeta-hoja:nth-child(2) { animation-delay: 0.08s; }
+.tarjetas > .tarjeta-hoja:nth-child(3), .columnas-fuentes > .tarjeta-hoja:nth-child(3) { animation-delay: 0.16s; }
+.tarjetas > .tarjeta-hoja:nth-child(n + 4) { animation-delay: 0.24s; }
+.tarjeta-hoja::after { content: ''; position: absolute; right: -16px; bottom: -16px; width: 88px; height: 88px; pointer-events: none; opacity: 0.12;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M100 100 C 70 60 40 40 6 30 C 30 70 60 90 100 100z' fill='%236fe39a'/><path d='M100 100 C 70 70 40 48 6 30 M60 70 C 56 58 52 50 46 44 M78 84 C 70 76 66 70 60 64 M40 56 C 34 50 28 46 20 42' fill='none' stroke='%230b1a13' stroke-width='1.5'/></svg>") no-repeat right bottom / contain; }
+.tarjeta-hoja > h2 { position: relative; padding-left: 22px; }
+.tarjeta-hoja > h2::before { content: ''; position: absolute; left: 0; top: 0.2em; width: 15px; height: 15px; border-radius: 0 70% 0 70%; background: linear-gradient(135deg, #c7ffd8, #2f8a52); box-shadow: 0 0 8px rgba(111, 227, 154, 0.55); }
+.tarjeta-hoja:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--acento) 60%, var(--hoja-borde)); box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45), 0 0 18px rgba(111, 227, 154, 0.14), inset 0 1px 0 rgba(201, 255, 216, 0.1); }
+.tarjeta-hoja dl > div { border-top: 1px solid transparent; border-image: linear-gradient(90deg, var(--hoja-borde), color-mix(in srgb, var(--hoja-borde) 30%, transparent)) 1; }
+.etiqueta-evidencia { background: rgba(255, 184, 77, 0.08); box-shadow: 0 0 10px rgba(255, 184, 77, 0.15); }
+@keyframes tarjeta-entra { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .tarjeta-hoja { animation: none; transition: none; } .tarjeta-hoja:hover { transform: none; } }
+@media (max-width: 760px) { main.seccion.ciencia::after, main.seccion.datos::after, main.seccion.fuentes::after { width: 130px; height: 70px; opacity: 0.35; } }
