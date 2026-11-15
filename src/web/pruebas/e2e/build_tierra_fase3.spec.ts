@@ -104,3 +104,34 @@ test('presupuesto: primer relleno pintado del globo ≤ 6 s con red lenta (9 Mbi
   console.log(`primer relleno pintado: ${Math.round(valor)} ms`)
   expect(valor).toBeLessThanOrEqual(6000)
 })
+
+// Contraste AA medido sobre el fondo real: se oculta el texto (y la muestra decorativa), se captura su caja y se toma el píxel más desfavorable
+const TEXTOS = ['.hoja-lotes h2', '.hoja-lotes p', '.hoja-lotes button', '.leyenda b', '.leyenda dt', '.leyenda dd', '.leyenda .hueco', '.leyenda .extremos', '.hoja-tiempo .ext', '.hoja-tiempo [data-testid="mes"]']
+test('contraste AA de los textos de las hojas sobre el fondo real', async ({ page }) => {
+  await page.goto('/#/tierra')
+  await expect(page.locator('.hoja-lotes button')).toHaveCount(2, { timeout: 60_000 })
+  await page.waitForTimeout(2000)
+  const fallos: string[] = []
+  for (const sel of TEXTOS) {
+    for (const el of await page.locator(sel).all()) {
+      const { color, grande } = await el.evaluate((e) => { const s = getComputedStyle(e); return { color: s.color, grande: parseFloat(s.fontSize) >= 24 || (parseFloat(s.fontSize) >= 18.66 && Number(s.fontWeight) >= 700) } })
+      await el.evaluate((e) => { (e as HTMLElement).style.setProperty('color', 'transparent', 'important'); e.querySelectorAll('*').forEach((h) => (h as HTMLElement).style.setProperty('color', 'transparent', 'important')); e.querySelectorAll('[aria-hidden="true"]').forEach((h) => (h as HTMLElement).style.setProperty('visibility', 'hidden')) })
+      const png = await el.screenshot()
+      await el.evaluate((e) => { (e as HTMLElement).style.removeProperty('color'); e.querySelectorAll('*').forEach((h) => { (h as HTMLElement).style.removeProperty('color'); (h as HTMLElement).style.removeProperty('visibility') }) })
+      const razon = await page.evaluate(async ({ b64, color }) => {
+        const lum = (r: number, g: number, b: number) => { const f = (c: number) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4 }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b) }
+        const [r, g, b] = color.match(/[\d.]+/g)!.map(Number)
+        const lt = lum(r, g, b)
+        const img = new Image(); img.src = `data:image/png;base64,${b64}`; await img.decode()
+        const c = document.createElement('canvas'); c.width = img.width; c.height = img.height
+        const x = c.getContext('2d')!; x.drawImage(img, 0, 0)
+        const d = x.getImageData(0, 0, c.width, c.height).data
+        let peor = Infinity
+        for (let i = 0; i < d.length; i += 4) { const lf = lum(d[i], d[i + 1], d[i + 2]); const q = (Math.max(lt, lf) + 0.05) / (Math.min(lt, lf) + 0.05); if (q < peor) peor = q }
+        return peor
+      }, { b64: png.toString('base64'), color })
+      if (razon < (grande ? 3 : 4.5)) fallos.push(`${sel}: ${razon.toFixed(2)}`)
+    }
+  }
+  expect(fallos).toEqual([])
+})

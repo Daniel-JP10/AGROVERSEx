@@ -48,5 +48,16 @@
   .tierra .hoja-lotes { top: 60px; right: auto; left: 12px; width: calc(100% - 24px); grid-template-columns: 1fr 1fr; }
   .tierra .hoja-lotes h2, .tierra .hoja-lotes p, .tierra .hoja-lotes [role="alert"] { grid-column: 1 / -1; }
   .tierra .hoja-lotes p { display: none; }
-  .tierra .controles { bottom: auto; top: 220px; }
+  .tierra .riel { top: 178px; left: 12px; transform: none; flex-direction: row; }
+  .tierra .riel .etq { display: none; }
+  .tierra .controles { bottom: auto; top: 246px; right: auto; left: 12px; }
+  .tierra .leyenda { bottom: 196px; }
+}
+
+/* Atribución de MapLibre (GIBS, geoBoundaries) arriba a la derecha: la hoja de tiempo no la tapa */
+.tierra .maplibregl-ctrl-bottom-right { top: 8px; bottom: auto; max-width: min(520px, 60%); }
+.tierra .maplibregl-ctrl-attrib { font-size: 11px; }
+@media (max-width: 900px) {
+  .tierra .maplibregl-ctrl-bottom-right { top: auto; bottom: 126px; left: 8px; right: 8px; max-width: none; z-index: 5; }
+  .tierra .maplibregl-ctrl-attrib { font-size: 10px; line-height: 1.25; }
 }
