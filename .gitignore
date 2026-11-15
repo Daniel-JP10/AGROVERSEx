@@ -18,3 +18,6 @@ src/web/test-results/
 herramientas/bin/
 .dodsrc
 .urs_cookies
+
+# D-033e: arreglos públicos del mundo, se construyen al desplegar con src/mapa_estatico/construir.py
+src/web/public/datos/unidades_geo.json.gz
