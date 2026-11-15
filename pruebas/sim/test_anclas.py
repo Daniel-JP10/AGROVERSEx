@@ -26,6 +26,7 @@ BASE = Path(os.environ.get("AGROVERSEX_ANCLAS_SQLITE", PROC / "tmp_t12" / "agrov
 GEO = Path(os.environ.get("AGROVERSEX_GEO_SQLITE", PROC / "geo.sqlite"))
 PMTILES = Path(__file__).resolve().parents[2] / "herramientas" / "bin" / "pmtiles.exe"
 DESFASES: dict = {}
+SIN_BASE_SIMULADA = pytest.mark.skip(reason="depende de la base simulada del generador (agroversex_muestra.sqlite); sale con el generador simulado, decisión i")
 
 # 22 sitios NASA POWER 2001-2025 (INV-CLI §8.1): nombre, lat, lon, elevación de celda (m), T anual °C, P anual mm
 SITIOS = [
@@ -86,6 +87,7 @@ def serie(con, col, unidad_ids=None, nivel=None):
 
 # --- temperatura global ---
 
+@SIN_BASE_SIMULADA
 def test_temperatura_contra_estaciones(con):
     # LIMITACIÓN: el repositorio solo trae GISTEMP LOTI anual (gistemp.yaml, INV-CLI §2.3), no GLB.Ts.csv;
     # la correlación usa LOTI y la pendiente se compara con la de solo estaciones (+0,326, INFERENCIA)
@@ -224,6 +226,7 @@ def test_normales_ideam(sitios):
 
 # --- eventos ---
 
+@SIN_BASE_SIMULADA
 def test_eventos_100_por_ciento(con):
     ev = pd.read_sql("SELECT id, tipo, inicio, fin FROM evento WHERE etiqueta='FUENTE'", con).set_index("id")
     eu = pd.read_sql("SELECT evento_id, unidad_id, intensidad FROM evento_unidad", con)
@@ -273,6 +276,7 @@ def test_grace_rodell(region):
 
 # --- lotes ---
 
+@SIN_BASE_SIMULADA
 def test_ndvi_cultivo_lotes(con):
     # Rangos de pico (INV-VEG §8): maíz 0,78-0,86 y soya 0,87-0,91
     rangos = {"maiz": (0.78, 0.86), "soya": (0.87, 0.91)}
@@ -292,6 +296,7 @@ def test_ndvi_cultivo_lotes(con):
 
 # --- agua y ENSO ---
 
+@SIN_BASE_SIMULADA
 def test_balance_hidrico_tolerancia(con):
     # P - ET - dS sale de las series mensuales: la escorrentía no se guarda, así que el cierre se exige como
     # residuo no negativo dentro del 15 % del flujo anual (SUPUESTO §5.4, no puede haber escorrentía negativa)
@@ -314,6 +319,7 @@ def test_balance_hidrico_tolerancia(con):
     assert (resid >= -0.15).all(), f"{int((resid < -0.15).sum())} unidades con residuo < -15 %"
 
 
+@SIN_BASE_SIMULADA
 def test_enso_real_literal(con):
     # ASO 2026 (mes central sep-2026, mes_id 320): ONI +2,46 y RONI +1,97 (INV-CLI §1.3-§1.4, NOAA CPC)
     f = ref.cargar_enso()

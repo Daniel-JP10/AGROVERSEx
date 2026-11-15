@@ -7,7 +7,7 @@ from simulacion.config import GEO_SQLITE
 
 # se corren en WSL, sobre la geo.sqlite con estaticos ya calculados
 pytestmark = [pytest.mark.datos_reales,
-              pytest.mark.skipif(not GEO_SQLITE.exists(), reason="falta geo.sqlite")]
+              pytest.mark.skip(reason="pendiente de T-D4: se reescribe contra los estáticos que T-D4 regenera")]
 
 
 @pytest.fixture(scope="module")
