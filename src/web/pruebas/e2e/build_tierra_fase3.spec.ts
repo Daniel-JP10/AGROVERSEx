@@ -141,6 +141,9 @@ const TEXTOS = ['.hoja-lotes h2', '.hoja-lotes p', '.hoja-lotes button', '.leyen
 test('contraste AA de los textos de las hojas sobre el fondo real', async ({ page }) => {
   await page.goto('/#/tierra')
   await expect(page.locator('.hoja-lotes button')).toHaveCount(2, { timeout: 60_000 })
+  // La leyenda arranca plegada: se abre para medir también sus textos (dt, dd, hueco), no para saltarlos
+  const det = page.locator('.leyenda > details')
+  if (await det.count()) await det.evaluate((e) => { (e as HTMLDetailsElement).open = true })
   await page.waitForTimeout(2000)
   const fallos: string[] = []
   for (const sel of TEXTOS) {

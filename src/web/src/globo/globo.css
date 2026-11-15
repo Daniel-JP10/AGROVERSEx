@@ -6,3 +6,5 @@
 .globo .aviso-red { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); z-index: 4; font-size: 11px; padding: 3px 8px; border-radius: 6px; background: #000a; color: #e8d9a8; pointer-events: none; }
 /* S1w: en móvil la leyenda de Technical (ponderación, PI-D1, limitaciones) no sube bajo la búsqueda ni los lotes; se desplaza dentro */
 @media (max-width: 600px) { .globo .leyenda { max-height: max(140px, calc(100dvh - 650px)); overflow-y: auto; } }
+/* Orquestador: abierta, la leyenda no sube hasta los controles del mapa (bottom 200 px en tierra.css); el resto se desplaza dentro */
+@media (min-width: 601px) { .globo .leyenda { max-height: 180px; overflow-y: auto; } }

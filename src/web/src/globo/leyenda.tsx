@@ -32,7 +32,6 @@ export function Leyenda() {
   const modo = useModo((s) => s.modo)
   const { ponderacion, set } = usePonderacion()
   const [, setMeta] = useState(0)
-  const [movil] = useState(() => typeof matchMedia === 'function' && matchMedia('(max-width: 760px)').matches)
   useEffect(() => { cargarMeta().then(() => setMeta((n) => n + 1)).catch(() => undefined) }, [])
   // Una línea por producto y estado: las versiones del mismo producto (en meta.json) van juntas, separadas por /
   const productos = Object.values(productosDe(capa.id).reduce<Record<string, ProductoMeta>>((acc, p) => {
@@ -49,8 +48,8 @@ export function Leyenda() {
       <b>{capa.nombre}</b>
       <div className="barra" style={{ background: grad }} />
       <div className="extremos"><span>{capa.rango[0]}</span><span>{capa.unidad}</span><span>{capa.rango[1]}+</span></div>
-      {/* Plegable (director 16:54): la escala queda siempre; lo demás, dentro. A 760 px o menos arranca plegada */}
-      <details open={!movil}>
+      {/* Plegable (director 16:54): la escala queda siempre; lo demás, dentro. Arranca plegada en todo tamaño: en PC abierta tapaba los controles del mapa */}
+      <details>
       <summary>{t('tierra.leyenda.detalles')}</summary>
       <dl>
         <dt>{t('tierra.leyenda.unidad')}</dt><dd>{capa.unidad}</dd>
