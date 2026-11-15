@@ -11,6 +11,7 @@ import { Compromisos } from '../src/secciones/rotaciones/Compromisos'
 import { FrentePareto } from '../src/secciones/rotaciones/FrentePareto'
 import { VistaRotaciones } from '../src/secciones/rotaciones/Rotaciones'
 import { t } from '../src/textos/i18n'
+import { useModo } from '../src/textos/modos'
 import { enEspanol } from './idioma_es'
 enEspanol()
 
@@ -134,7 +135,15 @@ describe('avisos, compromisos y Pareto', () => {
   it('el primer aviso del gemelo siempre se ve', () => {
     expect(renderToStaticMarkup(h(Avisos, { avisos: doc.avisos }))).toContain(doc.avisos[0])
   })
-  it('compromisos presenta los textos del gemelo y nunca dice óptima', () => {
+  it('compromisos: medias sin rango, solo en Technical; al agricultor solo la nota y ninguna cifra', () => {
+    useModo.setState({ modo: 'agricultor' })
+    const a = renderToStaticMarkup(h(Compromisos, { frente: doc.frente, compromisos: doc.compromisos }))
+    expect(a).toContain(t('rotaciones.compromisos_tecnico'))
+    expect(a.replace(/<[^>]+>/g, ' ')).not.toMatch(/\d/)
+    useModo.setState({ modo: 'tecnico' })
+  })
+  it('compromisos presenta los textos del gemelo y nunca dice óptima (Technical)', () => {
+    useModo.setState({ modo: 'tecnico' })
     const s = renderToStaticMarkup(h(Compromisos, { frente: doc.frente, compromisos: doc.compromisos }))
     expect(s).toContain(doc.compromisos.explicacion[0])
     expect(s).toContain(doc.frente[0].frente_a_linea_base!.gana[0].replace('>', '&gt;')) // el HTML escapa ">"
@@ -162,5 +171,17 @@ describe('sin lote', () => {
     const s = vista({ estado: 'sin_dato' })
     expect(s).toContain(t('aviso.sin_dato'))
     expect(s).not.toContain('data-testid="estrategia"')
+  })
+})
+
+// H-F3-4: card.benefit.delta trae una diferencia de medianas con el p10 y p90 ABSOLUTOS de la estrategia
+describe('beneficio frente a la línea base', () => {
+  it('rotula el delta como diferencia de medianas y el rango como el de la estrategia sola', async () => {
+    const { entradaTexto } = await import('../src/secciones/rotaciones/ComparadorEstrategias')
+    const cat = { 'card.benefit.delta': '{indicador}: {delta:+.3g} {unidad} against the baseline (p50; p10 {p10:.3g}, p90 {p90:.3g})', 'ind.x': 'Relative yield', 'unit.x': 'dimensionless' }
+    const s = entradaTexto(cat, { clave: 'card.benefit.delta', parametros: { indicador: { clave: 'ind.x' }, delta: 0.0163, unidad: { clave: 'unit.x' }, p10: 0.382, p90: 0.834 } })
+    expect(s).toContain('diferencia entre las dos medianas')
+    expect(s).toContain('va de p10 0.382 a p90 0.834')
+    expect(s).not.toContain('(p50; p10')
   })
 })

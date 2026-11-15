@@ -6,6 +6,10 @@ import { Banda } from './Banda'
 import { SECCIONES_TARJETA, type EstrategiaGemelo, type SeccionTarjeta, type Tarjeta as TTarjeta } from './gemelo'
 import { traducir, type Catalogo } from './textosGemelo'
 
+// card.benefit.delta del gemelo pone el p10 y p90 ABSOLUTOS de la estrategia junto a una diferencia de medianas: se rotula aparte
+export const entradaTexto = (cat: Catalogo, x: { clave: string; parametros?: Record<string, unknown> }) =>
+  x.clave === 'card.benefit.delta' ? traducir({ ...cat, [x.clave]: t('rotaciones.beneficio_delta') }, x.clave, x.parametros) : traducir(cat, x.clave, x.parametros)
+
 // data-bloque conserva los nombres cortos que usan las pruebas y el recorrido
 const BLOQUE: Record<SeccionTarjeta, [string, ClaveTexto]> = {
   por_que: ['porque', 'tarjeta.porque'], evidencia: ['evidencia', 'tarjeta.evidencia'], beneficios: ['beneficios', 'tarjeta.beneficios'], vacios: ['vacios', 'tarjeta.vacios'], riesgos: ['riesgos', 'tarjeta.riesgos'],
@@ -46,7 +50,7 @@ function Tarjeta({ e, base, tarjeta, catalogo, faltan }: P) {
           <section key={s} data-bloque={b}>
             <h4>{tarjeta?.secciones_claves?.[s] && catalogo ? traducir(catalogo, tarjeta.secciones_claves[s]) : t(clave)}</h4>
             {entradas?.length
-              ? <ul>{entradas.map((x, n) => <li key={n} data-texto-gemelo="">{traducir(catalogo!, x.clave, x.parametros)}</li>)}</ul>
+              ? <ul>{entradas.map((x, n) => <li key={n} data-texto-gemelo="">{entradaTexto(catalogo!, x)}</li>)}</ul>
               : <p className="sin-dato">{t('rotaciones.pendiente_gemelo')}</p>}
           </section>
         )

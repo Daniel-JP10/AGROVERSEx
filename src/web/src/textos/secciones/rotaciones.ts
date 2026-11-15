@@ -27,6 +27,8 @@ export const en = {
   'rotaciones.nc_lim_muestras': 'With {n} parameter samples, p10 and p90 are the same as the minimum and maximum.',
   'rotaciones.metodo': 'Method: FAO-56 Penman-Monteith reference evapotranspiration with NASA POWER daily climate.',
   'rotaciones.lote_demo': 'DEMO field',
+  'rotaciones.beneficio_delta': '{indicador}: {delta:+.3g} {unidad} against the baseline, as the difference between the two medians. This strategy on its own ranges from p10 {p10:.3g} to p90 {p90:.3g}.',
+  'rotaciones.compromisos_tecnico': 'These are ensemble means of the optimisation objectives, without a range. They are shown in Technical mode.',
 } as const
 export const es: Record<keyof typeof en, string> = {
   'rotaciones.fichas': 'Secuencia de la rotación',
@@ -53,4 +55,6 @@ export const es: Record<keyof typeof en, string> = {
   'rotaciones.nc_lim_muestras': 'Con {n} muestras de parámetros, p10 y p90 equivalen al mínimo y al máximo.',
   'rotaciones.metodo': 'Método: evapotranspiración de referencia FAO-56 Penman-Monteith con clima diario de NASA POWER.',
   'rotaciones.lote_demo': 'Lote DEMO',
+  'rotaciones.beneficio_delta': '{indicador}: {delta:+.3g} {unidad} frente a la línea base, como diferencia entre las dos medianas. Esta estrategia sola va de p10 {p10:.3g} a p90 {p90:.3g}.',
+  'rotaciones.compromisos_tecnico': 'Son medias del ensamble de los objetivos de la optimización, sin rango. Se muestran en el modo Técnico.',
 }
