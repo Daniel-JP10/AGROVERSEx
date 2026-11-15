@@ -62,7 +62,7 @@ def test_meta_paises_productos_en_ingles_y_conteo(tmp_path):
     assert meta["paises"] == ["ATA", "KEN"] and meta["paises_adm2"] == ["KEN", "USA"] and meta["ponderacion_defecto"] == "cultivo"
     nombres = [p["producto"] for p in meta["variables"]["precip"]["productos"]]
     assert "GPM IMERG Final Precipitation L3 1 month 0.1 degree x 0.1 degree (GPM_3IMERGM)" in nombres
-    assert meta["variables"]["t2m"]["productos"][0]["producto"] == "MERRA-2 tavgM_2d_slv_Nx: 2d, Monthly mean, Single-Level Diagnostics (M2TMNXSLV, T2M)"
+    assert meta["variables"]["t2m"]["productos"][0]["producto"] == PRODUCTO_EN["MERRA-2 reanálisis, M2TMNXSLV (T2M)"]
     u = meta["unidades_publicadas"]["precip"]
     assert u["area"]["2"] == {"ids": 3, "con_valor": 3, "sin_cultivo": 0, "archivos": 2}
     assert u["cultivo"]["0"] == {"ids": 2, "con_valor": 1, "sin_cultivo": 1, "archivos": 1}
@@ -94,3 +94,13 @@ def test_traducir_meta_y_manifiesto(tmp_path):
     m = json.loads((tmp_path / "manifiesto.json").read_text(encoding="utf-8"))
     b = (tmp_path / "meta.json").read_bytes()
     assert m["archivos"]["meta.json"] == {"bytes": len(b), "sha256": hashlib.sha256(b).hexdigest()} and m["total_bytes"] == len(b) + 5
+
+
+def test_producto_en_empieza_por_un_titulo_de_licencias():
+    import re
+    from pathlib import Path
+    filas = (Path(__file__).resolve().parents[2] / "LICENCIAS_TERCEROS.md").read_text(encoding="utf-8").splitlines()
+    # primera columna de la tabla, sin la versión (" V07 (" -> " (")
+    titulos = {re.sub(r" V[\d.]+ \(", " (", f.split("|")[1].strip()) for f in filas if f.startswith("| ") and "VERIFICADO (CMR)" in f}
+    for nuevo in PRODUCTO_EN.values():
+        assert any(nuevo.startswith(t) for t in titulos), nuevo

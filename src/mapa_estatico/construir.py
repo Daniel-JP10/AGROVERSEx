@@ -30,13 +30,14 @@ VARIABLES = {
 # El csv trae U+FFFD donde iba la tilde (hallazgo de T-D2): se repone solo aquí, sin tocar la fuente
 CORRECCION_TEXTO = {"rean\ufffdlisis": "reanálisis"}
 # H-F3-1: la app va en inglés; el nombre del producto se traduce aquí, nunca a mano en meta.json
-# Nombre oficial de la colección (GES DISC, LP DAAC), sin la versión, que va en su propio campo
+# Títulos de LICENCIAS_TERCEROS.md, columna Producto, VERIFICADO (CMR); se quita solo la versión en todos (va en su campo).
+# Tras el título va, si hace falta, la variable que se usa o cómo se agregó
 PRODUCTO_EN = {
     "GPM IMERG Final Run, mensual 0,1 grados (GPM_3IMERGM)": "GPM IMERG Final Precipitation L3 1 month 0.1 degree x 0.1 degree (GPM_3IMERGM)",
     "GPM IMERG Late Run, diario agregado a mes en UTC (GPM_3IMERGDL)": "GPM IMERG Late Precipitation L3 1 day 0.1 degree x 0.1 degree (GPM_3IMERGDL), daily values aggregated to month in UTC",
-    "MERRA-2 reanálisis, M2TMNXSLV (T2M)": "MERRA-2 tavgM_2d_slv_Nx: 2d, Monthly mean, Single-Level Diagnostics (M2TMNXSLV, T2M)",
-    "MODIS Terra MOD13C2 NDVI mensual 0,05 grados": "MODIS/Terra Vegetation Indices Monthly L3 Global 0.05Deg CMG (MOD13C2, NDVI)",
-    "GLDAS Noah 0,25 mensual, MODELO de superficie terrestre (GLDAS_NOAH025_M, RootMoist_inst)": "GLDAS Noah Land Surface Model L4 monthly 0.25 x 0.25 degree (GLDAS_NOAH025_M, RootMoist_inst)",
+    "MERRA-2 reanálisis, M2TMNXSLV (T2M)": "MERRA-2 tavgM_2d_slv_Nx: 2d,Monthly mean,Time-Averaged,Single-Level,Assimilation,Single-Level Diagnostics (M2TMNXSLV), T2M",
+    "MODIS Terra MOD13C2 NDVI mensual 0,05 grados": "MODIS/Terra Vegetation Indices Monthly L3 Global 0.05Deg CMG (MOD13C2), NDVI",
+    "GLDAS Noah 0,25 mensual, MODELO de superficie terrestre (GLDAS_NOAH025_M, RootMoist_inst)": "GLDAS Noah Land Surface Model L4 monthly 0.25 x 0.25 degree (GLDAS_NOAH025_M), RootMoist_inst",
 }
 # Señales de texto en español en un nombre de producto (H-F3-1): tildes o palabras sueltas
 ESPANOL = re.compile(r"[áéíóúñÁÉÍÓÚÑ]|\b(mensual|diario|agregado|grados|rean[aá]lisis|superficie|terrestre|modelo|mes|en)\b", re.I)

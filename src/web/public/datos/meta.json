@@ -43,7 +43,7 @@
    },
    "productos": [
     {
-     "producto": "MERRA-2 tavgM_2d_slv_Nx: 2d, Monthly mean, Single-Level Diagnostics (M2TMNXSLV, T2M)",
+     "producto": "MERRA-2 tavgM_2d_slv_Nx: 2d,Monthly mean,Time-Averaged,Single-Level,Assimilation,Single-Level Diagnostics (M2TMNXSLV), T2M",
      "version": "5.12.4",
      "unidad": "K",
      "estado": "final"
@@ -63,7 +63,7 @@
    },
    "productos": [
     {
-     "producto": "GLDAS Noah Land Surface Model L4 monthly 0.25 x 0.25 degree (GLDAS_NOAH025_M, RootMoist_inst)",
+     "producto": "GLDAS Noah Land Surface Model L4 monthly 0.25 x 0.25 degree (GLDAS_NOAH025_M), RootMoist_inst",
      "version": "2.1",
      "unidad": "kg m-2",
      "estado": "final"
@@ -83,7 +83,7 @@
    },
    "productos": [
     {
-     "producto": "MODIS/Terra Vegetation Indices Monthly L3 Global 0.05Deg CMG (MOD13C2, NDVI)",
+     "producto": "MODIS/Terra Vegetation Indices Monthly L3 Global 0.05Deg CMG (MOD13C2), NDVI",
      "version": "061",
      "unidad": "1",
      "estado": "final"
