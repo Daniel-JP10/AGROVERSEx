@@ -1,0 +1,113 @@
+{
+ "lote_id": "DEMO-COL-01",
+ "lat": 0.842,
+ "lon": -77.661,
+ "etiqueta": "DEMO",
+ "fuente": "SoilGrids 2.0 (ISRIC), API REST rest.isric.org/soilgrids/v2.0/properties/query, no rasters locales",
+ "licencia": "CC BY 4.0 (FUENTE: ISRIC SoilGrids 2.0)",
+ "naturaleza": "estimado",
+ "tipo_rango": "Q0.05-Q0.95 de SoilGrids en el píxel de 250 m; incertidumbre del mapa, no del lote",
+ "archivo_soilgrids_json": "soilgrids_rest.json",
+ "profundidad_m": 1.0,
+ "arena": 0.3921,
+ "arcilla": 0.28325,
+ "mo_pct": 7.479310344827588,
+ "cos_t_ha": 186.99900000000002,
+ "k_erodabilidad_williams": 0.016384,
+ "parametros": {
+  "arena": {
+   "valor": 0.3921,
+   "rango": [
+    0.14,
+    0.6334500000000001
+   ],
+   "unidad": "kg/kg",
+   "etiqueta": "FUENTE",
+   "profundidad_cm": [
+    0,
+    100
+   ]
+  },
+  "arcilla": {
+   "valor": 0.28325,
+   "rango": [
+    0.034350000000000006,
+    0.6958
+   ],
+   "unidad": "kg/kg",
+   "etiqueta": "FUENTE",
+   "profundidad_cm": [
+    0,
+    100
+   ]
+  },
+  "limo": {
+   "valor": 0.32465,
+   "rango": [
+    0.045899999999999996,
+    0.65205
+   ],
+   "unidad": "kg/kg",
+   "etiqueta": "FUENTE",
+   "profundidad_cm": [
+    0,
+    100
+   ]
+  },
+  "densidad_aparente": {
+   "valor": 1.1815,
+   "rango": [
+    0.579,
+    1.6644999999999999
+   ],
+   "unidad": "kg/dm3",
+   "etiqueta": "FUENTE",
+   "profundidad_cm": [
+    0,
+    100
+   ]
+  },
+  "mo_pct": {
+   "valor": 7.479310344827588,
+   "rango": [
+    0.4836206896551725,
+    23.818103448275867
+   ],
+   "unidad": "%",
+   "etiqueta": "INFERENCIA",
+   "profundidad_cm": [
+    0,
+    100
+   ],
+   "metodo": "MO = COS/0,58; el factor 0,58 es una convención, no una medición"
+  },
+  "cos_t_ha": {
+   "valor": 186.99900000000002,
+   "rango": [
+    8.7185,
+    770.174
+   ],
+   "unidad": "t C/ha",
+   "etiqueta": "FUENTE",
+   "profundidad_cm": [
+    0,
+    30
+   ],
+   "metodo": "suma SOC*BD*espesor; el rango combina Q0.05 de SOC con Q0.05 de BD (cota amplia)"
+  },
+  "agua_disponible_mm_m": {
+   "valor": 165.70000000000002,
+   "rango": [
+    0.0,
+    461.3
+   ],
+   "unidad": "mm de agua por m de suelo",
+   "etiqueta": "INFERENCIA",
+   "profundidad_cm": [
+    0,
+    100
+   ],
+   "metodo": "media(wv0033) - media(wv1500) de SoilGrids; rango = cota amplia Q0.05-Q0.95 cruzados, no son cuantiles de la diferencia"
+  }
+ }
+}

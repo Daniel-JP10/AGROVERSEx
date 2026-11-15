@@ -1,0 +1,238 @@
+# asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# Catálogo de cultivos del gemelo.
+# - Bloque fao56: copia literal de src/simulacion/referencias/fao56.yaml (rama datos, INV-ROT §3). No se edita aquí:
+#   al integrar, parametros.py puede leer directamente aquel archivo con el mismo formato.
+# - altura_m: FAO-56 Tabla 12 (altura máxima del cultivo), ficha EV-ROT-010.
+# - rue (g MS por MJ de radiación solar interceptada), temperaturas cardinales (función beta de Yan y Hunt, 1999),
+#   índice de cosecha, N en biomasa, índice de cosecha de N y Ndfa: SUPUESTO de orden de magnitud
+#   con rango; cada uno debe reemplazarse con ficha EV o calibración local. El ensamble muestrea el rango completo.
+# - Un cultivo con apto_rotacion: false (perennes o de corte múltiple) no se simula: el ciclo anual no lo representa.
+comunes:
+  rue: {unidad: "g/MJ", etiqueta: SUPUESTO, referencia: "orden de magnitud de RUE en radiación solar (Sinclair y Muchow, 1999); ficha EV pendiente"}
+  t_base: {unidad: "°C", etiqueta: SUPUESTO, referencia: "temperatura base de la función beta (Yan y Hunt, 1999); valor de diseño"}
+  t_opt: {unidad: "°C", etiqueta: SUPUESTO, referencia: "temperatura óptima de la función beta (Yan y Hunt, 1999); valor de diseño"}
+  t_max: {unidad: "°C", etiqueta: SUPUESTO, referencia: "temperatura máxima de la función beta (Yan y Hunt, 1999); valor de diseño"}
+  indice_cosecha: {unidad: "kg/kg", etiqueta: SUPUESTO, referencia: "índice de cosecha de orden de magnitud; varía con variedad y manejo"}
+  n_biomasa: {unidad: "kg N/kg MS", etiqueta: SUPUESTO, referencia: "concentración media de N en la biomasa aérea a cosecha; orden de magnitud"}
+  indice_cosecha_n: {unidad: "kg/kg", etiqueta: SUPUESTO, referencia: "fracción del N de la planta que sale con la cosecha; orden de magnitud"}
+  ndfa: {unidad: "kg/kg", etiqueta: SUPUESTO, referencia: "fracción del N de la planta derivada de la fijación biológica; muy variable entre sitios"}
+cultivos:
+  maiz:
+    nombre: "Maíz grano"
+    especie: "Zea mays"
+    familia: "Poáceas"
+    funcion: [cereal, raiz_profunda]
+    apto_rotacion: true
+    fao56: {"cultivo": "Maíz grano", "kc_ini": "0,3 (grupo)", "kc_mid": "1,20", "kc_end": "0,60–0,35", "etapas": "30/40/50/30 = 150 España, California; 30/50/60/40 = 180 África Oriental", "zr_min": 1.0, "zr_max": 1.7, "p": 0.55, "agua_min": 500.0, "agua_max": 800.0, "fuente_id": "EV-ROT-010", "fuente_agua": "EV-ROT-011"}
+    altura_m: 2.0
+    rue: [1.6, 1.4, 1.8]
+    t_base: [8.0, 6.0, 10.0]
+    t_opt: [30.0, 28.0, 32.0]
+    t_max: [42.0, 40.0, 44.0]
+    indice_cosecha: [0.50, 0.45, 0.55]
+    n_biomasa: [0.012, 0.010, 0.015]
+    indice_cosecha_n: [0.65, 0.55, 0.75]
+    ndfa: [0.0, 0.0, 0.0]
+  trigo_invierno:
+    nombre: "Trigo invierno"
+    especie: "Triticum aestivum"
+    familia: "Poáceas"
+    funcion: [cereal]
+    apto_rotacion: true
+    fao56: {"cultivo": "Trigo invierno", "kc_ini": "0,4 helado; 0,7 no helado", "kc_mid": "1,15", "kc_end": "0,25–0,4", "etapas": "20/60/70/30 = 180 California; 30/140/40/30 = 240 Mediterráneo", "zr_min": 1.5, "zr_max": 1.8, "p": 0.55, "agua_min": 450.0, "agua_max": 650.0, "fuente_id": "EV-ROT-010", "fuente_agua": "EV-ROT-011"}
+    altura_m: 1.0
+    rue: [1.4, 1.2, 1.6]
+    t_base: [0.0, 0.0, 3.0]
+    t_opt: [25.0, 22.0, 27.0]
+    t_max: [35.0, 33.0, 38.0]
+    indice_cosecha: [0.45, 0.40, 0.50]
+    n_biomasa: [0.013, 0.011, 0.016]
+    indice_cosecha_n: [0.75, 0.70, 0.80]
+    ndfa: [0.0, 0.0, 0.0]
+  trigo_primavera:
+    nombre: "Trigo primavera"
+    especie: "Triticum aestivum"
+    familia: "Poáceas"
+    funcion: [cereal]
+    apto_rotacion: true
+    fao56: {"cultivo": "Trigo primavera", "kc_ini": "0,3 (grupo)", "kc_mid": "1,15", "kc_end": "0,25–0,4", "etapas": "20/50/60/30 = 160 California desierto (fila de grano pequeño)", "zr_min": 1.0, "zr_max": 1.5, "p": 0.55, "agua_min": 450.0, "agua_max": 650.0, "fuente_id": "EV-ROT-010", "fuente_agua": "EV-ROT-011"}
+    altura_m: 1.0
+    rue: [1.4, 1.2, 1.6]
+    t_base: [0.0, 0.0, 3.0]
+    t_opt: [25.0, 22.0, 27.0]
+    t_max: [35.0, 33.0, 38.0]
+    indice_cosecha: [0.45, 0.40, 0.50]
+    n_biomasa: [0.013, 0.011, 0.016]
+    indice_cosecha_n: [0.75, 0.70, 0.80]
+    ndfa: [0.0, 0.0, 0.0]
+  arroz:
+    nombre: "Arroz"
+    especie: "Oryza sativa"
+    familia: "Poáceas"
+    funcion: [cereal]
+    apto_rotacion: true
+    fao56: {"cultivo": "Arroz", "kc_ini": "1,05", "kc_mid": "1,20", "kc_end": "0,90–0,60", "etapas": "30/30/60/30 = 150; 30/30/80/40 = 180 trópico", "zr_min": 0.5, "zr_max": 1.0, "p": 0.2, "agua_min": 450.0, "agua_max": 700.0, "fuente_id": "EV-ROT-010", "fuente_agua": "EV-ROT-011", "nota": "p es fracción de agotamiento a saturación (INV-ROT §3); el balance de una capa no representa la lámina de inundación"}
+    altura_m: 1.0
+    rue: [1.4, 1.2, 1.6]
+    t_base: [10.0, 8.0, 12.0]
+    t_opt: [30.0, 28.0, 32.0]
+    t_max: [40.0, 38.0, 42.0]
+    indice_cosecha: [0.45, 0.40, 0.50]
+    n_biomasa: [0.012, 0.010, 0.015]
+    indice_cosecha_n: [0.65, 0.55, 0.75]
+    ndfa: [0.0, 0.0, 0.0]
+  soya:
+    nombre: "Soya"
+    especie: "Glycine max"
+    familia: "Fabáceas"
+    funcion: [leguminosa, fijadora_n]
+    apto_rotacion: true
+    fao56: {"cultivo": "Soya", "kc_ini": "0,4 (grupo)", "kc_mid": "1,15", "kc_end": "0,50", "etapas": "15/15/40/15 = 85 trópico; 20/30-35/60/25 = 140 centro EE. UU.", "zr_min": 0.6, "zr_max": 1.3, "p": 0.5, "agua_min": 450.0, "agua_max": 700.0, "fuente_id": "EV-ROT-010", "fuente_agua": "EV-ROT-011"}
+    altura_m: 0.75
+    rue: [1.0, 0.8, 1.2]
+    t_base: [7.0, 5.0, 10.0]
+    t_opt: [30.0, 27.0, 32.0]
+    t_max: [40.0, 38.0, 42.0]
+    indice_cosecha: [0.40, 0.35, 0.45]
+    n_biomasa: [0.030, 0.025, 0.035]
+    indice_cosecha_n: [0.80, 0.75, 0.85]
+    ndfa: [0.55, 0.40, 0.70]
+  frijol:
+    nombre: "Frijol seco"
+    especie: "Phaseolus vulgaris"
+    familia: "Fabáceas"
+    funcion: [leguminosa, fijadora_n]
+    apto_rotacion: true
+    fao56: {"cultivo": "Frijol seco", "kc_ini": "0,4", "kc_mid": "1,15", "kc_end": "0,35", "etapas": "20/30/40/20 = 110; 15/25/35/20 = 95", "zr_min": 0.6, "zr_max": 0.9, "p": 0.45, "agua_min": 300.0, "agua_max": 500.0, "fuente_id": "EV-ROT-010", "fuente_agua": "EV-ROT-011"}
+    altura_m: 0.4
+    rue: [1.0, 0.8, 1.2]
+    t_base: [8.0, 6.0, 10.0]
+    t_opt: [25.0, 22.0, 28.0]
+    t_max: [35.0, 32.0, 38.0]
+    indice_cosecha: [0.45, 0.35, 0.55]
+    n_biomasa: [0.030, 0.025, 0.035]
+    indice_cosecha_n: [0.75, 0.65, 0.85]
+    ndfa: [0.40, 0.20, 0.60]
+  sorgo:
+    nombre: "Sorgo grano"
+    especie: "Sorghum bicolor"
+    familia: "Poáceas"
+    funcion: [cereal, tolerante_sequia, raiz_profunda]
+    apto_rotacion: true
+    fao56: {"cultivo": "Sorgo grano", "kc_ini": "0,3 (grupo)", "kc_mid": "1,00–1,10", "kc_end": "0,55", "etapas": "20/35/40/30 = 130", "zr_min": 1.0, "zr_max": 2.0, "p": 0.55, "agua_min": 450.0, "agua_max": 650.0, "fuente_id": "EV-ROT-010", "fuente_agua": "EV-ROT-011"}
+    altura_m: 1.5
+    rue: [1.4, 1.2, 1.6]
+    t_base: [8.0, 6.0, 11.0]
+    t_opt: [32.0, 30.0, 34.0]
+    t_max: [44.0, 42.0, 46.0]
+    indice_cosecha: [0.45, 0.35, 0.50]
+    n_biomasa: [0.012, 0.010, 0.015]
+    indice_cosecha_n: [0.65, 0.55, 0.75]
+    ndfa: [0.0, 0.0, 0.0]
+  mijo:
+    nombre: "Mijo"
+    especie: "Pennisetum glaucum"
+    familia: "Poáceas"
+    funcion: [cereal, tolerante_sequia]
+    apto_rotacion: true
+    fao56: {"cultivo": "Mijo", "kc_ini": "0,3 (grupo)", "kc_mid": "1,00", "kc_end": "0,30", "etapas": "15/25/40/25 = 105 Pakistán; 20/30/55/35 = 140 centro EE. UU.", "zr_min": 1.0, "zr_max": 2.0, "p": 0.55, "agua_min": 450.0, "agua_max": 650.0, "fuente_id": "EV-ROT-010", "fuente_agua": "EV-ROT-011"}
+    altura_m: 1.5
+    rue: [1.3, 1.1, 1.5]
+    t_base: [10.0, 8.0, 12.0]
+    t_opt: [32.0, 30.0, 34.0]
+    t_max: [44.0, 42.0, 46.0]
+    indice_cosecha: [0.35, 0.25, 0.45]
+    n_biomasa: [0.012, 0.010, 0.015]
+    indice_cosecha_n: [0.60, 0.50, 0.70]
+    ndfa: [0.0, 0.0, 0.0]
+  papa:
+    nombre: "Papa"
+    especie: "Solanum tuberosum"
+    familia: "Solanáceas"
+    funcion: [tuberculo]
+    apto_rotacion: true
+    fao56: {"cultivo": "Papa", "kc_ini": "0,5 (grupo)", "kc_mid": "1,15", "kc_end": "0,75 (~0,40 con quema de follaje)", "etapas": "25/30/45/30 = 130 continental; 30/35/50/30 = 145 Europa", "zr_min": 0.4, "zr_max": 0.6, "p": 0.35, "agua_min": 500.0, "agua_max": 700.0, "fuente_id": "EV-ROT-010", "fuente_agua": "EV-ROT-011"}
+    altura_m: 0.6
+    rue: [1.25, 1.1, 1.4]
+    t_base: [2.0, 0.0, 5.0]
+    t_opt: [18.0, 16.0, 21.0]
+    t_max: [30.0, 28.0, 33.0]
+    indice_cosecha: [0.75, 0.65, 0.85]
+    n_biomasa: [0.018, 0.015, 0.022]
+    indice_cosecha_n: [0.75, 0.65, 0.85]
+    ndfa: [0.0, 0.0, 0.0]
+  algodon:
+    nombre: "Algodón"
+    especie: "Gossypium hirsutum"
+    familia: "Malváceas"
+    funcion: [fibra, raiz_profunda]
+    apto_rotacion: true
+    fao56: {"cultivo": "Algodón", "kc_ini": "0,35 (grupo)", "kc_mid": "1,15–1,20", "kc_end": "0,70–0,50", "etapas": "30/50/60/55 = 195; 30/50/55/45 = 180 Texas", "zr_min": 1.0, "zr_max": 1.7, "p": 0.65, "agua_min": 700.0, "agua_max": 1300.0, "fuente_id": "EV-ROT-010", "fuente_agua": "EV-ROT-011"}
+    altura_m: 1.35
+    rue: [1.1, 0.9, 1.3]
+    t_base: [12.0, 10.0, 15.0]
+    t_opt: [28.0, 26.0, 32.0]
+    t_max: [40.0, 38.0, 43.0]
+    indice_cosecha: [0.35, 0.25, 0.45]
+    n_biomasa: [0.018, 0.015, 0.022]
+    indice_cosecha_n: [0.60, 0.50, 0.70]
+    ndfa: [0.0, 0.0, 0.0]
+  avena:
+    nombre: "Avena"
+    especie: "Avena sativa"
+    familia: "Poáceas"
+    funcion: [cereal, cobertura]
+    apto_rotacion: true
+    fao56: {"cultivo": "Avena", "kc_ini": "0,3 (grupo)", "kc_mid": "1,15", "kc_end": "0,25", "etapas": "15/25/50/30 = 120 centro India (cebada/avena/trigo)", "zr_min": 1.0, "zr_max": 1.5, "p": 0.55, "agua_min": 450.0, "agua_max": 650.0, "fuente_id": "EV-ROT-010", "fuente_agua": "EV-ROT-011"}
+    altura_m: 1.0
+    rue: [1.4, 1.2, 1.6]
+    t_base: [0.0, 0.0, 3.0]
+    t_opt: [22.0, 20.0, 25.0]
+    t_max: [32.0, 30.0, 35.0]
+    indice_cosecha: [0.40, 0.30, 0.45]
+    n_biomasa: [0.013, 0.011, 0.016]
+    indice_cosecha_n: [0.70, 0.60, 0.80]
+    ndfa: [0.0, 0.0, 0.0]
+  cana_azucar:
+    nombre: "Caña de azúcar"
+    especie: "Saccharum officinarum"
+    familia: "Poáceas"
+    funcion: [perenne]
+    apto_rotacion: false
+    motivo_no_apto: "perenne con socas; el ciclo anual del gemelo no la representa"
+    fao56: {"cultivo": "Caña de azúcar", "kc_ini": "0,40", "kc_mid": "1,25", "kc_end": "0,75", "etapas": "Soca: 30/50/180/60 = 320 trópico; virgen: 50/70/220/140 = 480 trópico", "zr_min": 1.2, "zr_max": 2.0, "p": 0.65, "agua_min": 1500.0, "agua_max": 2500.0, "fuente_id": "EV-ROT-010", "fuente_agua": "EV-ROT-011"}
+    altura_m: 3.0
+  cafe:
+    nombre: "Café"
+    especie: "Coffea arabica"
+    familia: "Rubiáceas"
+    funcion: [perenne]
+    apto_rotacion: false
+    motivo_no_apto: "perenne; FAO-56 no da etapas en la Tabla 11"
+    fao56: {"cultivo": "Café", "kc_ini": "0,90 suelo desnudo; 1,05 con arvenses", "kc_mid": "0,95; 1,10", "kc_end": "0,95; 1,10", "etapas": "No está en Tabla 11", "zr_min": 0.9, "zr_max": 1.5, "p": 0.4, "agua_min": null, "agua_max": null, "fuente_id": "EV-ROT-010", "fuente_agua": null}
+    altura_m: 2.5
+  alfalfa:
+    nombre: "Alfalfa heno"
+    especie: "Medicago sativa"
+    familia: "Fabáceas"
+    funcion: [perenne, leguminosa, fijadora_n, forraje]
+    apto_rotacion: false
+    motivo_no_apto: "forraje perenne de cortes múltiples; los cortes no están modelados"
+    fao56: {"cultivo": "Alfalfa heno", "kc_ini": "0,40", "kc_mid": "0,95 prom.; 1,20 corte", "kc_end": "0,90; 1,15", "etapas": "1.er corte 10/20/20/10 = 60 California; otros 5/10/10/5 = 30", "zr_min": 1.0, "zr_max": 2.0, "p": 0.55, "agua_min": 800.0, "agua_max": 1600.0, "fuente_id": "EV-ROT-010", "fuente_agua": "EV-ROT-011"}
+    altura_m: 0.7
+  trebol_berseem:
+    nombre: "Trébol berseem"
+    especie: "Trifolium alexandrinum"
+    familia: "Fabáceas"
+    funcion: [leguminosa, fijadora_n, forraje, cobertura]
+    apto_rotacion: true
+    fao56: {"cultivo": "Trébol berseem", "kc_ini": "0,40", "kc_mid": "0,90 prom.; 1,15 corte", "kc_end": "0,85; 1,10", "etapas": "No está en Tabla 11", "zr_min": 0.6, "zr_max": 0.9, "p": 0.5, "agua_min": null, "agua_max": null, "fuente_id": "EV-ROT-010", "fuente_agua": null}
+    altura_m: 0.6
+    rue: [1.0, 0.8, 1.2]
+    t_base: [3.0, 0.0, 5.0]
+    t_opt: [22.0, 20.0, 25.0]
+    t_max: [32.0, 30.0, 35.0]
+    indice_cosecha: [0.0, 0.0, 0.0]
+    n_biomasa: [0.030, 0.025, 0.035]
+    indice_cosecha_n: [0.0, 0.0, 0.0]
+    ndfa: [0.65, 0.45, 0.85]

@@ -24,3 +24,8 @@ src/web/public/datos/unidades_geo.json.gz
 
 # salidas de la herramienta de capturas del navegador (Playwright MCP)
 .playwright-mcp/
+
+# Gemelo
+*.env
+*.pyc
+salidas/

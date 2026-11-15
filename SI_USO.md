@@ -32,7 +32,7 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `pruebas/sim/test_suelo.py` | Pruebas del backend del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/sim/test_tiempo.py` | Pruebas del backend del prototipo | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/sim/test_vegetacion.py` | Pruebas del backend del prototipo | 2026-11-14 |
-| Claude Code (Anthropic) | `pytest.ini` | Configuración del entorno o de pruebas | 2026-11-14 |
+| Claude Code (Anthropic); Cursor (agente) | `pytest.ini` | Configuración común de Datos y Gemelo: rutas, filtro de rasterio y marcadores datos_reales y lento | 2026-11-14 |
 | Claude Code (Anthropic) | `requirements-geo-wsl.txt` | Configuración del entorno o de pruebas | 2026-11-14 |
 | Claude Code (Anthropic) | `requirements-geo.txt` | Configuración del entorno o de pruebas | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/__init__.py` | Generador y utilidades del prototipo; lo simulado se migra a datos reales | 2026-11-14 |
@@ -228,7 +228,7 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `pruebas/geo/test_lectura_nasa.py`, `pruebas/geo/test_teselas.py` | Prueba de orientación 120E/120O de IMERG y skipif de test_ruta_wsl (T-D2) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/lotes_demo/imerg_diario.py` y `pruebas/lotes/test_imerg_diario.py` | Lectura puntual de IMERG Final V07 diario por OPeNDAP (T-D5 B) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/lotes_demo/forzantes.py` y `pruebas/lotes/test_forzantes.py` | Lectura y validación de forzantes POWER e IMERG (T-D5 B) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/lotes_demo/suelo.py` y `pruebas/lotes/test_lotes_suelo.py` | Parámetros de suelo desde SoilGrids REST (T-D5 B) | 2026-11-14 |
+| Claude Code (Anthropic); Antigravity (Google DeepMind) | `src/lotes_demo/suelo.py` y `pruebas/lotes/test_lotes_suelo.py` | Parámetros de suelo desde SoilGrids REST (T-D5 B); Claves escalares en la raíz de `parametros_suelo.json` (`arena`, `arcilla`, `mo_pct`, `cos_t_ha`, `profundidad_m`) para `gemelo.suelo.perfil_desde_parametros_datos` conservando `"parametros"` con cuantiles (T-D5 Prioridad 3C, D-027) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/lotes_demo/hls_validez.py` y `pruebas/lotes/test_hls_validez.py` | Fracción de observaciones HLS válidas por píxel y mes (T-D5 B) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/lotes_demo/construir_lotes.py`, `pruebas/lotes/test_lotes_demo.py`, `datos/lotes/lotes_demo.json` | Construcción de lotes_demo.json (T-D5 B) | 2026-11-14 |
 | Claude Code (Anthropic) | `contratos/forzantes_gemelo.md` y fichas `datos/fichas/power_diario.md`, `hls_v2.md`, `imerg_diario.md` | Redacción del contrato y las fichas (T-D5 B) | 2026-11-14 |
@@ -252,6 +252,73 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Antigravity (Google DeepMind) | `src/lotes_demo/__init__.py` | Exportaciones públicas de `lotes_demo` incluyendo `exposicion_erosiva` y `umbral_p90_semanal` (T-D6) | 2026-11-14 |
 | Antigravity (Google DeepMind) | `src/lotes_demo/erosion.py` y `pruebas/lotes/test_erosion.py` | Función `exposicion_erosiva`, umbral semanal P90 sin fuga temporal, pendiente NASADEM 30 m (`S` de McCool et al., 1987) y erodabilidad `K` de Williams (1995) con pruebas TDD (T-D6 Prioridad 4) | 2026-11-14 |
 | Antigravity (Google DeepMind) | `src/lotes_demo/forzantes.py`, `src/lotes_demo/resumen_forzantes.py` y `pruebas/lotes/test_forzantes.py` | Corrección de temperatura por altura (`T2M_CORR`, `T2M_MAX_CORR`, `T2M_MIN_CORR`), validación bootstrap anual contra GHCN-Daily `COM00080370` y alineación horaria UTC / correlaciones 1d, 5d y mensual entre POWER e IMERG (T-D5 Prioridades 3A y 3B, D-027) | 2026-11-14 |
-| Antigravity (Google DeepMind) | `src/lotes_demo/suelo.py` y `pruebas/lotes/test_lotes_suelo.py` | Claves escalares en la raíz de `parametros_suelo.json` (`arena`, `arcilla`, `mo_pct`, `cos_t_ha`, `profundidad_m`) para `gemelo.suelo.perfil_desde_parametros_datos` conservando `"parametros"` con cuantiles (T-D5 Prioridad 3C, D-027) | 2026-11-14 |
 | Antigravity (Google DeepMind) | `contratos/forzantes_gemelo.md`, `datos/fichas/ghcn_daily.md`, `datos/fichas/nasadem_hgt.md`, `datos/fichas/power_diario.md`, `datos/fichas/imerg_diario.md`, `LICENCIAS_TERCEROS.md`, `CITAS.md` | Actualización de contrato v1, fichas de dataset, licencias y citas primarias verificadas (T-D5 y T-D6, D-027) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/estatico.test.ts` (escala de color sobre paraMostrar, empalme frente a climatología), `src/web/src/datos/estatico.ts` (leerGz con Content-Encoding), `src/web/src/globo/config.ts` y `src/web/pruebas/config.test.ts` (adm2 hasta z11 con apagado por opacidad, es_disputa), `src/lotes_demo/resumen_forzantes.py` (cobertura de COM00080370 y nota generada) | Correcciones del punto 3 del director, 19:15 | 2026-11-14 |
+
+## Área Gemelo
+
+
+Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archivo de código asistido por SI lleva la cabecera `# asistido por SI: <herramienta y uso>` y una fila aquí.
+
+| Herramienta | Archivo | Propósito | Fecha |
+|-|-|-|-|
+| Cursor (agente) | `requirements-gemelo.txt` | Dependencias directas fijadas del área Gemelo | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/__init__.py` | Paquete y exportaciones del núcleo del gemelo digital | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/__main__.py` | Punto de entrada CLI de `python -m gemelo` | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/agua.py` | Balance hídrico diario (FAO-56 / AquaCrop) | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/api.py` | Fachada pública del contrato del gemelo | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/biomasa.py` | Crecimiento de biomasa y partición a cosecha | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/carbono.py` | Dinámica diaria de carbono orgánico del suelo (ICBM) | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/cli.py` | Interfaz de línea de comandos para simular, optimizar y empaquetar | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/clima.py` | Lectura y validación de series climáticas diarias (POWER y Datos) | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/cobertura.py` | Cobertura viva, rastrojo y exposición erosiva | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/dinamica.py` | Evaluación dinámica de cultivos y cobertura entre ciclos | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/enso.py` | Clasificación de fases ENSO (ONI) y pesos por escenario | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/entrada.py` | Validación y carga de configuraciones YAML/JSON del lote | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/escenarios.py` | Construcción de ventanas históricas y escenarios sintéticos | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/fenologia.py` | Grados-día acumulados y etapas fenológicas FAO-56 | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/incertidumbre.py` | Muestreo Latino Hipercúbico (LHS) del ensamble de parámetros | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/indicadores.py` | Resumen de indicadores, percentiles, riesgos y heladas | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/manejo.py` | Reglas agronómicas, sucesión, siembra, riego y fertilización | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/modelos.py` | Estructuras de datos del lote, cultivos, estrategias y estado | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/nitrogeno.py` | Balance simplificado de nitrógeno mineral y orgánico | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/optimizacion.py` | Optimización multiobjetivo NSGA-II de rotaciones y manejo (`pymoo`) | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/paquete.py` | Generación de paquetes JSON estáticos precalculados para Web | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/parametros.py` | Carga de tablas YAML de referencias y parámetros del gemelo | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/prioridades.py` | Normalización y ordenamiento por pesos de deslizadores Web | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/procedencia.py` | Trazabilidad de parámetros (`Parametro`) y etiquetas de evidencia | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/salida.py` | Ensamblado del documento de salida v1/v1.1 conforme al contrato | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/simulador.py` | Motor diario de simulación acoplado suelo-agua-C-N-cultivo | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/suelo.py` | Perfiles edáficos (SoilGrids, Datos, manual) y Saxton-Rawls | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/tarjetas.py` | Generación de tarjetas explicativas de cinco secciones | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/textos.py` | Catálogo bilingüe `en`/`es` de claves con parámetros | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/referencias/agua_suelo.yaml` | Parámetros físicos de agua y suelo con fuente y rango | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/referencias/carbono_nitrogeno.yaml` | Parámetros de balance ICBM C/N con fuente y rango | 2026-11-14 |
+| Cursor (agente) | `src/gemelo/referencias/cultivos.yaml` | Catálogo fenológico y parámetros de cultivos | 2026-11-14 |
+| Cursor (agente) | `pruebas/gemelo/conftest.py` | Fixtures compartidos de pruebas del gemelo | 2026-11-14 |
+| Cursor (agente) | `pruebas/gemelo/test_clima_suelo.py` | Pruebas de lectura climática, SoilGrids y dominio Saxton-Rawls | 2026-11-14 |
+| Cursor (agente) | `pruebas/gemelo/test_contrato.py` | Pruebas de conformidad con `contratos/gemelo_api.md` | 2026-11-14 |
+| Cursor (agente) | `pruebas/gemelo/test_dinamica.py` | Pruebas de cobertura continua y rotación dinámica | 2026-11-14 |
+| Cursor (agente) | `pruebas/gemelo/test_entradas_datos.py` | Pruebas de lectura de forzantes de Datos y lotes DEMO | 2026-11-14 |
+| Cursor (agente) | `pruebas/gemelo/test_escenarios_incertidumbre.py` | Pruebas de escenarios climáticos, ENSO e incertidumbre LHS | 2026-11-14 |
+| Cursor (agente) | `pruebas/gemelo/test_optimizacion.py` | Pruebas de optimización multiobjetivo con `pymoo` | 2026-11-14 |
+| Cursor (agente) | `pruebas/gemelo/test_paquete.py` | Pruebas de exportación de paquetes estáticos para Web | 2026-11-14 |
+| Cursor (agente) | `pruebas/gemelo/test_prioridades.py` | Pruebas de normalización y orden por pesos de objetivos | 2026-11-14 |
+| Cursor (agente) | `pruebas/gemelo/test_procedencia.py` | Pruebas de etiquetas y trazabilidad de referencias YAML | 2026-11-14 |
+| Cursor (agente) | `pruebas/gemelo/test_procedencia_parametros.py` | Pruebas de clase `Parametro` y calibración local | 2026-11-14 |
+| Cursor (agente) | `pruebas/gemelo/test_procesos.py` | Pruebas unitarias físicas de agua, biomasa, C, N y fenología | 2026-11-14 |
+| Cursor (agente) | `pruebas/gemelo/test_textos.py` | Pruebas de paridad `en`/`es` y ausencia de fuga de idioma | 2026-11-14 |
+| Cursor (agente) | `ejemplos/escenario_ames.yaml` | Escenario interno de referencia (Ames) para pruebas | 2026-11-14 |
+| Cursor (agente) | `ejemplos/escenario_ipiales.yaml` | Escenario de referencia (Ipiales) | 2026-11-14 |
+| Cursor (agente) | `ejemplos/escenario_mead.yaml` | Escenario interno de referencia (Mead) para fijación de pruebas | 2026-11-14 |
+| Cursor (agente) | `ejemplos/visualizar_gemelo.py` | Script auxiliar de diagnóstico visual del gemelo | 2026-11-14 |
+| Cursor (agente) | `contratos/gemelo_api.md` y `src/gemelo/README.md` | Documentación del contrato v1/v1.1 y guía técnica del gemelo | 2026-11-14 |
+| Antigravity (agente) | `requirements-gemelo.lock.txt` | Bloqueo reproducible con hashes SHA-256 generado con `uv pip compile` | 2026-11-14 |
+| Antigravity (agente) | `SI_USO.md` y `LICENCIAS_TERCEROS.md` | Inventario de uso de SI y auditoría de licencias y citas verificadas | 2026-11-14 |
+| Antigravity (agente) | `src/gemelo/suelo.py`, `src/gemelo/textos.py`, `src/gemelo/tarjetas.py`, `pruebas/gemelo/test_clima_suelo.py`, `src/gemelo/README.md` | Separación de pruebas de dominio y declaración bilingüe de limitación de SoilGrids en Andisoles (`D-029`, `D-030`) | 2026-11-14 |
+| Antigravity (agente) | `src/gemelo/suelo.py`, `pruebas/gemelo/test_entradas_datos.py` | Adaptación de `perfil_desde_parametros_datos` al esquema T-D5 anidado en `parametros` | 2026-11-14 |
+| Claude Code (Opus 5.5) | `src/gemelo/alertas.py`, `src/gemelo/clima.py`, `src/gemelo/escenarios.py`, `src/gemelo/entrada.py`, `src/gemelo/salida.py`, `src/gemelo/simulador.py`, `src/gemelo/tarjetas.py`, `src/gemelo/textos.py`, `src/gemelo/paquete.py`, `pruebas/gemelo/test_alertas.py`, `pruebas/gemelo/test_clima_suelo.py`, `ejemplos/escenario_ipiales.yaml`, `ejemplos/escenario_mead.yaml`, `contratos/gemelo_api.md` | Bloque 2: avisos del suelo calibrado en `reunir_parametros`, alerta de helada en etapa sensible (`D-032`), lluvia alterna IMERG como sensibilidad técnica y forzantes T-D5 en los lotes DEMO | 2026-11-14 |
+
+Notas de procedencia sin generación nueva por este equipo de Gemelo:
+- `src/gemelo/referencias/enso.yaml` y `src/gemelo/referencias/sucesion.yaml` son copias literales de `origin/datos`.
+- La idea científica, alcance, reglas de corte y decisiones (`D-001` a `D-030`) fueron definidas por el equipo humano y aprobadas por el director en `decisiones/registro.md`.

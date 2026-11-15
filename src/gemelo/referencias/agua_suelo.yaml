@@ -1,0 +1,123 @@
+# asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# Parámetros del balance hídrico y del suelo. ficha: id EV-* de la rama datos; null = ficha EV pendiente.
+# FAO-56 = Allen, Pereira, Raes y Smith (1998), FAO Irrigation and Drainage Paper 56 (ficha EV-ROT-010 cubre sus tablas de Kc).
+parametros:
+  kc_min:
+    valor: 0.15
+    rango: [0.15, 0.20]
+    unidad: adimensional
+    etiqueta: FUENTE
+    referencia: "FAO-56 cap. 9, ec. 76: Kc mínimo de suelo desnudo seco 0,15-0,20"
+    ficha: EV-ROT-010
+  kc_max_suelo:
+    valor: 1.05
+    rango: [0.95, 1.10]
+    unidad: adimensional
+    etiqueta: INFERENCIA
+    referencia: "FAO-56 ec. 71-72: Ke <= Kc_max - Kcb con Kc_max = 1,20 (clima estándar) y Kcb de suelo desnudo 0,15"
+  ze_m:
+    valor: 0.10
+    rango: [0.10, 0.15]
+    unidad: m
+    etiqueta: FUENTE
+    referencia: "FAO-56 cap. 7: profundidad de la capa superficial que se evapora, 0,10-0,15 m"
+    ficha: EV-ROT-010
+  rew_mm:
+    valor: 9.0
+    rango: [6.0, 11.0]
+    unidad: mm
+    etiqueta: INFERENCIA
+    referencia: "FAO-56 Tabla 19: agua fácilmente evaporable 8-11 mm en francos y limosos, 6-10 en franco arenosos"
+  zr_inicial_m:
+    valor: 0.15
+    rango: [0.15, 0.20]
+    unidad: m
+    etiqueta: FUENTE
+    referencia: "FAO-56 cap. 8: profundidad radicular en la etapa inicial 0,15-0,20 m"
+    ficha: EV-ROT-010
+  ajuste_p_por_etc:
+    valor: 0.04
+    unidad: 1/(mm/día)
+    etiqueta: FUENTE
+    referencia: "FAO-56 Tabla 22, nota: p = p_tabla + 0,04 (5 - ETc), acotado a 0,1-0,8"
+    ficha: EV-ROT-010
+  reduccion_evap_mulch:
+    valor: 0.5
+    rango: [0.4, 0.6]
+    unidad: adimensional
+    etiqueta: FUENTE
+    referencia: "FAO-56 cap. 11: el mulch orgánico reduce la evaporación ~5 % por cada 10 % de superficie cubierta (50 % a cobertura total)"
+  viento_respaldo_ms:
+    valor: 2.0
+    unidad: m/s
+    etiqueta: FUENTE
+    referencia: "FAO-56 cap. 3: 2 m/s como valor por defecto cuando no hay viento medido"
+    ficha: EV-ROT-010
+  albedo:
+    valor: 0.23
+    unidad: adimensional
+    etiqueta: FUENTE
+    referencia: "FAO-56 ec. 38: albedo del cultivo de referencia"
+    ficha: EV-ROT-010
+  drenaje_a:
+    valor: 0.0866
+    unidad: adimensional
+    etiqueta: FUENTE
+    referencia: "AquaCrop, manual de referencia (Raes et al., FAO), cap. 3: tau = 0,0866 Ksat^0,35, Ksat en mm/día, tau <= 1"
+  drenaje_b:
+    valor: 0.35
+    unidad: adimensional
+    etiqueta: FUENTE
+    referencia: "AquaCrop, manual de referencia (Raes et al., FAO), cap. 3"
+  profundidad_perfil_m:
+    valor: 1.0
+    rango: [0.8, 1.2]
+    unidad: m
+    etiqueta: SUPUESTO
+    referencia: "Perfil de 0-100 cm, el mismo que publica SoilGrids; reemplazar con profundidad local"
+  fraccion_humedad_inicial:
+    valor: 0.5
+    rango: [0.2, 0.8]
+    unidad: fracción del agua disponible
+    etiqueta: SUPUESTO
+    referencia: "Sin humedad observada (SMAP L4) el estado inicial es incierto; el ensamble cubre 0,2-0,8"
+  eficiencia_riego:
+    valor: 0.75
+    rango: [0.6, 0.9]
+    unidad: adimensional
+    etiqueta: SUPUESTO
+    referencia: "Eficiencia de aplicación de diseño (aspersión típica); reemplazar con el sistema real"
+  fraccion_carbono_mo:
+    valor: 0.58
+    unidad: adimensional
+    etiqueta: INFERENCIA
+    referencia: "Factor de van Bemmelen 1,724 (MO = 1,724 COS); convención histórica, varía entre suelos"
+  umbral_cobertura_protectora:
+    valor: 0.30
+    rango: [0.25, 0.35]
+    unidad: fracción
+    etiqueta: INFERENCIA
+    referencia: "Umbral de 30 % de cobertura de la definición de labranza de conservación (CTIC, EE. UU.); aquí se usa como frontera de 'suelo desnudo'"
+  percentil_lluvia_intensa:
+    valor: 90.0
+    unidad: percentil
+    etiqueta: SUPUESTO
+    referencia: "Percentil de los días con lluvia >= 1 mm del clima histórico del lote; mismo criterio que la alerta de ventana erosiva de la especificación"
+  am_residuo:
+    valor: 0.0004
+    rango: [0.0002, 0.0006]
+    unidad: ha/kg
+    etiqueta: SUPUESTO
+    referencia: "Forma exponencial de Gregory (1982), cobertura = 1 - exp(-Am M); coeficiente de diseño, depende del residuo"
+# Números de curva SCS por grupo hidrológico A, B, C, D (USDA NRCS TR-55, 1986, Tabla 2-2b, condición hidrológica buena)
+numero_curva:
+  referencia: "USDA NRCS TR-55 (1986), Tabla 2-2b"
+  etiqueta: FUENTE
+  cultivo_en_hilera: {A: 67, B: 78, C: 85, D: 89}
+  barbecho_desnudo: {A: 77, B: 86, C: 91, D: 94}
+  barbecho_con_residuo: {A: 74, B: 83, C: 88, D: 90}
+# Grupo hidrológico por Ksat de la capa menos permeable, profundidad a capa impermeable > 100 cm (µm/s)
+grupo_hidrologico:
+  referencia: "USDA NRCS NEH parte 630, cap. 7, Tabla 7-1 (transcripción sin ficha EV)"
+  etiqueta: INFERENCIA
+  umbrales_um_s: {A: 10.0, B: 4.0, C: 0.4}
