@@ -396,6 +396,10 @@ Notas de procedencia sin generación nueva por este equipo de Gemelo:
 | Claude Code (Anthropic) | `src/lotes_demo/helada_estacion.py` | Climatología mensual de heladas de la estación GHCN como resumen derivado, sin redistribuir el CSV (D-038) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/lotes_demo/descargar_ghcn.py` | Descarga del CSV de una estación GHCN-Daily a C:/NASA/compartir, fuera del repositorio (D-038) | 2026-11-15 |
 | Claude Code (Anthropic) | `pruebas/lotes/test_helada_estacion.py` | Pruebas del resumen derivado de heladas y de que no haya crudos de GHCN en el repo | 2026-11-15 |
+| Claude Code (Anthropic) | `datos/evidencia/S4_hallazgo_lluvia_2026.py` | Contraste de la lluvia de 2026-01 y 2026-02 con POWER, ENSO y GHCN en anomalías (S4) | 2026-11-15 |
+| Claude Code (Anthropic) | `pruebas/test_registros.py` | Prueba de filas de tabla fuera de una tabla con encabezado en los registros (S4) | 2026-11-15 |
+| Claude Code (Anthropic) | `datos/evidencia/S4_registros_red.py` | RED de la prueba de registros (S4) | 2026-11-15 |
+| Claude Code (Anthropic) | `datos/evidencia/S4_grafo_importaciones.py` | Grafo estático de importaciones para la decisión i (S4) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registros.ts` | Filtro de filas en uso de los registros de Fuentes | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registrosPlugin.ts` | Plugin de Vite que filtra los registros al compilar | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/AlertaHelada.tsx` | Alerta de helada del gemelo con sus avisos | 2026-11-14 |
