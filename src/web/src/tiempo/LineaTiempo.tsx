@@ -8,7 +8,7 @@ import { crearReproductor } from './Reproductor'
 import { CintaEnso } from './CintaEnso'
 import { cargarMatriz, enRevision, textoEstado } from '../datos/estatico'
 import { CAPAS, capaPorId } from '../datos/capas'
-import { t } from '../textos/i18n'
+import { t, useIdioma } from '../textos/i18n'
 
 const VELOCIDAD = 4 // meses por segundo
 // Sin bloquear. Los archivos estáticos traen todos los meses de una variable, así que precargar es cargar la matriz del nivel 1.
@@ -36,6 +36,7 @@ export function LineaTiempo() {
   // Al cambiar de capa, el sombreado sigue al producto que se está pintando
   useEffect(() => { setClave(capaPorId(idCapa).calendario) }, [idCapa])
   const [paso, setPaso] = useState<1 | 12>(1)
+  const lengua = useIdioma() // los nombres de producto cambian con el idioma
   // El mes desde el que el producto es provisional sale de la matriz de su variable (nivel 0, unos KB)
   const [provDesde, setProvDesde] = useState<number | undefined>()
   useEffect(() => {
@@ -43,7 +44,8 @@ export function LineaTiempo() {
     setProvDesde(undefined)
     if (capa) void cargarMatriz(capa.id, 0).then((m) => setProvDesde(provisionalDesdeDe(m))).catch(() => undefined)
   }, [clave])
-  const producto = useMemo(() => ({ ...CALENDARIO[clave], ...(provDesde !== undefined && { provisionalDesde: provDesde }) }), [clave, provDesde])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const producto = useMemo(() => ({ ...CALENDARIO[clave], ...(provDesde !== undefined && { provisionalDesde: provDesde }) }), [clave, provDesde, lengua])
   const sinDato = useMemo(() => new Set(mesesConHueco(producto)), [producto])
 
   const rep = useRef(crearReproductor({ velocidad: VELOCIDAD, siguiente: pintar, precargar }))

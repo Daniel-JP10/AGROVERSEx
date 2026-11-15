@@ -66,10 +66,10 @@ export function Filtros() {
       <label>{t('filtros.maximo')} ({unidadCapa})<input type="number" value={filtro.max ?? ''} onChange={(e) => setFiltro({ ...filtro, max: num(e.target.value) })} /></label>
       <label>{t('filtros.fraccion')}<input type="number" min={0} max={1} step={0.1} value={filtro.fraccionMin ?? ''} onChange={(e) => setFiltro({ ...filtro, fraccionMin: num(e.target.value) })} /></label>
       {error && <p role="alert">{t('filtros.errAtributos')}</p>}
-      <Grupo nombre="Cobertura IGBP (clase)" opciones={distintos<number>(us, 'igbp')} sel={globales.igbp} alCambiar={(igbp) => cambiar({ ...globales, igbp })} />
-      <Grupo nombre="Condición de la tierra" opciones={distintos<string>(us, 'condicion')} sel={globales.clase} alCambiar={(clase) => cambiar({ ...globales, clase })} />
+      <Grupo nombre={t('filtros.igbp')} opciones={distintos<number>(us, 'igbp')} sel={globales.igbp} alCambiar={(igbp) => cambiar({ ...globales, igbp })} />
+      <Grupo nombre={t('filtros.condicion')} opciones={distintos<string>(us, 'condicion')} sel={globales.clase} alCambiar={(clase) => cambiar({ ...globales, clase })} />
       {attrs && !attrs.zona_demo && <p>{t('filtros.sinDemo')}</p>}
-      <Grupo nombre="Zona DEMO" opciones={distintos<string>(us, 'zona')} sel={globales.zona} alCambiar={(zona) => cambiar({ ...globales, zona })} />
+      <Grupo nombre={t('filtros.zonaDemo')} opciones={distintos<string>(us, 'zona')} sel={globales.zona} alCambiar={(zona) => cambiar({ ...globales, zona })} />
       <label><input type="checkbox" checked={!!globales.soloEventos} onChange={(e) => cambiar({ ...globales, soloEventos: e.target.checked || undefined })} /> {t('filtros.eventos')}</label>
       <label>ENSO
         <select aria-describedby="enso-umbral" value={globales.enso ?? ''} onChange={(e) => cambiar({ ...globales, enso: (e.target.value || undefined) as FiltrosGlobales['enso'] })}>
@@ -85,7 +85,7 @@ export function Filtros() {
         <section aria-label={t('filtros.regionales')}>
           <h3>{t('filtros.regionalesDe')} {seleccion.nombre}</h3>
           {!attrs ? <p role="status">{t('filtros.cargando')}</p> : !propia ? <p>{t('filtros.sinAtributos')}</p> : regionales.length === 0 ? <p>{t('filtros.ningunoAplica')}</p> : (
-            <ul>{regionales.map((r) => <li key={r.id}><strong>{r.nombre}</strong> <small>FUENTE: {r.evidencia}</small></li>)}</ul>
+            <ul>{regionales.map((r) => <li key={r.id}><strong>{r.nombre}</strong> <small>{t('filtros.fuente')} {r.evidencia}</small></li>)}</ul>
           )}
         </section>
       )}

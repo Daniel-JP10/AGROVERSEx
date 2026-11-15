@@ -61,7 +61,7 @@ export function Lotes({ id }: { id: string }) {
         <p className="etiqueta">{t('lotes.notaSensor')}</p>
         <h3>{t('lotes.vulnerabilidades')}</h3>
         <ul>{Object.values(RIESGOS).map((x) => (
-          <li key={x.id} data-testid="riesgo"><strong>{x.nombre}</strong>: {x.valor ?? t('comun.sinDato')} · {rotuloRiesgo(x)} · <small>{x.nota}</small></li>
+          <li key={x.id} data-testid="riesgo"><strong>{t(x.nombre)}</strong>: {x.valor ?? t('comun.sinDato')} · {rotuloRiesgo(x)} · <small>{t(x.nota)}</small></li>
         ))}</ul>
       </>}
       <Banco />
