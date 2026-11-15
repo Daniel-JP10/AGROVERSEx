@@ -1,7 +1,8 @@
 // asistido por SI: Claude Code (Anthropic), ayudas de los E2E de W1: idioma sembrado, contraste medido sobre el fondo real y textos prohibidos
 import type { Page } from '@playwright/test'
 
-export const ORIGEN = 'http://localhost:5199'
+// El origen sigue al puerto del config (E2E_ORIGEN); por defecto 5199 como antes
+export const ORIGEN = process.env.E2E_ORIGEN ?? 'http://localhost:5199'
 export const ES = { cookies: [], origins: [{ origin: ORIGEN, localStorage: [{ name: 'agroversex-idioma', value: 'es' }] }] }
 
 // Lista de la fase 3 (misma que textos_prohibidos.test.ts), aplicada al texto que se ve
