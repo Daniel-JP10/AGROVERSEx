@@ -1,6 +1,9 @@
 // asistido por SI: Claude Code (Anthropic), cifras de datos de los textos visibles: salen de constantes del código de datos, nunca de en.ts ni es.ts
-import { MES_INICIO, N_MESES } from '../tiempo/valor'
 
+// Primer mes y número de meses de la serie: los de public/datos/meta.json (mes0, n_meses); la prueba los compara con el archivo.
+// No se importa de tiempo/ (frontera con las carpetas de Daniel)
+const MES_INICIO = { anio: 2000, mes: 1 }
+const N_MESES = 323
 // Índice (desde MES_INICIO) del último mes de la línea base: mismo 0..191 que usa paneles/Series.tsx (2000-01 a 2015-12)
 const BASE_ULTIMO_INDICE = 191
 // Fracción válida mínima para publicar un valor (contratos/web_datos.md: null si frac_valida < 0,5)

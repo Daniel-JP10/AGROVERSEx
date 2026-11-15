@@ -49,8 +49,11 @@ describe('cifras de datos en los textos', () => {
     expect(conCifras('{recorrido_otro} {anios_serie}', 'en')).toMatch(/^\{recorrido_otro\} \d{4}-\d{4}$/)
   })
   it('los años de la serie salen de los mismos archivos de datos: coinciden con meta.json', () => {
-    const meta = JSON.parse(readFileSync(new URL('../public/datos/meta.json', import.meta.url), 'utf8')) as { variables: Record<string, { meses_disponibles?: { desde: string; hasta: string } }> }
+    const meta = JSON.parse(readFileSync(new URL('../public/datos/meta.json', import.meta.url), 'utf8')) as { mes0: string; n_meses: number; variables: Record<string, { meses_disponibles?: { desde: string; hasta: string } }> }
     const m = Object.values(meta.variables).flatMap((v) => (v.meses_disponibles ? [v.meses_disponibles.desde, v.meses_disponibles.hasta] : [])).map((x) => Number(x.slice(0, 4)))
+    expect(cifra('fecha_inicio_serie', 'en')).toBe(`${meta.mes0}-01`)
+    const [a0, m0] = meta.mes0.split('-').map(Number)
+    expect(cifra('anios_serie', 'en')).toBe(`${a0}-${a0 + Math.floor((m0 - 1 + meta.n_meses - 1) / 12)}`)
     expect(cifra('anios_serie', 'en')).toBe(`${Math.min(...m)}-${Math.max(...m)}`)
   })
 })
