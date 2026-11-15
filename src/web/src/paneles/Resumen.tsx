@@ -45,7 +45,7 @@ export function FilaDato({ v, s, mes }: { v: string; s: SerieVar; mes: number })
       {x !== null && lo !== null && hi !== null && <small>{t('globo.rangoCeldas')} {num(lo)}–{num(hi)} {unidad}</small>}
       <small>
         {frac !== null && `${t('globo.fraccionValida')} ${num(frac)} · `}
-        {p ? `${p.producto} ${p.version} · ${textoEstado(p.estado)}` : t('resumen.sinRegistro')}
+        {p ? `${p.producto} ${p.version} · ${textoEstado(p.estado, v, mes)}` : t('resumen.sinRegistro')}
       </small>
     </div>
   )

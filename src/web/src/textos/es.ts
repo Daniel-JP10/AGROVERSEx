@@ -94,6 +94,7 @@ export const es = {
   'globo.producto': 'producto',
   'globo.estado': 'estado',
   'estado.final': 'definitivo',
+  'estado.enRevision': 'en revisión',
   'panel.sinDatoReal': 'Sin dato real todavía para esta unidad. Esta versión solo trae datos reales de Colombia.',
   'panel.datosReales': 'datos reales',
   'panel.suelo': 'El suelo de esta unidad se incorpora con los lotes DEMO; no hay dato real todavía.',

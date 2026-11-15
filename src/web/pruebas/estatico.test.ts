@@ -110,7 +110,15 @@ describe('el mapa de Colombia con datos reales', () => {
     const crudo = Float32Array.from(m.valor, (f) => f[mes(aaaamm)] ?? NaN)
     expect(variados(colores(crudo, capaPorId('precip').rango))).toBe(false)
   })
-  // Sin salto en el empalme: cada mes de Late (2025-10 a 2026-10) frente a la mediana del mismo mes con Final 2001-2024,
+  // HALLAZGO registrado (bitácora de Datos, 19:3x; director 19:5x): la prueba original, con su aserción sin cambiar, falla
+  // porque 2026-01 (Late) queda 0,354 por encima de 2015-01 en la escala. Causa PENDIENTE (enero y febrero de 2026 salen
+  // 3,8 y 3,0 veces su climatología de Final). it.fails: se vuelve roja cuando la causa se resuelva y obliga a revisarla.
+  it.fails('la lluvia no salta de color entre 2015-01 (Final) y 2026-01 (Late): medianas a menos de 0,3 en la escala', async () => {
+    const r = capaPorId('precip').rango
+    const a = colores((await cargarCoropleta(2, 'precip', mes('2015-01'))).valores, r), b = colores((await cargarCoropleta(2, 'precip', mes('2026-01'))).valores, r)
+    expect(Math.abs(a.mediana - b.mediana)).toBeLessThan(0.3) // mm/day leído como mm/hr da 24 veces más y satura
+  })
+  // Guarda aparte contra errores de unidades en el empalme: cada mes de Late (2025-10 a 2026-10) frente a la mediana del mismo mes con Final 2001-2024,
   // en tramos de color. La mediana de esas razones debe quedar entre 0,5 y 2; un error de unidades da ~24 o ~0,04.
   // No se compara 2015-01 con 2026-01 directo: enero de 2026 es una anomalía húmeda (~3,8 veces su climatología).
   it('la lluvia no salta en el empalme: Late frente a la climatología de Final del mismo mes, en la escala de color', async () => {
@@ -174,5 +182,15 @@ describe('contratos y rutas', () => {
   it('leerGz acepta el archivo ya descomprimido por el navegador (Content-Encoding: gzip en Vite o en el alojamiento)', async () => {
     const { leerGz: leer } = await import('../src/datos/estatico')
     expect(await leer<{ a: number }>('x', async () => new Response(JSON.stringify({ a: 1 })))).toEqual({ a: 1 })
+  })
+})
+
+describe('meses en revisión (hallazgo de enero y febrero de 2026)', () => {
+  it('la lluvia de 2026-01 y 2026-02 sale provisional en revisión; 2025-12 y la temperatura no', async () => {
+    const { textoEstado, enRevision } = await import('../src/datos/estatico')
+    expect(textoEstado('provisional', 'precip', mes('2026-01'))).toMatch(/revisión|review/)
+    expect(textoEstado('provisional', 'precip', mes('2026-02'))).toMatch(/revisión|review/)
+    expect(enRevision('precip', mes('2025-12'))).toBe(false)
+    expect(enRevision('t2m', mes('2026-01'))).toBe(false)
   })
 })

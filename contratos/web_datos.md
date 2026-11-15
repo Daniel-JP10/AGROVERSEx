@@ -78,6 +78,7 @@ La conversión a unidad de pantalla (`mm/mes` con los días UTC reales de cada m
 - Carga inicial de una variable en los 3 niveles para Colombia (`precip_{0,1,2}.json.gz`): **3,26 MB** comprimidos en total (se cachean en memoria en `estatico.ts` al primer pedido).
 - `unidades_geo.json.gz` (**1,24 MB**) solo se descarga cuando el usuario selecciona una unidad para volar a su encuadre.
 - D-033e: `unidades_geo.json.gz` cubre el mundo y no se versiona; se construye al desplegar con `src/mapa_estatico/construir.py`. Los archivos de `COL/` ya versionados se quedan.
+- T-W4: la prueba de alojamiento mide cada `.json.gz` con y sin `Content-Encoding: gzip`; `leerGz` acepta los dos casos (prueba en `estatico.test.ts`, RED con el código viejo en `datos/evidencia/leergz_red.txt`).
 
 ## 5. Reglas sobre `SIMULADO` y unidades sin dato real
 

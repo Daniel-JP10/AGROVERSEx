@@ -96,6 +96,7 @@ export const en: Record<ClaveTexto, string> = {
   'globo.producto': 'product',
   'globo.estado': 'status',
   'estado.final': 'final',
+  'estado.enRevision': 'under review',
   'panel.sinDatoReal': 'No real data yet for this unit. This version only has real data for Colombia.',
   'panel.datosReales': 'real data',
   'panel.suelo': 'Soil for this unit comes with the DEMO plots; there is no real data yet.',

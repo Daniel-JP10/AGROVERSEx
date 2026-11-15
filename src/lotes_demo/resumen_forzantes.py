@@ -135,6 +135,9 @@ def resumir(raiz: Path, lote: str, ini: str, fin: str, ruta_ghcn: Path | None = 
             n_dias_comunes_con_pluviometro=int(len(jg)),
             metodo_anual_equiv="media diaria de los días comunes con dato de las tres fuentes x 365,25; supone que los días sin dato se parecen a los días con dato",
             anual_equiv_en_dias_comunes_mm=anual,
+            # totales comparables: suma solo en los días en que existen las tres fuentes
+            fraccion_dias_usados=round(len(jg) / len(cal), 4),
+            totales_mm_en_dias_comunes={k: round(float(jg[c].sum()), 1) for k, c in (("ghcn_estacion", "GHCN"), ("power", "POWER"), ("imerg", "IMERG"))},
             anual_equiv_ghcn_por_climatologia_mensual_mm=clim,
             sesgo_relativo_power_vs_ghcn=round(float((jg["POWER"].sum() - jg["GHCN"].sum()) / jg["GHCN"].sum()), 4),
             sesgo_relativo_imerg_vs_ghcn=round(float((jg["IMERG"].sum() - jg["GHCN"].sum()) / jg["GHCN"].sum()), 4),
