@@ -163,10 +163,15 @@ describe('el modo cambia el texto, nunca los datos', () => {
     expect(renderToStaticMarkup(createElement(Glosario, { modo: 'tecnico' }))).toContain(t('aviso.sin_dato'))
     expect(renderToStaticMarkup(createElement(Glosario, { modo: 'agricultor' }))).not.toContain(t('aviso.sin_dato'))
   })
-  it('la sección tiene su h1, el selector de modo con dos opciones y las tres partes', () => {
+  it('la sección tiene su h1 y las tres columnas: fuentes, glosario y créditos (el modo va en la cabecera)', () => {
     const html = renderToStaticMarkup(createElement(Fuentes))
     expect(html).toContain('<h1>Fuentes, glosario y créditos</h1>')
-    expect((html.match(/type="radio"/g) ?? []).length).toBe(2)
-    for (const marca of ['class="glosario"', 'id="creditos"', 'data-testid="declaracion-si"']) expect(html).toContain(marca)
+    expect((html.match(/<section class="tarjeta-hoja"/g) ?? []).length).toBe(3)
+    for (const marca of ['class="glosario"', 'id="creditos"', 'data-testid="declaracion-si"', 'data-credito=""']) expect(html).toContain(marca)
+  })
+  it('créditos: dirección visual de Jostin Colon Ramos y las referencias de diseño declaradas como IA fuera del producto', () => {
+    const html = renderToStaticMarkup(createElement(Fuentes))
+    expect(html).toContain('Dirección visual: Jostin Colon Ramos')
+    expect(html).toContain('Las imágenes de referencia de diseño se generaron con IA y no se usan en el producto')
   })
 })
