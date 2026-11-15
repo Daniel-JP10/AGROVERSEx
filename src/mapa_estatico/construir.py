@@ -212,7 +212,10 @@ def _trabajo_mundo(args) -> dict:
         raise ValueError("unidad y mes repetidos entre archivos (Final y Late no deben traslaparse)")
     # producto, versión, unidad y estado únicos por mes (como en matriz)
     cols = ["producto", "version", "unidad", "estado"]
-    pm_df = pd.DataFrame({c: d[c].astype(str) for c in cols}).assign(i=i).drop_duplicates()
+    # códigos de categoría, no texto: pasar 17 millones de filas a str tardaba minutos y llenaba la memoria
+    pm_df = pd.DataFrame({c: d[c].cat.codes.to_numpy() for c in cols}).assign(i=i).drop_duplicates()
+    for c in cols:
+        pm_df[c] = np.asarray(d[c].cat.categories, dtype=object)[pm_df[c].to_numpy()]
     if pm_df["i"].duplicated().any():
         raise ValueError("un mes trae más de un producto, versión, unidad o estado")
     productos: list[dict] = []
@@ -225,7 +228,7 @@ def _trabajo_mundo(args) -> dict:
     cats = np.asarray(d["unidad_id"].cat.categories, dtype=object)
     iso = np.array([c.split("-")[0] for c in cats], dtype=object)
     nivel = d["nivel"].to_numpy()
-    sin_c = (d["motivo"].astype(str) == "sin_cultivo").to_numpy()
+    sin_c = (d["motivo"] == "sin_cultivo").to_numpy()
     vals = {k: d[k].to_numpy() for k in ("valor", "p10", "p90", "frac_valida")}
     fmts = {"valor": ".6g", "p10": ".5g", "p90": ".5g", "frac_valida": ".3g"}
     sal = Path(salida)
