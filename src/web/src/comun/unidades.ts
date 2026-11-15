@@ -1,6 +1,7 @@
 // asistido por SI: Claude Code (Anthropic), conversión única de unidades para mostrar (contrato web_componentes §5)
 // Los datos guardan la unidad del producto (IMERG, mm/hr); la conversión es solo para mostrar.
 import { MES_INICIO } from '../tiempo/valor'
+import { t } from '../textos/i18n'
 
 /** mes: 'AAAA-MM' (UTC) o índice desde 2000-01 */
 export type Mes = string | number
@@ -21,8 +22,10 @@ export function diasDelMes(mes: Mes): number {
 
 type Conv = (v: number, dias: number) => { valor: number; unidad: string }
 const id: (u: string) => Conv = (u) => (v) => ({ valor: v, unidad: u })
-const mmHora: Conv = (v, d) => ({ valor: v * 24 * d, unidad: 'mm/mes' })
-const mmDia: Conv = (v, d) => ({ valor: v * d, unidad: 'mm/mes' })
+// la etiqueta de unidad se traduce al convertir (C-1); en español sigue siendo mm/mes
+const mmHora: Conv = (v, d) => ({ valor: v * 24 * d, unidad: t('unidad.mmMes') })
+const mmDia: Conv = (v, d) => ({ valor: v * d, unidad: t('unidad.mmMes') })
+const adim: Conv = (v) => ({ valor: v, unidad: t('unidad.adimensional') })
 const kC: Conv = (v) => ({ valor: v - 273.15, unidad: '°C' })
 
 // Un caso explícito por cada par (variable, unidad): los de serie_mensual (contratos/serie_mensual.md) y los de la base del prototipo.
@@ -32,8 +35,8 @@ const CONV: Record<string, Record<string, Conv>> = {
   t2m: { K: kC, C: id('°C') },
   t2m_p10: { C: id('°C') }, t2m_p90: { C: id('°C') },
   sm_raiz: { 'kg m-2': id('kg/m²') }, // GLDAS (modelo), sin conversión (el contrato no pide otra)
-  ndvi: { '1': id('adimensional'), adim: id('adimensional') },
-  nbr2: { adim: id('adimensional') },
+  ndvi: { '1': adim, adim },
+  nbr2: { adim },
   sm_verdad: { 'm3/m3': id('m³/m³') },
 }
 const ALIAS: Record<string, string> = { precipitacion: 'precip', humedad_radicular: 'sm_raiz' }

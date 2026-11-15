@@ -15,6 +15,7 @@ import { Miga } from './Miga'
 import { useEstado } from '../app/estado'
 import { nombreNivel, nombreUnidad } from '../globo/config'
 import { t } from '../textos/i18n'
+import type { ClaveTexto } from '../textos/en'
 import { HAY_API } from '../comun/rutas'
 
 export function PanelRegion() {
@@ -53,7 +54,7 @@ export function PanelRegion() {
         if (d) setTab(PESTANAS[(i + d + PESTANAS.length) % PESTANAS.length])
       }}>
         {PESTANAS.map((p) => (
-          <button key={p} role="tab" aria-selected={p === activa} tabIndex={p === activa ? 0 : -1} onClick={() => setTab(p)}>{p}</button>
+          <button key={p} role="tab" aria-selected={p === activa} tabIndex={p === activa ? 0 : -1} onClick={() => setTab(p)}>{t(`panel.tab.${p}` as ClaveTexto)}</button>
         ))}
       </div>
       <div role="tabpanel" className="pestana">

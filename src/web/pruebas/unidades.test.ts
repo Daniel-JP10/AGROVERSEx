@@ -1,6 +1,10 @@
 // asistido por SI: Claude Code (Anthropic), pruebas de la conversión única para mostrar (contrato web_componentes §5)
 import { describe, expect, it } from 'vitest'
 import { paraMostrar, diasDelMes } from '../src/comun/unidades'
+import { enEspanol } from './idioma_es'
+
+// estas pruebas afirman la etiqueta en español (mm/mes, adimensional): fijan el idioma ellas mismas (D-039.1)
+enEspanol()
 import { mmHoraAMmMes } from '../src/datos/desescalar'
 import { mmPorMes } from '../src/datos/series'
 import { capaPorId, valoresCapa } from '../src/datos/capas'

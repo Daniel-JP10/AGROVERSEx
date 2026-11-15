@@ -1,6 +1,10 @@
 // asistido por SI: Claude Code (Anthropic), prueba del empalme IMERG Final (mm/hr) a Late (mm/day) pasando por paraMostrar (T-D2)
 import { describe, expect, it } from 'vitest'
 import { paraMostrar } from '../src/comun/unidades'
+import { enEspanol } from './idioma_es'
+
+// estas pruebas afirman la etiqueta en español (mm/mes, adimensional): fijan el idioma ellas mismas (D-039.1)
+enEspanol()
 import filas from './fixture_empalme_imerg.json'
 
 type Fila = { unidad_id: string; mes: string; valor: number; estado: string; unidad: string }

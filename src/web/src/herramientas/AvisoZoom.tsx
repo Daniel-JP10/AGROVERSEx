@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import type { Map as MapaGL } from 'maplibre-gl'
 import './herramientas.css'
+import { t } from '../textos/i18n'
 
 // MapLibre cambia el globo por Mercator desde este zoom aunque el botón siga en 3D
 export const ZOOM_MERCATOR = 12
@@ -21,7 +22,7 @@ export function AvisoZoom({ mapa, proyeccion }: { mapa: MapaGL; proyeccion: 'glo
   if (!debeAvisarZoom(zoom, proyeccion)) return null
   return (
     <p role="status" className="aviso-zoom">
-      A zoom {ZOOM_MERCATOR} o más, el mapa pasa a 2D (Mercator) automáticamente.
+      {t('zoom.mercator').replace('{zoom}', String(ZOOM_MERCATOR))}
     </p>
   )
 }

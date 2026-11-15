@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react'
 import * as Plot from '@observablehq/plot'
 import type { Num } from '../datos/series'
+import { t } from '../textos/i18n'
 
 export interface CambioFuente { mes: number; texto: string }
 interface P { valor: Num[]; p10?: Num[]; p90?: Num[]; variable: string; unidad: string; cambiosFuente: CambioFuente[]; desde?: number }
@@ -35,8 +36,8 @@ export function BandaSerie({ valor, p10, p90, variable, unidad, cambiosFuente, d
       ],
     })
     f.setAttribute('role', 'img')
-    f.setAttribute('aria-label', `Serie mensual de ${variable}`)
-    f.setAttribute('aria-description', `${valor.filter((x) => x !== null).length} de ${valor.length} meses con dato; huecos sin interpolar; ${cambiosFuente.map((c) => c.texto).join(', ')}`)
+    f.setAttribute('aria-label', `${t('serie.aria')} ${variable}`)
+    f.setAttribute('aria-description', `${valor.filter((x) => x !== null).length} ${t('series.de')} ${valor.length}; ${t('serie.huecos')}; ${cambiosFuente.map((c) => c.texto).join(', ')}`)
     ref.current?.replaceChildren(f)
   }, [valor, p10, p90, variable, unidad, cambiosFuente, desde])
   return <div ref={ref} data-testid="grafico" />

@@ -472,5 +472,16 @@ export const en = {
   'mes.corto.10': 'Oct',
   'mes.corto.11': 'Nov',
   'mes.corto.12': 'Dec',
+  'panel.tab.Resumen': 'Summary',
+  'panel.tab.Series': 'Time series',
+  'panel.tab.Suelo': 'Soil',
+  'panel.tab.Rotaciones': 'Rotations',
+  'panel.tab.Lotes': 'Plots',
+  'panel.tab.Fuentes': 'Sources',
+  'unidad.mmMes': 'mm/month',
+  'unidad.adimensional': 'dimensionless',
+  'serie.aria': 'Monthly series of',
+  'serie.huecos': 'gaps not interpolated',
+  'zoom.mercator': 'At zoom {zoom} or more, the map switches to 2D (Mercator) automatically.',
 } as const
 export type ClaveTexto = keyof typeof en

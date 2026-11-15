@@ -60,7 +60,8 @@ test('recorrer pestañas del panel y herramientas del riel no llama a /api/', as
   await page.goto(`/#/tierra?unidad=${IPIALES}`)
   const panel = page.getByRole('complementary', { name: /panel de región|region panel/i })
   await expect(panel).toBeVisible({ timeout: 60_000 })
-  for (const pestana of ['Series', 'Suelo', 'Rotaciones', 'Fuentes', 'Resumen']) {
+  // corre en inglés (idioma por defecto): las pestañas se buscan por su etiqueta inglesa (C-1)
+  for (const pestana of ['Time series', 'Soil', 'Rotations', 'Sources', 'Summary']) {
     await panel.getByRole('tab', { name: pestana }).click()
     await expect(panel.getByRole('tab', { name: pestana })).toHaveAttribute('aria-selected', 'true')
     await page.waitForTimeout(400) // deja salir las peticiones de la pestaña

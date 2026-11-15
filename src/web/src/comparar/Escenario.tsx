@@ -8,7 +8,7 @@ import { t } from '../textos/i18n'
 
 interface Rango { p25: number; p75: number; min: number; max: number }
 const VARS = [
-  { id: 'precip', nombre: 'capa.precipCorta' as const, unidad: 'mm/mes' },
+  { id: 'precip', nombre: 'capa.precipCorta' as const, get unidad() { return t('unidad.mmMes') } },
   { id: 't2m', nombre: 'capa.tempCorta' as const, unidad: '°C' },
 ]
 

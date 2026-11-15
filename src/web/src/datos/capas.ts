@@ -17,10 +17,10 @@ export interface Capa {
 
 // Solo las cuatro variables núcleo con dato real (T-D2, Colombia). Las capas simuladas de la fase 1 salieron: no hay dato real que las respalde.
 export const CAPAS: Capa[] = [
-  { id: 'precip', tema: 'Agua', get nombre() { return t('capa.precip') }, unidad: 'mm/mes', rango: [0, 500], calendario: 'imerg' },
+  { id: 'precip', tema: 'Agua', get nombre() { return t('capa.precip') }, get unidad() { return t('unidad.mmMes') }, rango: [0, 500], calendario: 'imerg' },
   { id: 'sm_raiz', tema: 'Agua', get nombre() { return t('capa.sm_raiz') }, unidad: 'kg/m²', rango: [0, 900], calendario: 'gldas' },
   { id: 't2m', tema: 'Clima', get nombre() { return t('capa.t2m') }, unidad: '°C', rango: [-10, 35], calendario: 'merra2' },
-  { id: 'ndvi', tema: 'Vegetación', nombre: 'NDVI', unidad: 'adimensional', rango: [0, 1], calendario: 'mod13' },
+  { id: 'ndvi', tema: 'Vegetación', nombre: 'NDVI', get unidad() { return t('unidad.adimensional') }, rango: [0, 1], calendario: 'mod13' },
 ]
 
 export const CAPA_INICIAL = 'precip'

@@ -416,6 +416,7 @@ Notas de procedencia sin generación nueva por este equipo de Gemelo:
 | Claude Code (Anthropic) | `src/web/pruebas/idioma_es.ts` | Ayudante que fija el español en vitest (S3) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/pruebas/e2e/idioma.ts` | Ayudante de idioma guardado en E2E (S3) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/pruebas/e2e/idiomas.spec.ts` | E2E de idiomas, inglés por defecto y prioridades (S3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/ingles_visible.test.ts` | Prueba de que unidades, pestañas del panel, aria de la serie y aviso de zoom salen en inglés por defecto (C-1) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registros.ts` | Filtro de filas en uso de los registros de Fuentes | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registrosPlugin.ts` | Plugin de Vite que filtra los registros al compilar | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/AlertaHelada.tsx` | Alerta de helada del gemelo con sus avisos | 2026-11-14 |
