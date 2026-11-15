@@ -6,6 +6,13 @@ import type { SerieVar } from '../src/datos/series'
 
 const serie = (unidad: string | null): SerieVar => ({ valor: [123.456], p10: [100], p90: [150], frac: [1], unidad_mes: [unidad], productos: [], producto_mes: [-1] })
 
+// en servidor zustand lee el estado inicial, por eso se simula el estado con una unidad elegida
+let sel: Record<string, unknown> = { id: 'USA-ADM2-X', nombre: 'Prueba', nivel: 2, pais: 'Estados Unidos' }
+vi.mock('../src/app/estado', () => {
+  const st = { get seleccion() { return sel }, seleccionar: () => {}, aviso: null, pestana: 'Resumen', abrirPestana: () => {} }
+  return { useEstado: (f: (s: unknown) => unknown) => f(st) }
+})
+
 let FilaDato: typeof import('../src/paneles/Resumen').FilaDato
 let convertirSerie: typeof import('../src/paneles/Series').convertirSerie
 beforeAll(async () => {
@@ -26,5 +33,24 @@ describe('paneles ante una unidad sin conversión', () => {
   it('Series: unidad null da null (el panel muestra el error) y una válida convierte', () => {
     expect(convertirSerie('precip', serie(null))).toBeNull()
     expect(convertirSerie('precip', serie('mm/day'))?.unidad).toBe('mm/mes')
+  })
+
+  it('la cabecera del panel no lleva rótulo general de datos (D-036 c)', async () => {
+    const { PanelRegion } = await import('../src/paneles/PanelRegion')
+    const { t } = await import('../src/textos/i18n')
+    const h = renderToString(createElement(PanelRegion))
+    expect(h).toContain('Prueba')
+    // solo la cabecera: el rótulo por variable lo ponen Resumen y Series
+    const cab = /<p class="etiqueta">(.*?)<\/p>/.exec(h)?.[1] ?? ''
+    expect(cab).toContain('Estados Unidos')
+    expect(cab).not.toContain(t('globo.sinCargados'))
+    expect(cab).not.toMatch(/real data|datos reales|panel\.datosReales/i)
+  })
+  it('la cabecera de un nivel 0 no termina en separador', async () => {
+    sel = { id: 'COL-ADM0', nombre: 'Colombia', nivel: 0, pais: 'Colombia' }
+    const { PanelRegion } = await import('../src/paneles/PanelRegion')
+    const cab = /<p class="etiqueta">(.*?)<\/p>/.exec(renderToString(createElement(PanelRegion)).replace(/<!-- -->/g, ''))?.[1] ?? ''
+    expect(cab).not.toBe('')
+    expect(cab).not.toMatch(/·\s*$/)
   })
 })
