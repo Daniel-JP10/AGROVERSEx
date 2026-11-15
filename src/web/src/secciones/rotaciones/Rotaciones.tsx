@@ -1,8 +1,11 @@
-// asistido por SI: Claude Code (Anthropic), sección Rotaciones: lote por la ruta y salida del gemelo v1.1 con sus textos por clave
+// asistido por SI: Claude Code (Anthropic), sección Rotaciones: lote por la ruta, tablero de la fase 3 y salida del gemelo v1.2 con sus textos por clave
 import { useState } from 'react'
 import { irA, useRuta } from '../../app/ruta'
 import { idioma, t } from '../../textos/i18n'
-import type { ClaveTexto } from '../../textos/en'
+import { loteDeHash, useLote, type EstadoLote } from '../lote/datos'
+import '../lote/lote.css'
+import { sinCarbono } from './carbono'
+import { Tablero } from './Tablero'
 import { Avisos } from './Avisos'
 import { ComparadorEstrategias } from './ComparadorEstrategias'
 import { AlertaHelada } from './AlertaHelada'
@@ -14,9 +17,6 @@ import type { Fuente, SalidaOptimizacion } from './gemelo'
 import { useFuente } from './lector'
 import { traducir, type Catalogo } from './textosGemelo'
 import './rotaciones.css'
-
-// Partes aún sin conectar: solo título y estado, ningún cálculo propio en Web
-const PENDIENTES: ClaveTexto[] = ['rotaciones.escenarios', 'rotaciones.calibracion']
 
 // Con catálogo, los textos salen de sus claves v1.1; sin él, de los textos en español de la v1
 function textos(doc: SalidaOptimizacion, cat?: Catalogo) {
@@ -32,8 +32,13 @@ function rotulo(f: Extract<Fuente, { estado: 'listo' }>): string {
   return r?.[idioma()] ?? (r && f.catalogo ? traducir(f.catalogo, r.clave, r.parametros) : t('etiqueta.simulacion_modelo'))
 }
 
-export function VistaRotaciones({ fuente }: { fuente: Fuente }) {
+type Props = { fuente: Fuente; lote?: EstadoLote; escenario?: string; setEscenario?: (e: string) => void }
+
+export function VistaRotaciones({ fuente: cruda, lote, escenario = 'historico', setEscenario = () => {} }: Props) {
   const [pesos, setPesos] = useState<Pesos>(PESOS_IGUALES)
+  // Ninguna cifra de carbono en pantalla mientras MOSTRAR_CARBONO sea false (director, 13:27)
+  const fuente: Fuente = cruda.estado === 'listo' ? { ...cruda, doc: sinCarbono(cruda.doc) } : cruda
+  const deslizadores = <Deslizadores pesos={pesos} alCambiar={(k, v) => setPesos((p) => ({ ...p, [k]: v }))} />
   return (
     <main className="seccion rotaciones">
       <h1>{t('seccion.rotaciones')}</h1>
@@ -51,29 +56,31 @@ export function VistaRotaciones({ fuente }: { fuente: Fuente }) {
         <>
           {/* El rótulo lo decide el origen de los datos, no metadatos.naturaleza (en el gemelo siempre vale simulado) */}
           <p className="rotulo" data-testid="rotulo"><strong data-texto-gemelo="">{rotulo(fuente)}</strong></p>
+          {/* Con la simulación del lote, el tablero va arriba y lleva los deslizadores en su columna derecha */}
+          {lote?.estado === 'listo'
+            ? <Tablero d={lote} pesos={pesos} escenario={escenario} setEscenario={setEscenario} prioridades={deslizadores} />
+            : deslizadores}
           <Avisos avisos={textos(fuente.doc, fuente.catalogo).avisos} />
-          <Deslizadores pesos={pesos} alCambiar={(k, v) => setPesos((p) => ({ ...p, [k]: v }))} />
           <ComparadorEstrategias linea_base={fuente.doc.linea_base} frente={fuente.doc.frente} tarjetas={fuente.doc.tarjetas} catalogo={fuente.catalogo} orden={ordenDelDocumento(fuente.doc, pesos)} faltantes={faltantesDelDocumento(fuente.doc)} />
+          {lote?.estado === 'listo' && !lote.lote.escenarios[escenario]?.optimizacion && <p className="sin-dato" role="note">{t('rotaciones.pareto_no_esc')}</p>}
           <FrentePareto objetivos={textos(fuente.doc, fuente.catalogo).objetivos} linea_base={fuente.doc.linea_base} frente={fuente.doc.frente} />
           <Compromisos frente={fuente.doc.frente} compromisos={fuente.doc.compromisos} />
           <section className="alertas" aria-labelledby="h-alertas">
             <h2 id="h-alertas">{t('rotaciones.alertas')}</h2>
             <AlertaHelada alerta={fuente.doc.alertas?.helada_etapa_sensible} estrategias={[fuente.doc.linea_base, ...fuente.doc.frente]} catalogo={fuente.catalogo} />
           </section>
-          {PENDIENTES.map((k) => (
-            <section key={k} className="pendiente">
-              <h2>{t(k)}</h2>
-              {k === 'rotaciones.escenarios' && <p>{t('aviso.escenario')}</p>}
-              <p className="sin-dato">{t('rotaciones.pendiente_gemelo')}</p>
-            </section>
-          ))}
         </>
       )}
     </main>
   )
 }
 
+// Lote de ?lote= (por defecto DEMO-COL-01). El frente sale de la optimización del escenario si existe; si no, de la histórica
 export function Rotaciones() {
-  const { params } = useRuta()
-  return <VistaRotaciones fuente={useFuente(params.lote)} />
+  useRuta()
+  const loteId = loteDeHash(typeof window === 'undefined' ? '' : window.location.hash)
+  const [escenario, setEscenario] = useState('historico')
+  const lote = useLote(loteId, escenario)
+  const escOpt = lote.estado === 'listo' && lote.lote.escenarios[escenario]?.optimizacion ? escenario : 'historico'
+  return <VistaRotaciones fuente={useFuente(loteId, escOpt)} lote={lote} escenario={escenario} setEscenario={setEscenario} />
 }

@@ -1,0 +1,50 @@
+{
+ "fuente": "datos/lotes/exposicion_erosiva_lotes.json",
+ "version": 1,
+ "lotes": {
+  "DEMO-USA-01": {
+   "producto": "NASADEM_HGT v001 (1 arc-sec, ~30 m)",
+   "crs_metrico": "EPSG:32614",
+   "dx_m": 23.3062,
+   "dy_m": 30.8409,
+   "n_pixeles": 1178,
+   "elevacion_centro_m": 356,
+   "elevacion_media_m": 355.6281833616299,
+   "elevacion_p10_p50_p90_m": [
+    354,
+    356,
+    357
+   ],
+   "pendiente_media_m_m": 0.03131030698942477,
+   "pendiente_p10_p50_p90_m_m": [
+    0.016212239172340544,
+    0.026890310080184717,
+    0.053780620160369434
+   ],
+   "fraccion_pendiente_alta_ge_0p09": 0.0050933786078098476,
+   "pendiente_centro_m_m": 0.045867690239322224
+  },
+  "DEMO-COL-01": {
+   "producto": "NASADEM_HGT v001 (1 arc-sec, ~30 m)",
+   "crs_metrico": "EPSG:32618",
+   "dx_m": 30.94,
+   "dy_m": 30.7362,
+   "n_pixeles": 961,
+   "elevacion_centro_m": 2936,
+   "elevacion_media_m": 2945.213319458897,
+   "elevacion_p10_p50_p90_m": [
+    2929,
+    2942,
+    2966
+   ],
+   "pendiente_media_m_m": 0.08807997343764204,
+   "pendiente_p10_p50_p90_m_m": [
+    0.03253491686411047,
+    0.08114486484455553,
+    0.1600423249108872
+   ],
+   "fraccion_pendiente_alta_ge_0p09": 0.4162330905306972,
+   "pendiente_centro_m_m": 0.08114486484455553
+  }
+ }
+}

@@ -1,4 +1,56 @@
-// asistido por SI: Claude Code (Anthropic), textos de la sección rotaciones (plan fase 3 v2 §10)
+// asistido por SI: Claude Code (Anthropic), textos de la sección rotaciones (plan fase 3 v2 §5 y §10)
 // Claves con prefijo 'rotaciones.'; el español debe tener todas las claves del inglés (lo exige el tipo)
-export const en = {} as const
-export const es: Record<keyof typeof en, string> = {}
+// Las claves 'rotaciones.*' de en.ts siguen en uso; aquí solo van las nuevas, sin repetir ninguna
+// "0-30 cm" y "8" están atados por prueba a los campos del paquete (D-039 punto 3)
+export const en = {
+  'rotaciones.fichas': 'Rotation sequence',
+  'rotaciones.fichas_nota': 'Seasons of {estrategia} in the simulated years.',
+  'rotaciones.siembra': 'sown {mes} {dia}, year {anio}',
+  'rotaciones.grafico': 'Strategies over time',
+  'rotaciones.grafico_nota': 'Up to 3 strategies, the first ones for your priorities. Line: median. Band: p10 to p90.',
+  'rotaciones.variable': 'Variable',
+  'rotaciones.eje_anios': 'Year of the rotation',
+  'rotaciones.elegidas': 'Strategies shown',
+  'rotaciones.maximo': 'Up to 3 at a time.',
+  'rotaciones.comparador': 'Scenario comparison',
+  'rotaciones.comparador_nota': 'Erosion exposure and drainage of each strategy in the chosen scenario, median and p10 to p90.',
+  'rotaciones.escenario_elegido': 'Scenario',
+  'rotaciones.estrategia_col': 'Strategy',
+  'rotaciones.pareto_pequeno': 'Trade-off front',
+  'rotaciones.pareto_no_esc': 'The trade-off front exists for the historical, dry, normal and wet scenarios only.',
+  'rotaciones.nc': 'Nitrogen and carbon',
+  'rotaciones.nc_no_disponible': 'Not available yet',
+  'rotaciones.nc_inicial': 'Soil organic carbon, 0-30 cm, January mean of year 1: model ensemble median {p50} t C/ha (range {p10}-{p90})',
+  'rotaciones.nc_base': 'Twin ensemble from SoilGrids 2.0 with sampled uncertainty. The package has no initial carbon state, so this is the mean of the first month.',
+  'rotaciones.nc_cambio': 'Change in soil organic carbon at the end of the horizon, same base',
+  'rotaciones.nc_lim_rango': 'The range is a wide bound: its low end combines the low quantiles of organic carbon and bulk density, and its high end combines their high quantiles, a physically implausible combination. That is why the ensemble median sits above the central SoilGrids value.',
+  'rotaciones.nc_lim_muestras': 'With {n} parameter samples, p10 and p90 are the same as the minimum and maximum.',
+  'rotaciones.metodo': 'Method: FAO-56 Penman-Monteith reference evapotranspiration with NASA POWER daily climate.',
+  'rotaciones.lote_demo': 'DEMO field',
+} as const
+export const es: Record<keyof typeof en, string> = {
+  'rotaciones.fichas': 'Secuencia de la rotación',
+  'rotaciones.fichas_nota': 'Temporadas de {estrategia} en los años simulados.',
+  'rotaciones.siembra': 'siembra {dia} {mes}, año {anio}',
+  'rotaciones.grafico': 'Estrategias en el tiempo',
+  'rotaciones.grafico_nota': 'Hasta 3 estrategias, las primeras según tus prioridades. Línea: mediana. Banda: p10 a p90.',
+  'rotaciones.variable': 'Variable',
+  'rotaciones.eje_anios': 'Año de la rotación',
+  'rotaciones.elegidas': 'Estrategias en el gráfico',
+  'rotaciones.maximo': 'Hasta 3 a la vez.',
+  'rotaciones.comparador': 'Comparador de escenarios',
+  'rotaciones.comparador_nota': 'Exposición erosiva y drenaje de cada estrategia en el escenario elegido, mediana y p10 a p90.',
+  'rotaciones.escenario_elegido': 'Escenario',
+  'rotaciones.estrategia_col': 'Estrategia',
+  'rotaciones.pareto_pequeno': 'Frente de compromisos',
+  'rotaciones.pareto_no_esc': 'El frente de compromisos existe solo para los escenarios histórico, seco, normal y húmedo.',
+  'rotaciones.nc': 'Nitrógeno y carbono',
+  'rotaciones.nc_no_disponible': 'Aún no disponible',
+  'rotaciones.nc_inicial': 'Carbono orgánico del suelo, 0-30 cm, media de enero del año 1: mediana del ensamble del modelo {p50} t C/ha (rango {p10}-{p90})',
+  'rotaciones.nc_base': 'Ensamble del gemelo desde SoilGrids 2.0 con incertidumbre muestreada. El paquete no trae el estado inicial del carbono, así que es la media del primer mes.',
+  'rotaciones.nc_cambio': 'Cambio del carbono orgánico del suelo al final del horizonte, misma base',
+  'rotaciones.nc_lim_rango': 'El rango es una cota amplia: su extremo bajo combina los cuantiles bajos del carbono orgánico y de la densidad aparente, y su extremo alto combina los cuantiles altos, una combinación físicamente inverosímil. Por eso la mediana del ensamble queda por encima del valor central de SoilGrids.',
+  'rotaciones.nc_lim_muestras': 'Con {n} muestras de parámetros, p10 y p90 equivalen al mínimo y al máximo.',
+  'rotaciones.metodo': 'Método: evapotranspiración de referencia FAO-56 Penman-Monteith con clima diario de NASA POWER.',
+  'rotaciones.lote_demo': 'Lote DEMO',
+}

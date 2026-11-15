@@ -18,9 +18,9 @@ function falso(archivos: Record<string, unknown>) {
 }
 const COMPLETO: Record<string, unknown> = {
   '/datos/lotes_demo.json': LOTES,
-  '/datos/publicos/gemelo/indice.json': INDICE,
-  '/datos/publicos/gemelo/DEMO-COL-01/optimizacion_historico.json': ejemplo,
-  '/datos/publicos/gemelo/textos/es.json': CAT,
+  '/gemelo/indice.json': INDICE,
+  '/gemelo/DEMO-COL-01/optimizacion_historico.json': ejemplo,
+  '/gemelo/textos/es.json': CAT,
 }
 
 describe('cargarGemelo sin ejemplos', () => {
@@ -32,8 +32,8 @@ describe('cargarGemelo sin ejemplos', () => {
     expect(f.origen).toBe('modelo')
     expect(f.catalogo).toEqual(CAT)
     expect(f.doc.linea_base.id).toBe(ejemplo.linea_base.id)
-    expect(pedidas.slice(0, 2)).toEqual(['/datos/lotes_demo.json', '/datos/publicos/gemelo/indice.json'])
-    expect(pedidas.slice(2).sort()).toEqual(['/datos/publicos/gemelo/DEMO-COL-01/optimizacion_historico.json', '/datos/publicos/gemelo/textos/es.json'])
+    expect(pedidas.slice(0, 2)).toEqual(['/datos/lotes_demo.json', '/gemelo/indice.json'])
+    expect(pedidas.slice(2).sort()).toEqual(['/gemelo/DEMO-COL-01/optimizacion_historico.json', '/gemelo/textos/es.json'])
   })
   it('un id que no es DEMO-XXX-NN no pide nada', async () => {
     for (const id of ['../../etc', 'DEMO-COL-1', 'demo-col-01', 'DEMO-COL-01/../x']) {
@@ -44,18 +44,18 @@ describe('cargarGemelo sin ejemplos', () => {
   })
   it('un lote que no está en lotes_demo.json o en indice.json da sin_dato', async () => {
     expect((await cargarGemelo('DEMO-USA-01', 'es', falso(COMPLETO).pedir)).estado).toBe('sin_dato')
-    const sinIndice = { ...COMPLETO, '/datos/publicos/gemelo/indice.json': { ...INDICE, lotes: [] } }
+    const sinIndice = { ...COMPLETO, '/gemelo/indice.json': { ...INDICE, lotes: [] } }
     expect((await cargarGemelo('DEMO-COL-01', 'es', falso(sinIndice).pedir)).estado).toBe('sin_dato')
   })
   it('una ruta de indice.json que sube de carpeta no se pide', async () => {
-    const malo = { ...COMPLETO, '/datos/publicos/gemelo/indice.json': { ...INDICE, lotes: [{ lote_id: 'DEMO-COL-01', escenarios: { historico: { optimizacion: '../../secreto.json' } } }] } }
+    const malo = { ...COMPLETO, '/gemelo/indice.json': { ...INDICE, lotes: [{ lote_id: 'DEMO-COL-01', escenarios: { historico: { optimizacion: '../../secreto.json' } } }] } }
     const { pedir, pedidas } = falso(malo)
     expect((await cargarGemelo('DEMO-COL-01', 'es', pedir)).estado).toBe('sin_dato')
     expect(pedidas.some((u) => u.includes('secreto'))).toBe(false)
   })
   it('un archivo ausente (404) da sin_dato sin romper', async () => {
     const sinTextos = { ...COMPLETO }
-    delete sinTextos['/datos/publicos/gemelo/textos/es.json']
+    delete sinTextos['/gemelo/textos/es.json']
     expect((await cargarGemelo('DEMO-COL-01', 'es', falso(sinTextos).pedir)).estado).toBe('sin_dato')
     expect((await cargarGemelo('DEMO-COL-01', 'es', falso({}).pedir)).estado).toBe('sin_dato')
   })
