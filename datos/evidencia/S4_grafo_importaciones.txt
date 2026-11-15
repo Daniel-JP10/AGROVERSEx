@@ -1,0 +1,199 @@
+Raiz: C:\NASA\wt\f2-s4-analisis
+Modulos Python analizados: 145
+
+Importadores por modulo del generador (src/simulacion/*.py)
+- simulacion.agua: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: ['simulacion.escribir_sqlite', 'simulacion.lotes']; de pruebas/sim: 2
+- simulacion.azar: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: ['simulacion.clima', 'simulacion.cobertura', 'simulacion.lotes', 'simulacion.suelo', 'simulacion.vegetacion']; de pruebas/sim: 3
+- simulacion.clima: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: ['simulacion.agua', 'simulacion.cobertura', 'simulacion.escribir_sqlite', 'simulacion.lotes']; de pruebas/sim: 11
+- simulacion.cobertura: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: ['simulacion.lotes', 'simulacion.suelo', 'simulacion.vegetacion']; de pruebas/sim: 2
+- simulacion.condicion: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: ['simulacion.escribir_sqlite']; de pruebas/sim: 2
+- simulacion.config: de los que se quedan: ['simulacion.geo.descargas', 'simulacion.geo.estaticos', 'simulacion.geo.extraer', 'simulacion.geo.gmted_tierra', 'simulacion.geo.indice_busqueda', 'simulacion.geo.teselas', 'simulacion.geo.unidades']; de pruebas que se quedan: ['pruebas.geo.test_config_datos', 'pruebas.geo.test_estaticos_reales', 'pruebas.geo.test_teselas', 'pruebas.geo.test_unidades_reales']; del generador: ['simulacion.agua', 'simulacion.azar', 'simulacion.clima', 'simulacion.escribir_sqlite', 'simulacion.lotes', 'simulacion.productos', 'simulacion.referencias.cargar', 'simulacion.rotaciones', 'simulacion.suelo', 'simulacion.tiempo', 'simulacion.vegetacion']; de pruebas/sim: 12
+- simulacion.escribir_sqlite: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: nadie; de pruebas/sim: 2
+- simulacion.incertidumbre: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: ['simulacion.agua', 'simulacion.clima', 'simulacion.vegetacion']; de pruebas/sim: 1
+- simulacion.lotes: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: ['simulacion.escribir_sqlite']; de pruebas/sim: 1
+- simulacion.productos: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: ['simulacion.agua', 'simulacion.clima', 'simulacion.vegetacion']; de pruebas/sim: 4
+- simulacion.referencias.cargar: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: ['simulacion.agua', 'simulacion.clima', 'simulacion.escribir_sqlite', 'simulacion.rotaciones']; de pruebas/sim: 5
+- simulacion.rotaciones: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: ['simulacion.escribir_sqlite']; de pruebas/sim: 1
+- simulacion.suelo: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: ['simulacion.condicion', 'simulacion.escribir_sqlite']; de pruebas/sim: 3
+- simulacion.tiempo: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: ['simulacion.agua', 'simulacion.clima', 'simulacion.escribir_sqlite', 'simulacion.lotes', 'simulacion.productos', 'simulacion.suelo', 'simulacion.vegetacion']; de pruebas/sim: 7
+- simulacion.variables: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: ['simulacion.clima', 'simulacion.escribir_sqlite', 'simulacion.productos', 'simulacion.suelo', 'simulacion.vegetacion']; de pruebas/sim: 6
+- simulacion.vegetacion: de los que se quedan: nadie; de pruebas que se quedan: nadie; del generador: ['simulacion.escribir_sqlite', 'simulacion.lotes']; de pruebas/sim: 5
+
+Archivos de pruebas/sim: modulos del generador y de geo que importan (los que dependen solo del generador salen con el)
+- pruebas\sim\test_agua.py: ['agua', 'clima', 'config', 'productos', 'referencias.cargar', 'tiempo', 'vegetacion']
+- pruebas\sim\test_anclas.py: ['clima', 'config', 'geo.teselas', 'referencias.cargar', 'tiempo', 'variables']
+- pruebas\sim\test_azar.py: ['azar']
+- pruebas\sim\test_clim_normal_geo.py: ['clima', 'geo.clim_normal']
+- pruebas\sim\test_clima.py: ['clima', 'config', 'productos', 'referencias.cargar', 'tiempo']
+- pruebas\sim\test_clima_normal.py: ['clima']
+- pruebas\sim\test_cobertura.py: ['clima', 'cobertura']
+- pruebas\sim\test_condicion.py: ['clima', 'condicion', 'suelo', 'vegetacion']
+- pruebas\sim\test_correcciones_v2.py: ['agua', 'clima', 'config', 'escribir_sqlite', 'suelo', 'tiempo', 'variables', 'vegetacion']
+- pruebas\sim\test_escribir.py: ['escribir_sqlite', 'variables']
+- pruebas\sim\test_esquema.py: ['config', 'variables']
+- pruebas\sim\test_incertidumbre.py: ['azar', 'incertidumbre']
+- pruebas\sim\test_lotes.py: ['azar', 'clima', 'config', 'lotes', 'tiempo']
+- pruebas\sim\test_productos.py: ['config', 'productos', 'tiempo']
+- pruebas\sim\test_referencias.py: ['config', 'referencias.cargar']
+- pruebas\sim\test_rotaciones.py: ['config', 'referencias.cargar', 'rotaciones', 'variables']
+- pruebas\sim\test_suelo.py: ['clima', 'cobertura', 'condicion', 'config', 'suelo', 'vegetacion']
+- pruebas\sim\test_tiempo.py: ['config', 'tiempo']
+- pruebas\sim\test_vegetacion.py: ['clima', 'config', 'productos', 'variables', 'vegetacion']
+
+Llamadas dinamicas (__import__, import_module, reload, run_module, exec, eval) en Python:
+- pruebas\geo\test_config_datos.py:10 reload
+- pruebas\geo\test_config_datos.py:14 reload
+- pruebas\geo\test_descargas.py:113 __import__
+- pruebas\geo\test_teselas.py:154 reload
+- pruebas\geo\test_teselas.py:151 reload
+
+Referencias de texto fuera de Python a simulacion o a artefactos del generador (ts, tsx, json, yaml, sh):
+- datos\evidencia\S4_grafo_importaciones.py:9 # candidatos del generador simulado = todo src/simulacion fuera de geo/
+- datos\evidencia\S4_grafo_importaciones.py:57 # modulos del generador: .py directos de src/simulacion
+- datos\evidencia\S4_grafo_importaciones.py:81 # texto: referencias fuera de Python (ts, tsx, json, yaml, sh, md) a src/simulacion
+- datos\evidencia\S4_grafo_importaciones.py:93 if re.search(r"src[/\\]simulacion|-m simulacion|simulacion[./\\](clima|vegetacion|agua|cobertura|suelo|lotes|escribir_sqlite|variables|tiempo|config|azar|condic
+- datos\evidencia\S4_grafo_importaciones.py:104 lineas.append("Importadores por modulo del generador (src/simulacion/*.py)")
+- pruebas\geo\test_config_datos.py:4 import simulacion.config as cfg
+- pruebas\geo\test_estaticos_reales.py:6 from simulacion.config import GEO_SQLITE
+- pruebas\geo\test_estaticos_reales.py:8 # se corren en WSL, sobre la geo.sqlite con estaticos ya calculados
+- pruebas\geo\test_teselas.py:8 from simulacion.config import PROCESADOS
+- pruebas\geo\test_unidades_reales.py:11 from simulacion.config import CRUDOS, PROCESADOS
+- pruebas\sim\test_agua.py:7 from simulacion.productos import fraccion_dias
+- pruebas\sim\test_agua.py:8 from simulacion.tiempo import mes_id
+- pruebas\sim\test_agua.py:125 from simulacion.referencias.cargar import cargar_rodell
+- pruebas\sim\test_agua.py:153 SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+- pruebas\sim\test_anclas.py:19 from simulacion.referencias import cargar as ref
+- pruebas\sim\test_anclas.py:20 from simulacion.variables import INT_NULO, VARIABLES, de_entero
+- pruebas\sim\test_anclas.py:25 BASE = Path(os.environ.get("AGROVERSEX_ANCLAS_SQLITE", PROC / "tmp_t12" / "agroversex_muestra.sqlite"))
+- pruebas\sim\test_anclas.py:26 GEO = Path(os.environ.get("AGROVERSEX_GEO_SQLITE", PROC / "geo.sqlite"))
+- pruebas\sim\test_anclas.py:29 SIN_BASE_SIMULADA = pytest.mark.skip(reason="depende de la base simulada del generador (agroversex_muestra.sqlite); sale con el generador simulado, decisión i")
+- pruebas\sim\test_anclas.py:55 """Unidad ADM2 más pequeña cuyo bbox contiene el punto (sin geometrías: bbox de geo.sqlite); si no hay, ADM1."""
+- pruebas\sim\test_anclas.py:116 SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+- pruebas\sim\test_anclas.py:166 from simulacion.tiempo import dias_del_mes
+- pruebas\sim\test_anclas.py:356 assert ids_geo == teselas, "geo.sqlite y teselas difieren"
+- pruebas\sim\test_azar.py:7 from simulacion.azar import rng_unidad
+- pruebas\sim\test_azar.py:12 "from simulacion.azar import rng_unidad;"
+- pruebas\sim\test_clima.py:10 from simulacion.productos import B_PROVISIONAL
+- pruebas\sim\test_clima.py:11 from simulacion.referencias.cargar import cargar_enso, cargar_eventos
+- pruebas\sim\test_clima.py:12 from simulacion.tiempo import mes_id
+- pruebas\sim\test_clima.py:14 AQUI = Path(__file__).resolve().parents[2] / "src/simulacion/referencias"
+- pruebas\sim\test_clima.py:21 # Datos sintéticos: ninguna prueba unitaria depende de geo.sqlite
+- pruebas\sim\test_clima.py:190 SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+- pruebas\sim\test_clima.py:197 geo = clima.cargar_geo(PRINCIPAL / "datos/procesados/geo.sqlite")
+- pruebas\sim\test_clima.py:214 assert "koppen" not in (Path(config.RAIZ) / "src/simulacion/geo/estaticos.py").read_text(encoding="utf-8").lower()
+- pruebas\sim\test_cobertura.py:9 from simulacion.clima import cargar_geo
+- pruebas\sim\test_cobertura.py:53 SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+- pruebas\sim\test_cobertura.py:59 geo = cargar_geo(PRINCIPAL / "datos/procesados/geo.sqlite")
+- pruebas\sim\test_cobertura.py:61 est = cb.cargar_suelo(PRINCIPAL / "datos/procesados/geo.sqlite", col.index)
+- pruebas\sim\test_correcciones_v2.py:10 from simulacion import escribir_sqlite as esc
+- pruebas\sim\test_correcciones_v2.py:11 from simulacion.tiempo import dias_del_mes, mes_id
+- pruebas\sim\test_correcciones_v2.py:12 from simulacion.variables import VARIABLES, a_entero
+- pruebas\sim\test_escribir.py:9 from simulacion.escribir_sqlite import construir_agroversex, hash_contenido
+- pruebas\sim\test_escribir.py:10 from simulacion.variables import VARIABLES, de_entero
+- pruebas\sim\test_escribir.py:12 GEO = Path(os.environ.get("AGROVERSEX_GEO_SQLITE") or Path(__file__).resolve().parents[2] / "datos/procesados/geo.sqlite")
+- pruebas\sim\test_escribir.py:27 SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+- pruebas\sim\test_escribir.py:85 from simulacion.escribir_sqlite import a_mm_h
+- pruebas\sim\test_escribir.py:86 from simulacion.variables import a_entero
+- pruebas\sim\test_esquema.py:8 from simulacion.variables import INT_NULO, VARIABLES, a_entero, crear_esquema, de_entero
+- pruebas\sim\test_esquema.py:79 SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+- pruebas\sim\test_esquema.py:85 ruta = next((p / "datos/procesados/geo.sqlite"
+- pruebas\sim\test_esquema.py:86 for p in (config.RAIZ, *config.RAIZ.parents) if (p / "datos/procesados/geo.sqlite").exists()), None)
+- pruebas\sim\test_incertidumbre.py:4 from simulacion.azar import rng_unidad
+- pruebas\sim\test_incertidumbre.py:5 from simulacion.incertidumbre import (
+- pruebas\sim\test_lotes.py:12 from simulacion.azar import rng_unidad
+- pruebas\sim\test_lotes.py:13 from simulacion.tiempo import dia_id
+- pruebas\sim\test_lotes.py:123 SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+- pruebas\sim\test_lotes.py:129 from simulacion.clima import cargar_geo
+- pruebas\sim\test_productos.py:5 from simulacion.config import N_MESES
+- pruebas\sim\test_productos.py:6 from simulacion.productos import (
+- pruebas\sim\test_productos.py:10 from simulacion.tiempo import mes_id
+- pruebas\sim\test_referencias.py:10 from simulacion.referencias import cargar as ref
+- pruebas\sim\test_referencias.py:333 assert "Cai 2025" not in (Path(config.RAIZ) / "src/simulacion/clima.py").read_text(encoding="utf-8")
+- pruebas\sim\test_rotaciones.py:8 from simulacion.referencias.cargar import cargar_kluger
+- pruebas\sim\test_rotaciones.py:9 from simulacion.variables import crear_esquema
+- pruebas\sim\test_suelo.py:10 from simulacion.clima import cargar_geo
+- pruebas\sim\test_suelo.py:11 from simulacion.cobertura import cargar_suelo
+- pruebas\sim\test_suelo.py:94 SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+- pruebas\sim\test_suelo.py:100 ruta = PRINCIPAL / "datos/procesados/geo.sqlite"
+- pruebas\sim\test_suelo.py:122 ruta = PRINCIPAL / "datos/procesados/geo.sqlite.bak_prereconstruccion"
+- pruebas\sim\test_tiempo.py:4 from simulacion.tiempo import dia_id, dias_del_mes, mes_a_fecha, mes_id
+- pruebas\sim\test_tiempo.py:5 from simulacion.config import N_MESES
+- pruebas\sim\test_vegetacion.py:11 from simulacion.clima import cargar_geo
+- pruebas\sim\test_vegetacion.py:12 from simulacion.productos import B_PROVISIONAL
+- pruebas\sim\test_vegetacion.py:13 from simulacion.variables import B_NIEVE, VARIABLES, a_entero, de_entero
+- pruebas\sim\test_vegetacion.py:117 SIN_GEO_PROTOTIPO = pytest.mark.skip(reason="depende de geo.sqlite del prototipo, que D-003 no importa; sale con el generador simulado, decisión i")
+- pruebas\sim\test_vegetacion.py:123 geo = cargar_geo(PRINCIPAL / "datos/procesados/geo.sqlite")
+- src\gemelo\referencias\cultivos.yaml:3 # - Bloque fao56: copia literal de src/simulacion/referencias/fao56.yaml (rama datos, INV-ROT §3). No se edita aquí:
+- src\gemelo\referencias\enso.yaml:1 # Copia de src/simulacion/referencias/enso.yaml de la rama datos (commit b3834e6). No editar aquí: se reemplaza por la clasificación de fases que entregue Datos
+- src\gemelo\referencias\sucesion.yaml:1 # Copia sin cambios de origin/datos:src/simulacion/referencias/sucesion.yaml, respaldo para usar el gemelo
+- src\simulacion\agua.py:13 from simulacion.clima import _rad_extraterrestre, cargar_geo
+- src\simulacion\agua.py:14 from simulacion.incertidumbre import err_sm_l4, err_sm_sin_campo, err_tws, nivel_confianza
+- src\simulacion\agua.py:15 from simulacion.productos import aplicar_cobertura, bandera_mes, fraccion_dias
+- src\simulacion\agua.py:16 from simulacion.referencias.cargar import cargar_rodell
+- src\simulacion\agua.py:17 from simulacion.tiempo import dias_del_mes, mes_id
+- src\simulacion\azar.py:6 from simulacion.config import SEMILLA
+- src\simulacion\clima.py:18 from simulacion.azar import rng_unidad
+- src\simulacion\clima.py:19 from simulacion.incertidumbre import banda_p10_p90, err_precip
+- src\simulacion\clima.py:20 from simulacion.productos import aplicar_cobertura
+- src\simulacion\clima.py:21 from simulacion.referencias import cargar as ref
+- src\simulacion\clima.py:22 from simulacion.tiempo import dias_del_mes
+- src\simulacion\clima.py:23 from simulacion.variables import B_HUECO, B_PROVISIONAL
+- src\simulacion\clima.py:263 raise FileNotFoundError(f"sin geo.sqlite utilizable en {ruta} ni su respaldo")
+- src\simulacion\cobertura.py:14 from simulacion.azar import rng_unidad
+- src\simulacion\cobertura.py:15 from simulacion.clima import _COD, _IDX, _clase_respaldo, _t_anual
+- src\simulacion\cobertura.py:112 """phh2o, clay y sand (0-30 cm) desde geo.sqlite (solo lectura), con el respaldo si está incompleto."""
+- src\simulacion\condicion.py:9 from simulacion.suelo import ANIOS, CULTIVOS
+- src\simulacion\config.py:18 GEO_SQLITE = PROCESADOS / "geo.sqlite"
+- src\simulacion\config.py:19 # Respaldo mientras geo.sqlite se reconstruye (las latitudes no cambian)
+- src\simulacion\config.py:20 GEO_SQLITE_RESPALDO = PROCESADOS / "geo.sqlite.bak_prereconstruccion"
+- src\simulacion\escribir_sqlite.py:21 from simulacion.condicion import tabla_anual
+- src\simulacion\escribir_sqlite.py:22 from simulacion.referencias import cargar as ref
+- src\simulacion\escribir_sqlite.py:23 from simulacion.tiempo import dias_del_mes
+- src\simulacion\escribir_sqlite.py:24 from simulacion.variables import INT_NULO, VARIABLES, a_entero, de_entero
+- src\simulacion\escribir_sqlite.py:50 # Solo columnas explícitas presentes en ambos lados (un geo.sqlite antiguo puede no traer las bbox)
+- src\simulacion\escribir_sqlite.py:359 p = argparse.ArgumentParser(prog="python -m simulacion.escribir_sqlite")
+- src\simulacion\lotes.py:17 from simulacion.azar import rng_unidad
+- src\simulacion\lotes.py:18 from simulacion.cobertura import cobertura_simulada
+- src\simulacion\lotes.py:19 from simulacion.tiempo import dia_id
+- src\simulacion\lotes.py:23 ZONAS_YAML = Path(__file__).resolve().parent / "zonas_agroversex.yaml"
+- src\simulacion\lotes.py:85 from simulacion.clima import cargar_geo
+- src\simulacion\productos.py:8 from simulacion.config import FECHA_FIN_DIARIA, FECHA_INICIO, N_MESES
+- src\simulacion\productos.py:9 from simulacion.tiempo import dias_del_mes
+- src\simulacion\productos.py:10 from simulacion.variables import (  # noqa: F401  (se reexportan las banderas)
+- src\simulacion\rotaciones.py:4 Cada función devuelve filas como tuplas en el orden de columnas de esquema_agroversex.sql, listas para executemany.
+- src\simulacion\rotaciones.py:11 from simulacion.referencias.cargar import cargar_fao56, cargar_kluger, cargar_sistemas_rotacion, cargar_sucesion
+- src\simulacion\suelo.py:12 from simulacion.azar import rng_unidad
+- src\simulacion\suelo.py:13 from simulacion.cobertura import COLS, cobertura_simulada
+- src\simulacion\suelo.py:14 from simulacion.tiempo import dias_del_mes
+- src\simulacion\suelo.py:15 from simulacion.variables import _SUP, _v
+- src\simulacion\tiempo.py:5 from simulacion.config import FECHA_INICIO
+- src\simulacion\variables.py:9 INT_NULO = -(2**31)  # centinela interno; escribir_sqlite lo traduce a NULL
+- src\simulacion\variables.py:49 # precip: IMERG mensual publica mm/h (INICIAR §5.2); escribir_sqlite convierte desde mm/mes
+- src\simulacion\variables.py:102 con.executescript((AQUI / "esquema_agroversex.sql").read_text(encoding="utf-8"))
+- src\simulacion\vegetacion.py:12 from simulacion.azar import rng_unidad
+- src\simulacion\vegetacion.py:13 from simulacion.cobertura import cobertura_simulada
+- src\simulacion\vegetacion.py:14 from simulacion.incertidumbre import banda_p10_p90, err_lst
+- src\simulacion\vegetacion.py:15 from simulacion.productos import aplicar_cobertura, bandera_mes
+- src\simulacion\vegetacion.py:16 from simulacion.tiempo import dias_del_mes
+- src\simulacion\vegetacion.py:17 from simulacion.variables import B_HUECO, B_NIEVE, B_NUBE, B_PROVISIONAL
+- src\simulacion\zonas_agroversex.yaml:2 # Regla de elección (SUPUESTO del orquestador, revisión 2026-11-13): unidades ADM1 de geo.sqlite que cubren
+- src\simulacion\geo\clim_normal.py:5 Uso WSL: PYTHONPATH=src python -m simulacion.geo.clim_normal zonal --gpkg ~/tmp/unidades.gpkg --tifs ~/tmp/wc --salida ~/tmp/clim_normal.sqlite
+- src\simulacion\geo\descargas.py:12 from simulacion.config import CRUDOS, RAIZ
+- src\simulacion\geo\descargas_nasa.py:118 # uso: python -m simulacion.geo.descargas_nasa mod13c2 [hilos] [limite]
+- src\simulacion\geo\estaticos.py:16 from simulacion.config import CRUDOS, GEO_SQLITE
+- src\simulacion\geo\estaticos.py:210 # partes viejas de otra corrida (otra geo.sqlite u otros ids) contaminarían la unión
+- src\simulacion\geo\estaticos.py:255 # uso: python -m simulacion.geo.estaticos [--sqlite R] [--iso3 X] [--workers N] [--partes D]
+- src\simulacion\geo\extraer.py:5 from simulacion.config import CRUDOS, RAIZ
+- src\simulacion\geo\gmted_tierra.py:6 from simulacion.config import CRUDOS
+- src\simulacion\geo\indice_busqueda.py:9 from simulacion.config import CRUDOS, PROCESADOS
+- src\simulacion\geo\pi_d1_colombia.py:2 """python -m simulacion.geo.pi_d1_colombia <carpeta de series COL> <salida.json> [AAAA-MM ...]
+- src\simulacion\geo\sensibilidad_late.py:81 # uso (WSL, venv geo): python -m simulacion.geo.sensibilidad_late <carpeta imerg_late> <gpkg ADM2> <salida.json>
+- src\simulacion\geo\serie_mensual.py:2 """Corrida de un país: python -m simulacion.geo.serie_mensual COL [area|cultivo|ambas]
+- src\simulacion\geo\teselas.py:9 from simulacion.config import PROCESADOS, RAIZ
+- src\simulacion\geo\unidades.py:16 from simulacion.config import CRS_AREA, CRS_SALIDA, CRUDOS, PROCESADOS
+- src\web\playwright.busqueda.config.ts:4 // E2E de búsqueda/miga: usa geo.sqlite (tabla unidad con bbox) si agroversex.sqlite aún no existe
+- src\web\playwright.busqueda.config.ts:8 webServer: { command: 'npx vite --port 5198 --strictPort', port: 5198, reuseExistingServer: false, env: { AGROVERSEX_DATOS: D, AGROVERSEX_SQLITE: `${D}/geo.sqli
+- src\web\pruebas\fixture.ts:7 // Base mínima con el DDL real de la fase 2 (esquema_geo.sql + esquema_agroversex.sql).
+- src\web\pruebas\fixture.ts:19 db.exec(ddl('esquema_agroversex.sql'))
+- src\web\src\datos\banderas.ts:3 // Bits de bandera_motivo, en el orden real de la fase 2 (simulacion/variables.py).
+- src\web\src\tiempo\huecos.ts:21 // DEUDA: duplica src/simulacion/productos.py (COBERTURAS, fase 2), sin endpoint de calendario.
