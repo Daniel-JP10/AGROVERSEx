@@ -1,9 +1,12 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
 import { Medir, resumen } from '../src/herramientas/Medir'
 import { debeAvisarZoom } from '../src/herramientas/AvisoZoom'
+import { enEspanol } from './idioma_es'
+
+enEspanol() // las aserciones son en español y el idioma por defecto es el inglés (D-039)
 
 describe('resumen de Medir', () => {
   it('distancia: pide 2 puntos y suma los tramos en km', () => {
@@ -25,8 +28,13 @@ describe('aviso de zoom 12', () => {
 })
 
 describe('Medir accesible por teclado', () => {
-  const html = renderToStaticMarkup(createElement(Medir, { mapa: {} as never }))
-  const nombres = [...html.matchAll(/<button[^>]*aria-label="([^"]*)"/g)].map((m) => m[1])
+  // se renderiza después de fijar el español (beforeAll de enEspanol corre antes)
+  let html = ''
+  let nombres: string[] = []
+  beforeAll(() => {
+    html = renderToStaticMarkup(createElement(Medir, { mapa: {} as never }))
+    nombres = [...html.matchAll(/<button[^>]*aria-label="([^"]*)"/g)].map((m) => m[1])
+  })
   it('los controles son button con texto o nombre accesible', () => {
     expect(html).toContain('Distancia')
     expect(html).toContain('Área')

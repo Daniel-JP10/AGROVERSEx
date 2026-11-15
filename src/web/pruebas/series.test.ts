@@ -18,6 +18,9 @@ describe('series', () => {
 
 import { nombreVar } from '../src/datos/series'
 import { paraMostrar } from '../src/comun/unidades'
+import { enEspanol } from './idioma_es'
+
+enEspanol() // las aserciones son en español y el idioma por defecto es el inglés (D-039)
 describe('mostrar', () => {
   it('unidad por variable y sin dato nunca es 0', () => {
     expect(paraMostrar('precip', 1, 'mm/h', '2023-02')).toEqual({ valor: 672, unidad: 'mm/mes' })

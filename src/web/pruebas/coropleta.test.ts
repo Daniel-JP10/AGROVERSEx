@@ -3,6 +3,9 @@ import { describe, expect, it } from 'vitest'
 import { estadoUnidad, partirEnRebanadas, crearMotorCoropleta, textoValor, opacidadValida, leerOpacidad } from '../src/globo/coropleta'
 import { mmHoraAMmMes } from '../src/datos/desescalar'
 import { capasNivel, NIVELES } from '../src/globo/config'
+import { enEspanol } from './idioma_es'
+
+enEspanol() // las aserciones son en español y el idioma por defecto es el inglés (D-039)
 
 const R: [number, number] = [0, 100]
 describe('estado por unidad', () => {

@@ -3,6 +3,9 @@ import { describe, expect, it, vi } from 'vitest'
 import { createHash } from 'node:crypto'
 import { gunzipSync, gzipSync } from 'node:zlib'
 import { existsSync, readFileSync } from 'node:fs'
+import { enEspanol } from './idioma_es'
+
+enEspanol() // las aserciones son en español y el idioma por defecto es el inglés (D-039)
 
 vi.stubGlobal('localStorage', { getItem: () => null, setItem: () => {}, removeItem: () => {} })
 const { cargarCoropleta, cargarMatriz, tieneDatoReal, nivelDeUnidad, PAISES_CON_DATO } = await import('../src/datos/estatico')

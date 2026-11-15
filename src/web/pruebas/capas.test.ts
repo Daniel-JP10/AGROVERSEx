@@ -3,6 +3,9 @@ import { describe, expect, it } from 'vitest'
 import { CAPAS, capaPorId, valoresCapa } from '../src/datos/capas'
 import { CALENDARIO } from '../src/tiempo/huecos'
 import { rotulosDeVariable, BANDERA, BANDERA_CALIDAD_BAJA } from '../src/datos/banderas'
+import { enEspanol } from './idioma_es'
+
+enEspanol() // las aserciones son en español y el idioma por defecto es el inglés (D-039)
 
 describe('capas', () => {
   it('toda capa apunta a un producto del calendario y tiene un rango creciente', () => {

@@ -1,6 +1,9 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 // Se ejecuta con una config como playwright.busqueda.config.ts (testMatch panel.spec.ts)
 import { expect, test } from '@playwright/test'
+import { ES } from './idioma'
+
+test.use({ storageState: ES }) // asserta español y el idioma por defecto es el inglés (D-039)
 
 // Con la base de muestra real (playwright.panel.config.ts)
 test('panel de región: 4 pestañas sin errores y serie con corte', async ({ page }) => {

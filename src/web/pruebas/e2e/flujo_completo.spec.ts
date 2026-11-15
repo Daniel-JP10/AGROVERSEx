@@ -1,5 +1,8 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import { expect, test } from '@playwright/test'
+import { ES } from './idioma'
+
+test.use({ storageState: ES }) // asserta español y el idioma por defecto es el inglés (D-039)
 
 // Con la base mundial (AGROVERSEX_SQLITE) y el índice regenerado (AGROVERSEX_DATOS)
 async function buscar(page: import('@playwright/test').Page, texto: string, ctx: string) {
