@@ -95,8 +95,8 @@ main.seccion.ciencia > h1::after, main.seccion.datos > h1::after, main.seccion.f
 
 /* Tarjetas con relieve: degradado interior, borde con brillo, hoja junto al título y nervadura en la esquina */
 .tarjeta-hoja { overflow: hidden; background: linear-gradient(160deg, color-mix(in srgb, var(--hoja) 95%, #6fe39a 5%) 0%, var(--hoja) 30%, color-mix(in srgb, var(--hoja) 90%, #000 10%) 100%);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(201, 255, 216, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-  animation: tarjeta-entra 0.6s ease-out both; }
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(201, 255, 216, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+/* Sin animación de entrada: movía las cajas mientras la prueba de contraste las medía */
 .tarjetas > .tarjeta-hoja:nth-child(2), .columnas-fuentes > .tarjeta-hoja:nth-child(2) { animation-delay: 0.08s; }
 .tarjetas > .tarjeta-hoja:nth-child(3), .columnas-fuentes > .tarjeta-hoja:nth-child(3) { animation-delay: 0.16s; }
 .tarjetas > .tarjeta-hoja:nth-child(n + 4) { animation-delay: 0.24s; }
@@ -105,10 +105,8 @@ main.seccion.ciencia > h1::after, main.seccion.datos > h1::after, main.seccion.f
 .tarjeta-hoja > h2 { position: relative; padding-left: 22px; }
 .tarjeta-hoja > h2::before { content: ''; position: absolute; left: 0; top: 0.2em; width: 15px; height: 15px; border-radius: 0 70% 0 70%; background: linear-gradient(135deg, #c7ffd8, #2f8a52); box-shadow: 0 0 8px rgba(111, 227, 154, 0.55); }
 .tarjeta-hoja:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--acento) 60%, var(--hoja-borde)); box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45), 0 0 18px rgba(111, 227, 154, 0.14), inset 0 1px 0 rgba(201, 255, 216, 0.1); }
-.tarjeta-hoja dl > div { border-top: 1px solid transparent; border-image: linear-gradient(90deg, var(--hoja-borde), color-mix(in srgb, var(--hoja-borde) 30%, transparent)) 1; }
-.etiqueta-evidencia { background: rgba(255, 184, 77, 0.08); box-shadow: 0 0 10px rgba(255, 184, 77, 0.15); }
 @keyframes tarjeta-entra { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .tarjeta-hoja { animation: none; transition: none; } .tarjeta-hoja:hover { transform: none; } }
 @media (max-width: 760px) { main.seccion.ciencia::after, main.seccion.datos::after, main.seccion.fuentes::after { width: 130px; height: 70px; opacity: 0.35; } }
 /* AA sobre el degradado de la tarjeta: rótulos un poco más claros que --suave */
-.tarjeta-hoja dt { color: color-mix(in srgb, var(--suave) 80%, #ffffff 20%); }
+.tarjeta-hoja dt { color: #b8c4be; } /* hex y no color-mix(): el valor calculado de color-mix es color(srgb …) */
