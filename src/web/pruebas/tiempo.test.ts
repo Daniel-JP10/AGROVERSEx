@@ -1,5 +1,6 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import { describe, expect, it, vi } from 'vitest'
+import { N_MESES } from '../src/tiempo/valor'
 import { crearReproductor } from '../src/tiempo/Reproductor'
 import { CALENDARIO, mesIdAEtiqueta, mesesConHueco } from '../src/tiempo/huecos'
 
@@ -20,23 +21,25 @@ describe('etiquetas y huecos', () => {
     const dentro = mesesConHueco(g).filter((m) => m >= g.inicio && m <= g.fin)
     expect(dentro).toHaveLength(33)
   })
-  it('IMERG: provisional desde oct-2025 (mes 309), sin sombrear', () => {
-    expect(CALENDARIO.imerg.provisionalDesde).toBe(309)
+  // O1 (D-037): el mes provisional de IMERG ya no está escrito a mano; sale de la matriz (309 = oct-2025, ver tierra_disponibilidad.test.ts)
+  it('IMERG: sin sombrear y sin mes provisional fijo en el calendario', () => {
+    expect(CALENDARIO.imerg.provisionalDesde).toBeUndefined()
     expect(mesesConHueco(CALENDARIO.imerg)).toEqual([])
   })
 })
 
 describe('reproductor', () => {
-  it('se detiene en 322 y precarga los 12 siguientes', async () => {
+  // O1 (D-037): el último mes es N_MESES - 1 (321 con meta.json actual), no 322 escrito a mano
+  it('se detiene en el último mes y precarga los 12 siguientes', async () => {
     vi.useFakeTimers()
     const vistos: number[] = []
     const pre: [number, number][] = []
     const r = crearReproductor({ velocidad: 4, siguiente: async (m) => { vistos.push(m) }, precargar: (a, b) => pre.push([a, b]) })
-    r.irA(319)
+    r.irA(N_MESES - 4)
     r.play()
     await vi.advanceTimersByTimeAsync(5000)
-    expect(vistos).toEqual([320, 321, 322])
-    expect(pre[0]).toEqual([321, 322])
+    expect(vistos).toEqual([N_MESES - 3, N_MESES - 2, N_MESES - 1])
+    expect(pre[0]).toEqual([N_MESES - 2, N_MESES - 1])
     r.irA(0); r.play(); await vi.advanceTimersByTimeAsync(260)
     expect(pre.at(-1)).toEqual([3, 14])
     r.pausa(); vi.useRealTimers()

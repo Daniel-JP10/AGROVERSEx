@@ -1,6 +1,7 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import { describe, expect, it } from 'vitest'
 import { valorSimulado, etiquetaMes, N_MESES } from '../src/tiempo/valor'
+import meta from '../public/datos/meta.json'
 import { NIVELES, capasNivel, construirEstilo, nivelParaZoom } from '../src/globo/config'
 
 describe('valor placeholder', () => {
@@ -12,9 +13,10 @@ describe('valor placeholder', () => {
     }
     expect(valorSimulado(1, 0)).not.toBe(valorSimulado(2, 0))
   })
-  it('el rango de meses es 2000-01 a 2026-11', () => {
-    expect(etiquetaMes(0)).toBe('2000-01')
-    expect(etiquetaMes(N_MESES - 1)).toBe('2026-11')
+  // O1 (D-037): el fin del eje es el último mes con producto de meta.json (antes 2026-11 escrito a mano, meta decía 2026-10)
+  it('el eje de meses va de mes0 de meta.json al último mes con producto', () => {
+    expect(etiquetaMes(0)).toBe(meta.mes0)
+    expect(etiquetaMes(N_MESES - 1)).toBe(Object.values(meta.variables).map((v) => v.meses_disponibles.hasta).sort().at(-1))
   })
 })
 

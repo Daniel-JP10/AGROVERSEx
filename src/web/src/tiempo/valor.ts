@@ -2,8 +2,17 @@
 // Valor PLACEHOLDER SIMULADO para la coropleta de prueba. No es dato real:
 // se reemplaza por /api/coropleta cuando exista la simulación de la fase 2.
 
-export const MES_INICIO = { anio: 2000, mes: 1 }
-export const N_MESES = 26 * 12 + 11 // 2000-01 .. 2026-11
+// El eje temporal sale de meta.json (lo escribe src/mapa_estatico/construir.py): ni el inicio ni el fin van a mano
+import meta from '../../public/datos/meta.json'
+
+const [ANIO0, MES0] = meta.mes0.split('-').map(Number)
+export const MES_INICIO = { anio: ANIO0, mes: MES0 }
+
+/** 'AAAA-MM' -> índice desde mes0 del eje (0 = mes0) */
+export const idDeMes = (aaaamm: string): number => (Number(aaaamm.slice(0, 4)) - ANIO0) * 12 + Number(aaaamm.slice(5, 7)) - MES0
+
+/** Meses del eje: hasta el último mes con producto de alguna variable (los archivos traen un mes más, siempre vacío) */
+export const N_MESES = 1 + Math.max(...Object.values(meta.variables).map((v) => idDeMes(v.meses_disponibles.hasta)))
 
 /** Hash FNV-1a de un id (texto o número) a [0, 1). */
 export function hash01(id: string | number): number {
