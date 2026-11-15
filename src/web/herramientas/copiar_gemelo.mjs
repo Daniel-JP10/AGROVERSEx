@@ -14,7 +14,10 @@ const ARCHIVO_LOTE = /^(lote|simulacion_[a-z_]+|optimizacion_[a-z_]+)\.json$/
 // Se borra el destino para que no queden archivos viejos
 if (existsSync(destino)) rmSync(destino, { recursive: true })
 mkdirSync(join(destino, 'textos'), { recursive: true })
-copyFileSync(join(origen, 'indice.json'), join(destino, 'indice.json'))
+// indice.json sin nota_naturaleza: es una nota interna que contiene una palabra de la lista de textos prohibidos; la app no la lee
+const ind = JSON.parse(readFileSync(join(origen, 'indice.json'), 'utf8'))
+delete ind.nota_naturaleza
+writeFileSync(join(destino, 'indice.json'), JSON.stringify(ind, null, 1) + '\n')
 for (const f of readdirSync(join(origen, 'textos')).filter((f) => f.endsWith('.json'))) copyFileSync(join(origen, 'textos', f), join(destino, 'textos', f))
 const indice = JSON.parse(readFileSync(join(origen, 'indice.json'), 'utf8'))
 let n = 0

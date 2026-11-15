@@ -3,7 +3,6 @@
  "version_contrato_completa": "1.2",
  "generado_utc": "2026-11-15T02:25:41+00:00",
  "commit": "4f3114c",
- "nota_naturaleza": "metadatos.naturaleza = 'simulado' indica que el valor sale del modelo; no es SIMULADO (dato ficticio) en el sentido del proyecto. El rótulo para mostrar es metadatos.rotulo.",
  "textos": {
   "en": "textos/en.json",
   "es": "textos/es.json"
@@ -617,7 +616,7 @@
      "id": "mo_laboratorio",
      "descripcion": "Materia orgánica medida en laboratorio (3,0 %)",
      "valores": {
-      "suelo.mo_pct": 3.0
+      "suelo.mo_pct": 3
      },
      "archivo": "DEMO-USA-01/calibracion/mo_laboratorio.json"
     },
