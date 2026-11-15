@@ -95,7 +95,7 @@ export const en = {
   'globo.estado': 'status',
   'estado.final': 'final',
   'estado.enRevision': 'under review',
-  'panel.sinDatoReal': 'No real data yet for this unit. This version only has real data for Colombia.',
+  'panel.sinDatoReal': 'No product data for this unit yet.',
   'panel.suelo': 'Soil for this unit comes with the DEMO plots; there is no real data yet.',
   'globo.sinDatoProducto': 'no product data',
   'globo.sinLimites': 'Boundaries (tiles) did not load: check AGROVERSEX_DATOS',
