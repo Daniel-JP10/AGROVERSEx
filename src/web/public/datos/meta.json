@@ -1,0 +1,94 @@
+{
+ "formato": "web_datos v0 (borrador, lo congela Daniel)",
+ "pais": "COL",
+ "mes0": "2000-01",
+ "n_meses": 323,
+ "variables": {
+  "precip": {
+   "niveles": [
+    0,
+    1,
+    2
+   ],
+   "meses_disponibles": {
+    "desde": "2000-01",
+    "hasta": "2026-10",
+    "n_meses_con_producto": 322
+   },
+   "productos": [
+    {
+     "producto": "GPM IMERG Final Run, mensual 0,1 grados (GPM_3IMERGM)",
+     "version": "07B",
+     "unidad": "mm/hr",
+     "estado": "final"
+    },
+    {
+     "producto": "GPM IMERG Late Run, diario agregado a mes en UTC (GPM_3IMERGDL)",
+     "version": "07B",
+     "unidad": "mm/day",
+     "estado": "provisional"
+    }
+   ]
+  },
+  "t2m": {
+   "niveles": [
+    0,
+    1,
+    2
+   ],
+   "meses_disponibles": {
+    "desde": "2000-01",
+    "hasta": "2026-09",
+    "n_meses_con_producto": 321
+   },
+   "productos": [
+    {
+     "producto": "MERRA-2 reanálisis, M2TMNXSLV (T2M)",
+     "version": "5.12.4",
+     "unidad": "K",
+     "estado": "final"
+    }
+   ]
+  },
+  "sm_raiz": {
+   "niveles": [
+    0,
+    1,
+    2
+   ],
+   "meses_disponibles": {
+    "desde": "2000-01",
+    "hasta": "2026-07",
+    "n_meses_con_producto": 319
+   },
+   "productos": [
+    {
+     "producto": "GLDAS Noah 0,25 mensual, MODELO de superficie terrestre (GLDAS_NOAH025_M, RootMoist_inst)",
+     "version": "2.1",
+     "unidad": "kg m-2",
+     "estado": "final"
+    }
+   ]
+  },
+  "ndvi": {
+   "niveles": [
+    0,
+    1,
+    2
+   ],
+   "meses_disponibles": {
+    "desde": "2000-02",
+    "hasta": "2026-10",
+    "n_meses_con_producto": 321
+   },
+   "productos": [
+    {
+     "producto": "MODIS Terra MOD13C2 NDVI mensual 0,05 grados",
+     "version": "061",
+     "unidad": "1",
+     "estado": "final"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,13 @@
+/* asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón */
+.panel { max-height: calc(100% - 190px); overflow-y: auto; overflow-x: hidden; }
+/* El panel de región deja libre la columna de brújula y zoom */
+.panel:not(.panel-herr) { right: 68px; }
+.pestanas { display: flex; flex-wrap: wrap; gap: 4px; margin: 10px 0; }
+.grupo-capas { border: 0; padding: 0; margin: 8px 0; }
+.grupo-capas legend { font-size: 12px; font-weight: 600; padding: 0; margin-bottom: 2px; }
+.panel-herr label.capa { display: flex; gap: 6px; align-items: center; font-size: 12px; cursor: pointer; }
+.pestanas button { flex: 1; padding: 6px 4px; border: 1px solid var(--borde); border-radius: 6px; background: none; color: var(--texto); font-size: 12px; }
+.pestanas button[aria-selected="true"] { background: var(--acento); color: #000; }
+.chip { font-size: 10px; border: 1px solid var(--borde); border-radius: 4px; padding: 0 4px; color: var(--acento); }
+.pestana h3 { font-size: 13px; margin: 12px 0 4px; }
+.pestana label { display: block; font-size: 12px; margin-bottom: 4px; }

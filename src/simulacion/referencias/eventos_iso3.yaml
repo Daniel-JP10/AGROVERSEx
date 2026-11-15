@@ -1,0 +1,36 @@
+# Países de cada evento FUENTE de eventos.yaml (INFERENCIA: nivel país, no polígono del evento).
+# Los demás eventos van a todo el país nombrado en su region_texto (nacionales o multinacionales, sin ADM1 en la evidencia).
+# Sin entrada, PENDIENTE de polígono: ev06 Cape Town, ev10 atribución, ev14 SE Australia,
+# ev22 Rio Grande do Sul, ev25 California, ev28 Delta del Mekong, ev29 Corredor Seco, ev30 Sahel, ev34 global.
+rotulo: INFERENCIA
+eventos:
+  ev02: [RUS]
+  ev03: [SOM]
+  ev04: [USA]
+  ev05: [ZAF, ZWE, ZMB, MWI, MOZ, BWA, NAM, LSO, SWZ, AGO]
+  ev07: [AUS]
+  ev08: [PAK]
+  # ev09 (Amazonia 2023, INV-CLI §4): solo ADM1 amazónicos (INFERENCIA); un dict es país: lista de ADM1
+  ev09:
+    COL: [Amazonas, Caquetá, Putumayo, Guainía, Guaviare, Vaupés]
+    BRA: [Acre, Amapá, Amazonas, Pará, Rondônia, Roraima]
+    PER: [Loreto, Ucayali, Madre de Dios, Amazonas, San Martín]
+    BOL: [Pando, Beni]
+    ECU: [Orellana, Sucumbios, Napo, Pastaza, Morona Santiago, Zamora Chinchipe]
+    VEN: [Amazonas]
+  ev11: [COL]
+  ev12: [COL]
+  ev13: [COL]
+  ev15: [CHL]
+  ev16: [ARG]
+  ev17: [THA]
+  ev18: [BRA]
+  ev19: [ZAF, ZWE, ZMB, MWI, MOZ, BWA, NAM, LSO, SWZ, AGO]
+  ev20: [FRA, DEU, ITA, ESP, PRT, GBR, NLD, BEL, CHE, AUT, POL, ROU, HUN]
+  ev21: [SOM, ETH, KEN]
+  ev23: [MOZ]
+  ev24: [FRA]
+  ev26: [IND]
+  ev27: [ETH]
+  ev31: [NGA]
+  ev32: [PAK]

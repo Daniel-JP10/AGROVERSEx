@@ -1,0 +1,23 @@
+# Ficha de dataset
+
+- Nombre corto: imerg_diario
+- Producto oficial y versión: GPM IMERG Final Run Daily V07B (`GPM_3IMERGDF.07`), archivos `3B-DAY.MS.MRG.3IMERG.<fecha>-S000000-E235959.V07B.nc4`
+- Agencia y centro de datos: NASA Goddard Earth Sciences Data and Information Services Center (GES DISC)
+- Página oficial: https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDF_07/summary
+- DOI: 10.5067/GPM/IMERGDF/DAY/07 (VERIFICADO: Huffman et al., 2023, NASA GES DISC)
+- Variable y unidades: `precipitation` en mm/día (`IMERG_PRECIP_MM_DIA`) y `precipitation_cnt` (conteo de muestras de media hora con dato válido en el día UTC, `IMERG_N_MUESTRAS`). El valor de relleno `-9999.9` se convierte a vacío (`NaN`), nunca a `0`
+- Resolución espacial nominal: `0,1 x 0,1` grados (~11 km en el ecuador), una celda por lote (contexto satelital del lote, no pluviómetro dentro del predio)
+- Resolución temporal: diaria en día UTC (`00:00:00` a `23:59:59 UTC`), columna explícita `FECHA_UTC`
+- CRS nativo: WGS 84 lat/lon (EPSG:4326)
+- Periodo descargado: 2001-01-01 a 2024-12-31 (`8766` días completos en ambos lotes DEMO)
+- Área descargada: celda de `0,1°` que contiene el centro del lote (`DEMO-USA-01`: `i=835, j=1311`; `DEMO-COL-01`: `i=1023, j=908`)
+- Herramienta y consulta exacta de descarga: OPeNDAP ASCII sobre `https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07/<YYYY>/<MM>/3B-DAY.MS.MRG.3IMERG.<YYYYMMDD>-S000000-E235959.V07B.nc4.ascii?precipitation[0:0][i:i][j:j],precipitation_cnt[0:0][i:i][j:j]` con sesión autenticada Earthdata (`src/lotes_demo/imerg_diario.py`)
+- Fecha de descarga: 2026-11-14
+- Banderas de calidad aplicadas: conversión de `-9999.9` a vacío y verificación de `IMERG_N_MUESTRAS > 0` (`pruebas/lotes/test_imerg_diario.py`)
+- Fracción de datos válidos en el área: `100 %` (`8766 / 8766` días con dato válido y `0` días con `cnt == 0` en `DEMO-USA-01` y `DEMO-COL-01`, VERIFICADO en `datos/lotes/comparacion_power_imerg.json`)
+- Transformaciones a la grilla común y método de remuestreo: ninguna; se extrae el valor nativo de la celda de `0,1°`. En `datos/lotes/comparacion_power_imerg.json` se compara contra NASA POWER en escala diaria (`lag = -1, 0, +1` días y combinación ponderada a UTC), acumulada de 5 días (pentadal) y mensual
+- Requisito del reto y pregunta que atiende: N2, N3; PI-D2, PI-D3, PI-D4 (D-027 y T-D6 exposición erosiva)
+- Limitaciones conocidas:
+  - Una celda de `0,1°` (~11 km) en los Andes de Nariño (`DEMO-COL-01`) abarca gradientes orográficos abruptos hacia la vertiente oriental/amazónica y sobreestima la lluvia anual frente al pluviómetro del Aeropuerto San Luis (`COM00080370`: `933,4 mm/año` equiv. en días comunes, frente a `1162,5 mm/año` en POWER y `1598,9 mm/año` en IMERG). Por D-027, POWER es el forzante diario principal de lotes y `imerg_diario.csv` se entrega para contraste y para el cálculo de umbrales semanales P90 de tormentas intensas en `exposicion_erosiva`.
+- Responsable: constructor de datos (Claude Code / Antigravity), tarea T-D5 Parte B y Prioridad 3B (D-027)
+- Verificador y fecha: PENDIENTE

@@ -1,0 +1,24 @@
+# Evidencia T-D2 paso 1: importorskip de exactextract (Sat Nov 14 15:18:17 HPS 2026)
+## Windows (sin exactextract)
+2 passed, 9 skipped, 1 deselected in 0.33s
+## WSL
+11 passed, 1 deselected in 2.54s
+def test_raster_constante_da_la_constante_y_fraccion_uno():
+    pytest.importorskip("exactextract")  # se salta sin exactextract (Windows)
+    g = _grilla()
+    p = zm.calcular_pesos(g, [_caja(0.3, -1.6, 3.4, 1.2)])
+    r = zm.agregar(p, g, np.full(g.alto * g.ancho, 7.5, "float64"), umbral=0.5)
+    assert r["valor"][0] == pytest.approx(7.5) and r["frac_valida"][0] == pytest.approx(1.0)
+    assert r["p10"][0] == pytest.approx(7.5) and r["p90"][0] == pytest.approx(7.5)
+
+## WSL con el codigo roto a proposito (se revierte)
+C:\NASA\wt\t-d2-motor\pruebas\geo\test_zonal_mensual.py:73: AssertionError
+=========================== short test summary info ============================
+FAILED pruebas/geo/test_zonal_mensual.py::test_raster_constante_da_la_constante_y_fraccion_uno
+FAILED pruebas/geo/test_zonal_mensual.py::test_mitad_nan_da_frac_valida_exacta
+FAILED pruebas/geo/test_zonal_mensual.py::test_unidad_igual_a_una_celda_da_el_valor_de_la_celda
+FAILED pruebas/geo/test_zonal_mensual.py::test_gradiente_de_latitud_coincide_con_el_calculo_analitico_por_area
+FAILED pruebas/geo/test_zonal_mensual.py::test_percentiles_ponderados_inferiores
+5 failed, 6 passed, 1 deselected in 3.15s
+## revertido: git diff src vacio:
+11 passed, 1 deselected in 2.19s

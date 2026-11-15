@@ -1,0 +1,198 @@
+[
+ {
+  "lote_id": "DEMO-USA-01",
+  "periodo": [
+   "2001-01-01",
+   "2024-12-31"
+  ],
+  "dias": 8766,
+  "dias_imerg_faltantes": 0,
+  "dias_cnt_cero_o_vacio": 0,
+  "correccion_altura_temperatura": {
+   "elev_celda_m": 357.8,
+   "elev_lote_m": 355.0,
+   "delta_z_m": -2.8000000000000114,
+   "gradiente_c_por_m": -0.0065,
+   "delta_t_c": 0.018200000000000074
+  },
+  "anual_media_mm": {
+   "imerg": 832.5889583333334,
+   "power": 769.535
+  },
+  "corr_diaria": 0.6736363912648762,
+  "corr_mensual": 0.9640616460827404,
+  "sesgo_relativo_power_menos_imerg": -0.07573239796448186,
+  "alineacion_horaria_utc": {
+   "regla": "IMERG 3B-DAY está en 00:00-23:59:59 UTC; NASA POWER diario está en hora solar local (LST)",
+   "lon_grados": -96.477,
+   "desfase_solar_horas": -6.432,
+   "huso_nominal_utc": "UTC-6",
+   "corr_diaria_lags": {
+    "lag_menos_1": {
+     "desfase_dias": -1,
+     "n_dias": 8765,
+     "pearson": 0.1179,
+     "spearman": 0.2163,
+     "descripcion": "POWER(t+1) LST frente a IMERG(t) UTC"
+    },
+    "lag_0": {
+     "desfase_dias": 0,
+     "n_dias": 8766,
+     "pearson": 0.6736,
+     "spearman": 0.6229,
+     "descripcion": "POWER(t) LST frente a IMERG(t) UTC (mismo día calendario)"
+    },
+    "lag_mas_1": {
+     "desfase_dias": 1,
+     "n_dias": 8765,
+     "pearson": 0.4156,
+     "spearman": 0.3563,
+     "descripcion": "POWER(t-1) LST frente a IMERG(t) UTC (lluvia vespertina/nocturna local cae en el día UTC siguiente)"
+    }
+   },
+   "corr_diaria_ponderada_utc": {
+    "solar_exacta": {
+     "peso_t_menos_1": 0.268,
+     "peso_t": 0.732,
+     "pearson": 0.7205,
+     "spearman": 0.5805
+    },
+    "huso_entero_5_24_o_6_24": {
+     "peso_t_menos_1": 0.25,
+     "peso_t": 0.75,
+     "pearson": 0.7194,
+     "spearman": 0.5825
+    }
+   }
+  },
+  "corr_5dias_pentadal": {
+   "n_pentadas": 1754,
+   "pearson": 0.867,
+   "spearman": 0.8321,
+   "mae_mm_5d": 5.19,
+   "rmse_mm_5d": 8.889
+  },
+  "corr_mensual_detalle": {
+   "n_meses": 288,
+   "pearson": 0.9641,
+   "spearman": 0.9574,
+   "corr_anomalias_pearson": 0.9403,
+   "mae_mm_mes": 11.493,
+   "rmse_mm_mes": 15.298
+  },
+  "errores_diarios_power_menos_imerg": {
+   "sesgo_mm_dia": -0.1726,
+   "mae_mm_dia": 1.8892,
+   "rmse_mm_dia": 5.158
+  }
+ },
+ {
+  "lote_id": "DEMO-COL-01",
+  "periodo": [
+   "2001-01-01",
+   "2024-12-31"
+  ],
+  "dias": 8766,
+  "dias_imerg_faltantes": 0,
+  "dias_cnt_cero_o_vacio": 0,
+  "correccion_altura_temperatura": {
+   "elev_celda_m": 2553.24,
+   "elev_lote_m": 2934.0,
+   "delta_z_m": 380.7600000000002,
+   "gradiente_c_por_m": -0.0065,
+   "delta_t_c": -2.4749400000000015
+  },
+  "anual_media_mm": {
+   "imerg": 1533.6956250000003,
+   "power": 1083.6908333333333
+  },
+  "corr_diaria": 0.2754486747690436,
+  "corr_mensual": 0.6622790803821569,
+  "sesgo_relativo_power_menos_imerg": -0.2934120592974025,
+  "alineacion_horaria_utc": {
+   "regla": "IMERG 3B-DAY está en 00:00-23:59:59 UTC; NASA POWER diario está en hora solar local (LST)",
+   "lon_grados": -77.661,
+   "desfase_solar_horas": -5.177,
+   "huso_nominal_utc": "UTC-5",
+   "corr_diaria_lags": {
+    "lag_menos_1": {
+     "desfase_dias": -1,
+     "n_dias": 8765,
+     "pearson": 0.1263,
+     "spearman": 0.2321,
+     "descripcion": "POWER(t+1) LST frente a IMERG(t) UTC"
+    },
+    "lag_0": {
+     "desfase_dias": 0,
+     "n_dias": 8766,
+     "pearson": 0.2754,
+     "spearman": 0.3946,
+     "descripcion": "POWER(t) LST frente a IMERG(t) UTC (mismo día calendario)"
+    },
+    "lag_mas_1": {
+     "desfase_dias": 1,
+     "n_dias": 8765,
+     "pearson": 0.3399,
+     "spearman": 0.3958,
+     "descripcion": "POWER(t-1) LST frente a IMERG(t) UTC (lluvia vespertina/nocturna local cae en el día UTC siguiente)"
+    }
+   },
+   "corr_diaria_ponderada_utc": {
+    "solar_exacta": {
+     "peso_t_menos_1": 0.2157,
+     "peso_t": 0.7843,
+     "pearson": 0.3242,
+     "spearman": 0.4291
+    },
+    "huso_entero_5_24_o_6_24": {
+     "peso_t_menos_1": 0.2083,
+     "peso_t": 0.7917,
+     "pearson": 0.3226,
+     "spearman": 0.4284
+    }
+   }
+  },
+  "corr_5dias_pentadal": {
+   "n_pentadas": 1754,
+   "pearson": 0.518,
+   "spearman": 0.5685,
+   "mae_mm_5d": 13.492,
+   "rmse_mm_5d": 20.98
+  },
+  "corr_mensual_detalle": {
+   "n_meses": 288,
+   "pearson": 0.6623,
+   "spearman": 0.6697,
+   "corr_anomalias_pearson": 0.5451,
+   "mae_mm_mes": 48.171,
+   "rmse_mm_mes": 60.39
+  },
+  "errores_diarios_power_menos_imerg": {
+   "sesgo_mm_dia": -1.232,
+   "mae_mm_dia": 4.3167,
+   "rmse_mm_dia": 9.0262
+  },
+  "contraste_estacion_ghcn_com00080370": {
+   "estacion": "COM00080370 SAN LUIS (Ipiales)",
+   "n_dias_calendario": 8766,
+   "fraccion_dias_con_dato": {
+    "PRCP": 0.499,
+    "TMIN": 0.5914,
+    "TMAX": 0.0019,
+    "TAVG": 0.723
+   },
+   "relleno": "ninguno",
+   "n_dias_comunes_con_pluviometro": 4374,
+   "metodo_anual_equiv": "media diaria de los días comunes con dato de las tres fuentes x 365,25; supone que los días sin dato se parecen a los días con dato",
+   "anual_equiv_en_dias_comunes_mm": {
+    "ghcn_estacion": 933.4,
+    "power": 1162.5,
+    "imerg": 1598.9
+   },
+   "anual_equiv_ghcn_por_climatologia_mensual_mm": 919.3,
+   "sesgo_relativo_power_vs_ghcn": 0.2454,
+   "sesgo_relativo_imerg_vs_ghcn": 0.713,
+   "nota": "En los 4374 días con dato de pluviómetro en San Luis (49.9% de los días de 2001 a 2024, sin relleno), la estación suma 933.4 mm/año equivalentes, POWER 1162.5 e IMERG 0,1° 1598.9. Equivalente = media diaria de esos días x 365,25."
+  }
+ }
+]

@@ -1,0 +1,40 @@
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  pruebas/zona_disputa.test.ts > zona en disputa > la capa en disputa se puede consultar para mostrar "Zona en disputa"
+AssertionError: expected [ 'adm0-relleno', 'adm0-respaldo' ] to include 'adm0-disputa'
+ ❯ pruebas/zona_disputa.test.ts:38:34
+     36|   })
+     37|   it('la capa en disputa se puede consultar para mostrar "Zona en disp…
+     38|     expect(capasInteractivas(0)).toContain('adm0-disputa')
+       |                                  ^
+     39|   })
+     40|   it('el índice marca la disputa con d: 1', async () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  pruebas/zona_disputa.test.ts > zona en disputa > el índice marca la disputa con d: 1
+AssertionError: expected undefined to be true // Object.is equality
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ pruebas/zona_disputa.test.ts:47:63
+     45|     await cargarFilas()
+     46|     globalThis.fetch = orig
+     47|     expect(porClave.get(claveUnidad(0, '111-ADM0'))?.disputa).toBe(tru…
+       |                                                               ^
+     48|   })
+     49| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 1 passed (6)
+   Start at  15:18:42
+   Duration  811ms (transform 52%, tests 24%, import 19%, worker 4%)
+

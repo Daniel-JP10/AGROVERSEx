@@ -1,0 +1,29 @@
+# Anomalía anual global GISTEMP LOTI, base 1951-1980 (INV-CLI §2.3).
+anual:
+  - {"anio": 2000, "loti": 0.39, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2001, "loti": 0.53, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2002, "loti": 0.63, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2003, "loti": 0.62, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2004, "loti": 0.53, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2005, "loti": 0.68, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2006, "loti": 0.64, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2007, "loti": 0.66, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2008, "loti": 0.54, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2009, "loti": 0.66, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2010, "loti": 0.72, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2011, "loti": 0.61, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2012, "loti": 0.65, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2013, "loti": 0.67, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2014, "loti": 0.75, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2015, "loti": 0.89, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2016, "loti": 1.01, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2017, "loti": 0.91, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2018, "loti": 0.85, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2019, "loti": 0.98, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2020, "loti": 1.01, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2021, "loti": 0.85, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2022, "loti": 0.89, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2023, "loti": 1.17, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2024, "loti": 1.28, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+  - {"anio": 2025, "loti": 1.18, "etiqueta": "FUENTE", "fuente_id": null, "fuente_informe": "INV-CLI §2.3"}
+tendencia_estaciones: {"valor": 0.326, "unidad": "°C/década", "etiqueta": "INFERENCIA", "fuente_id": null, "fuente_informe": "INV-CLI §2.3", "nota": "tendencia de solo estaciones 2000-2025, cálculo propio (INV-CLI §2.1)"}

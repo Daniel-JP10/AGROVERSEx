@@ -1,0 +1,40 @@
+
+## humedad_radicular 368764 meses 319 2000-01 2026-07 unidades 1156 kg m-2 final
+ filas por nivel: {0: 319, 1: 10527, 2: 357918}
+ frac_valida media/min: 0.9897 0.0  NaN valor: 2233 {'frac_valida_bajo_umbral': 1276, 'sin_celdas_validas': 957}
+ frac_valida media por nivel: {0: 0.9936, 1: 0.9582, 2: 0.9907}
+ valor min/p1/med/p99/max: [ 96.6622 231.374  515.812  826.8547 905.604 ]
+ p10>p90: 0  valor fuera de [p10,p90]: 2144  (esperable: la media puede salir del intervalo)
+ ADM0 media global serie: 596.452  por mes calendario: [559.561, 535.326, 553.364, 599.442, 627.974, 628.546, 616.722, 605.81, 606.84, 613.804, 617.738, 594.382]
+
+## ndvi 371076 meses 321 2000-02 2026-10 unidades 1156 1 final
+ filas por nivel: {0: 321, 1: 10593, 2: 360162}
+ frac_valida media/min: 0.9902 0.0  NaN valor: 1029 {'frac_valida_bajo_umbral': 996, 'sin_celdas_validas': 33}
+ frac_valida media por nivel: {0: 0.9895, 1: 0.9885, 2: 0.9903}
+ valor min/p1/med/p99/max: [0.1809 0.435  0.7385 0.8385 0.8998]
+ p10>p90: 0  valor fuera de [p10,p90]: 20  (esperable: la media puede salir del intervalo)
+ ADM0 media global serie: 0.7488  por mes calendario: [0.746, 0.715, 0.71, 0.735, 0.758, 0.763, 0.758, 0.755, 0.753, 0.761, 0.769, 0.764]
+
+## precipitacion_final 357204 meses 309 2000-01 2025-09 unidades 1156 mm/hr final
+ filas por nivel: {0: 309, 1: 10197, 2: 346698}
+ frac_valida media/min: 1.0 1  NaN valor: 0 {}
+ frac_valida media por nivel: {0: 1.0, 1: 1.0, 2: 1.0}
+ valor min/p1/med/p99/max: [0.     0.0128 0.2621 0.7335 1.3772]
+ p10>p90: 0  valor fuera de [p10,p90]: 527  (esperable: la media puede salir del intervalo)
+ ADM0 media global serie: 0.3287  por mes calendario: [0.166, 0.188, 0.281, 0.41, 0.473, 0.434, 0.388, 0.343, 0.341, 0.357, 0.327, 0.234]
+
+## precipitacion_late 15028 meses 13 2025-10 2026-10 unidades 1156 mm/day provisional
+ filas por nivel: {0: 13, 1: 429, 2: 14586}
+ frac_valida media/min: 1.0 1  NaN valor: 0 {}
+ frac_valida media por nivel: {0: 1.0, 1: 1.0, 2: 1.0}
+ valor min/p1/med/p99/max: [1.19000e-02 8.23400e-01 6.74390e+00 2.38319e+01 4.24196e+01]
+ p10>p90: 0  valor fuera de [p10,p90]: 9  (esperable: la media puede salir del intervalo)
+ ADM0 media global serie: 8.1522  por mes calendario: [9.518, 9.541, 5.576, 7.924, 8.3, 9.388, 7.87, 6.078, 6.873, 10.063, 10.332, 4.453]
+
+## t2m 371076 meses 321 2000-01 2026-09 unidades 1156 K final
+ filas por nivel: {0: 321, 1: 10593, 2: 360162}
+ frac_valida media/min: 1.0 1  NaN valor: 0 {}
+ frac_valida media por nivel: {0: 1.0, 1: 1.0, 2: 1.0}
+ valor min/p1/med/p99/max: [282.957  285.0218 293.467  303.676  307.098 ]
+ p10>p90: 0  valor fuera de [p10,p90]: 248  (esperable: la media puede salir del intervalo)
+ ADM0 media global serie: 297.2744  por mes calendario: [297.348, 297.9, 297.954, 297.579, 297.228, 296.784, 296.771, 297.133, 297.348, 297.173, 296.996, 297.056]

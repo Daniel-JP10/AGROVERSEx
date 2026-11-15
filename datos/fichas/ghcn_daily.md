@@ -1,0 +1,25 @@
+# Ficha de dataset
+
+- Nombre corto: ghcn_daily
+- Producto oficial y versión: Global Historical Climatology Network - Daily (GHCN-Daily), versión 3.31+ (VERIFICADO: Menne et al., 2012; NOAA NCEI)
+- Agencia y centro de datos: NOAA National Centers for Environmental Information (NCEI)
+- Página oficial: https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily
+- DOI: 10.7289/V5D21VHZ (VERIFICADO: Menne et al., 2012, J. Atmos. Oceanic Technol. 29:897-910, doi:10.1175/JTECH-D-11-00103.1)
+- Variable y unidades: `TAVG`, `TMAX`, `TMIN` en décimas de °C en el CSV crudo (convertidas a °C al dividir por 10,0 en `src/lotes_demo/forzantes.py`); `PRCP` en décimas de mm (convertida a mm/día al dividir por 10,0). Atributos `*_ATTRIBUTES` con formato `Measurement_Flag,Quality_Flag,Source_Flag,Time_of_Observation` (VERIFICADO por lectura del CSV)
+- Resolución espacial nominal: estación meteorológica puntual en superficie (`COM00080370` Aeropuerto San Luis, Ipiales, Nariño, Colombia; lat `0.862`, lon `-77.672`, elevación declarada en cabecera GHCN `2976.4 m`, elevación de referencia OMM/IDEAM en `T-D5_opciones_lotes.md` `2961 m`, a ~2,5 km del centro del lote `DEMO-COL-01`)
+- Resolución temporal: diaria (día sinóptico de la estación WMO 80370; `TAVG_ATTRIBUTES = "H,,S"` indica media calculada a partir de lecturas sinópticas horarias/trihorarias GTS)
+- CRS nativo: WGS 84 lat/lon (EPSG:4326), estación puntual
+- Periodo descargado: serie histórica completa disponible en GHCN-Daily (`1964-09-16` a `2025-08-24`, `10401` filas diarias); ventana de validación común con NASA POWER e IMERG: `2001-01-01` a `2024-12-31` (`8766` días calendario, `6338` días con registro en GHCN)
+- Área descargada: estación `COM00080370` (`SAN LUIS, CO`)
+- Herramienta y consulta exacta de descarga: descarga HTTPS directa desde el archivo público por estación de NOAA NCEI `https://www.ncei.noaa.gov/data/global-historical-climatology-network-daily/access/COM00080370.csv`, guardada en `datos/crudos/ghcn/COM00080370.csv` (`1146671` bytes, SHA256 `b2dca61c6f63748daa21bf876815b402e6c2f60ed9710f302202152db93f94b5`, VERIFICADO)
+- Fecha de descarga: 2026-11-14
+- Banderas de calidad aplicadas: se descarta todo registro cuyo segundo campo de `*_ATTRIBUTES` (`Quality_Flag`) no esté vacío (`q_flag != ""`), en `cargar_ghcn_diario` (`src/lotes_demo/forzantes.py`). En el periodo 2001-2024 hubo `0` registros rechazados por bandera de calidad activa (VERIFICADO)
+- Fracción de datos válidos en el área (periodo 2001-2024, sobre 8766 días): `TAVG` `72,30 %` (`6338` días), `TMIN` `59,14 %` (`5184` días), `TMAX` `0,19 %` (`17` días), `PRCP` `49,90 %` (`4374` días) (VERIFICADO)
+- Transformaciones a la grilla común y método de remuestreo: ninguna; se compara directamente como estación de referencia en tierra frente a la serie puntual de NASA POWER del lote `DEMO-COL-01` (`datos/lotes/validacion_temperatura_ipiales.json`)
+- Requisito del reto y pregunta que atiende: N1, N2, N3, C2; PI-D2, PI-D3
+- Limitaciones conocidas:
+  - En los partes sinópticos GTS (`Source_Flag = S`) de la estación `COM00080370` entre 2001 y 2024, el extremo máximo diario (`TMAX`) casi no se transmitió (`17` días válidos), mientras que `TMIN` (`5184` días) y `TAVG` (`6338` días) tienen cobertura amplia para validar sesgo y error.
+  - `TAVG` lleva atributo `H` (media de observaciones sinópticas, con mayor peso diurno en estaciones con reportes diurnos más frecuentes), lo que explica que en horas de sol el calentamiento radiativo del altiplano ecuatorial acerque `TAVG` a la `T2M` cruda de MERRA-2 (`+0,80 °C` de sesgo crudo frente a `-1,68 °C` corregida), mientras que en la madrugada sin radiación solar `TMIN` sigue el enfriamiento adiabático por altitud (la corrección por altura a `2934 m` reduce el sesgo de `T2M_MIN` de `+3,51 °C` a `+1,04 °C` y el MAE de `3,52 °C` a `1,79 °C`).
+- Licencia: Dominio público de EE. UU. (17 U.S.C. § 105, obra del Gobierno Federal de EE. UU. distribuida por NOAA NCEI sin restricciones de uso; registrada en `LICENCIAS_TERCEROS.md` y `CITAS.md`)
+- Responsable: constructor de datos (Claude Code / Antigravity), tarea T-D5 Prioridad 3A (D-027)
+- Verificador y fecha: PENDIENTE

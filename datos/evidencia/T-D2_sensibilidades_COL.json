@@ -1,0 +1,95 @@
+{
+ "pi_d1_con_clases_1_a_5": {
+  "precipitacion_final": {
+   "2%": 0.4377,
+   "5%": 0.203,
+   "10%": 0.0759,
+   "20%": 0.0174,
+   "pares": 13428
+  },
+  "ndvi": {
+   "2%": 0.3488,
+   "5%": 0.1214,
+   "10%": 0.0331,
+   "20%": 0.005,
+   "pares": 13377
+  },
+  "t2m": {
+   "2%": 0.0,
+   "5%": 0.0,
+   "10%": 0.0,
+   "20%": 0.0,
+   "pares": 13440
+  },
+  "humedad_radicular": {
+   "2%": 0.3968,
+   "5%": 0.2154,
+   "10%": 0.0829,
+   "20%": 0.0105,
+   "pares": 13380
+  }
+ },
+ "cultivo_1_3_contra_cultivo_1_5": {
+  "precipitacion_final": {
+   "pares": 13032,
+   ">2%": 0.4712,
+   ">5%": 0.2262,
+   ">10%": 0.0908,
+   "sin_valor_en_a_con_valor_en_b": 432
+  },
+  "t2m": {
+   "pares": 13188,
+   ">2%": 0.0,
+   ">5%": 0.0,
+   ">10%": 0.0,
+   "sin_valor_en_a_con_valor_en_b": 276
+  },
+  "humedad_radicular": {
+   "pares": 13116,
+   ">2%": 0.3942,
+   ">5%": 0.1983,
+   ">10%": 0.077,
+   "sin_valor_en_a_con_valor_en_b": 336
+  },
+  "ndvi": {
+   "pares": 12678,
+   ">2%": 0.3859,
+   ">5%": 0.1436,
+   ">10%": 0.0485,
+   "sin_valor_en_a_con_valor_en_b": 783
+  }
+ },
+ "ndvi_reliability_solo_0": {
+  "pi_d1": {
+   "ndvi": {
+    "2%": 0.5023,
+    "5%": 0.2291,
+    "10%": 0.0906,
+    "20%": 0.0222,
+    "pares": 5718
+   }
+  }
+ },
+ "ndvi_0y1_contra_solo0_area": {
+  "pares": 6531,
+  ">2%": 0.1159,
+  ">5%": 0.0329,
+  ">10%": 0.0064,
+  "sin_valor_en_a_con_valor_en_b": 32,
+  "frac_valida_media_0y1": 0.9906,
+  "frac_valida_media_solo0": 0.494,
+  "unidades_mes_sin_valor_0y1": 32,
+  "unidades_mes_sin_valor_solo0": 7164
+ },
+ "ndvi_0y1_contra_solo0_cultivo": {
+  "pares": 6428,
+  ">2%": 0.0776,
+  ">5%": 0.0199,
+  ">10%": 0.0036,
+  "sin_valor_en_a_con_valor_en_b": 783,
+  "frac_valida_media_0y1": 0.9381,
+  "frac_valida_media_solo0": 0.479,
+  "unidades_mes_sin_valor_0y1": 819,
+  "unidades_mes_sin_valor_solo0": 7267
+ }
+}

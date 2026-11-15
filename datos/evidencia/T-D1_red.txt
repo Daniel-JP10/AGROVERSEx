@@ -1,0 +1,94 @@
+# RED T-D1 2026-11-14T17:51:50Z
+$ PYTHONPATH=src python -m pytest pruebas/geo/test_unidades.py pruebas/geo/test_cgaz_lectura.py pruebas/geo/test_config_datos.py -q
+        try:
+            c = importlib.reload(cfg)
+>           assert c.CRUDOS == tmp_path / "crudos" and c.PROCESADOS == tmp_path / "procesados"
+E           AssertionError: assert (WindowsPath('C:/NASA/wt/t-d1-limites/datos/crudos') == (WindowsPath('C:/Users/usuario/AppData/Local/Temp/pytest-of-usuario/pytest-264/test_agro_datos_redirige_crudo0') / 'crudos'))
+E            +  where WindowsPath('C:/NASA/wt/t-d1-limites/datos/crudos') = <module 'simulacion.config' from 'C:\\NASA\\wt\\t-d1-limites\\src\\simulacion\\config.py'>.CRUDOS
+
+pruebas\geo\test_config_datos.py:11: AssertionError
+=========================== short test summary info ===========================
+FAILED pruebas/geo/test_unidades.py::test_formato_unidad_id - AttributeError:...
+FAILED pruebas/geo/test_unidades.py::test_duplicados_detecta_repetidos - Attr...
+FAILED pruebas/geo/test_unidades.py::test_padre_espacial_simple - KeyError: "...
+FAILED pruebas/geo/test_unidades.py::test_padre_espacial_fuera - KeyError: "[...
+FAILED pruebas/geo/test_unidades.py::test_corregir_padres_reasigna_al_del_mismo_pais
+FAILED pruebas/geo/test_unidades.py::test_area_proyectada_vs_geodesica - Attr...
+FAILED pruebas/geo/test_unidades.py::test_codigos_huerfanos_con_sql - Attribu...
+FAILED pruebas/geo/test_unidades.py::test_paises_sin_nivel2_se_derivan - Attr...
+FAILED pruebas/geo/test_unidades.py::test_escribir_gpkg_parcial_indice_y_capas
+FAILED pruebas/geo/test_unidades.py::test_exportar_niveles_geojson - KeyError...
+FAILED pruebas/geo/test_cgaz_lectura.py::test_leer_cgaz_declara_wgs84_y_normaliza_columnas
+FAILED pruebas/geo/test_cgaz_lectura.py::test_hash_verificado_rechaza_archivo_distinto
+FAILED pruebas/geo/test_config_datos.py::test_agro_datos_redirige_crudos_y_procesados
+13 failed, 2 passed in 2.31s
+
+# RED teselas (regex anterior de id) 2026-11-14T17:58:15Z
+$ pytest pruebas/geo/test_teselas.py -m "not datos_reales" -q
+pruebas\geo\test_teselas.py:76: AssertionError
+=========================== short test summary info ===========================
+FAILED pruebas/geo/test_teselas.py::test_contar_ids - AssertionError: assert ...
+FAILED pruebas/geo/test_teselas.py::test_partir_y_unir_conserva_ids - Asserti...
+FAILED pruebas/geo/test_teselas.py::test_completar_perdidos - AssertionError:...
+3 failed, 4 passed, 4 deselected in 0.25s
+
+# RED geometrias y CRS de area 2026-11-14T18:03:59Z
+$ pytest pruebas/geo/test_unidades.py -q
+pruebas\geo\test_unidades.py:134: AttributeError
+=========================== short test summary info ===========================
+FAILED pruebas/geo/test_unidades.py::test_reparar_deja_solo_poligonos - Asser...
+FAILED pruebas/geo/test_unidades.py::test_area_usa_proyeccion_de_igual_area_elipsoidal
+2 failed, 13 passed in 1.57s
+
+# RED colombia 2026-11-14T18:05:07Z
+$ pytest pruebas/geo/test_colombia.py -q
+=========================== short test summary info ===========================
+ERROR pruebas/geo/test_colombia.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 1.12s
+
+# RED indice 2026-11-14T18:05:48Z
+$ pytest pruebas/geo/test_indice_busqueda.py -m "not datos_reales" -q
+src\simulacion\geo\indice_busqueda.py:41: TypeError
+=========================== short test summary info ===========================
+FAILED pruebas/geo/test_indice_busqueda.py::test_contexto_distingue_los_bolivar
+FAILED pruebas/geo/test_indice_busqueda.py::test_ascii_normalizado_y_sin_es_en
+FAILED pruebas/geo/test_indice_busqueda.py::test_zona_en_disputa_lleva_marca_y_contexto
+FAILED pruebas/geo/test_indice_busqueda.py::test_padre_nulo_completa_pais_por_iso3
+FAILED pruebas/geo/test_indice_busqueda.py::test_escritura_y_lectura_de_vuelta
+FAILED pruebas/geo/test_indice_busqueda.py::test_indice_reproducible_por_hash
+FAILED pruebas/geo/test_indice_busqueda.py::test_nombres_ne_completan_nivel_0
+7 failed, 1 deselected in 1.10s
+
+# RED area con bordes largos y linea pura 2026-11-14T18:15:00Z
+$ pytest pruebas/geo/test_unidades.py -q
+pruebas\geo\test_unidades.py:154: AssertionError
+=========================== short test summary info ===========================
+FAILED pruebas/geo/test_unidades.py::test_area_con_bordes_largos_coincide_densificando
+FAILED pruebas/geo/test_unidades.py::test_reparar_linea_pura_pasa_a_poligono
+2 failed, 15 passed in 1.85s
+
+# RED colombia contiene/exclusion 2026-11-14T18:16:03Z
+pruebas\geo\test_colombia.py:42: AssertionError
+=========================== short test summary info ===========================
+FAILED pruebas/geo/test_colombia.py::test_contiene_y_exclusion_por_departamento
+1 failed, 2 passed in 0.80s
+
+# RED completar_perdidos con cierre de mapshaper 2026-11-14T18:36:30Z
+src\simulacion\geo\teselas.py:112: AssertionError
+=========================== short test summary info ===========================
+FAILED pruebas/geo/test_teselas.py::test_completar_perdidos_con_cierre_sin_salto_final
+1 failed, 7 passed, 4 deselected in 0.36s
+
+# RED teselas: tiempo/RAM de tippecanoe y AGRO_HERRAMIENTAS 2026-11-14T18:37:00Z
+=========================== short test summary info ===========================
+FAILED pruebas/geo/test_teselas.py::test_comando_tippecanoe_flags - Assertion...
+FAILED pruebas/geo/test_teselas.py::test_herramientas_se_puede_apuntar_con_variable
+2 failed, 7 passed, 4 deselected in 0.42s
+
+# RED indice sin filas repetidas de nivel superior 2026-11-14T18:37:43Z
+pruebas\geo\test_indice_busqueda.py:52: AssertionError
+=========================== short test summary info ===========================
+FAILED pruebas/geo/test_indice_busqueda.py::test_zona_en_disputa_lleva_marca_y_contexto
+FAILED pruebas/geo/test_indice_busqueda.py::test_filas_que_repiten_un_nivel_superior_no_se_indexan
+2 failed, 6 passed, 1 deselected in 2.33s

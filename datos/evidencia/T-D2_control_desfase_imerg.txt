@@ -1,0 +1,5 @@
+2000-01 orientada: diferencia maxima contra csv.gz = 4.999e-07, unidades con diferencia > 1e-6: 0 de 1156
+2000-01 espejada_en_longitud: diferencia maxima contra csv.gz = 4.238e-01, unidades con diferencia > 1e-6: 1156 de 1156
+2015-01 orientada: diferencia maxima contra csv.gz = 4.982e-07, unidades con diferencia > 1e-6: 0 de 1156
+2015-01 espejada_en_longitud: diferencia maxima contra csv.gz = 8.153e-01, unidades con diferencia > 1e-6: 1156 de 1156
+Marcas de tiempo: commit ac4e20d (lectura orientada) 2026-11-14 14:32:46; csv.gz de precipitacion_final escritos 14:37 (WSL) y copiados 14:51, todos posteriores. Lectura de las series: serie_mensual.campos_mensuales llama L.leer_campo (orientada).

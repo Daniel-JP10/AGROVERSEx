@@ -1,0 +1,271 @@
+{
+ "cgaz": 1122,
+ "dane": 1122,
+ "exactos": 1088,
+ "variantes": [
+  {
+   "cgaz": "Santander (Araracuara)",
+   "dane": "PUERTO SANTANDER",
+   "dpto": "amazonas",
+   "parecido": 0.9,
+   "cod_mpio": "91669",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "Don Matías",
+   "dane": "DONMATÍAS",
+   "dpto": "antioquia",
+   "parecido": 0.95,
+   "cod_mpio": "05237",
+   "metodo": "parecido"
+  },
+  {
+   "cgaz": "San Vicente",
+   "dane": "SAN VICENTE FERRER",
+   "dpto": "antioquia",
+   "parecido": 0.9,
+   "cod_mpio": "05674",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "Santuario",
+   "dane": "EL SANTUARIO",
+   "dpto": "antioquia",
+   "parecido": 0.9,
+   "cod_mpio": "05697",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "San Andrès",
+   "dane": "SAN ANDRÉS DE CUERQUÍA",
+   "dpto": "antioquia",
+   "parecido": 0.9,
+   "cod_mpio": "05647",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "San Pedro",
+   "dane": "SAN PEDRO DE LOS MILAGROS",
+   "dpto": "antioquia",
+   "parecido": 0.9,
+   "cod_mpio": "05664",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "Rioviejo",
+   "dane": "RÍO VIEJO",
+   "dpto": "bolivar",
+   "parecido": 0.94,
+   "cod_mpio": "13600",
+   "metodo": "parecido"
+  },
+  {
+   "cgaz": "Tiquiso",
+   "dane": "TIQUISIO",
+   "dpto": "bolivar",
+   "parecido": 0.93,
+   "cod_mpio": "13810",
+   "metodo": "parecido"
+  },
+  {
+   "cgaz": "Labranza Grande",
+   "dane": "LABRANZAGRANDE",
+   "dpto": "boyaca",
+   "parecido": 0.97,
+   "cod_mpio": "15377",
+   "metodo": "parecido"
+  },
+  {
+   "cgaz": "Güicán",
+   "dane": "GÜICÁN DE LA SIERRA",
+   "dpto": "boyaca",
+   "parecido": 0.9,
+   "cod_mpio": "15332",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "Piendamó",
+   "dane": "PIENDAMÓ - TUNÍA",
+   "dpto": "cauca",
+   "parecido": 0.9,
+   "cod_mpio": "19548",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "Sotará (Paispamba)",
+   "dane": "SOTARÁ - PAISPAMBA",
+   "dpto": "cauca",
+   "parecido": 0.9,
+   "cod_mpio": "19760",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "López",
+   "dane": "LÓPEZ DE MICAY",
+   "dpto": "cauca",
+   "parecido": 0.9,
+   "cod_mpio": "19418",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "Becerrill",
+   "dane": "BECERRIL",
+   "dpto": "cesar",
+   "parecido": 0.94,
+   "cod_mpio": "20045",
+   "metodo": "parecido"
+  },
+  {
+   "cgaz": "El Carmen",
+   "dane": "EL CARMEN DE ATRATO",
+   "dpto": "choco",
+   "parecido": 0.9,
+   "cod_mpio": "27245",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "Purísima",
+   "dane": "PURÍSIMA DE LA CONCEPCIÓN",
+   "dpto": "cordoba",
+   "parecido": 0.9,
+   "cod_mpio": "23586",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "San Juan De Rio Seco",
+   "dane": "SAN JUAN DE RIOSECO",
+   "dpto": "cundinamarca",
+   "parecido": 0.97,
+   "cod_mpio": "25662",
+   "metodo": "parecido"
+  },
+  {
+   "cgaz": "Villa Gómez",
+   "dane": "VILLAGÓMEZ",
+   "dpto": "cundinamarca",
+   "parecido": 0.95,
+   "cod_mpio": "25871",
+   "metodo": "parecido"
+  },
+  {
+   "cgaz": "Ubate",
+   "dane": "VILLA DE SAN DIEGO DE UBATÉ",
+   "dpto": "cundinamarca",
+   "parecido": 0.9,
+   "cod_mpio": "25843",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "Barranco Mina",
+   "dane": "BARRANCOMINAS",
+   "dpto": "guainia",
+   "parecido": 0.92,
+   "cod_mpio": "94343",
+   "metodo": "parecido"
+  },
+  {
+   "cgaz": "Pueblo Viejo",
+   "dane": "PUEBLOVIEJO",
+   "dpto": "magdalena",
+   "parecido": 0.96,
+   "cod_mpio": "47570",
+   "metodo": "parecido"
+  },
+  {
+   "cgaz": "Santa Cruz (Guachavés)",
+   "dane": "SANTACRUZ",
+   "dpto": "narino",
+   "parecido": 0.95,
+   "cod_mpio": "52699",
+   "metodo": "parecido"
+  },
+  {
+   "cgaz": "Cuaspud",
+   "dane": "CUASPUD CARLOSAMA",
+   "dpto": "narino",
+   "parecido": 0.9,
+   "cod_mpio": "52224",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "Tumaco",
+   "dane": "SAN ANDRÉS DE TUMACO",
+   "dpto": "narino",
+   "parecido": 0.9,
+   "cod_mpio": "52835",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "Cúcuta",
+   "dane": "SAN JOSÉ DE CÚCUTA",
+   "dpto": "norte de santander",
+   "parecido": 0.9,
+   "cod_mpio": "54001",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "Jordán Sube",
+   "dane": "JORDÁN",
+   "dpto": "santander",
+   "parecido": 0.9,
+   "cod_mpio": "68370",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "Buga",
+   "dane": "GUADALAJARA DE BUGA",
+   "dpto": "valle del cauca",
+   "parecido": 0.9,
+   "cod_mpio": "76111",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "Cali",
+   "dane": "SANTIAGO DE CALI",
+   "dpto": "valle del cauca",
+   "parecido": 0.9,
+   "cod_mpio": "76001",
+   "metodo": "contiene"
+  },
+  {
+   "cgaz": "Papunaua(cor. Departamental)",
+   "dane": "PAPUNAHUA",
+   "dpto": "vaupes",
+   "parecido": 0.94,
+   "cod_mpio": "97777",
+   "metodo": "parecido"
+  }
+ ],
+ "candidatos_por_exclusion": [
+  {
+   "cgaz": "Distrito Especial, Industrial Y Portuario De Barr*",
+   "dane": "BARRANQUILLA",
+   "dpto": "atlantico",
+   "parecido": 0.0,
+   "cod_mpio": "08001",
+   "metodo": "exclusion"
+  },
+  {
+   "cgaz": "Mompós",
+   "dane": "SANTA CRUZ DE MOMPOX",
+   "dpto": "bolivar",
+   "parecido": 0.0,
+   "cod_mpio": "13468",
+   "metodo": "exclusion"
+  }
+ ],
+ "sobran_en_cgaz": [
+  "Distrito Especial, Industrial Y Portuario De Barr*",
+  "Mompós",
+  "Mapiripana",
+  "Ricaurte (Coloso)",
+  "Tolú Viejo"
+ ],
+ "faltan_en_cgaz": [
+  "BARRANQUILLA",
+  "SANTA CRUZ DE MOMPOX",
+  "NUEVO BELÉN DE BAJIRÁ",
+  "COLOSÓ",
+  "SAN JOSÉ DE TOLUVIEJO"
+ ]
+}

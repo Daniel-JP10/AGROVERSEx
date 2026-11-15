@@ -1,1 +1,26 @@
 repo/
+AGENTS.md
+CLAUDE.md
+.env
+*.netrc
+_netrc
+*.parcial
+datos/crudos/
+datos/procesados/
+node_modules/
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+dist/
+*.sqlite
+.pytest_cache/
+src/web/test-results/
+herramientas/bin/
+.dodsrc
+.urs_cookies
+
+# D-033e: arreglos públicos del mundo, se construyen al desplegar con src/mapa_estatico/construir.py
+src/web/public/datos/unidades_geo.json.gz
+
+# salidas de la herramienta de capturas del navegador (Playwright MCP)
+.playwright-mcp/

@@ -1,0 +1,70 @@
+{
+ "precipitacion_final": {
+  "descripcion": "lluvia (IMERG Final, mm/hr)",
+  "meses": [
+   "2020-01"
+  ],
+  "unidades_nivel2": 1122,
+  "unidades_mes_con_cultivo_y_valor": 1086,
+  "sin_cultivo_o_sin_valor": 36,
+  "diferencia_cultivo_menos_area": {
+   "p1": -0.03852,
+   "p5": -0.01962,
+   "p25": -0.00411,
+   "p50": -0.00033,
+   "p75": 0.00169,
+   "p95": 0.01202,
+   "p99": 0.02846
+  },
+  "diferencia_absoluta_media": 0.00621,
+  "diferencia_relativa_abs_percentiles": {
+   "p50": 0.03487,
+   "p75": 0.08111,
+   "p90": 0.16329,
+   "p95": 0.25474,
+   "p99": 0.41104
+  },
+  "fraccion_unidades_con_dif_relativa_mayor_a": {
+   "2%": 0.6473,
+   "5%": 0.4006,
+   "10%": 0.1888,
+   "20%": 0.0718
+  },
+  "fraccion_con_valor_cultivo_fuera_de_p10_p90_area": 0.035,
+  "correlacion": 0.99435
+ },
+ "ndvi": {
+  "descripcion": "NDVI (MOD13C2)",
+  "meses": [
+   "2020-01"
+  ],
+  "unidades_nivel2": 1122,
+  "unidades_mes_con_cultivo_y_valor": 1061,
+  "sin_cultivo_o_sin_valor": 61,
+  "diferencia_cultivo_menos_area": {
+   "p1": -0.10189,
+   "p5": -0.04739,
+   "p25": -0.01282,
+   "p50": 0.00022,
+   "p75": 0.01553,
+   "p95": 0.0677,
+   "p99": 0.11753
+  },
+  "diferencia_absoluta_media": 0.02367,
+  "diferencia_relativa_abs_percentiles": {
+   "p50": 0.01918,
+   "p75": 0.04124,
+   "p90": 0.08402,
+   "p95": 0.13995,
+   "p99": 0.23192
+  },
+  "fraccion_unidades_con_dif_relativa_mayor_a": {
+   "2%": 0.4844,
+   "5%": 0.2036,
+   "10%": 0.0839,
+   "20%": 0.0179
+  },
+  "fraccion_con_valor_cultivo_fuera_de_p10_p90_area": 0.0302,
+  "correlacion": 0.91827
+ }
+}

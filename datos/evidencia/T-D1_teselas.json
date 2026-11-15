@@ -1,0 +1,135 @@
+{
+  "decision": ["D-016", "D-017"],
+  "fecha": "2026-11-14",
+  "herramienta_generacion": "tippecanoe v2.49.0 (Ubuntu-24.04 WSL)",
+  "parametros_tippecanoe": {
+    "adm0_adm1": [
+      "--no-simplification-of-shared-nodes",
+      "--no-tiny-polygon-reduction",
+      "--no-feature-limit",
+      "--no-tile-size-limit"
+    ],
+    "adm2": [
+      "--detect-shared-borders",
+      "--low-detail=10",
+      "--no-tiny-polygon-reduction",
+      "--no-feature-limit",
+      "--no-tile-size-limit"
+    ]
+  },
+  "propiedades_teselas": [
+    "unidad_id",
+    "nombre",
+    "nivel",
+    "iso3",
+    "padre_id",
+    "es_disputa"
+  ],
+  "archivos_pmtiles": {
+    "adm0.pmtiles": {
+      "capa": "adm0",
+      "zoom": [0, 6],
+      "unidades": 218,
+      "disputas": 20,
+      "bytes_antes_d016": 4325593,
+      "bytes": 4359484,
+      "mb": 4.36,
+      "mib": 4.16,
+      "sha256": "49410c0138194db2109cdf62b6d892e6c3c53d0ed90ef43c14f47d3b677e87ee",
+      "tiempo_s": 5.18,
+      "ram_max_mb": 317.8
+    },
+    "adm1.pmtiles": {
+      "capa": "adm1",
+      "zoom": [2, 9],
+      "unidades": 3224,
+      "disputas": 20,
+      "bytes_antes_d016": 26308185,
+      "bytes": 27097844,
+      "mb": 27.1,
+      "mib": 25.84,
+      "sha256": "a50df7eb4e9f73b4a732a7879aa1c40e91410bc00527399e0e33c59d3988d69a",
+      "tiempo_s": 27.28,
+      "ram_max_mb": 273.9
+    },
+    "adm2.pmtiles": {
+      "capa": "adm2",
+      "zoom": [5, 10],
+      "unidades": 49349,
+      "disputas": 20,
+      "bytes_antes_d016": 399216225,
+      "bytes": 92905976,
+      "mb": 92.91,
+      "mib": 88.6,
+      "reduccion_pct": 76.73,
+      "cumple_tope_100mb": true,
+      "sha256": "3b2fa556fc6a738dc45bd7861851c9dcd7ef33094e27097b6b5cea7a121a2de1",
+      "tiempo_s": 86.63,
+      "ram_max_mb": 262.6
+    }
+  },
+  "verificacion_visual_zmax": {
+    "ipiales": {
+      "unidad_id": "COL-ADM2-7082276B52108893597118",
+      "nombre": "Ipiales",
+      "iso3": "COL",
+      "padre_id": "COL-ADM1-13589884B81785725414319",
+      "es_disputa": 0,
+      "zmax_evaluado": 10,
+      "municipios_en_recorte": 9,
+      "municipios_recuperados_en_z10": 9,
+      "nombres_vecinos": [
+        "Aldana",
+        "Contadero",
+        "Cuaspud",
+        "Córdoba",
+        "Gualmatán",
+        "Ipiales",
+        "Potosí",
+        "Puerres",
+        "Pupiales"
+      ],
+      "vertices_gpkg": 2758,
+      "vertices_geojson_simplificado": 71,
+      "vertices_tesela_z10": 80,
+      "area_km2_gpkg": 1534.3286,
+      "area_km2_geojson_simplificado": 1539.0456,
+      "area_km2_tesela_z10": 1539.0536,
+      "diferencia_relativa_area_z10_vs_simplificado_pct": 0.0005,
+      "diferencia_relativa_area_z10_vs_gpkg_pct": 0.308,
+      "iou_z10_vs_simplificado": 0.999687,
+      "iou_z10_vs_gpkg": 0.971574,
+      "captura_png": "datos/evidencia/D016_ipiales_zmax.png"
+    },
+    "cartagena": {
+      "unidad_id": "COL-ADM2-7082276B69747109400917",
+      "nombre": "Cartagena De Indias",
+      "iso3": "COL",
+      "padre_id": "COL-ADM1-13589884B96168520946689",
+      "es_disputa": 0,
+      "zmax_evaluado": 10,
+      "municipios_en_recorte": 7,
+      "municipios_recuperados_en_z10": 7,
+      "nombres_vecinos": [
+        "Arjona",
+        "Cartagena De Indias",
+        "Clemencia",
+        "Santa Catalina",
+        "Santa Rosa",
+        "Turbaco",
+        "Turbana"
+      ],
+      "vertices_gpkg": 1021,
+      "vertices_geojson_simplificado": 64,
+      "vertices_tesela_z10": 74,
+      "area_km2_gpkg": 531.4342,
+      "area_km2_geojson_simplificado": 528.2875,
+      "area_km2_tesela_z10": 528.285,
+      "diferencia_relativa_area_z10_vs_simplificado_pct": -0.0005,
+      "diferencia_relativa_area_z10_vs_gpkg_pct": -0.5926,
+      "iou_z10_vs_simplificado": 0.999088,
+      "iou_z10_vs_gpkg": 0.898235,
+      "captura_png": "datos/evidencia/D016_cartagena_zmax.png"
+    }
+  }
+}

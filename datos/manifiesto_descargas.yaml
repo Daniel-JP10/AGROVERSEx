@@ -1,0 +1,242 @@
+# Manifiesto de descargas: consulta exacta, licencia, ficha y hash de cada archivo crudo
+# SoilGrids 2.0 agregado a 1000 m (solo publica la media); tamaños leídos con HEAD el 2026-11-14
+
+- id: soilgrids_soc_0-5cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/soc/soc_0-5cm_mean_1000.tif
+  archivo: soilgrids/soc_0-5cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 224589956
+  sha256: 1873108c25b569fc936853f9578d271b92142d40998c9922a7145c9486bd5344
+
+- id: soilgrids_soc_5-15cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/soc/soc_5-15cm_mean_1000.tif
+  archivo: soilgrids/soc_5-15cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 213203577
+  sha256: 2de23ff0c4e0abbef905c9d63f61770a709a234e6b4ade49ce019a4d1b3b9296
+
+- id: soilgrids_soc_15-30cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/soc/soc_15-30cm_mean_1000.tif
+  archivo: soilgrids/soc_15-30cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 207177268
+  sha256: 09b83990d9229359cd895bedf9470a215e75ef6cdb4a8375de5d1ab8cbfdf669
+
+- id: soilgrids_phh2o_0-5cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/phh2o/phh2o_0-5cm_mean_1000.tif
+  archivo: soilgrids/phh2o_0-5cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 78793346
+  sha256: d49a413ffe3d483ed41359855fd548509decfb5930368dcee7cfc3eff55d2d97
+
+- id: soilgrids_phh2o_5-15cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/phh2o/phh2o_5-15cm_mean_1000.tif
+  archivo: soilgrids/phh2o_5-15cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 79096499
+  sha256: dde2006490fad24deb8f4c5727d78066bea6042615dd5943503aa31012115896
+
+- id: soilgrids_phh2o_15-30cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/phh2o/phh2o_15-30cm_mean_1000.tif
+  archivo: soilgrids/phh2o_15-30cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 78972879
+  sha256: 053dfe17ff71e7eb5e686cda1dd9b5e61f982c3b65443161534b2e3ac54c2a0e
+
+- id: soilgrids_clay_0-5cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/clay/clay_0-5cm_mean_1000.tif
+  archivo: soilgrids/clay_0-5cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 191530251
+  sha256: 20f699cc64686bb5696e395f709232e5957ea3c6a4b39f6676517a502033f424
+
+- id: soilgrids_clay_5-15cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/clay/clay_5-15cm_mean_1000.tif
+  archivo: soilgrids/clay_5-15cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 192320598
+  sha256: 4164a3176651927fd503e313a22da2d8862a5817bdcade8096a475d0540e5f17
+
+- id: soilgrids_clay_15-30cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/clay/clay_15-30cm_mean_1000.tif
+  archivo: soilgrids/clay_15-30cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 193957642
+  sha256: ff3c3fc8075c668e4861b655310d03c4e33139a45e4bf2bae308b30a7162be7a
+
+- id: soilgrids_sand_0-5cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/sand/sand_0-5cm_mean_1000.tif
+  archivo: soilgrids/sand_0-5cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 198827692
+  sha256: fab9afdd9e576d816499142914c259e83409640f5d91a6aef000126de8cafdd0
+
+- id: soilgrids_sand_5-15cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/sand/sand_5-15cm_mean_1000.tif
+  archivo: soilgrids/sand_5-15cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 199088292
+  sha256: c8fd832a050776dc9a545251c92b39fcd54391d155b74d7df02a4fe557efd013
+
+- id: soilgrids_sand_15-30cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/sand/sand_15-30cm_mean_1000.tif
+  archivo: soilgrids/sand_15-30cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 199362307
+  sha256: 69d56d1577c29e111d9bb5748d3e154fc367c87ee610c0c4f6bed6841c154305
+
+- id: soilgrids_silt_0-5cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/silt/silt_0-5cm_mean_1000.tif
+  archivo: soilgrids/silt_0-5cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 194638176
+  sha256: 4c72f9303aa27fcb5f2527bb1a64b307e9ef37885afc08cdcee063e99c495295
+
+- id: soilgrids_silt_5-15cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/silt/silt_5-15cm_mean_1000.tif
+  archivo: soilgrids/silt_5-15cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 194628164
+  sha256: 13b685ff61986da5c7d8d255fee975318947f9fc17b693a76fc136bbec0f1a46
+
+- id: soilgrids_silt_15-30cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/silt/silt_15-30cm_mean_1000.tif
+  archivo: soilgrids/silt_15-30cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 194289699
+  sha256: ceb2ea427c813f6919cff9c23f212a39520ad2c5863f2531b35abf02c77849a0
+
+- id: soilgrids_bdod_0-5cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/bdod/bdod_0-5cm_mean_1000.tif
+  archivo: soilgrids/bdod_0-5cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 114696796
+  sha256: 05d76fc4ced9b47a132bd58e98a4c58e318801b977223381a54c5823907044ee
+
+- id: soilgrids_bdod_5-15cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/bdod/bdod_5-15cm_mean_1000.tif
+  archivo: soilgrids/bdod_5-15cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 110211361
+  sha256: d6ffa74d8297928e7c03a20626f0ddb85685625bbfa0286d7ac26f6a1587eff9
+
+- id: soilgrids_bdod_15-30cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/bdod/bdod_15-30cm_mean_1000.tif
+  archivo: soilgrids/bdod_15-30cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 108464241
+  sha256: d29bdd372ba05d7811359531bbbf9933d6ac19a47ce0ae90cbb29e73b8347099
+
+- id: soilgrids_cec_0-5cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/cec/cec_0-5cm_mean_1000.tif
+  archivo: soilgrids/cec_0-5cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 183213341
+  sha256: 15f7cc5a55aad9639d80e88037d2a98a53f79024615a08410e9547c2ef9e9ac9
+
+- id: soilgrids_cec_5-15cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/cec/cec_5-15cm_mean_1000.tif
+  archivo: soilgrids/cec_5-15cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 182914931
+  sha256: 42ff48cc633a250cbf6b825077b86a7c73c289e423d50f84e2f99b795b35365b
+
+- id: soilgrids_cec_15-30cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/cec/cec_15-30cm_mean_1000.tif
+  archivo: soilgrids/cec_15-30cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 182791202
+  sha256: da174b44e06375d0bc110af18b2c2d72081420a0d95f729a7b0d6d712d4534cd
+
+- id: soilgrids_nitrogen_0-5cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/nitrogen/nitrogen_0-5cm_mean_1000.tif
+  archivo: soilgrids/nitrogen_0-5cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 208586750
+  sha256: a7c484c3da23032ed2657093ee728193e35484464e532a215692ef2be17d22de
+
+- id: soilgrids_nitrogen_5-15cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/nitrogen/nitrogen_5-15cm_mean_1000.tif
+  archivo: soilgrids/nitrogen_5-15cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 198657091
+  sha256: 8c23b59bfb03fde8ce59535129ccb614ed3edd7b1fbb9abb58c8a35e4dc8a944
+
+- id: soilgrids_nitrogen_15-30cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/nitrogen/nitrogen_15-30cm_mean_1000.tif
+  archivo: soilgrids/nitrogen_15-30cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 191671233
+  sha256: e9a90afb0dc711f70d55aee27398e6d9eac7ffca9c7b990cc625384ce105e4de
+
+- id: soilgrids_wv0033_0-5cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/wv0033/wv0033_0-5cm_mean_1000.tif
+  archivo: soilgrids/wv0033_0-5cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 173530050
+  sha256: 75da237e1e819cc8c47ba68d5d02563d1187988e943c2d0c04db171616c9cbc1
+
+- id: soilgrids_wv0033_5-15cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/wv0033/wv0033_5-15cm_mean_1000.tif
+  archivo: soilgrids/wv0033_5-15cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 172279651
+  sha256: b4a7a698b0311e05f276c860e2d94ebee9541acc6d312ff0f5a0497c734f4a55
+
+- id: soilgrids_wv0033_15-30cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/wv0033/wv0033_15-30cm_mean_1000.tif
+  archivo: soilgrids/wv0033_15-30cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 170999720
+  sha256: d66c678305e3751dcd41c05fed59beaf2e2f46d26d97ae9e5a3e7e992075d0d5
+
+- id: soilgrids_wv1500_0-5cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/wv1500/wv1500_0-5cm_mean_1000.tif
+  archivo: soilgrids/wv1500_0-5cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 149693589
+  sha256: dc7ccb937488456bbdc6fa2dea7dfd8b8604c9707a716437236414d6ef9b7875
+
+- id: soilgrids_wv1500_5-15cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/wv1500/wv1500_5-15cm_mean_1000.tif
+  archivo: soilgrids/wv1500_5-15cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 150915962
+  sha256: 90dfbad147754809fe2fe22e90ce1eee93e30a3acdaab30eb4168cf28107a917
+
+- id: soilgrids_wv1500_15-30cm
+  url: https://files.isric.org/soilgrids/latest/data_aggregated/1000m/wv1500/wv1500_15-30cm_mean_1000.tif
+  archivo: soilgrids/wv1500_15-30cm_mean_1000.tif
+  licencia: CC BY 4.0 (PENDIENTE verificar en ISRIC)
+  ficha: datos/fichas/soilgrids2.md
+  bytes_esperados: 151948261
+  sha256: 1164d9fd04422ecb723dd26ba985b4867c80d9dbceb308f5e97d7b242347f116

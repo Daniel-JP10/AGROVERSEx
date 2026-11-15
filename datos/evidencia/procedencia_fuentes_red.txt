@@ -1,0 +1,20 @@
+RED 2026-11-14T15:40:44-05:00
+--- pytest
+pruebas\sim\test_referencias.py:329: AssertionError
+=========================== short test summary info ===========================
+FAILED pruebas/sim/test_referencias.py::test_africa_enso_sin_cai_2025_y_con_cita_cpc
+1 failed, 23 deselected in 1.27s
+--- vitest
+     × server\rutas_rotaciones.ts 8ms
+ Test Files  1 failed (1)
+      Tests  1 failed | 24 passed (25)
+RED 2 2026-11-14T15:55:08-05:00
+FAILED pruebas/sim/test_vegetacion.py::test_colombia_real - TypeError: unsupp...
+FAILED pruebas/sim/test_vegetacion.py::test_sin_coeficiente_de_greening_para_ningun_pais
+FAILED pruebas/sim/test_referencias.py::test_africa_nina_apagada_con_limitacion_declarada
+FAILED pruebas/sim/test_referencias.py::test_kluger_citado_como_preprint_fuente
+4 failed, 21 passed, 12 skipped in 13.72s
+RED 3 (D-025 Köppen) 2026-11-14T16:08:27-05:00
+FAILED pruebas/sim/test_clima.py::test_clases_internas_30_sin_koppen_beck - A...
+FAILED pruebas/sim/test_clima.py::test_sin_dataset_koppen_en_el_producto - as...
+2 failed, 15 deselected in 1.47s

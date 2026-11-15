@@ -1,0 +1,4 @@
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  pruebas/empalme_imerg.test.ts > paraMostrar cubre todo par (variable, unidad) de serie_mensual en Colombia > un par inventado lanza error con el par en el mensaje
+ FAIL  pruebas/empalme_imerg.test.ts > paraMostrar cubre todo par (variable, unidad) de serie_mensual en Colombia > T2M de K a °C
+      Tests  2 failed | 9 passed (11)

@@ -1,0 +1,22 @@
+[
+ [
+  "humedad_radicular",
+  "kg m-2"
+ ],
+ [
+  "ndvi",
+  "1"
+ ],
+ [
+  "precipitacion",
+  "mm/day"
+ ],
+ [
+  "precipitacion",
+  "mm/hr"
+ ],
+ [
+  "t2m",
+  "K"
+ ]
+]

@@ -1,0 +1,51 @@
+# Ficha de traspaso entre agentes o personas
+
+- De: Constructor D-016 / D-017 (T-D1 límites y teselas)
+- Para: Orquestador de Datos y Verificador con contexto limpio
+- Fecha y hora: 2026-11-14, 18:48 hora local
+- Tarea: Prioridad 8 · Reducción de `adm2.pmtiles` a menos de 100 MB por archivo (D-016) e inclusión de `es_disputa` en GeoJSON y teselas de los tres niveles (D-017)
+- Requisito del reto, pregunta de investigación y compuerta:
+  - Requisitos del reto: N1, N8, F12 (habilita F8).
+  - Pregunta de investigación: base de PI-D1 y PI-D4 (infraestructura espacial global sin pregunta propia).
+  - Compuerta: G2 Dato y G3 Armonización.
+- Qué se entrega: rutas exactas de archivos y commit
+  - Worktree `C:\NASA\wt\t-d1-limites` (rama `datos-t-d1-limites`, partiendo de `2afe669`):
+    - `src/simulacion/geo/teselas.py` (`ZOOMS[2] = (5, 10)`, `comando_tippecanoe` con `--detect-shared-borders --low-detail=10` en `adm2` y `--no-simplification-of-shared-nodes` en `adm0`/`adm1`, `asegurar_es_disputa` en streaming y corrección de solape de 200 bytes en `contar_ids`).
+    - `src/simulacion/geo/unidades.py` (`exportar_niveles` exporta `es_disputa` en las propiedades de `limites_crudos/adm{0,1,2}.geojson`).
+    - `pruebas/geo/test_teselas.py` y `pruebas/geo/test_unidades.py` (pruebas unitarias y `datos_reales` de D-016 y D-017).
+    - `contratos/unidades.md` (tamaños, sha256, rango de zoom 5 a 10 de `adm2.pmtiles` y propiedad `es_disputa`).
+    - `SI_USO.md` (propósitos actualizados con D-016 y D-017).
+    - `datos/evidencia/D016_red.txt`, `datos/evidencia/D016_ipiales_zmax.png`, `datos/evidencia/D016_cartagena_zmax.png`, `datos/evidencia/T-D1_teselas_d016.json`, `datos/evidencia/T-D1_teselas.json`, `datos/evidencia/T-D1_teselas_construccion.log`.
+  - Datos fuera de git (`C:\NASA\AGROVERSEx\datos\procesados\` y `C:\NASA\compartir\`):
+    - `limites_crudos/adm{0,1,2}.geojson` y `limites_simplificados/adm{0,1,2}.geojson` con `"es_disputa": 0|1` en todas las unidades (`218`, `3.224`, `49.349`).
+    - `teselas/adm0.pmtiles` (`4.359.484` bytes, sha256 `49410c0138194db2109cdf62b6d892e6c3c53d0ed90ef43c14f47d3b677e87ee`).
+    - `teselas/adm1.pmtiles` (`27.097.844` bytes, sha256 `a50df7eb4e9f73b4a732a7879aa1c40e91410bc00527399e0e33c59d3988d69a`).
+    - `teselas/adm2.pmtiles` (`92.905.976` bytes, `92,91 MB`, `88,60 MiB`, sha256 `3b2fa556fc6a738dc45bd7861851c9dcd7ef33094e27097b6b5cea7a121a2de1`).
+    - Copias verificadas en `C:\NASA\compartir\adm{0,1,2}.pmtiles` y `C:\NASA\compartir\SHA256SUMS.txt`.
+- Cómo reproducir: comando exacto
+  - Construcción de teselas:
+    `AGRO_DATOS=C:\NASA\AGROVERSEx\datos PYTHONPATH=C:\NASA\wt\t-d1-limites\src python -m simulacion.geo.teselas`
+  - Pruebas unitarias (sin datos):
+    `PYTHONPATH=C:\NASA\wt\t-d1-limites\src pytest -p no:cacheprovider C:\NASA\wt\t-d1-limites\pruebas\geo\test_teselas.py C:\NASA\wt\t-d1-limites\pruebas\geo\test_unidades.py -m "not datos_reales"`
+  - Pruebas completas con datos reales y `tippecanoe-decode`:
+    `AGRO_DATOS=C:\NASA\AGROVERSEx\datos PYTHONPATH=C:\NASA\wt\t-d1-limites\src pytest -p no:cacheprovider C:\NASA\wt\t-d1-limites\pruebas\geo\test_teselas.py C:\NASA\wt\t-d1-limites\pruebas\geo\test_unidades.py`
+- Qué se verificó ya y cómo:
+  - 28 pruebas unitarias (`not datos_reales`) y 8 pruebas `datos_reales` (36 en total en `test_teselas.py` y `test_unidades.py`) pasan en verde.
+  - `adm2.pmtiles` bajó de `399.216.225` bytes (`399,22 MB`) a `92.905.976` bytes (`92,91 MB`, `88,60 MiB`, reducción de `76,73 %`), cumpliendo `< 100.000.000` bytes.
+  - Los ids decodificados con `tippecanoe-decode` coinciden 1 a 1 con `unidades.gpkg` en los 3 niveles: `218` en ADM0, `3.224` en ADM1 y `49.349` en ADM2.
+  - Las propiedades de las teselas son exactamente las 6 del contrato: `unidad_id`, `nombre`, `nivel`, `iso3`, `padre_id`, `es_disputa`.
+  - Verificación visual y métrica en `zmax=10` (D-016) sobre Ipiales (`COL-ADM2-7082276B52108893597118`, 9/9 municipios vecinos en Nariño, `IoU = 0,999687` frente al GeoJSON simplificado, diferencia de área `+0,0005 %`) y Cartagena de Indias (`COL-ADM2-7082276B69747109400917`, 7/7 municipios vecinos en Bolívar, `IoU = 0,999088` frente al GeoJSON simplificado, diferencia de área `-0,0005 %`), con capturas en `datos/evidencia/D016_ipiales_zmax.png` y `datos/evidencia/D016_cartagena_zmax.png`.
+- Qué falta verificar:
+  - Revisión independiente del Verificador con contexto limpio.
+  - Ajuste en Web del `maxzoom` de la fuente vectorial `adm2` a `10` (con sobrezoom de MapLibre en `z > 10`) y consumo de `es_disputa` (tarea de Web).
+- Afirmaciones con su etiqueta:
+  - `adm2.pmtiles` pesa `92.905.976` bytes (`92,91 MB`, `88,60 MiB`), sha256 `3b2fa556fc6a738dc45bd7861851c9dcd7ef33094e27097b6b5cea7a121a2de1`, y conserva las `49.349` unidades y las 6 propiedades: VERIFICADO (ejecución reproducible con `tippecanoe-decode` y `pyogrio`).
+  - `adm0.pmtiles` (`4.359.484` bytes, `218` unidades) y `adm1.pmtiles` (`27.097.844` bytes, `3.224` unidades) incluyen `es_disputa` (`1` en las 20 zonas `111..129` y `ESH`, `0` en el resto): VERIFICADO.
+  - En `z=10`, Ipiales (`IoU = 0,999687`) y Cartagena de Indias (`IoU = 0,999088`) conservan su geometría simplificada y sus fronteras compartidas con los municipios vecinos sin huecos: VERIFICADO (`datos/evidencia/T-D1_teselas_d016.json`).
+- Desfases conocidos:
+  - En `contar_ids` (`src/simulacion/geo/teselas.py`), el corte por bloques `corte = len(datos) - 200` sin solape entre `datos[:corte]` y `datos[corte:]` perdía 1 `unidad_id` de `49.349` cuando un id caía exactamente sobre la frontera `len(datos) - 200` tras inyectar `"es_disputa"`. Se documentó con prueba unitaria (`test_contar_ids_en_corte_de_bloque`) y se corrigió escaneando `datos` completo y guardando `datos[-200:]` como solape.
+  - En `adm1.pmtiles` (`zmax=9`), activar `--detect-shared-borders` eliminaba el polígono reparado de Kaafu (`MDV-ADM1-51498476B94896396125649`, de `1e-5` grados de ancho). Se mantuvo `--no-simplification-of-shared-nodes` en `adm0` y `adm1` (`4,36 MB` y `27,10 MB`) y se aplicó `--detect-shared-borders --low-detail=10` únicamente a `adm2` (`92,91 MB`), conservando el 100 % de las unidades en los tres niveles.
+- Criterio de aceptación: qué debe ser cierto para darlo por bueno
+  - `adm2.pmtiles` `< 100.000.000` bytes (`92.905.976` bytes), con las `49.349` unidades completas y verificado en `z=10` sobre Ipiales y Cartagena.
+  - `es_disputa` presente en `limites_crudos/adm{0,1,2}.geojson`, `limites_simplificados/adm{0,1,2}.geojson` y `teselas/adm{0,1,2}.pmtiles`.
+  - Copias y `SHA256SUMS.txt` actualizados en `C:\NASA\compartir\`, contrato `contratos/unidades.md` al día y las 36 pruebas de `test_teselas.py` y `test_unidades.py` en verde.

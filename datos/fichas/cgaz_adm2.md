@@ -1,0 +1,25 @@
+# Ficha de dataset · geoBoundaries CGAZ ADM2
+
+- Nombre corto: cgaz_adm2
+- Producto oficial y versión: geoBoundaries CGAZ (Comprehensive Global Administrative Zones), archivo `geoBoundariesCGAZ_ADM2.gpkg`. Línea de versión publicada: geoBoundaries 6.0.0 (2023-09-14), según el README y las versiones del repositorio. El archivo se tomó del commit `4004e96433a2bdc54cac2b88d7d2e694c89cb818` (2024-04-20, mensaje "gB Core Data Update 2024-04-20 06:23") de la rama principal, que es el último commit que toca `releaseData/CGAZ`. El archivo no trae campo de versión: la relación entre el commit y la versión 6.0.0 queda PENDIENTE de confirmar con los autores. Etiqueta: FUENTE.
+- Agencia y centro de datos: William & Mary geoLab y comunidad geoBoundaries (no es un dato de NASA).
+- Página oficial: https://www.geoboundaries.org/ y https://github.com/wmgeolab/geoBoundaries
+- DOI: del artículo, 10.1371/journal.pone.0231866 (Runfola et al., 2020, PLoS ONE 15(4): e0231866). DOI propio del conjunto de datos: PENDIENTE (no se encontró).
+- Variable y unidades: polígonos de segundo nivel; donde un país no tiene nivel 2 la capa repite su polígono de nivel 1 o 0 (campo shapeType). Campos del archivo: `shapeName`, `shapeID` (solo en ADM1 y ADM2), `shapeGroup` (código de país o de zona en disputa), `shapeType`. Capa `globalADM2`. Sin unidades físicas.
+- Resolución espacial nominal: vectorial, ya simplificado por los autores ("extensive simplification", página globalDownloads de geoboundaries.org). Escala o tolerancia de simplificación: PENDIENTE.
+- Resolución temporal: no aplica; instantánea administrativa. Año de representación de los límites: PENDIENTE (varía por país).
+- CRS nativo: el GPKG declara un SRS geográfico sin nombre ("Undefined geographic SRS", esferoide 6378137 / 298.257223563, que es WGS84). Se declara EPSG:4326 al leerlo. Etiqueta: INFERENCIA.
+- Periodo descargado: no aplica.
+- Área descargada: global, 49349 unidades.
+- Herramienta y consulta exacta de descarga: `simulacion.geo.unidades.descargar_cgaz`; URL `https://media.githubusercontent.com/media/wmgeolab/geoBoundaries/4004e96433a2bdc54cac2b88d7d2e694c89cb818/releaseData/CGAZ/geoBoundariesCGAZ_ADM2.gpkg` (los archivos del repositorio son punteros Git LFS; el sha256 del puntero coincide con el del archivo bajado).
+- Fecha de descarga: 2026-11-14.
+- sha256: `6bc948cdd84575b733573d7983cf2503e1c71d66d2434db04502ae5fba60eec1` (240824320 bytes). VERIFICADO: coincide con el `oid sha256` del puntero LFS del repositorio.
+- Licencia: CC BY 4.0 según geoboundaries.org ("geoBoundaries datasets are provided under the CC BY 4.0 license") y el LICENSE del repositorio. El archivo GPKG no trae campo de licencia ni de cita. El README dice "CC BY 4.0 / ODbL" y los metadatos gbOpen del mismo commit (`geoBoundariesOpen-meta.csv`, 715 filas) muestran que los límites de origen por país tienen licencias variadas (ODbL en 84 de los ADM0, CC BY-SA, CC BY 3.0 IGO y otras). Si esas condiciones de origen se heredan en CGAZ es una pregunta legal sin resolver: escalada al director en el traspaso de T-D1. Etiqueta: FUENTE para CC BY 4.0, PENDIENTE para la herencia.
+- Cita: Runfola, D. et al. (2020) geoBoundaries: A global database of political administrative boundaries. PLoS ONE 15(4): e0231866. https://doi.org/10.1371/journal.pone.0231866 (forma corta indicada en geoboundaries.org).
+- Banderas de calidad aplicadas: no hay bandera de calidad. Se conserva `shapeType` como `nivel_real`; `DISP` marca zonas en disputa, que CGAZ reemplaza por polígonos siguiendo el criterio del Departamento de Estado de EE. UU. (geoboundaries.org).
+- Fracción de datos válidos en el área: no aplica. Geometrías inválidas reparadas con `shapely.make_valid` y conservando solo polígonos: 1.276 en total entre los tres niveles; un polígono degenerado (Kaafu, Maldivas, ADM1) pasó a un polígono mínimo de 1e-5 grados de ancho.
+- Transformaciones a la grilla común y método de remuestreo: no hay grilla. Origen EPSG:4326, destino EPSG:4326 para el GPKG y las teselas; EPSG:6933 (igual área sobre el elipsoide WGS84) solo para `area_km2`, con vértices cada 0,1 grados como máximo; Mollweide ESRI:54009 solo para elegir el padre más cercano. Sin remuestreo.
+- Requisito del reto y pregunta que atiende: N1, N8, F12. Es base de PI-D1 y PI-D4; no atiende una pregunta directa.
+- Limitaciones conocidas: límites ilustrativos; zonas en disputa según un solo criterio; sin nivel 2 real en 42 códigos (ver `contratos/unidades.md`); 37 unidades ADM2 sin nombre en el archivo; nombres de unidad solo en el idioma del origen; ADM2 de Colombia con 5 nombres distintos de DIVIPOLA (ver informe de Colombia en el traspaso).
+- Responsable: constructor T-D1 (Claude Code), orquestador Daniel.
+- Verificador y fecha: PENDIENTE

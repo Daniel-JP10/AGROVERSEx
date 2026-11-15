@@ -1,0 +1,9 @@
+$ PYTHONPATH=C:\NASA\wt\t-d1-limites\src AGRO_DATOS=C:\NASA\AGROVERSEx\datos pytest C:\NASA\wt\t-d1-limites\pruebas\geo\test_teselas.py -q
+ImportError while importing test module 'C:\NASA\wt\t-d1-limites\pruebas\geo\test_teselas.py'.
+..\wt\t-d1-limites\pruebas\geo\test_teselas.py:9: in <module>
+    from simulacion.geo.teselas import (ZOOMS, asegurar_es_disputa, comando_mapshaper, comando_tippecanoe, contar_ids,
+E   ImportError: cannot import name 'asegurar_es_disputa' from 'simulacion.geo.teselas' (C:\NASA\wt\t-d1-limites\src\simulacion\geo\teselas.py)
+
+$ PYTHONPATH=C:\NASA\wt\t-d1-limites\src AGRO_DATOS=C:\NASA\AGROVERSEx\datos pytest -p no:cacheprovider C:\NASA\wt\t-d1-limites\pruebas\geo\test_unidades.py -k "test_exportar_niveles_geojson" -q
+FAILED ..\wt\t-d1-limites\pruebas\geo\test_unidades.py::test_exportar_niveles_geojson
+AttributeError: 'GeoDataFrame' object has no attribute 'es_disputa'

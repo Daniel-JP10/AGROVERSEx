@@ -1,0 +1,26 @@
+# Ficha de dataset
+
+- Nombre corto: nasadem_hgt
+- Producto oficial y versión: NASADEM Merged DEM Global 1 arc second V001 (`NASADEM_HGT.001`)
+- Agencia y centro de datos: NASA JPL / LP DAAC (EOSDIS)
+- Página oficial: https://lpdaac.usgs.gov/products/nasadem_hgtv001/
+- DOI: 10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001 (VERIFICADO: NASA JPL, 2020)
+- Variable y unidades: elevación ortométrica sobre el geoide EGM96 (`.hgt`, entero con signo de 16 bits big-endian en metros; valor nulo `-32768`) y número de escenas SRTM (`.num`)
+- Resolución espacial nominal: 1 segundo de arco (~30 m en el ecuador; `3601 x 3601` píxeles por tesela de `1° x 1°`)
+- Resolución temporal: estático (misión SRTM febrero 2000 reprocesada con ICESat GLAS y ASTER GDEM)
+- CRS nativo: coordenadas geográficas WGS 84 (EPSG:4326) en horizontal; alturas referidas al geoide EGM96 en vertical
+- Periodo descargado: estático (publicado en 2020)
+- Área descargada:
+  - Tesela `n41w097` (`NASADEM_HGT_n41w097.zip`, `7145135` bytes, SHA256 `b722bd28567035a035c357f514fc713fdb4190c775aa0ac70f8453070d2992a4`) que cubre `DEMO-USA-01` (Saunders, Nebraska, lat `41.165`, lon `-96.477`)
+  - Tesela `n00w078` (`NASADEM_HGT_n00w078.zip`, `17854386` bytes, SHA256 `425a865d368f9d0b0fa80d5273cf3ec4370998775a0a1255f744f4b052f6a132`) que cubre `DEMO-COL-01` (Ipiales, Nariño, lat `0.842`, lon `-77.661`)
+- Herramienta y consulta exacta de descarga: `earthaccess` (Earthdata Login) buscando `short_name="NASADEM_HGT"`, `version="001"`, granulos `NASADEM_HGT_n41w097.zip` y `NASADEM_HGT_n00w078.zip` desde `https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/NASADEM_HGT.001/`
+- Fecha de descarga: 2026-11-14
+- Banderas de calidad aplicadas: rechazo de vacío `-32768` (`0` píxeles vacíos en ambos lotes DEMO, `100 %` válidos, VERIFICADO)
+- Fracción de datos válidos en el área: `100 %` en los `1178` píxeles del recorte de `DEMO-USA-01` y en los `961` píxeles del recorte de `DEMO-COL-01` (VERIFICADO)
+- Transformaciones a la grilla común y método de remuestreo: para calcular pendiente topográfica (`m/m`) sin distorsión angular se proyectan los pasos de celda `(dx_m, dy_m)` al sistema métrico local UTM (`EPSG:32614` en `DEMO-USA-01`: `dx = 23,31 m`, `dy = 30,84 m`; `EPSG:32618` en `DEMO-COL-01`: `dx = 30,94 m`, `dy = 30,74 m`) y se aplica diferencia finita centrada de 2.º orden (`np.gradient`) en `pendiente_nasadem_lote` (`src/lotes_demo/erosion.py`)
+- Requisito del reto y pregunta que atiende: N1, N2, N3; PI-D1, PI-D4 (T-D4 y T-D6 exposición erosiva)
+- Limitaciones conocidas:
+  - A ~30 m de paso de malla, las microterrazas o surcos de labranza menores de 30 m se suavizan; la pendiente media del lote (`3,13 %` en `DEMO-USA-01` y `8,81 %` en `DEMO-COL-01`, con `41,6 %` del área de `DEMO-COL-01` con pendiente `>= 9 %`) representa la meso-ladera agrícola.
+- Licencia: Dominio público / política de datos abiertos de NASA EOSDIS (sin restricciones de reutilización; registrado en `LICENCIAS_TERCEROS.md` y `CITAS.md`)
+- Responsable: constructor de datos (Antigravity), tareas T-D5 y T-D6 Prioridad 4
+- Verificador y fecha: PENDIENTE
