@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test'
 
 // Se ejecuta con playwright.escenario.config.ts (Chrome real, datos reales)
 test('pantalla dividida: segundo mapa solo al activarla, cámaras sincronizadas', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#/tierra')
   await page.waitForFunction(() => (window as never as { __mapa?: { loaded(): boolean } }).__mapa?.loaded())
   expect(await page.evaluate(() => !!(window as never as { __mapaB?: unknown }).__mapaB)).toBe(false)
   await page.getByRole('button', { name: 'Comparar' }).click()
@@ -18,7 +18,7 @@ test('pantalla dividida: segundo mapa solo al activarla, cámaras sincronizadas'
 })
 
 test('escenario: no sale de p25-p75 y explica por qué', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#/tierra')
   await page.waitForFunction(() => (window as never as { __mapa?: { loaded(): boolean } }).__mapa?.loaded())
   await page.getByRole('button', { name: 'Escenario' }).click()
   await expect(page.getByText('Seleccione una unidad')).toBeVisible()

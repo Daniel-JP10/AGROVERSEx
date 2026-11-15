@@ -1,0 +1,22 @@
+/* asistido por SI: Claude Code (Anthropic), estilos de la sección Rotaciones con los tokens de tema.css */
+.rotaciones .aviso-apoyo { padding: 10px 14px; border: 1px solid var(--acento); border-radius: 8px; color: var(--banda-texto); background: var(--banda-fondo); font-weight: 600; }
+.rotaciones .rotulo strong { padding: 2px 8px; border-radius: 6px; color: var(--banda-texto); background: var(--banda-fondo); }
+.rotaciones .aviso-principal { padding: 8px 12px; border-left: 4px solid var(--acento); background: var(--realce); }
+.rotaciones .estrategia { margin: 16px 0; padding: 14px; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--realce); }
+.rotaciones .estrategia h3 { margin: 0 0 4px; }
+.rotaciones .insignia { margin: 0 0 8px; color: var(--agua); font-size: 13px; }
+.rotaciones .juicio { color: var(--banda-texto); font-size: 13px; }
+.rotaciones table { width: 100%; margin: 8px 0; border-collapse: collapse; font-size: 13px; }
+.rotaciones caption { text-align: left; color: var(--suave); padding-bottom: 4px; }
+.rotaciones th, .rotaciones td { padding: 4px 8px; text-align: left; border-bottom: 1px solid var(--borde); vertical-align: top; }
+.rotaciones small { color: var(--suave); }
+.rotaciones .banda { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.rotaciones .estrategia section h4 { margin: 8px 0 2px; font-size: 13px; }
+.rotaciones .sin-dato { color: var(--suave); margin: 2px 0; }
+.rotaciones .ejes { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 8px; }
+.rotaciones .ejes label { display: grid; gap: 4px; font-size: 13px; }
+.rotaciones select { max-width: 100%; padding: 4px; color: var(--texto); background: var(--panel-base); border: 1px solid var(--borde); border-radius: 6px; }
+.rotaciones .pareto-grafico { max-width: 100%; overflow-x: auto; }
+.rotaciones .pendiente { margin: 16px 0; padding: 10px 14px; border: 1px dashed var(--borde); border-radius: var(--radio); }
+.rotaciones .pendiente h2 { margin: 0 0 4px; font-size: 16px; }
+.rotaciones a { color: var(--agua); }

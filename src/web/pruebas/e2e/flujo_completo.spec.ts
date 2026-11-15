@@ -13,14 +13,14 @@ async function buscar(page: import('@playwright/test').Page, texto: string, ctx:
 }
 
 test('buscador encuentra Costa de Marfil y su panel tiene datos', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#/tierra')
   const panel = await buscar(page, 'Costa de Marfil', 'Ivoire')
   await expect(panel.getByRole('heading', { level: 2 })).toContainText(/Marfil|Ivoire/)
   await expect(panel.locator('.dato strong').first()).not.toHaveText(/^\s*$/)
 })
 
 test('municipio de otro país (Kolkata, India) tiene dato y nunca 0 sin dato', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#/tierra')
   const panel = await buscar(page, 'Kolkata', 'India')
   const valores = panel.locator('.dato strong')
   await expect(valores.first()).toContainText(/\d|sin dato/, { timeout: 15_000 })
@@ -30,7 +30,7 @@ test('municipio de otro país (Kolkata, India) tiene dato y nunca 0 sin dato', a
 })
 
 test('zona DEMO (Mbeya): Rotaciones y Lotes; teclado en pestañas y Escape', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#/tierra')
   const panel = await buscar(page, 'Mbeya', 'Tanzania')
   await expect(panel.getByRole('tab', { name: 'Lotes' })).toBeVisible({ timeout: 15_000 })
   await panel.getByRole('tab', { name: 'Rotaciones' }).click()
@@ -45,7 +45,7 @@ test('zona DEMO (Mbeya): Rotaciones y Lotes; teclado en pestañas y Escape', asy
 })
 
 test('sin dato hay trama registrada y el riel se opera con teclado', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#/tierra')
   await page.waitForFunction(() => (window as any).__mapa?.loaded())
   expect(await page.evaluate(() => (window as any).__mapa.hasImage('trama'))).toBe(true)
   const riel = page.getByRole('navigation', { name: 'Herramientas' })

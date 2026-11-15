@@ -1,0 +1,12 @@
+/* asistido por SI: Claude Code (Anthropic), estilos de la sección Ciencia y validación, tema oscuro con los tokens de tema.css */
+.ciencia h2 { margin: 22px 0 6px; font-size: 18px; }
+.ciencia .metricas { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.ciencia .metrica { padding: 12px; background: var(--panel-base); border: 1px solid var(--borde); border-radius: var(--radio); }
+.ciencia .metrica h3 { margin: 0 0 8px; font-size: 15px; }
+.ciencia .metrica dl { margin: 0; }
+.ciencia .metrica dl > div { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; border-top: 1px solid var(--borde); }
+.ciencia .metrica dt { color: var(--suave); }
+.ciencia .metrica dd { margin: 0; text-align: right; }
+.ciencia .preguntas, .ciencia .limitaciones { padding-left: 20px; }
+.ciencia .preguntas li, .ciencia .limitaciones li { margin: 6px 0; }
+.ciencia .estado { display: inline-block; margin-left: 6px; color: var(--suave); font-size: 13px; }

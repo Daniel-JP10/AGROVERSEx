@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test'
 
 // Se ejecuta con playwright.busqueda.config.ts
 test('Colombia › Meta › Acacías por búsqueda, subida por miga y Escape', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#/tierra')
   const campo = page.getByRole('combobox', { name: 'Buscar' })
   await expect(campo).toHaveAttribute('placeholder', /Buscar/, { timeout: 30_000 })
   await campo.fill('Acacias')

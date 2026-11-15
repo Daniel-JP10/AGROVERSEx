@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test'
 
 // Se ejecuta con playwright.e2e.config.ts (Chrome real)
 test('medir con teclado, aviso de zoom 12 y mapa interactivo', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#/tierra')
   await page.waitForFunction(() => (window as any).__mapa?.loaded() === true)
 
   // Herramienta Medir desde el riel, solo con teclado

@@ -7,7 +7,7 @@ test('panel de región: 4 pestañas sin errores y serie con corte', async ({ pag
   const errores: string[] = []
   page.on('pageerror', (e) => errores.push(e.message))
   page.on('console', (m) => m.type() === 'error' && !/favicon|Failed to load resource/.test(m.text()) && errores.push(m.text()))
-  await page.goto('/')
+  await page.goto('/#/tierra')
   const campo = page.getByRole('combobox', { name: 'Buscar' })
   await expect(campo).toHaveAttribute('placeholder', /Buscar/, { timeout: 30_000 })
   await campo.pressSequentially('Colombia', { delay: 50 })

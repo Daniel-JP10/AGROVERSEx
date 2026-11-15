@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test'
 
 // Corre con AGROVERSEX_SQLITE (base) y AGROVERSEX_DATOS (teselas e índice) definidos
 test('coropleta con datos reales: leyenda, etiqueta central y opacidad', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#/tierra')
   await expect(page.locator('.leyenda')).toContainText('GPM IMERG')
   await page.waitForTimeout(3000)
   await page.evaluate(() => (window as any).__mapa.jumpTo({ center: [-74.07, 4.65], zoom: 10 }))

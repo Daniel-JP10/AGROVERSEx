@@ -128,9 +128,9 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/web/src/app/Cabecera.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/app/contraste.ts` | Frontend del prototipo (base de la app) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/app/estado.ts` | Frontend del prototipo (base de la app) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/web/src/app/Fps.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/tierra/Fps.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/app/iconos.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/web/src/app/Riel.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/tierra/Riel.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/app/tema.css` | Frontend del prototipo (base de la app) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/comparar/comparar.css` | Frontend del prototipo (base de la app) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/comparar/Dividida.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
@@ -170,14 +170,17 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/web/src/main.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/paneles/Busqueda.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/paneles/Chip.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/web/src/paneles/comparador/datos.ts` | Frontend del prototipo (base de la app) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/web/src/paneles/comparador/demo.html` | Frontend del prototipo (base de la app) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/web/src/paneles/comparador/demo.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/web/src/paneles/comparador/fixtures.ts` | Frontend del prototipo (base de la app) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/web/src/paneles/comparador/ordenar.ts` | Frontend del prototipo (base de la app) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/web/src/paneles/comparador/Prioridades.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/web/src/paneles/comparador/Rotaciones.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/web/src/paneles/comparador/TarjetaEstrategia.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/paneles/comparador/datos.ts` | Reexportación hacia secciones/rotaciones/datos.ts; Petición de desarrollo local que usa PanelRegion | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/datos.ts` | Frontend del prototipo (base de la app), movido desde paneles/comparador sin China | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/demo.html` | Frontend del prototipo (base de la app), movido desde paneles/comparador | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/demo.tsx` | Frontend del prototipo (base de la app), movido desde paneles/comparador | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/fixtures.ts` | Frontend del prototipo (base de la app), movido desde paneles/comparador sin China | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/ordenar.ts` | Frontend del prototipo (base de la app), movido desde paneles/comparador | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/Prioridades.tsx` | Frontend del prototipo (base de la app), movido desde paneles/comparador | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/paneles/comparador/Rotaciones.tsx` | Reexportación de ResumenPanel como Rotaciones para PanelRegion; Resumen corto de la pestaña Rotaciones con enlace a la sección | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/ResumenPanel.tsx` | Resumen del panel, movido y renombrado desde paneles/comparador/Rotaciones.tsx, sin China | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/TarjetaEstrategia.tsx` | Frontend del prototipo (base de la app), movido desde paneles/comparador sin China | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/rotaciones_movido.test.ts` | Pruebas de los reexportes y de la salida de China de Rotaciones | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/paneles/filtros/Filtros.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/paneles/filtros/filtros_regionales.ts` | Frontend del prototipo (base de la app) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/paneles/Fuentes.tsx` | Frontend del prototipo (base de la app) | 2026-11-14 |
@@ -206,16 +209,16 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/web/src/tiempo/tiempo.css` | Frontend del prototipo (base de la app) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/tiempo/valor.ts` | Frontend del prototipo (base de la app) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/vite.config.ts` | Frontend del prototipo (base de la app) | 2026-11-14 |
-| Claude Code (Anthropic) | `pruebas/geo/test_config_datos.py` | Prueba de la variable AGRO_DATOS (T-D1) | 2026-11-14 |
-| Claude Code (Anthropic) | `pruebas/geo/test_cgaz_lectura.py` | Pruebas de lectura de CGAZ y verificación de hash (T-D1) | 2026-11-14 |
-| Claude Code (Anthropic) | `pruebas/geo/test_colombia.py` | Pruebas de la comparación de Colombia con DIVIPOLA (T-D1) | 2026-11-14 |
-| Claude Code (Anthropic) | `src/simulacion/geo/colombia.py` | Comparación de municipios de CGAZ con DIVIPOLA del DANE (T-D1) | 2026-11-14 |
-| Claude Code (Anthropic) | `contratos/unidades.md` | Redacción del contrato de unidades a partir de los datos de CGAZ (T-D1) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/descargas_nasa.py` | Descarga con subconjunto por variable vía OPeNDAP de Earthdata (T-D3) | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_descargas_nasa.py` | Pruebas de la descarga con subconjunto (T-D3) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/imerg_late.py` | Regla de días válidos de IMERG Late por celda (D-011) | 2026-11-14 |
 | Claude Code (Anthropic) | `pruebas/geo/test_imerg_late.py` | Pruebas de la regla de IMERG Late | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/sensibilidad_late.py` | Sensibilidad 70/80/90 de IMERG Late en Colombia | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_config_datos.py` | Prueba de la variable AGRO_DATOS (T-D1) | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_cgaz_lectura.py` | Pruebas de lectura de CGAZ y verificación de hash (T-D1) | 2026-11-14 |
+| Claude Code (Anthropic) | `pruebas/geo/test_colombia.py` | Pruebas de la comparación de Colombia con DIVIPOLA (T-D1) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/simulacion/geo/colombia.py` | Comparación de municipios de CGAZ con DIVIPOLA del DANE (T-D1) | 2026-11-14 |
+| Claude Code (Anthropic) | `contratos/unidades.md` | Redacción del contrato de unidades a partir de los datos de CGAZ (T-D1) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/zonal_mensual.py` | Motor zonal con pesos por firma de grilla (T-D2) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/lectura_nasa.py` | Lectura orientada de netCDF con puntos de control (T-D2) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/simulacion/geo/serie_mensual.py` | Corrida de series mensuales por país (T-D2) | 2026-11-14 |
@@ -323,3 +326,68 @@ Notas de procedencia sin generación nueva por este equipo de Gemelo:
 - `src/gemelo/referencias/enso.yaml` y `src/gemelo/referencias/sucesion.yaml` son copias literales de `origin/datos`.
 - La idea científica, alcance, reglas de corte y decisiones (`D-001` a `D-030`) fueron definidas por el equipo humano y aprobadas por el director en `decisiones/registro.md`.
 | Claude Code (Anthropic) | `pruebas/lotes/test_erosion_gemelo.py` | Prueba de que la exposición erosiva de Datos y del Gemelo coincide con la misma lluvia POWER y la misma fracción desnuda (director, 20:50) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/app/ruta.ts` | Rutas por hash de las siete secciones, contrato web_componentes §3 | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/app/Navegacion.tsx` | Navegación entre las siete secciones con aria-current | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/app/SeccionVacia.tsx` | Cuerpo común de las secciones sin contenido, con aviso.sin_dato | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/app/ejemplos.ts` | Carga de ejemplos detrás de la bandera VITE_EJEMPLOS | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/ejemplos/index.ts` | Módulo de ejemplos con su marcador, solo entra con VITE_EJEMPLOS=1 | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/portada/Portada.tsx` | Portada: idea en dos frases y botón del recorrido guiado | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/gemelo/Gemelo.tsx` | Sección El gemelo del lote: carga del lote y del ejemplo (T-W6) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/ciencia/Ciencia.tsx` | Sección Ciencia y validación: métricas, preguntas, limitaciones (T-W6) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/datos-abiertos/DatosAbiertos.tsx` | Sección Datos abiertos: ficha, descarga y comando (T-W6) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/Rotaciones.tsx` | Sección Rotaciones: lote por la ruta, datos por props y estructura de la v1.1 | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/gemelo.ts` | Tipos de la salida del gemelo, contrato v1 | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/lector.ts` | Capa que lee la salida del gemelo y carga el ejemplo tras la bandera; Lectura de lotes_demo.json y del paquete estático del gemelo v1.1 | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/ejemplo_gemelo.json` | Ejemplo ficticio SIMULADO que sigue el contrato v1 del gemelo (JSON sin comentario de cabecera); Ejemplo SIMULADO pasado a la forma v1.1 (tarjetas, rótulo, avisos por clave) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/Banda.tsx` | Componente que muestra un valor con su rango p10 a p90 | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/Avisos.tsx` | Avisos del gemelo con el primero siempre visible | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/ComparadorEstrategias.tsx` | Comparador de línea base y frente con indicadores en banda | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/FrentePareto.tsx` | Frente de Pareto con selector de ejes y alternativa en texto | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/Compromisos.tsx` | Compromisos del frente con los textos del gemelo | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/rotaciones.css` | Estilos de la sección Rotaciones | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/rotaciones.test.ts` | Pruebas de bandas, ejemplo, tarjeta, avisos, Pareto y estado sin lote | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/rotaciones_bandera.test.ts` | Prueba de que el ejemplo del gemelo solo entra con VITE_EJEMPLOS=1 | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/rotaciones_seccion.spec.ts` | E2E de #/rotaciones con y sin lote y capturas de T-W2 | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/fuentes/Fuentes.tsx` | Sección Fuentes: glosario por modo, créditos y declaración de SI generados | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/ruta.test.ts` | Pruebas de rutas por hash y navegación | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/frontera.test.ts` | Prueba de frontera entre Web y las carpetas de Daniel | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/bandera_ejemplos.test.ts` | Prueba de la bandera VITE_EJEMPLOS con compilación real | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/universo.spec.ts` | E2E de las siete rutas, teclado y globo montado | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/gemelo/GemeloVista.tsx` | Vista del gemelo: cinco variables, ventanas de suelo desnudo y enlace (T-W6) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/gemelo/Grafico.tsx` | Gráfico SVG con banda y texto alternativo (T-W6) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/gemelo/tipos.ts` | Tipos locales de la v1 del contrato del gemelo (T-W6) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/gemelo/ejemplo.ts` | Trayectorias ficticias detrás de VITE_EJEMPLOS (T-W6) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/gemelo/gemelo.css` | Estilos de la sección El gemelo del lote (T-W6) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/ciencia/ciencia.css` | Estilos de la sección Ciencia y validación (T-W6) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/datos-abiertos/datos.css` | Estilos de la sección Datos abiertos (T-W6) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/gemelo_seccion.test.ts` | Pruebas de la sección El gemelo del lote (T-W6) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/ciencia_datos.test.ts` | Pruebas de las secciones Ciencia y Datos abiertos (T-W6) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/secciones_w6.spec.ts` | E2E de las tres secciones de T-W6 con capturas | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/app/Relleno.tsx` | Pinta textos con huecos de datos y el aviso de dato no disponible | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/app/recorrido/pasos.ts` | Pasos del guion de tres actos escritos como datos | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/app/recorrido/acciones.ts` | Ruta y acciones del globo de cada paso del recorrido | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/app/recorrido/estado.ts` | Estado del recorrido guiado | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/app/recorrido/Recorrido.tsx` | Panel del recorrido guiado con teclado y aria-live | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/app/recorrido/recorrido.css` | Estilos del recorrido con movimiento reducido | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/fuentes/tablas.ts` | Lectura en compilación de licencias, citas y uso de SI | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/textos/huecos.ts` | Huecos de datos de los textos y su fuente | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/recorrido.test.ts` | Pruebas del recorrido, los huecos y la portada | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/fuentes.test.ts` | Pruebas de glosario, modos, créditos y declaración de SI | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/accesibilidad.test.ts` | Pruebas de movimiento reducido, foco y contraste | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/recorrido.spec.ts` | E2E de la portada, el recorrido completo con teclado y la sección Fuentes | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/textosGemelo.ts` | Traducción de las claves de texto del gemelo v1.1 con formato %g de Python | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/ejemplo_textos_gemelo.json` | Catálogo de textos del ejemplo SIMULADO del gemelo v1.1, solo bajo VITE_EJEMPLOS | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/rotaciones_lector.test.ts` | Pruebas de la lectura del paquete del gemelo con fetch falso | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/textos_gemelo.test.ts` | Pruebas del formato de las claves de texto del gemelo | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/textos_prohibidos.test.ts` | Prueba de textos prohibidos en los textos de Web y en una compilación | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/rutas_base_web.test.ts` | Prueba de que las fuentes tipográficas siguen a la base de la compilación | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/datos-abiertos/manifiesto.ts` | Ficha y descargas de Datos abiertos leídas de datos/manifiesto.json (web_datos v0) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/datos_abiertos_manifiesto.test.ts` | Pruebas de la ficha de Datos abiertos desde el manifiesto | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/app/recorrido/cargarHuecos.ts` | Huecos del guion leídos de lotes_demo, meta, HLS y el paquete del gemelo | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/cargar_huecos.test.ts` | Pruebas de los huecos del guion con fetch falso | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registros.ts` | Filtro de filas en uso de los registros de Fuentes | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registrosPlugin.ts` | Plugin de Vite que filtra los registros al compilar | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/AlertaHelada.tsx` | Alerta de helada del gemelo con sus avisos | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/registros.test.ts` | Pruebas del filtro de registros y del plugin | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/prohibidos.ts` | Detector de textos prohibidos compartido | 2026-11-14 |
+| Claude Code (Anthropic) | `src/web/pruebas/alerta_helada.test.ts` | Pruebas de la alerta de helada | 2026-11-14 |

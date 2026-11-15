@@ -30,6 +30,6 @@ describe('textos de Tierra por clave', () => {
   })
   it('las claves nuevas del inglés no son copia del español, salvo nombres propios', () => {
     const iguales = Object.keys(es).filter((k) => (en as Record<string, string>)[k] === (es as Record<string, string>)[k])
-    for (const k of iguales) expect(['idioma.boton', 'capa.ndvi', 'enso.real', 'lotes.error', 'bandera.provisional', 'series.variable', 'resumen.eventos'].includes(k) || /^(ayuda|modo|idioma)/.test(k), k).toBe(true)
+    for (const k of iguales) expect(['idioma.boton', 'capa.ndvi', 'enso.real', 'lotes.error', 'bandera.provisional', 'series.variable', 'resumen.eventos', 'aviso.demo', 'glosario.ndvi.nombre'].includes(k) || /^(ayuda|modo|idioma)/.test(k), k).toBe(true)
   })
 })

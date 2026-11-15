@@ -4,7 +4,7 @@ import { contraste } from '../../src/app/contraste'
 
 // Se ejecuta con playwright.e2e.config.ts (Chrome real)
 test('riel: sin texto cortado, teclado y foco visible', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#/tierra')
   const botones = page.locator('.riel button')
   const n = await botones.count()
   expect(n).toBe(6)
@@ -32,7 +32,7 @@ test('riel: sin texto cortado, teclado y foco visible', async ({ page }) => {
 })
 
 test('captura del riel a zoom 1 y zoom 10', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#/tierra')
   await page.waitForTimeout(2500) // teselas y globo
   await page.locator('.riel button').nth(1).focus()
   await page.screenshot({ path: 'capturas/09-riel.png' })

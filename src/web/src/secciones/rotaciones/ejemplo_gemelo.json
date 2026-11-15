@@ -1,0 +1,1250 @@
+{
+  "metadatos": {
+    "version_contrato": 1,
+    "version_modelo": "ejemplo",
+    "tipo": "optimizacion",
+    "generado_utc": "2026-11-14T00:00:00Z",
+    "commit": null,
+    "semilla": 42,
+    "huella_parametros": "ejemplo-simulado",
+    "naturaleza": "simulado",
+    "paso_tiempo": "mensual",
+    "horizonte_anios": 3,
+    "miembros": {
+      "estrategias": 5,
+      "clima": 4,
+      "parametros": 8,
+      "total": 160
+    },
+    "archivo_entrada": "AGROVERSEX_EJEMPLO_GEMELO ejemplo_gemelo.json",
+    "version_contrato_completa": "1.1",
+    "rotulo": {
+      "clave": "label.example_simulated",
+      "parametros": {},
+      "en": "SIMULATED example",
+      "es": "Ejemplo SIMULADO"
+    }
+  },
+  "lote": {
+    "id": "DEMO-USA-01",
+    "nombre": "Lote DEMO de ejemplo (ficticio)",
+    "unidad_id": "USA-ADM2-EJEMPLO",
+    "clima_tipo": "templado"
+  },
+  "avisos": [
+    "Ejemplo ficticio SIMULADO: estos resultados no vienen del modelo ni de datos reales y no deben usarse para decidir.",
+    "Los rangos p10 a p90 resumen la variación entre años y entre parámetros del modelo."
+  ],
+  "objetivos": [
+    {
+      "id": "produccion",
+      "indicador": "produccion_relativa_anio",
+      "sentido": "max",
+      "texto": "Producción cosechada (media del ensamble)",
+      "texto_clave": "objective.produccion"
+    },
+    {
+      "id": "carbono",
+      "indicador": "cambio_carbono_t_ha_anio",
+      "sentido": "max",
+      "texto": "Cambio del carbono del suelo (media del ensamble)",
+      "texto_clave": "objective.carbono"
+    },
+    {
+      "id": "lluvia_intensa_suelo_desnudo",
+      "indicador": "lluvia_intensa_sobre_suelo_desnudo_mm_anio",
+      "sentido": "min",
+      "texto": "Lluvia intensa sobre suelo desprotegido (media del ensamble)",
+      "texto_clave": "objective.lluvia_intensa_suelo_desnudo"
+    },
+    {
+      "id": "lixiviacion",
+      "indicador": "lixiviacion_n_kg_ha_anio",
+      "sentido": "min",
+      "texto": "Nitrógeno lavado (media del ensamble)",
+      "texto_clave": "objective.lixiviacion"
+    }
+  ],
+  "restricciones": [
+    "solape_dias",
+    "sucesion_dias",
+    "cultivos_exigidos_faltantes",
+    "cosechas_faltantes",
+    "riego_exceso_mm_anio"
+  ],
+  "linea_base": {
+    "id": "E0",
+    "nombre": "Rotación actual",
+    "descripcion": "Rotación actual (ejemplo ficticio SIMULADO)",
+    "etiqueta": "FUENTE",
+    "secuencia": "maiz -> soya -> maiz",
+    "indicadores": {
+      "produccion_relativa_anio": {
+        "p10": 0.82,
+        "p50": 1,
+        "p90": 1.1,
+        "unidad": "temporadas equivalentes/año",
+        "definicion": "Producción cosechada por año en temporadas equivalentes.",
+        "explicacion": "Cuánto cosecha la rotación por año frente a una temporada normal."
+      },
+      "cambio_carbono_t_ha_anio": {
+        "p10": -0.18,
+        "p50": 0,
+        "p90": 0.15,
+        "unidad": "t C/ha/año",
+        "definicion": "Cambio anual del carbono orgánico del suelo frente al equilibrio de la estrategia de referencia.",
+        "explicacion": "Si es positivo, el suelo gana carbono respecto de la referencia."
+      },
+      "lluvia_intensa_sobre_suelo_desnudo_mm_anio": {
+        "p10": 60,
+        "p50": 120,
+        "p90": 210,
+        "unidad": "mm/año",
+        "definicion": "Lluvia intensa que cae sobre suelo con poca cobertura.",
+        "explicacion": "Más lluvia sobre suelo desnudo significa más riesgo de erosión."
+      },
+      "lixiviacion_n_kg_ha_anio": {
+        "p10": 18,
+        "p50": 38,
+        "p90": 66,
+        "unidad": "kg N/ha/año",
+        "definicion": "Nitrógeno que se lava bajo la raíz cada año.",
+        "explicacion": "Menos nitrógeno lavado es menos pérdida de fertilizante y menos contaminación."
+      }
+    },
+    "trayectoria_mensual": {
+      "W": {
+        "p10": [
+          72,
+          88,
+          99.7,
+          104,
+          99.7,
+          88,
+          72,
+          56,
+          44.3,
+          40,
+          44.3,
+          56,
+          72,
+          88,
+          99.7,
+          104,
+          99.7,
+          88,
+          72,
+          56,
+          44.3,
+          40,
+          44.3,
+          56,
+          72,
+          88,
+          99.7,
+          104,
+          99.7,
+          88,
+          72,
+          56,
+          44.3,
+          40,
+          44.3,
+          56
+        ],
+        "p50": [
+          90,
+          110,
+          124.6,
+          130,
+          124.6,
+          110,
+          90,
+          70,
+          55.4,
+          50,
+          55.4,
+          70,
+          90,
+          110,
+          124.6,
+          130,
+          124.6,
+          110,
+          90,
+          70,
+          55.4,
+          50,
+          55.4,
+          70,
+          90,
+          110,
+          124.6,
+          130,
+          124.6,
+          110,
+          90,
+          70,
+          55.4,
+          50,
+          55.4,
+          70
+        ],
+        "p90": [
+          108,
+          132,
+          149.6,
+          156,
+          149.6,
+          132,
+          108,
+          84,
+          66.4,
+          60,
+          66.4,
+          84,
+          108,
+          132,
+          149.6,
+          156,
+          149.6,
+          132,
+          108,
+          84,
+          66.4,
+          60,
+          66.4,
+          84,
+          108,
+          132,
+          149.6,
+          156,
+          149.6,
+          132,
+          108,
+          84,
+          66.4,
+          60,
+          66.4,
+          84
+        ]
+      }
+    },
+    "n_miembros": 32,
+    "objetivos": {
+      "produccion": 1,
+      "carbono": 0,
+      "lluvia_intensa_suelo_desnudo": 120,
+      "lixiviacion": 38
+    }
+  },
+  "frente": [
+    {
+      "id": "P01",
+      "nombre": "Maíz, soya y trigo con trébol",
+      "descripcion": "Maíz, soya y trigo con trébol (ejemplo ficticio SIMULADO)",
+      "etiqueta": "INFERENCIA",
+      "secuencia": "maiz -> soya -> trigo_invierno",
+      "indicadores": {
+        "produccion_relativa_anio": {
+          "p10": 0.78,
+          "p50": 0.96,
+          "p90": 1.07,
+          "unidad": "temporadas equivalentes/año",
+          "definicion": "Producción cosechada por año en temporadas equivalentes.",
+          "explicacion": "Cuánto cosecha la rotación por año frente a una temporada normal."
+        },
+        "cambio_carbono_t_ha_anio": {
+          "p10": -0.05,
+          "p50": 0.12,
+          "p90": 0.3,
+          "unidad": "t C/ha/año",
+          "definicion": "Cambio anual del carbono orgánico del suelo frente al equilibrio de la estrategia de referencia.",
+          "explicacion": "Si es positivo, el suelo gana carbono respecto de la referencia."
+        },
+        "lluvia_intensa_sobre_suelo_desnudo_mm_anio": {
+          "p10": 30,
+          "p50": 70,
+          "p90": 130,
+          "unidad": "mm/año",
+          "definicion": "Lluvia intensa que cae sobre suelo con poca cobertura.",
+          "explicacion": "Más lluvia sobre suelo desnudo significa más riesgo de erosión."
+        },
+        "lixiviacion_n_kg_ha_anio": {
+          "p10": 9,
+          "p50": 22,
+          "p90": 41,
+          "unidad": "kg N/ha/año",
+          "definicion": "Nitrógeno que se lava bajo la raíz cada año.",
+          "explicacion": "Menos nitrógeno lavado es menos pérdida de fertilizante y menos contaminación."
+        }
+      },
+      "trayectoria_mensual": {
+        "W": {
+          "p10": [
+            81.6,
+            97.6,
+            109.3,
+            113.6,
+            109.3,
+            97.6,
+            81.6,
+            65.6,
+            53.9,
+            49.6,
+            53.9,
+            65.6,
+            81.6,
+            97.6,
+            109.3,
+            113.6,
+            109.3,
+            97.6,
+            81.6,
+            65.6,
+            53.9,
+            49.6,
+            53.9,
+            65.6,
+            81.6,
+            97.6,
+            109.3,
+            113.6,
+            109.3,
+            97.6,
+            81.6,
+            65.6,
+            53.9,
+            49.6,
+            53.9,
+            65.6
+          ],
+          "p50": [
+            102,
+            122,
+            136.6,
+            142,
+            136.6,
+            122,
+            102,
+            82,
+            67.4,
+            62,
+            67.4,
+            82,
+            102,
+            122,
+            136.6,
+            142,
+            136.6,
+            122,
+            102,
+            82,
+            67.4,
+            62,
+            67.4,
+            82,
+            102,
+            122,
+            136.6,
+            142,
+            136.6,
+            122,
+            102,
+            82,
+            67.4,
+            62,
+            67.4,
+            82
+          ],
+          "p90": [
+            122.4,
+            146.4,
+            164,
+            170.4,
+            164,
+            146.4,
+            122.4,
+            98.4,
+            80.8,
+            74.4,
+            80.8,
+            98.4,
+            122.4,
+            146.4,
+            164,
+            170.4,
+            164,
+            146.4,
+            122.4,
+            98.4,
+            80.8,
+            74.4,
+            80.8,
+            98.4,
+            122.4,
+            146.4,
+            164,
+            170.4,
+            164,
+            146.4,
+            122.4,
+            98.4,
+            80.8,
+            74.4,
+            80.8,
+            98.4
+          ]
+        }
+      },
+      "n_miembros": 32,
+      "objetivos": {
+        "produccion": 0.96,
+        "carbono": 0.12,
+        "lluvia_intensa_suelo_desnudo": 70,
+        "lixiviacion": 22
+      },
+      "frente_a_linea_base": {
+        "gana": [
+          "Cambio del carbono del suelo (media del ensamble): 0 -> 0.12",
+          "Lluvia intensa sobre suelo desprotegido (media del ensamble): 120 -> 70",
+          "Nitrógeno lavado (media del ensamble): 38 -> 22"
+        ],
+        "cede": [
+          "Producción cosechada (media del ensamble): 1 -> 0.96"
+        ],
+        "similar": []
+      },
+      "no_dominada_en_evaluacion_final": true,
+      "domina_a_linea_base": false
+    },
+    {
+      "id": "P02",
+      "nombre": "Maíz y soya con cobertura de avena",
+      "descripcion": "Maíz y soya con cobertura de avena (ejemplo ficticio SIMULADO)",
+      "etiqueta": "INFERENCIA",
+      "secuencia": "maiz -> soya -> avena",
+      "indicadores": {
+        "produccion_relativa_anio": {
+          "p10": 0.85,
+          "p50": 1.04,
+          "p90": 1.14,
+          "unidad": "temporadas equivalentes/año",
+          "definicion": "Producción cosechada por año en temporadas equivalentes.",
+          "explicacion": "Cuánto cosecha la rotación por año frente a una temporada normal."
+        },
+        "cambio_carbono_t_ha_anio": {
+          "p10": -0.12,
+          "p50": 0.05,
+          "p90": 0.22,
+          "unidad": "t C/ha/año",
+          "definicion": "Cambio anual del carbono orgánico del suelo frente al equilibrio de la estrategia de referencia.",
+          "explicacion": "Si es positivo, el suelo gana carbono respecto de la referencia."
+        },
+        "lluvia_intensa_sobre_suelo_desnudo_mm_anio": {
+          "p10": 45,
+          "p50": 95,
+          "p90": 170,
+          "unidad": "mm/año",
+          "definicion": "Lluvia intensa que cae sobre suelo con poca cobertura.",
+          "explicacion": "Más lluvia sobre suelo desnudo significa más riesgo de erosión."
+        },
+        "lixiviacion_n_kg_ha_anio": {
+          "p10": 14,
+          "p50": 30,
+          "p90": 52,
+          "unidad": "kg N/ha/año",
+          "definicion": "Nitrógeno que se lava bajo la raíz cada año.",
+          "explicacion": "Menos nitrógeno lavado es menos pérdida de fertilizante y menos contaminación."
+        }
+      },
+      "trayectoria_mensual": {
+        "W": {
+          "p10": [
+            72,
+            88,
+            99.7,
+            104,
+            99.7,
+            88,
+            72,
+            56,
+            44.3,
+            40,
+            44.3,
+            56,
+            72,
+            88,
+            99.7,
+            104,
+            99.7,
+            88,
+            72,
+            56,
+            44.3,
+            40,
+            44.3,
+            56,
+            72,
+            88,
+            99.7,
+            104,
+            99.7,
+            88,
+            72,
+            56,
+            44.3,
+            40,
+            44.3,
+            56
+          ],
+          "p50": [
+            90,
+            110,
+            124.6,
+            130,
+            124.6,
+            110,
+            90,
+            70,
+            55.4,
+            50,
+            55.4,
+            70,
+            90,
+            110,
+            124.6,
+            130,
+            124.6,
+            110,
+            90,
+            70,
+            55.4,
+            50,
+            55.4,
+            70,
+            90,
+            110,
+            124.6,
+            130,
+            124.6,
+            110,
+            90,
+            70,
+            55.4,
+            50,
+            55.4,
+            70
+          ],
+          "p90": [
+            108,
+            132,
+            149.6,
+            156,
+            149.6,
+            132,
+            108,
+            84,
+            66.4,
+            60,
+            66.4,
+            84,
+            108,
+            132,
+            149.6,
+            156,
+            149.6,
+            132,
+            108,
+            84,
+            66.4,
+            60,
+            66.4,
+            84,
+            108,
+            132,
+            149.6,
+            156,
+            149.6,
+            132,
+            108,
+            84,
+            66.4,
+            60,
+            66.4,
+            84
+          ]
+        }
+      },
+      "n_miembros": 32,
+      "objetivos": {
+        "produccion": 1.04,
+        "carbono": 0.05,
+        "lluvia_intensa_suelo_desnudo": 95,
+        "lixiviacion": 30
+      },
+      "frente_a_linea_base": {
+        "gana": [
+          "Producción cosechada (media del ensamble): 1 -> 1.04",
+          "Cambio del carbono del suelo (media del ensamble): 0 -> 0.05",
+          "Lluvia intensa sobre suelo desprotegido (media del ensamble): 120 -> 95",
+          "Nitrógeno lavado (media del ensamble): 38 -> 30"
+        ],
+        "cede": [],
+        "similar": []
+      },
+      "no_dominada_en_evaluacion_final": true,
+      "domina_a_linea_base": false
+    },
+    {
+      "id": "P03",
+      "nombre": "Soya, maíz y trébol",
+      "descripcion": "Soya, maíz y trébol (ejemplo ficticio SIMULADO)",
+      "etiqueta": "SUPUESTO",
+      "secuencia": "soya -> maiz -> trebol_berseem",
+      "indicadores": {
+        "produccion_relativa_anio": {
+          "p10": 0.7,
+          "p50": 0.9,
+          "p90": 1.02,
+          "unidad": "temporadas equivalentes/año",
+          "definicion": "Producción cosechada por año en temporadas equivalentes.",
+          "explicacion": "Cuánto cosecha la rotación por año frente a una temporada normal."
+        },
+        "cambio_carbono_t_ha_anio": {
+          "p10": 0.02,
+          "p50": 0.2,
+          "p90": 0.38,
+          "unidad": "t C/ha/año",
+          "definicion": "Cambio anual del carbono orgánico del suelo frente al equilibrio de la estrategia de referencia.",
+          "explicacion": "Si es positivo, el suelo gana carbono respecto de la referencia."
+        },
+        "lluvia_intensa_sobre_suelo_desnudo_mm_anio": {
+          "p10": 22,
+          "p50": 55,
+          "p90": 100,
+          "unidad": "mm/año",
+          "definicion": "Lluvia intensa que cae sobre suelo con poca cobertura.",
+          "explicacion": "Más lluvia sobre suelo desnudo significa más riesgo de erosión."
+        },
+        "lixiviacion_n_kg_ha_anio": {
+          "p10": 6,
+          "p50": 15,
+          "p90": 30,
+          "unidad": "kg N/ha/año",
+          "definicion": "Nitrógeno que se lava bajo la raíz cada año.",
+          "explicacion": "Menos nitrógeno lavado es menos pérdida de fertilizante y menos contaminación."
+        }
+      },
+      "trayectoria_mensual": {
+        "W": {
+          "p10": [
+            74.4,
+            90.4,
+            102.1,
+            106.4,
+            102.1,
+            90.4,
+            74.4,
+            58.4,
+            46.7,
+            42.4,
+            46.7,
+            58.4,
+            74.4,
+            90.4,
+            102.1,
+            106.4,
+            102.1,
+            90.4,
+            74.4,
+            58.4,
+            46.7,
+            42.4,
+            46.7,
+            58.4,
+            74.4,
+            90.4,
+            102.1,
+            106.4,
+            102.1,
+            90.4,
+            74.4,
+            58.4,
+            46.7,
+            42.4,
+            46.7,
+            58.4
+          ],
+          "p50": [
+            93,
+            113,
+            127.6,
+            133,
+            127.6,
+            113,
+            93,
+            73,
+            58.4,
+            53,
+            58.4,
+            73,
+            93,
+            113,
+            127.6,
+            133,
+            127.6,
+            113,
+            93,
+            73,
+            58.4,
+            53,
+            58.4,
+            73,
+            93,
+            113,
+            127.6,
+            133,
+            127.6,
+            113,
+            93,
+            73,
+            58.4,
+            53,
+            58.4,
+            73
+          ],
+          "p90": [
+            111.6,
+            135.6,
+            153.2,
+            159.6,
+            153.2,
+            135.6,
+            111.6,
+            87.6,
+            70,
+            63.6,
+            70,
+            87.6,
+            111.6,
+            135.6,
+            153.2,
+            159.6,
+            153.2,
+            135.6,
+            111.6,
+            87.6,
+            70,
+            63.6,
+            70,
+            87.6,
+            111.6,
+            135.6,
+            153.2,
+            159.6,
+            153.2,
+            135.6,
+            111.6,
+            87.6,
+            70,
+            63.6,
+            70,
+            87.6
+          ]
+        }
+      },
+      "n_miembros": 32,
+      "objetivos": {
+        "produccion": 0.9,
+        "carbono": 0.2,
+        "lluvia_intensa_suelo_desnudo": 55,
+        "lixiviacion": 15
+      },
+      "frente_a_linea_base": {
+        "gana": [
+          "Cambio del carbono del suelo (media del ensamble): 0 -> 0.2",
+          "Lluvia intensa sobre suelo desprotegido (media del ensamble): 120 -> 55",
+          "Nitrógeno lavado (media del ensamble): 38 -> 15"
+        ],
+        "cede": [
+          "Producción cosechada (media del ensamble): 1 -> 0.9"
+        ],
+        "similar": []
+      },
+      "no_dominada_en_evaluacion_final": true,
+      "domina_a_linea_base": false
+    },
+    {
+      "id": "P04",
+      "nombre": "Maíz, trigo y soya",
+      "descripcion": "Maíz, trigo y soya (ejemplo ficticio SIMULADO)",
+      "etiqueta": "INFERENCIA",
+      "secuencia": "maiz -> trigo_primavera -> soya",
+      "indicadores": {
+        "produccion_relativa_anio": {
+          "p10": 0.83,
+          "p50": 1.02,
+          "p90": 1.12,
+          "unidad": "temporadas equivalentes/año",
+          "definicion": "Producción cosechada por año en temporadas equivalentes.",
+          "explicacion": "Cuánto cosecha la rotación por año frente a una temporada normal."
+        },
+        "cambio_carbono_t_ha_anio": {
+          "p10": -0.2,
+          "p50": -0.02,
+          "p90": 0.15,
+          "unidad": "t C/ha/año",
+          "definicion": "Cambio anual del carbono orgánico del suelo frente al equilibrio de la estrategia de referencia.",
+          "explicacion": "Si es positivo, el suelo gana carbono respecto de la referencia."
+        },
+        "lluvia_intensa_sobre_suelo_desnudo_mm_anio": {
+          "p10": 50,
+          "p50": 110,
+          "p90": 190,
+          "unidad": "mm/año",
+          "definicion": "Lluvia intensa que cae sobre suelo con poca cobertura.",
+          "explicacion": "Más lluvia sobre suelo desnudo significa más riesgo de erosión."
+        },
+        "lixiviacion_n_kg_ha_anio": {
+          "p10": 16,
+          "p50": 34,
+          "p90": 60,
+          "unidad": "kg N/ha/año",
+          "definicion": "Nitrógeno que se lava bajo la raíz cada año.",
+          "explicacion": "Menos nitrógeno lavado es menos pérdida de fertilizante y menos contaminación."
+        }
+      },
+      "trayectoria_mensual": {
+        "W": {
+          "p10": [
+            76.8,
+            92.8,
+            104.5,
+            108.8,
+            104.5,
+            92.8,
+            76.8,
+            60.8,
+            49.1,
+            44.8,
+            49.1,
+            60.8,
+            76.8,
+            92.8,
+            104.5,
+            108.8,
+            104.5,
+            92.8,
+            76.8,
+            60.8,
+            49.1,
+            44.8,
+            49.1,
+            60.8,
+            76.8,
+            92.8,
+            104.5,
+            108.8,
+            104.5,
+            92.8,
+            76.8,
+            60.8,
+            49.1,
+            44.8,
+            49.1,
+            60.8
+          ],
+          "p50": [
+            96,
+            116,
+            130.6,
+            136,
+            130.6,
+            116,
+            96,
+            76,
+            61.4,
+            56,
+            61.4,
+            76,
+            96,
+            116,
+            130.6,
+            136,
+            130.6,
+            116,
+            96,
+            76,
+            61.4,
+            56,
+            61.4,
+            76,
+            96,
+            116,
+            130.6,
+            136,
+            130.6,
+            116,
+            96,
+            76,
+            61.4,
+            56,
+            61.4,
+            76
+          ],
+          "p90": [
+            115.2,
+            139.2,
+            156.8,
+            163.2,
+            156.8,
+            139.2,
+            115.2,
+            91.2,
+            73.6,
+            67.2,
+            73.6,
+            91.2,
+            115.2,
+            139.2,
+            156.8,
+            163.2,
+            156.8,
+            139.2,
+            115.2,
+            91.2,
+            73.6,
+            67.2,
+            73.6,
+            91.2,
+            115.2,
+            139.2,
+            156.8,
+            163.2,
+            156.8,
+            139.2,
+            115.2,
+            91.2,
+            73.6,
+            67.2,
+            73.6,
+            91.2
+          ]
+        }
+      },
+      "n_miembros": 32,
+      "objetivos": {
+        "produccion": 1.02,
+        "carbono": -0.02,
+        "lluvia_intensa_suelo_desnudo": 110,
+        "lixiviacion": 34
+      },
+      "frente_a_linea_base": {
+        "gana": [
+          "Producción cosechada (media del ensamble): 1 -> 1.02",
+          "Lluvia intensa sobre suelo desprotegido (media del ensamble): 120 -> 110",
+          "Nitrógeno lavado (media del ensamble): 38 -> 34"
+        ],
+        "cede": [
+          "Cambio del carbono del suelo (media del ensamble): 0 -> -0.02"
+        ],
+        "similar": []
+      },
+      "no_dominada_en_evaluacion_final": true,
+      "domina_a_linea_base": false
+    }
+  ],
+  "compromisos": {
+    "mejor_por_objetivo": {
+      "produccion": "P02",
+      "carbono": "P03",
+      "lluvia_intensa_suelo_desnudo": "P03",
+      "lixiviacion": "P03"
+    },
+    "compromiso_equilibrado": "P01",
+    "explicacion": [
+      "Ninguna rotación es la mejor en todo: el frente reúne opciones donde mejorar un objetivo obliga a ceder en otro. La elección depende de las prioridades del productor.",
+      "Mejor en producción cosechada (media del ensamble): P02",
+      "Mejor en cambio del carbono del suelo (media del ensamble): P03",
+      "Mejor en lluvia intensa sobre suelo desprotegido (media del ensamble): P03",
+      "Mejor en nitrógeno lavado (media del ensamble): P03",
+      "Compromiso equilibrado (más cercano al ideal con todos los objetivos normalizados y peso igual, SUPUESTO): P01",
+      "Ninguna candidata mejora a la línea base en todos los objetivos a la vez."
+    ]
+  },
+  "avisos_claves": [
+    {
+      "clave": "warning.example_simulated",
+      "parametros": {}
+    },
+    {
+      "clave": "warning.bands",
+      "parametros": {}
+    }
+  ],
+  "tarjetas": {
+    "E0": {
+      "por_que": [
+        {
+          "clave": "card.why.is_baseline",
+          "parametros": {
+            "id": "E0"
+          },
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "evidencia": [
+        {
+          "clave": "card.evidence.label",
+          "parametros": {
+            "etiqueta": "FUENTE"
+          },
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "beneficios": [
+        {
+          "clave": "card.benefit.none",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "vacios": [
+        {
+          "clave": "card.gap.not_evaluated",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "riesgos": [
+        {
+          "clave": "card.risk.local_review",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "referencia": "E0",
+      "secciones_claves": {
+        "por_que": "card.section.por_que",
+        "evidencia": "card.section.evidencia",
+        "beneficios": "card.section.beneficios",
+        "vacios": "card.section.vacios",
+        "riesgos": "card.section.riesgos"
+      }
+    },
+    "P01": {
+      "por_que": [
+        {
+          "clave": "card.why.front_member",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "evidencia": [
+        {
+          "clave": "card.evidence.label",
+          "parametros": {
+            "etiqueta": "INFERENCIA"
+          },
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "beneficios": [
+        {
+          "clave": "card.benefit.none",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "vacios": [
+        {
+          "clave": "card.gap.not_evaluated",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "riesgos": [
+        {
+          "clave": "card.risk.local_review",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "referencia": "E0",
+      "secciones_claves": {
+        "por_que": "card.section.por_que",
+        "evidencia": "card.section.evidencia",
+        "beneficios": "card.section.beneficios",
+        "vacios": "card.section.vacios",
+        "riesgos": "card.section.riesgos"
+      }
+    },
+    "P02": {
+      "por_que": [
+        {
+          "clave": "card.why.front_member",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "evidencia": [
+        {
+          "clave": "card.evidence.label",
+          "parametros": {
+            "etiqueta": "INFERENCIA"
+          },
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "beneficios": [
+        {
+          "clave": "card.benefit.none",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "vacios": [
+        {
+          "clave": "card.gap.not_evaluated",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "riesgos": [
+        {
+          "clave": "card.risk.local_review",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "referencia": "E0",
+      "secciones_claves": {
+        "por_que": "card.section.por_que",
+        "evidencia": "card.section.evidencia",
+        "beneficios": "card.section.beneficios",
+        "vacios": "card.section.vacios",
+        "riesgos": "card.section.riesgos"
+      }
+    },
+    "P03": {
+      "por_que": [
+        {
+          "clave": "card.why.front_member",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "evidencia": [
+        {
+          "clave": "card.evidence.label",
+          "parametros": {
+            "etiqueta": "SUPUESTO"
+          },
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "beneficios": [
+        {
+          "clave": "card.benefit.none",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "vacios": [
+        {
+          "clave": "card.gap.not_evaluated",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "riesgos": [
+        {
+          "clave": "card.risk.local_review",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "referencia": "E0",
+      "secciones_claves": {
+        "por_que": "card.section.por_que",
+        "evidencia": "card.section.evidencia",
+        "beneficios": "card.section.beneficios",
+        "vacios": "card.section.vacios",
+        "riesgos": "card.section.riesgos"
+      }
+    },
+    "P04": {
+      "por_que": [
+        {
+          "clave": "card.why.front_member",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "evidencia": [
+        {
+          "clave": "card.evidence.label",
+          "parametros": {
+            "etiqueta": "INFERENCIA"
+          },
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "beneficios": [
+        {
+          "clave": "card.benefit.none",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "vacios": [
+        {
+          "clave": "card.gap.not_evaluated",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "riesgos": [
+        {
+          "clave": "card.risk.local_review",
+          "parametros": {},
+          "valores": {},
+          "referencias": []
+        }
+      ],
+      "referencia": "E0",
+      "secciones_claves": {
+        "por_que": "card.section.por_que",
+        "evidencia": "card.section.evidencia",
+        "beneficios": "card.section.beneficios",
+        "vacios": "card.section.vacios",
+        "riesgos": "card.section.riesgos"
+      }
+    }
+  }
+}

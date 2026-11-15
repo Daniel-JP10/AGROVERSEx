@@ -130,6 +130,8 @@ Dependencias directas de `src/web/package.json` y `herramientas/package.json`, l
 | tippecanoe (WSL, apt) | v2.49.0 | BSD-2-Clause, leído de /usr/share/doc/tippecanoe/copyright | https://github.com/felt/tippecanoe | No requiere cita | Daniel (orquestador de datos) | 2026-11-14 | en uso |
 | pmtiles CLI (Protomaps), herramientas/bin, no versionado | 1.31.2 | BSD-3-Clause, según herramientas/bin/LICENSE del prototipo | PENDIENTE | No requiere cita | Daniel (orquestador de datos) | 2026-11-14 | en uso |
 | IBM Plex Sans | 5.3.0 (@fontsource) | OFL-1.1, src/web/public/fuentes/OFL.txt | https://www.npmjs.com/package/@fontsource/ibm-plex-sans/v/5.3.0 | No requiere cita | Daniel (orquestador de datos) | 2026-11-14 | en uso |
+| wrangler (Cloudflare), solo para subir la prueba de despliegue; en C:/NASA/herramientas-despliegue, fuera del repo y del producto | 4.156.0 (npm, publicada 2026-10-29) | MIT OR Apache-2.0, campo license del registro npm | https://github.com/cloudflare/workers-sdk | No requiere cita | Orquestador Web, por Daniel | 2026-11-14 | en uso |
+| netlify-cli (Netlify), solo para subir la prueba de despliegue; en C:/NASA/herramientas-despliegue, fuera del repo y del producto. OSV sin avisos para la versión; npm audit: 15 transitivas (2 bajas, 13 moderadas) en deepmerge GHSA-gcqx-w48m-w2h4, glob GHSA-3g3m-2fjr-6pw4 y minimatch GHSA-g3hv-75wg-m249 | 27.16.1 (npm, publicada 2026-10-30) | MIT, campo license del registro npm | https://github.com/netlify/cli | No requiere cita | Orquestador Web, por Daniel | 2026-11-14 | en uso |
 
 ## Área Gemelo
 

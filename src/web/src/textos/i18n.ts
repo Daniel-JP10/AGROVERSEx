@@ -19,4 +19,5 @@ export function alternar() {
   useIdiomaStore.setState({ idioma: nuevo })
   try { localStorage.setItem(LLAVE, nuevo) } catch { /* sin persistencia */ }
 }
-export const t = (clave: ClaveTexto): string => (idioma() === 'en' ? en : es)[clave]
+// Al español le pueden faltar claves (FALTANTES_ES): cae al inglés
+export const t = (clave: ClaveTexto): string => (idioma() === 'en' ? en[clave] : (es[clave] ?? en[clave]))

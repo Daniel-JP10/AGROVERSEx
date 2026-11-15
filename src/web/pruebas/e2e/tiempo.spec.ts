@@ -6,7 +6,7 @@ test('línea de tiempo: teclado, sin dato antes de SMAP, reproducción sin error
   const errores: string[] = []
   page.on('pageerror', (e) => e.message !== 'Failed to fetch' && errores.push(e.message)) // fetch del globo (Task 6), ajeno
   page.on('console', (m) => m.type() === 'error' && !/api\/|favicon|Failed to (load resource|fetch)/.test(m.text()) && errores.push(m.text()))
-  await page.goto('/')
+  await page.goto('/#/tierra')
   const mes = page.getByTestId('mes')
   await page.getByLabel('Mes', { exact: true }).focus()
   await page.keyboard.press('Home')

@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test'
 
 // Corre con AGROVERSEX_SQLITE y AGROVERSEX_DATOS definidos
 test('filtro por cobertura: las unidades filtradas se apagan sin volverse hueco', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#/tierra')
   await page.getByRole('button', { name: 'Filtros' }).click()
   const clase = page.getByRole('group', { name: /Cobertura IGBP/ }).getByRole('checkbox').first()
   await expect(clase).toBeVisible({ timeout: 15000 })
