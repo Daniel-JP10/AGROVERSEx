@@ -13,13 +13,15 @@ describe('tres niveles reales', () => {
   it('rangos de las teselas: 0-6, 2-9, 6-11 (adm2 llega a z10 por D-016, más un nivel de margen)', () => {
     expect(NIVELES.map((c) => [c.zoomDesde, c.zoomHasta])).toEqual([[0, 6], [2, 9], [6, 11]])
   })
-  it('adm2 se apaga por opacidad al pasar z11 y la capa se corta un nivel después', () => {
+  // Director 08:55: a z11 el relleno de ADM2 se ve. MapLibre sobreescala desde el maxzoom de la cabecera (z10), así que
+  // el último nivel no se apaga al acercar ni su capa se corta (antes se apagaba entre z10,5 y z11)
+  it('adm2 sigue con relleno al acercar: sin apagado por opacidad y la capa no se corta', () => {
     const r = capasNivel(NIVELES[2]).find((l) => l.id === 'adm2-relleno') as unknown as { maxzoom: number; paint: Record<string, unknown[]> }
-    expect(r.maxzoom).toBe(12)
+    expect(r.maxzoom).toBe(24)
     const op = r.paint['fill-opacity'] as unknown[]
     const paradas = op.slice(3).filter((_, i) => i % 2 === 0)
-    expect(paradas.slice(-2)).toEqual([10.5, 11])
-    expect(JSON.stringify(op.at(-1))).toContain(',0,0]') // a z11 el relleno vale 0
+    expect(paradas.at(-1)).toBe(NIVELES[2].zoomDesde + NIVELES[2].fundido)
+    expect(JSON.stringify(op.at(-1))).not.toContain(',0,0]') // la última parada pinta (no vale 0)
   })
   it('se solapan sin dejar zooms sin nivel', () => {
     for (let z = 0; z <= 11; z += 0.25) expect(NIVELES.some((c) => z >= c.zoomDesde && z <= c.zoomHasta)).toBe(true)

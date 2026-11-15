@@ -99,8 +99,8 @@ function paradas(c: NivelConfig): [number, number][] {
   const sig = NIVELES[c.nivel + 1]
   const alEntrar: [number, number][] = c.zoomDesde === 0 ? [[0, 1]] : [[c.zoomDesde, 0], [c.zoomDesde + c.fundido, 1]]
   // El nivel saliente sigue a pleno hasta que el siguiente ya tiene color (D-015: ADM2 se pinta desde z7)
-  // El último nivel se apaga por opacidad al pasar su zoomHasta (las teselas ya no tienen más detalle)
-  const salida: [number, number][] = sig ? [[sig.zoomDesde + sig.fundido - 0.02, 1], [sig.zoomDesde + sig.fundido, 0]] : [[c.zoomHasta - 0.5, 1], [c.zoomHasta, 0]]
+  // El último nivel no se apaga: MapLibre sobreescala sus teselas desde el maxzoom de la cabecera PMTiles (director, 08:55)
+  const salida: [number, number][] = sig ? [[sig.zoomDesde + sig.fundido - 0.02, 1], [sig.zoomDesde + sig.fundido, 0]] : []
   return [...alEntrar, ...salida]
 }
 // Cada parada vale k*tope solo si la unidad cumple la condición (ok pinta color, hueco pinta trama)
@@ -117,7 +117,7 @@ export function capasNivel(c: NivelConfig) {
   const sig = NIVELES[c.nivel + 1]
   const base = { source: c.fuente, 'source-layer': c.capaFuente }
   // +1: MapLibre filtra capas por el zoom entero de la tesela; a z6,5-7 ya usa teselas 7 y un tope en 7 las descartaría. La opacidad ya es 0 pasado el relevo
-  const rango = { ...base, minzoom: c.zoomDesde, maxzoom: sig ? sig.zoomDesde + sig.fundido + 1 : c.zoomHasta + 1 }
+  const rango = { ...base, minzoom: c.zoomDesde, maxzoom: sig ? sig.zoomDesde + sig.fundido + 1 : 24 }
   const rl = { ...base, minzoom: c.zoomDesde, maxzoom: 24 } // los contornos no desaparecen al acercar
   const en = estadoBool
   const sinDisputa = ['!', exprDisputa]
