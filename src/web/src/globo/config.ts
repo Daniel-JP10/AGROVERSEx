@@ -72,7 +72,7 @@ export function urlTrueColor(fecha: string): string {
 export const TRUECOLOR_ACTIVO = false
 export const FECHA_TRUECOLOR = '2024-06-15'
 
-export const ATRIBUCION = `${fondoDetalle(true)!.atribucion} · Boundaries: geoBoundaries CGAZ, CC BY 4.0 (derivados bajo ODbL, D-015); Runfola et al. 2020, PLoS ONE 15(4): e0231866`
+export const ATRIBUCION = `${fondoDetalle(true)!.atribucion} · Boundaries: geoBoundaries CGAZ, CC BY 4.0, derived layers under ODbL 1.0; Runfola et al. 2020, PLoS ONE 15(4): e0231866`
 
 /** Capas con las que se interactúa en un nivel: su relleno y los respaldos de los niveles superiores. */
 export function capasInteractivas(nivel: number): string[] {

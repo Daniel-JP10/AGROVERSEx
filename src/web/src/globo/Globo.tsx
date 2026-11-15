@@ -65,6 +65,9 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       canvasContextAttributes: { antialias: true },
     })
     ;(window as unknown as { __mapa: MapaGL }).__mapa = m
+    // Atribución cerrada al cargar (botón i); el texto completo va en el pie del marco
+    // idle: MapLibre abre la atribución al llegar sus datos, que en WebKit llegan después de load
+    m.once('idle', () => contenedor.current?.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show'))
     m.on('styleimagemissing', (e) => { if (e.id === 'trama' && !m.hasImage('trama')) m.addImage('trama', trama()) })
     const motores: (MotorCoropleta | undefined)[] = []
     let version = 0

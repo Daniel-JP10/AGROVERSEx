@@ -78,12 +78,8 @@ test('Soil: ningún JSON de dist trae claves de la base simulada de suelo', () =
 
 test.describe('reduced-motion', () => {
   test.use({ reducedMotion: 'reduce' })
-  test('órbitas quietas y salto directo (jumpTo) al lote', async ({ page }) => {
+  test('sin órbitas y salto directo (jumpTo) al lote', async ({ page }) => {
     await page.goto('/#/tierra')
-    const orbita = page.locator('.orbita').first()
-    await expect(orbita).toBeAttached({ timeout: 60_000 })
-    expect(await orbita.evaluate((e) => getComputedStyle(e).animationName)).toBe('none')
-    await expect(page.locator('svg.orbitas')).toHaveAttribute('aria-hidden', 'true')
     const boton = page.locator('button[data-lote="DEMO-USA-01"]')
     await expect(boton).toBeVisible({ timeout: 60_000 })
     const t0 = Date.now()
@@ -92,6 +88,31 @@ test.describe('reduced-motion', () => {
     expect(Date.now() - t0).toBeLessThan(2_000) // flyTo dura 2,4 s; jumpTo es inmediato
   })
 })
+
+// Director 14:28: sin órbitas, y ninguna hoja (búsqueda, leyenda, atribución, lotes, tiempo) sale del viewport
+for (const vp of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+  test(`hojas dentro del viewport y sin órbitas a ${vp.width}×${vp.height}`, async ({ page }) => {
+    await page.setViewportSize(vp)
+    await page.goto('/#/tierra')
+    await expect(page.locator('.hoja-tiempo')).toBeVisible({ timeout: 60_000 })
+    await page.waitForTimeout(1500)
+    await expect(page.locator('.orbitas, .orbita')).toHaveCount(0)
+    const fuera = await page.evaluate(() => {
+      const sel = '.hoja, .maplibregl-ctrl-attrib, .busqueda, .leyenda, [class*="atribucion"]'
+      return [...document.querySelectorAll(sel)].filter((e) => {
+        const r = e.getBoundingClientRect()
+        if (r.width === 0 || r.height === 0 || getComputedStyle(e).visibility === 'hidden') return false
+        return r.left < -1 || r.top < -1 || r.right > innerWidth + 1 || r.bottom > innerHeight + 1
+      }).map((e) => `${e.className}`)
+    })
+    expect(fuera).toEqual([])
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    // Atribución con el tema (no la caja blanca de MapLibre) y cerrada al cargar
+    const at = page.locator('.maplibregl-ctrl-attrib')
+    expect(await at.evaluate((e) => getComputedStyle(e).backgroundColor)).not.toBe('rgb(255, 255, 255)')
+    await expect(at).not.toHaveClass(/maplibregl-compact-show/, { timeout: 30_000 })
+  })
+}
 
 test('presupuesto: primer relleno pintado del globo ≤ 6 s con red lenta (9 Mbit/s, 150 ms)', async ({ page, browserName }) => {
   test.skip(browserName !== 'chromium', 'la limitación de red por CDP solo existe en Chromium')
