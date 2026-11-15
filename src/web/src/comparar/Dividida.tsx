@@ -10,7 +10,7 @@ import { registrarPatron } from '../globo/patron'
 import { cargarCoropleta } from '../datos/estatico'
 import type { Nivel } from '../datos/tipos'
 import { useEstado } from '../app/estado'
-import { etiquetaMes } from '../tiempo/valor'
+import { N_MESES, etiquetaMes } from '../tiempo/valor'
 import { sincronizarCamaras } from './sincronia'
 import './comparar.css'
 import { t } from '../textos/i18n'
@@ -66,7 +66,7 @@ export function Dividida({ mapa, mesB, setMesB }: { mapa: MapaGL; mesB: number; 
       <div className="barra-dividida" role="group" aria-label={t('comparar.titulo')}>
         <span>A: {etiquetaMes(mesA)} {t('comparar.lineaTiempo')}</span>
         <label>B: {etiquetaMes(mesB)}
-          <input type="range" min={0} max={322} value={mesB} aria-label={t('comparar.mesB')} aria-valuetext={etiquetaMes(mesB)} onChange={(e) => setMesB(Number(e.target.value))} />
+          <input type="range" min={0} max={N_MESES - 1} value={mesB} aria-label={t('comparar.mesB')} aria-valuetext={etiquetaMes(mesB)} onChange={(e) => setMesB(Number(e.target.value))} />
         </label>
         <span>{t('comparar.nota')}</span>
       </div>

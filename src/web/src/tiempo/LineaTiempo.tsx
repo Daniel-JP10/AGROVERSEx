@@ -3,11 +3,11 @@ import './tiempo.css'
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { useEstado } from '../app/estado'
 import { N_MESES } from './valor'
-import { CALENDARIO, mesIdAEtiqueta, mesesConHueco } from './huecos'
+import { CALENDARIO, mesIdAEtiqueta, mesesConHueco, provisionalDesdeDe } from './huecos'
 import { crearReproductor } from './Reproductor'
 import { CintaEnso } from './CintaEnso'
 import { cargarMatriz, enRevision, textoEstado } from '../datos/estatico'
-import { capaPorId } from '../datos/capas'
+import { CAPAS, capaPorId } from '../datos/capas'
 import { t } from '../textos/i18n'
 
 const VELOCIDAD = 4 // meses por segundo
@@ -36,7 +36,14 @@ export function LineaTiempo() {
   // Al cambiar de capa, el sombreado sigue al producto que se está pintando
   useEffect(() => { setClave(capaPorId(idCapa).calendario) }, [idCapa])
   const [paso, setPaso] = useState<1 | 12>(1)
-  const producto = CALENDARIO[clave]
+  // El mes desde el que el producto es provisional sale de la matriz de su variable (nivel 0, unos KB)
+  const [provDesde, setProvDesde] = useState<number | undefined>()
+  useEffect(() => {
+    const capa = CAPAS.find((c) => c.calendario === clave)
+    setProvDesde(undefined)
+    if (capa) void cargarMatriz(capa.id, 0).then((m) => setProvDesde(provisionalDesdeDe(m))).catch(() => undefined)
+  }, [clave])
+  const producto = useMemo(() => ({ ...CALENDARIO[clave], ...(provDesde !== undefined && { provisionalDesde: provDesde }) }), [clave, provDesde])
   const sinDato = useMemo(() => new Set(mesesConHueco(producto)), [producto])
 
   const rep = useRef(crearReproductor({ velocidad: VELOCIDAD, siguiente: pintar, precargar }))

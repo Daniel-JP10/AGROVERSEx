@@ -9,7 +9,10 @@ from datetime import datetime, timezone
 import gzip
 import hashlib
 import json
+import os
 from pathlib import Path
+import shutil
+import sys
 
 import pandas as pd
 
@@ -181,6 +184,48 @@ def copiar_lotes(lotes: Path, salida: Path) -> int:
     destino.write_bytes(raw)
     return destino.stat().st_size
 
+# origen (relativo a AGROVERSEX_DATOS) -> destino (relativo al build): las rutas que piden globo/config.ts
+ARCHIVOS_DESPLIEGUE = {
+    "teselas/adm0.pmtiles": "teselas/adm0.pmtiles",
+    "teselas/adm1.pmtiles": "teselas/adm1.pmtiles",
+    "teselas/adm2.pmtiles": "teselas/adm2.pmtiles",
+    "indice_busqueda.json.gz": "teselas/indice_busqueda.json.gz",
+}
+
+
+class ErrorDespliegue(RuntimeError):
+    """El despliegue no puede seguir: falta algo que el build público necesita."""
+
+
+def raiz_datos(entorno=None) -> Path:
+    """AGROVERSEX_DATOS con teselas, índice y unidades.gpkg; si falta algo, error claro (D-037 C2.2)."""
+    ruta = (os.environ if entorno is None else entorno).get("AGROVERSEX_DATOS")
+    if not ruta:
+        raise ErrorDespliegue("falta la variable AGROVERSEX_DATOS (carpeta datos/procesados con teselas/, indice_busqueda.json.gz y unidades.gpkg)")
+    raiz = Path(ruta)
+    if not raiz.is_dir():
+        raise ErrorDespliegue(f"AGROVERSEX_DATOS apunta a una carpeta que no existe: {raiz}")
+    faltan = [o for o in (*ARCHIVOS_DESPLIEGUE, "unidades.gpkg") if not (raiz / o).is_file() or (raiz / o).stat().st_size == 0]
+    if faltan:
+        raise ErrorDespliegue(f"en {raiz} faltan o están vacíos: {', '.join(faltan)}")
+    return raiz
+
+
+def desplegar(dist: Path, entorno=None) -> dict:
+    """Copia teselas e índice a dist/ y construye dist/datos/unidades_geo.json.gz (D-033e: no se versionan)."""
+    raiz = raiz_datos(entorno)
+    if not dist.is_dir():
+        raise ErrorDespliegue(f"no existe {dist}: corre primero npm run build en src/web")
+    tam = {}
+    for origen, destino in ARCHIVOS_DESPLIEGUE.items():
+        (dist / destino).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(raiz / origen, dist / destino)
+        tam[destino] = (dist / destino).stat().st_size
+        if tam[destino] != (raiz / origen).stat().st_size:
+            raise ErrorDespliegue(f"copia incompleta de {origen}")
+    tam["datos/unidades_geo.json.gz"] = construir_geo(raiz / "unidades.gpkg", dist / "datos")
+    return tam
+
 
 def construir_manifiesto(
     salida: Path,
@@ -237,13 +282,22 @@ def construir_manifiesto(
 
 def principal():
     p = argparse.ArgumentParser()
-    p.add_argument("--series", type=Path, required=True)
+    p.add_argument("--desplegar", type=Path, metavar="DIST", help="copia teselas e índice a DIST (src/web/dist) desde AGROVERSEX_DATOS")
+    p.add_argument("--series", type=Path)
     p.add_argument("--gpkg", type=Path)
     p.add_argument("--lotes", type=Path)
-    p.add_argument("--salida", type=Path, required=True)
+    p.add_argument("--salida", type=Path)
     p.add_argument("--pais", default="COL")
     p.add_argument("--generado-utc", default=None)
     a = p.parse_args()
+    if a.desplegar:
+        try:
+            print(json.dumps(desplegar(a.desplegar), indent=1))
+        except ErrorDespliegue as e:
+            sys.exit(f"ERROR de despliegue: {e}")
+        return
+    if not (a.series and a.salida):
+        p.error("--series y --salida son obligatorios si no se usa --desplegar")
     tam = construir_series(a.series, a.salida, a.pais)
     if a.gpkg:
         tam["unidades_geo.json.gz"] = construir_geo(a.gpkg, a.salida)
