@@ -58,6 +58,10 @@ def test_el_despliegue_falla_si_hay_fugas(tmp_path, monkeypatch):
     '{"r": "/root/x"}',
     'const a="\\\\servidor\\compartido\\x"',
     'instalado en herramientas-despliegue',
+    'const c = "c:/NASA/datos"',
+    'const c = "c:\\NASA\\datos"',
+    r'r=\\ab\compartido',
+    '{"r": "/var/folders/xy/T/a"}',
 ])
 def test_detecta_rutas_de_v5(tmp_path, texto):
     (tmp_path / "a.js").write_text(texto, encoding="utf-8")
@@ -69,7 +73,9 @@ def test_detecta_rutas_de_v5(tmp_path, texto):
     r"{e:/^\d+$/}",
     "https://gibs.earthdata.nasa.gov/wmts",
     'new RegExp("\\s*\\d")',
-    "const c = 'c:/minúscula no es unidad'",
+    r'"N:\n"',
+    r'"P:\u00e9"',
+    "{B:/xy/}",
 ])
 def test_no_confunde_codigo_minificado(tmp_path, texto):
     (tmp_path / "a.js").write_text(texto, encoding="utf-8")
@@ -116,3 +122,17 @@ def test_limites_de_pages(tmp_path, monkeypatch):
     assert c.revisar_limites(tmp_path) == []
     (tmp_path / "grande.json").write_bytes(b"x" * 11)
     assert c.revisar_limites(tmp_path) == ["grande.json pesa 11 B"]
+
+
+def test_el_despliegue_falla_si_supera_los_limites(tmp_path, monkeypatch):
+    datos = tmp_path / "datos"
+    for o in (*c.ARCHIVOS_DESPLIEGUE, "unidades.gpkg"):
+        (datos / o).parent.mkdir(parents=True, exist_ok=True)
+        (datos / o).write_bytes(b"x")
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    (dist / "grande.json").write_bytes(b"x" * 20)
+    monkeypatch.setattr(c, "MAX_ARCHIVO", 10)
+    monkeypatch.setattr(c, "construir_geo", lambda gpkg, salida: (salida.mkdir(parents=True, exist_ok=True), (salida / "unidades_geo.json.gz").write_bytes(b"{}"))[1])
+    with pytest.raises(c.ErrorDespliegue, match="límites de Pages"):
+        c.desplegar(dist, {"AGROVERSEX_DATOS": str(datos)})

@@ -229,9 +229,10 @@ def _metadatos_pmtiles(contenido: bytes) -> bytes:
 # Extensiones que se leen como texto; en las demás (imágenes, binarios) no se busca la letra de unidad (V5)
 TEXTO = {".js", ".mjs", ".css", ".html", ".json", ".txt", ".md", ".svg", ".map", ".xml", ".csv", ".webmanifest"}
 # Rutas locales sin re.I (V5): Unix, carpetas de usuario, rutas de red y la carpeta de herramientas del despliegue
-_COMUNES = r"""/home/|/Users/|/mnt/|/tmp/|/root/|\\{1,2}Users\\{1,2}|(?<=["'`\s(])\\{2,4}[A-Za-z][A-Za-z0-9._-]{2,}\\{1,2}[A-Za-z][A-Za-z0-9._$-]|herramientas-despliegue"""
-# Letra de unidad con / o \ (C:/, X:\), sin letra, cifra, punto ni $ delante, para no confundirla con código minificado
-_UNIDAD = r"(?<![A-Za-z0-9_$.])[A-Z]:(?:/|\\{1,2})[A-Za-z]"
+_COMUNES = r"""/home/|/Users/|/mnt/|/tmp/|/root/|/var/folders/|/opt/|\\{1,2}Users\\{1,2}|(?<=["'`\s(=])\\{2,4}[A-Za-z][A-Za-z0-9._-]+\\{1,2}[A-Za-z][A-Za-z0-9._$-]|herramientas-despliegue"""
+# Letra de unidad mayúscula o minúscula (V6.2) con / o \, solo tras inicio, comilla, espacio, ( = o >,
+# y un segmento de 3 o más caracteres que no sea un escape \uXXXX: así no se confunde con código minificado
+_UNIDAD = r"""(?<![^\s"'`(=>])[A-Za-z]:(?:/|\\{1,2})(?!u[0-9A-Fa-f]{4})[A-Za-z][A-Za-z0-9._-]{2,}"""
 
 
 def buscar_fugas(dist: Path) -> list[str]:
@@ -301,6 +302,10 @@ def desplegar(dist: Path, entorno=None) -> dict:
         # V5: no queda un dist con fugas listo para subir por error
         shutil.rmtree(dist)
         raise ErrorDespliegue("dist contiene rutas locales o el usuario de la máquina: " + "; ".join(fugas[:10]))
+    # V6.3: los límites de Pages se revisan en el mismo paso que publica
+    limites = revisar_limites(dist)
+    if limites:
+        raise ErrorDespliegue("dist supera los límites de Pages: " + "; ".join(limites[:10]))
     return tam
 
 
