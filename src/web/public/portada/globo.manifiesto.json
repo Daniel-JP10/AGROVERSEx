@@ -1,0 +1,18 @@
+{
+ "archivo": "globo.webp",
+ "sha256": "e7956c6102a53380daabfe98fbabcd2319c80ad4c1c59cf5aa2adbd9553f0778",
+ "bytes": 17476,
+ "ancho": 400,
+ "alto": 400,
+ "script": "src/web/herramientas/poster_globo.mjs",
+ "vista": {
+  "center": [
+   -74,
+   4
+  ],
+  "zoom": 1.6
+ },
+ "datos": "datos/COL (IMERG, mes inicial de la app)",
+ "fondo": "Blue Marble, NASA GIBS (atribuido en la app)",
+ "nota": "Captura de WebGL: el SHA-256 identifica esta salida; otra GPU o versión del navegador puede dar bytes distintos"
+}
