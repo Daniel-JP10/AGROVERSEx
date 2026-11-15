@@ -57,9 +57,9 @@ describe('ciencia: una tarjeta por afirmación', () => {
       expect(t, `${v} ${u}`).toContain(`${fr} `)
     }
   })
-  it('PI-D1 mundial queda oculto con "Not available yet" y está listo para leer el informe', () => {
+  it('PI-D1 mundial se lee del informe (S1w) y sigue sabiendo leer el formato anterior', () => {
     const h = tarjeta(html(), 'pi_d1_mundo')
-    expect((h.match(/Not available yet/g) ?? []).length).toBe(5)
+    expect(h).not.toContain('Not available yet')
     const informe = { precip: { total: { fraccion_mayor_a: { '10%': 0.2, '2%': 0.5 } } }, ndvi: { total: { fraccion_mayor_a: { '10%': 0.1, '2%': 0.4 } } } }
     expect(rangoPiD1Mundo(informe)).toEqual({ min: 0.1, max: 0.5, umbralAlto: 10, umbralBajo: 2 })
     expect(texto(renderToStaticMarkup(createElement(TarjetaPiD1Mundo, { informe })))).toContain('Between 10.0 and 50.0 % of unit-month pairs change with the definition (PI-D1).')
