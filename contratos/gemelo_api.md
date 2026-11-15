@@ -171,7 +171,7 @@ La app pública no tiene servidor: lee archivos precalculados. Carpeta fija: `da
 | `DEMO-USA-01` | `ejemplos/escenario_mead.yaml` (Saunders, Nebraska) | 41,165, −96,477 | `USA-ADM2-52423323B480079355264` | templado |
 | `DEMO-COL-01` | `ejemplos/escenario_ipiales.yaml` (Ipiales, Nariño) | 0,842, −77,661 | `COL-ADM2-7082276B52108893597118` | tropical |
 
-  Clima y suelo: forzantes de Datos (T-D5, `forzantes_gemelo.md` v1), copiados con sus SHA256 en `datos/referencia/lotes/`.
+  Clima y suelo: forzantes de Datos (T-D5, `forzantes_gemelo.md` v1), versionados con sus SHA256 en `datos/lotes/` (D-036 g); la estación GHCN entra solo como resumen derivado (D-038).
 - **Rótulo**. `metadatos.naturaleza = "simulado"` significa salida del modelo, no SIMULADO (dato ficticio) en el sentido del proyecto. Web muestra `metadatos.rotulo`: `{clave: "label.model_simulation", parametros: {fuentes: [claves source.*]}, en, es}`, p. ej. «Model simulation with NASA POWER and SoilGrids 2.0 data».
 
 ### 2. Tarjeta de cinco secciones
