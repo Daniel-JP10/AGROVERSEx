@@ -36,12 +36,8 @@ const PROHIBIDOS_F3: [string, RegExp][] = [
 ]
 const prohibidosF3En = (t: string) => PROHIBIDOS_F3.filter(([, re]) => re.test(t)).map(([n]) => n)
 
-// Claves de en.ts/es.ts (del orquestador) que hoy nombran CDL y que ninguna pantalla de la fase 3 usa; su retiro se pide
-// en el reporte de W1. Una prueba falla cuando ya no lleven CDL, para que esta lista no quede vieja.
-const PENDIENTES_ORQUESTADOR: readonly string[] = ['ciencia.metrica_suelo_desnudo', 'ciencia.pi_d2']
 const todo = { ...enTodo } as Record<string, string>
 const todoEs = { ...esTodo } as Record<string, string | undefined>
-const textosPendientes = PENDIENTES_ORQUESTADOR.flatMap((k) => [todo[k], todoEs[k]].filter((x): x is string => !!x && prohibidosF3En(x).length > 0))
 
 // Frase de una librería (scheduler de React) que solo va a la consola, nunca a la pantalla
 const DE_LIBRERIAS = ['forcing frame rates higher than 125 fps is not supported']
@@ -96,13 +92,9 @@ describe('textos prohibidos', () => {
   })
   it('ningún texto visible (todas las claves EN y ES, glosario y cabecera de avisos) contiene un término de la fase 3', () => {
     const valores = [...Object.entries(todo), ...Object.entries(todoEs)]
-      .filter(([k]) => !PENDIENTES_ORQUESTADOR.includes(k))
       .map(([k, v]) => `${k}: ${v}`)
     const terminos = glosario.GLOSARIO.flatMap((g) => [g.es, g.en, g.tecnico, g.tecnico_en, g.fuente])
     expect([...valores, ...terminos, avisos.BANDA].filter((v) => prohibidosF3En(v).length)).toEqual([])
-  })
-  it('la lista de pendientes del orquestador sigue vigente (si falla, quítala: ya se retiraron)', () => {
-    expect(textosPendientes.length).toBeGreaterThan(0)
   })
   it('los archivos de W1 (marco, portada, ciencia, datos abiertos, fuentes y sus textos) no contienen términos de la fase 3', () => {
     const rutas = [join('app', 'marco'), join('secciones', 'portada'), join('secciones', 'ciencia'), join('secciones', 'datos-abiertos'), join('secciones', 'fuentes')]
@@ -126,7 +118,7 @@ describe('textos prohibidos', () => {
   // El CSS no se revisa con la lista de la fase 3: sus nombres de clase no se ven (el texto renderizado lo cubre el E2E)
   it.runIf(!!process.env.PROHIBIDOS_DIST)('la compilación no contiene términos de la fase 3 en su texto (js, html, json, txt, svg)', () => {
     const dist = process.env.PROHIBIDOS_DIST!
-    const limpiar = (t: string) => [...textosPendientes, ...DE_LIBRERIAS].reduce((a, x) => a.split(x).join(' '), t)
+    const limpiar = (t: string) => DE_LIBRERIAS.reduce((a, x) => a.split(x).join(' '), t)
     const hallados = archivos(dist, /\.(js|mjs|html|json|txt|svg)$/).flatMap((p) => prohibidosF3En(limpiar(readFileSync(p, 'utf8'))).map((n) => `${relative(dist, p)}: ${n}`))
     expect(hallados).toEqual([])
   })

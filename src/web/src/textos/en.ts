@@ -334,7 +334,6 @@ export const en = {
   // seccion: ciencia
   'ciencia.descripcion': 'How the results were checked: baselines, validation and the coverage of each range.',
   'ciencia.metricas_titulo': 'Metrics',
-  'ciencia.metrica_suelo_desnudo': 'Bare-soil detection against CDL and NAIP',
   'ciencia.metrica_anomalias': 'Satellite against ground stations, monthly anomalies',
   'ciencia.metrica_escala': 'Error by size of the unit',
   'ciencia.campo_valor': 'Value',
@@ -346,7 +345,6 @@ export const en = {
   'ciencia.estado': 'Status',
   'ciencia.estado_abierta': 'open',
   'ciencia.pi_d1': 'Does aggregating the variables per unit while weighting only the cropland cells change the values materially compared with weighting the whole area of the unit, and in what fraction of the agricultural units of the world?',
-  'ciencia.pi_d2': 'How accurately does HLS detect bare-soil periods in the United States plot against CDL and NAIP, and what fraction of cloud-free observations is left in the Nariño plot?',
   'ciencia.pi_d3': 'How much do IMERG and ground stations differ in monthly rainfall anomalies in the DEMO zones, and how does that error change with the size of the unit?',
   'ciencia.pi_d4': 'What fraction of the agricultural units of the world falls in high, medium or low confidence under the AGROVERSEx confidence rule?',
   'ciencia.satelite_titulo': 'Satellite against ground station',

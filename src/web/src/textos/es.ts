@@ -341,7 +341,6 @@ export const es: Partial<Record<ClaveTexto, string>> = {
   // seccion: ciencia
   'ciencia.descripcion': 'Cómo se comprobaron los resultados: líneas base, validación y cobertura de cada rango.',
   'ciencia.metricas_titulo': 'Métricas',
-  'ciencia.metrica_suelo_desnudo': 'Detección de suelo desnudo frente a CDL y NAIP',
   'ciencia.metrica_anomalias': 'Satélite frente a estaciones en tierra, anomalías mensuales',
   'ciencia.metrica_escala': 'Error según el tamaño de la unidad',
   'ciencia.campo_valor': 'Valor',
@@ -353,7 +352,6 @@ export const es: Partial<Record<ClaveTexto, string>> = {
   'ciencia.estado': 'Estado',
   'ciencia.estado_abierta': 'abierta',
   'ciencia.pi_d1': '¿Agregar las variables por unidad ponderando solo las celdas de cultivo cambia de forma material los valores frente a ponderar toda el área de la unidad, y en qué fracción de las unidades agrícolas del mundo?',
-  'ciencia.pi_d2': '¿Con qué exactitud detecta HLS los periodos de suelo desnudo en el lote de EE. UU. frente a CDL y NAIP, y qué fracción de observaciones sin nube queda en el lote de Nariño?',
   'ciencia.pi_d3': '¿Cuánto difieren IMERG y las estaciones en tierra en anomalías mensuales de precipitación en las zonas DEMO, y cómo cambia ese error con el tamaño de la unidad?',
   'ciencia.pi_d4': '¿Qué fracción de las unidades agrícolas del mundo queda en confianza alta, media o baja con la regla de confianza de AGROVERSEx?',
   'ciencia.satelite_titulo': 'Satélite y estación en tierra',
