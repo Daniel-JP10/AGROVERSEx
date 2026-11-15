@@ -171,7 +171,7 @@ La app pública no tiene servidor: lee archivos precalculados. Carpeta fija: `da
 | `DEMO-USA-01` | `ejemplos/escenario_mead.yaml` (Saunders, Nebraska) | 41,165, −96,477 | `USA-ADM2-52423323B480079355264` | templado |
 | `DEMO-COL-01` | `ejemplos/escenario_ipiales.yaml` (Ipiales, Nariño) | 0,842, −77,661 | `COL-ADM2-7082276B52108893597118` | tropical |
 
-  Clima y suelo: forzantes de Datos (T-D5, `forzantes_gemelo.md` v1), copiados con sus SHA256 en `datos/referencia/lotes/`.
+  Clima y suelo: forzantes de Datos (T-D5, `forzantes_gemelo.md` v1), versionados con sus SHA256 en `datos/lotes/` (D-036 g); la estación GHCN entra solo como resumen derivado (D-038).
 - **Rótulo**. `metadatos.naturaleza = "simulado"` significa salida del modelo, no SIMULADO (dato ficticio) en el sentido del proyecto. Web muestra `metadatos.rotulo`: `{clave: "label.model_simulation", parametros: {fuentes: [claves source.*]}, en, es}`, p. ej. «Model simulation with NASA POWER and SoilGrids 2.0 data».
 
 ### 2. Tarjeta de cinco secciones
@@ -217,7 +217,7 @@ n_{o,s} = \frac{x_{o,s} - \min_o}{\max_o - \min_o}\ (\text{max}),\qquad n_{o,s} 
 S_s = \frac{\sum_k w_k\, \bar n_{k,s}}{\sum_k w_k},\qquad \bar n_{k,s} = \text{media de } n_{o,s} \text{ sobre los objetivos del deslizador } k,\qquad S_s = 0 \text{ si } \sum_k w_k = 0
 \]
 
-Orden: \(S\) descendente; empate, posición original en el documento. Pesos \(w_k \ge 0\) (Web usa 0 a 5). El documento trae `normalizados`, `por_deslizador` y el orden con pesos iguales.
+Orden: \(S\) descendente; empate, posición original en el documento. Objetivo sin valor (aclaración D-039): la estrategia queda incompleta, se ordena después de las completas y la interfaz muestra «sin dato» en ese objetivo; nunca se imputa un valor. Pesos \(w_k \ge 0\) (Web usa 0 a 5). El documento trae `normalizados`, `por_deslizador` y el orden con pesos iguales.
 
 Casos de prueba (`prioridades.casos_prueba`, `pruebas/gemelo/test_prioridades.py` y **`contratos/prioridades_casos.json`**, el archivo que leen las dos pruebas, la del gemelo y la de Web), sobre esta tabla sintética (en v1.2 la columna `lluvia_intensa` se llama `exposicion_erosiva`; valores, puntajes y órdenes no cambian):
 

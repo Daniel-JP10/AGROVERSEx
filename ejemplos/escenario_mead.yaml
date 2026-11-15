@@ -6,16 +6,16 @@ version_contrato: 1
 lote:
   id: DEMO-USA-01
   # Nombre, punto, unidad y clima se leen de lotes_demo.json de Datos (no se escriben a mano)
-  catalogo: ../datos/referencia/lotes/lotes_demo.json
+  catalogo: ../datos/lotes/lotes_demo.json
 
 clima:
-  # Forzantes de Datos (T-D5, forzantes_gemelo.md v1, SHA256 en datos/referencia/lotes/SHA256SUMS.txt)
+  # Forzantes de Datos (T-D5, forzantes_gemelo.md v1, SHA256 en datos/lotes/SHA256SUMS.txt)
   fuente: power_csv
-  archivo: ../datos/referencia/lotes/power_DEMO-USA-01_diario.csv
+  archivo: ../datos/lotes/power_DEMO-USA-01_diario.csv
 
 suelo:
   fuente: parametros_suelo_json
-  archivo: ../datos/referencia/lotes/parametros_suelo_DEMO-USA-01.json
+  archivo: ../datos/lotes/parametros_suelo_DEMO-USA-01.json
 
 # Alerta de helada en etapa sensible (D-032); sin validación de temperatura contra estación para este lote
 alertas:
@@ -24,7 +24,7 @@ alertas:
 
 # Pendiente NASADEM y K de Williams del lote para exposicion_erosiva de Datos (T-D6, una sola definición)
 erosion:
-  archivo: ../datos/referencia/lotes/exposicion_erosiva_lotes.json
+  archivo: ../datos/lotes/exposicion_erosiva_lotes.json
 
 escenario:
   tipo: historico                 # historico | seco | normal | humedo | personalizado

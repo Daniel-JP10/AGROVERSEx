@@ -13,6 +13,7 @@ from lotes_demo.forzantes import (
     leer_power_csv,
     validar_temperatura_ghcn,
 )
+from lotes_demo.helada_estacion import CSV_LOCAL, ampliar
 
 LOTES_META = {
     "DEMO-USA-01": dict(lon=-96.477, huso_entero_h=6, elev_lote_m=355.0),
@@ -150,7 +151,7 @@ def resumir(raiz: Path, lote: str, ini: str, fin: str, ruta_ghcn: Path | None = 
 
 if __name__ == "__main__":
     raiz, ini, fin, out_comp = Path(sys.argv[1]), sys.argv[2], sys.argv[3], Path(sys.argv[4])
-    ghcn_csv = Path("C:/NASA/AGROVERSEx/datos/crudos/ghcn/COM00080370.csv")
+    ghcn_csv = CSV_LOCAL  # C:/NASA/compartir/ghcn, nunca dentro del repo (D-038)
     r = [resumir(raiz, l, ini, fin, ghcn_csv) for l in ("DEMO-USA-01", "DEMO-COL-01")]
     out_comp.write_text(json.dumps(r, ensure_ascii=False, indent=1), encoding="utf-8", newline="\n")
     if ghcn_csv.exists():
@@ -167,4 +168,6 @@ if __name__ == "__main__":
             encoding="utf-8",
             newline="\n",
         )
+        # climatología de heladas de la estación para el Gemelo, solo agregados (D-038)
+        ampliar(ghcn_csv, out_comp.parent / "validacion_temperatura_ipiales.json")
     print(json.dumps(r, ensure_ascii=False, indent=1))

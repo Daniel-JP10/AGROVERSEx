@@ -5,6 +5,5 @@
 *.tif binary
 *.pmtiles binary
 *.exe binary
-# Copias byte a byte de los forzantes de Datos: sin conversión de fin de línea, para que sus SHA256 coincidan
-# Temporales hasta la integración (D-034, P-3 rechazada a largo plazo)
-datos/referencia/lotes/** -text
+# Forzantes de los lotes DEMO en su ruta canónica: sin conversión de fin de línea, para que coincidan con SHA256SUMS.txt (D-036 g)
+datos/lotes/** -text

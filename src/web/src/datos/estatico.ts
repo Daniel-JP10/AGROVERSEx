@@ -3,6 +3,7 @@
 import { rutaPublica } from '../comun/rutas'
 import { paraMostrar } from '../comun/unidades'
 import { t } from '../textos/i18n'
+import { etiquetaMes } from '../tiempo/valor'
 
 /** Países con dato real en esta versión (carpeta datos/<iso3>/). Fuera de ellos el globo dice "sin dato real todavía". */
 export const PAISES_CON_DATO: readonly string[] = ['COL']
@@ -15,8 +16,7 @@ export const nivelDeUnidad = (id: string): 0 | 1 | 2 => { const m = /-ADM([012])
 // Meses con un valor raro de causa PENDIENTE (hallazgo de ene y feb de 2026, ~3-4 veces la climatología; director 19:5x).
 // Salen como provisionales en revisión hasta confirmar la causa con fuentes independientes.
 export const MESES_EN_REVISION: Readonly<Record<string, readonly string[]>> = { precip: ['2026-01', '2026-02'] }
-const aaaamm = (i: number) => `${2000 + Math.floor(i / 12)}-${String((i % 12) + 1).padStart(2, '0')}`
-export const enRevision = (variable: string, mes: number) => !!MESES_EN_REVISION[variable]?.includes(aaaamm(mes))
+export const enRevision = (variable: string, mes: number) => !!MESES_EN_REVISION[variable]?.includes(etiquetaMes(mes))
 export const textoEstado = (e: 'final' | 'provisional', variable?: string, mes?: number) =>
   variable !== undefined && mes !== undefined && enRevision(variable, mes) ? `${t('bandera.provisional')} · ${t('estado.enRevision')}` : t(e === 'final' ? 'estado.final' : 'bandera.provisional')
 

@@ -1,5 +1,7 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
-import { N_MESES } from './valor'
+import { N_MESES, idDeMes } from './valor'
+import meta from '../../public/datos/meta.json'
+import type { Matriz } from '../datos/estatico'
 
 const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
 export const mesIdAEtiqueta = (mes: number) => `${MESES[mes % 12]}-${2000 + Math.floor(mes / 12)}`
@@ -13,6 +15,15 @@ export interface Producto {
   /** Meses con hueco de días, pero con algo de dato */
   parciales?: number[]
   provisionalDesde?: number
+}
+
+// Disponibilidad de un producto con archivo estático: sale de meta.json (y coincide con manifiesto.json, ver pruebas/tierra_disponibilidad.test.ts)
+const disponible = (v: keyof typeof meta.variables) => ({ inicio: idDeMes(meta.variables[v].meses_disponibles.desde), fin: idDeMes(meta.variables[v].meses_disponibles.hasta) })
+
+/** Primer mes cuyo producto es provisional, leído de la propia matriz (producto_mes); undefined si no hay ninguno */
+export function provisionalDesdeDe(m: Pick<Matriz, 'productos' | 'producto_mes'>): number | undefined {
+  const i = m.producto_mes.findIndex((p) => p >= 0 && m.productos[p].estado === 'provisional')
+  return i < 0 ? undefined : i
 }
 
 const id = (a: number, m: number) => (a - 2000) * 12 + m - 1
@@ -31,15 +42,15 @@ export const CALENDARIO: Record<string, Producto> = {
     ].map(([a, m]) => id(a, m)),
   },
   power: { nombre: 'NASA POWER', inicio: 0, fin: N_MESES - 1 },
-  merra2: { nombre: 'MERRA-2', inicio: 0, fin: id(2026, 9) },
-  gldas: { nombre: 'GLDAS Noah (modelo)', inicio: 0, fin: id(2026, 7) },
-  mod13: { nombre: 'MODIS MOD13', inicio: id(2000, 2), fin: id(2026, 10) },
+  merra2: { nombre: 'MERRA-2', ...disponible('t2m') },
+  gldas: { nombre: 'GLDAS Noah (modelo)', ...disponible('sm_raiz') },
+  mod13: { nombre: 'MODIS MOD13', ...disponible('ndvi') },
   mod16: { nombre: 'MODIS MOD16', inicio: 0, fin: N_MESES - 1, provisionalDesde: id(2026, 1) },
   mod11: { nombre: 'MODIS MOD11', inicio: id(2000, 2), fin: N_MESES - 1 },
-  imerg: { nombre: 'IMERG (Late provisional desde oct-2025)', inicio: 0, fin: N_MESES - 1, provisionalDesde: id(2025, 10) },
+  imerg: { nombre: 'IMERG (Final y Late provisional)', ...disponible('precip') }, // provisionalDesde: provisionalDesdeDe(matriz)
 }
 
-/** Meses del eje 0..322 sin dato: fuera de [inicio, fin] o dentro de un hueco entero. */
+/** Meses del eje sin dato: fuera de [inicio, fin] o dentro de un hueco entero. */
 export function mesesConHueco(p: Pick<Producto, 'inicio' | 'fin' | 'huecos'>): number[] {
   const h = new Set(p.huecos)
   return rango(0, N_MESES - 1).filter((m) => m < p.inicio || m > p.fin || h.has(m))

@@ -13,7 +13,7 @@ from gemelo.manejo import compilar
 from gemelo.parametros import cargar_catalogo
 
 RAIZ = Path(__file__).resolve().parents[2]
-LOTES = RAIZ / "datos" / "referencia" / "lotes"
+LOTES = RAIZ / "datos" / "lotes"
 
 
 def _programas(ent):
@@ -49,7 +49,7 @@ def test_alerta_ipiales_usa_climatologia_de_estacion_con_cifras_de_datos(ipiales
     assert b["metodo_etiqueta"] == "combinacion_propia"
     e = b["estacion_cercana"]
     assert e["cercana"] and e["distancia_km"] < 5 and e["desnivel_m"] < 100
-    # Ejecución propia sobre el CSV de la estación = cifras independientes de Datos
+    # Climatología del resumen derivado de Datos = conteos del análisis de extremos del mismo resumen
     clim = e["climatologia_mensual"]
     assert sum(f["dias_helada"] for f in clim) == v["analisis_extremos_frios_tmin"]["ghcn_dias_le_0c"]
     assert sum(f["dias_con_dato"] for f in clim) == v["analisis_extremos_frios_tmin"]["ghcn_tmin_n_validos"]
@@ -64,11 +64,20 @@ def test_alerta_ipiales_usa_climatologia_de_estacion_con_cifras_de_datos(ipiales
 
 def test_sin_estacion_cercana_queda_vigilancia(ipiales):
     val = alertas.leer_validacion(LOTES / "validacion_temperatura_ipiales.json", "t2m_min_corr")
-    est = alertas.leer_estacion(LOTES / "COM00080370.csv", val["periodo"])
+    est = alertas.leer_estacion(LOTES / "validacion_temperatura_ipiales.json")
     b = alertas.helada_etapa_sensible(ipiales.clima, ipiales.escenario, _programas(ipiales), 0.0, True, val, est,
                                       max_km=1.0, lote=ipiales.lote)
     assert b["metodo"] == "serie_power" and not b["estacion_cercana"]["cercana"]
     assert {x["clave"] for x in b["estrategias"].values()} == {"alert.frost.unresolved"}
+
+
+def test_estacion_se_lee_del_resumen_derivado_sin_csv_crudo():
+    # D-038: el CSV de GHCN (Resolución 40 de la OMM) no está en el repo; el Gemelo usa solo los agregados
+    assert not (LOTES / "COM00080370.csv").exists() and not (RAIZ / "datos" / "referencia" / "lotes").exists()
+    est = alertas.leer_estacion(LOTES / "validacion_temperatura_ipiales.json")
+    assert est["fuente"] == "COM00080370.csv" and "fechas" not in est
+    with pytest.raises(KeyError, match="umbral"):
+        alertas.climatologia_mensual(est, -2.0)
 
 
 def test_umbral_supuesto_declarado_en_la_tarjeta_y_avena_sin_fuente(ipiales):

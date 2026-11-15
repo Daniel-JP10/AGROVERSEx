@@ -248,7 +248,7 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Claude Code (Anthropic) | `src/web/pruebas/paneles_unidad.test.ts` | Prueba de que los paneles muestran error ante una unidad sin conversión | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/zona_disputa.test.ts` y cambios de disputa en `globo/`, `datos/`, `paneles/` | Zonas en disputa con es_disputa = 1 en las tres capas y clave de texto en vez de país (decisión 3) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/globo/fondos.ts`, `src/web/pruebas/fondos.test.ts`, `src/web/pruebas/e2e/captura.mjs` | Fondo del globo con NASA GIBS (D-020) y pruebas de atribución | 2026-11-14 |
-| Claude Code (Anthropic) | `src/mapa_estatico/__init__.py`, `src/mapa_estatico/construir.py`, `pruebas/mapa/test_construir.py` | Conversión de series mensuales a matrices estáticas comprimidas, copia de lotes_demo.json y manifiesto con sha256 (T-D9, D-027) | 2026-11-14 |
+| Claude Code (Anthropic) | `src/mapa_estatico/__init__.py`, `src/mapa_estatico/construir.py`, `pruebas/mapa/test_construir.py` | Conversión de series mensuales a matrices estáticas comprimidas, copia de lotes_demo.json y manifiesto con sha256 (T-D9, D-027); despliegue --desplegar que copia teselas e índice y falla claro sin datos (S2) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/comun/rutas.ts`, `src/web/src/datos/estatico.ts`, `src/web/pruebas/estatico.test.ts` | Lectura de archivos estáticos reales en el globo y paneles sin servidor, y pruebas con datos reales de Colombia (T-D9) | 2026-11-14 |
 | Claude Code (Anthropic) | `contratos/web_datos.md` | Contrato v0 de archivos estáticos para el Mapa y Web con tamaños y sumas SHA-256 (T-D9, T-D7 Parte C) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/rutas_base.test.ts` | Prueba de que teselas e índice respetan la base de publicación (BASE_URL) | 2026-11-14 |
@@ -316,10 +316,10 @@ Registro exigido por las guías de Space Apps 2026 y AGENTS.md §5.3. Cada archi
 | Cursor (agente) | `ejemplos/escenario_mead.yaml` | Escenario interno de referencia (Mead) para fijación de pruebas | 2026-11-14 |
 | Cursor (agente) | `ejemplos/visualizar_gemelo.py` | Script auxiliar de diagnóstico visual del gemelo | 2026-11-14 |
 | Cursor (agente) | `contratos/gemelo_api.md` y `src/gemelo/README.md` | Documentación del contrato v1/v1.1 y guía técnica del gemelo | 2026-11-14 |
-| Antigravity (agente) | `requirements-gemelo.lock.txt` | Bloqueo reproducible con hashes SHA-256 generado con `uv pip compile` | 2026-11-14 |
-| Antigravity (agente) | `SI_USO.md` y `LICENCIAS_TERCEROS.md` | Inventario de uso de SI y auditoría de licencias y citas verificadas | 2026-11-14 |
-| Antigravity (agente) | `src/gemelo/suelo.py`, `src/gemelo/textos.py`, `src/gemelo/tarjetas.py`, `pruebas/gemelo/test_clima_suelo.py`, `src/gemelo/README.md` | Separación de pruebas de dominio y declaración bilingüe de limitación de SoilGrids en Andisoles (`D-029`, `D-030`) | 2026-11-14 |
-| Antigravity (agente) | `src/gemelo/suelo.py`, `pruebas/gemelo/test_entradas_datos.py` | Adaptación de `perfil_desde_parametros_datos` al esquema T-D5 anidado en `parametros` | 2026-11-14 |
+| Antigravity (Google DeepMind) | `requirements-gemelo.lock.txt` | Bloqueo reproducible con hashes SHA-256 generado con `uv pip compile` | 2026-11-14 |
+| Antigravity (Google DeepMind) | `SI_USO.md` y `LICENCIAS_TERCEROS.md` | Inventario de uso de SI y auditoría de licencias y citas verificadas | 2026-11-14 |
+| Antigravity (Google DeepMind) | `src/gemelo/suelo.py`, `src/gemelo/textos.py`, `src/gemelo/tarjetas.py`, `pruebas/gemelo/test_clima_suelo.py`, `src/gemelo/README.md` | Separación de pruebas de dominio y declaración bilingüe de limitación de SoilGrids en Andisoles (`D-029`, `D-030`) | 2026-11-14 |
+| Antigravity (Google DeepMind) | `src/gemelo/suelo.py`, `pruebas/gemelo/test_entradas_datos.py` | Adaptación de `perfil_desde_parametros_datos` al esquema T-D5 anidado en `parametros` | 2026-11-14 |
 | Claude Code (Anthropic) | `src/gemelo/alertas.py`, `src/gemelo/clima.py`, `src/gemelo/escenarios.py`, `src/gemelo/entrada.py`, `src/gemelo/salida.py`, `src/gemelo/simulador.py`, `src/gemelo/tarjetas.py`, `src/gemelo/textos.py`, `src/gemelo/paquete.py`, `pruebas/gemelo/test_alertas.py`, `pruebas/gemelo/test_clima_suelo.py`, `ejemplos/escenario_ipiales.yaml`, `ejemplos/escenario_mead.yaml`, `contratos/gemelo_api.md` | Bloque 2: avisos del suelo calibrado en `reunir_parametros`, alerta de helada en etapa sensible (`D-032`), lluvia alterna IMERG como sensibilidad técnica y forzantes T-D5 en los lotes DEMO (modelo Opus 5.5) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/gemelo/alertas.py`, `src/gemelo/entrada.py`, `src/gemelo/textos.py`, `src/gemelo/tarjetas.py`, `pruebas/gemelo/test_alertas.py`, `ejemplos/escenario_ipiales.yaml`, `ejemplos/escenario_mead.yaml`, `contratos/gemelo_api.md` | Climatología de heladas de la estación cercana, umbral de helada por cultivo y lote leído de `lotes_demo.json` (modelo Opus 5.5) | 2026-11-14 |
 | Claude Code (Anthropic) | `src/gemelo/indicadores.py`, `src/gemelo/simulador.py`, `src/gemelo/clima.py`, `src/gemelo/entrada.py`, `src/gemelo/optimizacion.py`, `src/gemelo/prioridades.py`, `src/gemelo/tarjetas.py`, `src/gemelo/textos.py`, `src/gemelo/api.py`, `src/gemelo/cli.py`, `src/gemelo/paquete.py`, `contratos/gemelo_api.md`, `contratos/prioridades_casos.json`, pruebas | v1.2: exposicion_erosiva de Datos como objetivo del deslizador suelo, alias obsoleto y casos de orden compartidos con Web (modelo Opus 5.5) | 2026-11-14 |
@@ -393,6 +393,20 @@ Notas de procedencia sin generación nueva por este equipo de Gemelo:
 | Claude Code (Anthropic) | `src/web/src/app/recorrido/cargarHuecos.ts` | Huecos del guion leídos de lotes_demo, meta, HLS y el paquete del gemelo | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/cargar_huecos.test.ts` | Pruebas de los huecos del guion con fetch falso | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/lotes_nombre.test.ts` | Prueba de que ningún texto de interfaz lleva escrito a mano el lugar de un lote de lotes_demo.json (D-036 f) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/lotes_demo/helada_estacion.py` | Climatología mensual de heladas de la estación GHCN como resumen derivado, sin redistribuir el CSV (D-038) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/lotes_demo/descargar_ghcn.py` | Descarga del CSV de una estación GHCN-Daily a C:/NASA/compartir, fuera del repositorio (D-038) | 2026-11-15 |
+| Claude Code (Anthropic) | `pruebas/lotes/test_helada_estacion.py` | Pruebas del resumen derivado de heladas y de que no haya crudos de GHCN en el repo | 2026-11-15 |
+| Claude Code (Anthropic) | `datos/evidencia/S4_hallazgo_lluvia_2026.py` | Contraste de la lluvia de 2026-01 y 2026-02 con POWER, ENSO y GHCN en anomalías (S4) | 2026-11-15 |
+| Claude Code (Anthropic) | `pruebas/test_registros.py` | Prueba de filas de tabla fuera de una tabla con encabezado en los registros (S4) | 2026-11-15 |
+| Claude Code (Anthropic) | `datos/evidencia/S4_registros_red.py` | RED de la prueba de registros (S4) | 2026-11-15 |
+| Claude Code (Anthropic) | `datos/evidencia/S4_grafo_importaciones.py` | Grafo estático de importaciones para la decisión i (S4) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/tierra/aplicarRuta.ts` | Aplica unidad, variable y mes de la ruta al globo (S2) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/tierra_ruta.test.ts` | Prueba de aplicarParams de la ruta de Tierra (S2) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/tierra_disponibilidad.test.ts` | Prueba de N_MESES y disponibilidad desde meta.json y el manifiesto (S2) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/build_servidor.mjs` | Servidor estático con Range para probar dist/ sin servidor de desarrollo (S2) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/playwright.estatico.config.ts` | Configuración del E2E sobre el build estático (S2) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/build_tierra.spec.ts` | E2E del build estático: búsqueda, ruta y cero llamadas a /api/ (S2) | 2026-11-15 |
+| Claude Code (Anthropic) | `pruebas/mapa/test_despliegue.py` | Prueba de que el despliegue falla claro sin AGROVERSEX_DATOS, teselas o índice (S2) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registros.ts` | Filtro de filas en uso de los registros de Fuentes | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registrosPlugin.ts` | Plugin de Vite que filtra los registros al compilar | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/AlertaHelada.tsx` | Alerta de helada del gemelo con sus avisos | 2026-11-14 |

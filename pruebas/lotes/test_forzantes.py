@@ -14,7 +14,7 @@ from lotes_demo.forzantes import (
 )
 
 RAIZ = Path("C:/NASA/AGROVERSEx/datos/procesados/lotes")
-GHCN_CSV = Path("C:/NASA/AGROVERSEx/datos/crudos/ghcn/COM00080370.csv")
+GHCN_CSV = Path("C:/NASA/compartir/ghcn/COM00080370.csv")  # fuera del repo (D-038)
 
 
 def test_validar_detecta_tmin_mayor_que_tmax():

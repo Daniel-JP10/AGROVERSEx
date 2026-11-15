@@ -14,7 +14,7 @@ RAIZ = Path(__file__).resolve().parents[2]
 
 def _ruta_power(lote):
     # copia temporal del Gemelo (D-034, P-3) o la ruta de Datos
-    for r in (RAIZ / f"datos/referencia/lotes/power_{lote}_diario.csv", RAIZ / f"datos/procesados/lotes/{lote}/power_diario.csv"):
+    for r in (RAIZ / f"datos/lotes/power_{lote}_diario.csv", RAIZ / f"datos/procesados/lotes/{lote}/power_diario.csv"):
         if r.exists():
             return r
     pytest.skip(f"sin power_diario.csv de {lote}")
