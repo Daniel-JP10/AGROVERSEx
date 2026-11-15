@@ -2,7 +2,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createHash } from 'node:crypto'
 import { gunzipSync, gzipSync } from 'node:zlib'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 
 vi.stubGlobal('localStorage', { getItem: () => null, setItem: () => {}, removeItem: () => {} })
 const { cargarCoropleta, cargarMatriz, tieneDatoReal, nivelDeUnidad, PAISES_CON_DATO } = await import('../src/datos/estatico')
@@ -47,7 +47,10 @@ describe('archivos estáticos de Colombia', () => {
     expect(man.variables.ndvi.productos[0].unidad).toBe('1')
     expect(man.archivos).toHaveProperty('lotes_demo.json')
     expect(man.archivos).toHaveProperty('unidades_geo.json.gz')
+    // D-033e: los arreglos del mundo no se versionan, se construyen al desplegar; se verifican solo si ya están construidos
+    const alDesplegar = ['unidades_geo.json.gz']
     for (const [rel, info] of Object.entries(man.archivos as Record<string, { bytes: number; sha256: string }>)) {
+      if (alDesplegar.includes(rel) && !existsSync(publico(`datos/${rel}`))) continue
       const b = readFileSync(publico(`datos/${rel}`))
       expect(b.byteLength, rel).toBe(info.bytes)
       expect(createHash('sha256').update(b).digest('hex'), rel).toBe(info.sha256)
