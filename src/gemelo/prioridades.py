@@ -1,5 +1,6 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
-"""Prioridades del agricultor (contrato v1.1): los cuatro deslizadores de Web sobre los objetivos del gemelo.
+# asistido por SI: Claude Code (Opus 5.5), v1.2: suelo con exposicion_erosiva de Datos y casos en JSON compartido
+"""Prioridades del agricultor (contrato v1.2): los cuatro deslizadores de Web sobre los objetivos del gemelo.
 
     n(o, s) = (x(o, s) - min_o) / (max_o - min_o)        si el objetivo se maximiza
     n(o, s) = (max_o - x(o, s)) / (max_o - min_o)        si se minimiza
@@ -10,14 +11,17 @@ min y max se toman sobre las estrategias del mismo documento (línea base y fren
 Orden: S descendente; empate, posición original en el documento. Es el mismo esquema que `ordenar.ts` de Web.
 Insumos = fertilizante_n_kg_ha_anio (D-007) mientras el costo siga PENDIENTE.
 """
+import json
+from pathlib import Path
+
 import numpy as np
 
 from gemelo import indicadores as ind
-from gemelo.optimizacion import OBJETIVOS, a_natural, valores_objetivo
+from gemelo.optimizacion import ALIAS_OBJETIVOS, OBJETIVOS, a_natural, valores_objetivo
 
 DESLIZADORES = {
     "agua": ("riego", "deficit"),
-    "suelo": ("carbono", "lluvia_intensa_suelo_desnudo"),
+    "suelo": ("carbono", "exposicion_erosiva"),
     "insumos": ("fertilizante",),
     "estabilidad_climatica": ("riesgo_produccion",),
 }
@@ -38,9 +42,11 @@ FORMULA = {
 
 def metricas_ensamble(ens, costos: dict | None = None) -> list[dict[str, float]]:
     """Valores naturales de todos los objetivos (media del ensamble; CVaR 90 % para riesgo) por estrategia."""
-    h = ind.por_miembro(ens.reg, ens.prog, ens.H, ens.p_intensa, ens.umbral_cobertura)
-    return [a_natural(list(METRICAS_TODAS), valores_objetivo(h, ens.bloque(s), list(METRICAS_TODAS)))
-            for s in range(ens.S)]
+    h = ind.por_miembro(ens.reg, ens.prog, ens.H, ens.p_intensa, ens.umbral_cobertura, erosion=ens.erosion)
+    out = [a_natural(list(METRICAS_TODAS), valores_objetivo(h, ens.bloque(s), list(METRICAS_TODAS)))
+           for s in range(ens.S)]
+    # Alias obsoletos (v1.2): mismo valor que el objetivo vigente, para Web que aún use el id viejo
+    return [{**m, **{a: m[o] for a, o in ALIAS_OBJETIVOS.items() if o in m}} for m in out]
 
 
 def normalizar(valores: dict[str, dict[str, float]], objetivos=METRICAS) -> dict[str, dict[str, float]]:
@@ -83,26 +89,11 @@ def ordenar(normalizados: dict[str, dict[str, float]], pesos: dict[str, float]) 
 
 PESOS_IGUALES = {k: 1 for k in DESLIZADORES}
 
-# Tabla sintética fija para que Web compruebe su implementación (no son resultados del modelo)
-TABLA_PRUEBA = {
-    "X": {"riego": 0.0, "deficit": 0.30, "carbono": -0.10, "lluvia_intensa_suelo_desnudo": 30.0,
-          "fertilizante": 150.0, "riesgo_produccion": 0.30},
-    "Y": {"riego": 0.0, "deficit": 0.20, "carbono": 0.05, "lluvia_intensa_suelo_desnudo": 20.0,
-          "fertilizante": 100.0, "riesgo_produccion": 0.25},
-    "Z": {"riego": 0.0, "deficit": 0.25, "carbono": -0.30, "lluvia_intensa_suelo_desnudo": 35.0,
-          "fertilizante": 50.0, "riesgo_produccion": 0.40},
-}
-CASOS_PRUEBA = [
-    {"nombre": "pesos iguales", "pesos": {"agua": 1, "suelo": 1, "insumos": 1, "estabilidad_climatica": 1},
-     "puntajes": {"X": 0.258929, "Y": 0.5625, "Z": 0.625}, "orden": ["Z", "Y", "X"]},
-    {"nombre": "solo suelo", "pesos": {"agua": 0, "suelo": 5, "insumos": 0, "estabilidad_climatica": 0},
-     "puntajes": {"X": 0.452381, "Y": 1.0, "Z": 0.0}, "orden": ["Y", "X", "Z"]},
-    {"nombre": "agua alta y algo de estabilidad", "pesos": {"agua": 5, "suelo": 0, "insumos": 0,
-                                                            "estabilidad_climatica": 1},
-     "puntajes": {"X": 0.263889, "Y": 0.625, "Z": 0.583333}, "orden": ["Y", "Z", "X"]},
-    {"nombre": "todos los pesos en cero", "pesos": {"agua": 0, "suelo": 0, "insumos": 0, "estabilidad_climatica": 0},
-     "puntajes": {"X": 0.0, "Y": 0.0, "Z": 0.0}, "orden": ["X", "Y", "Z"]},
-]
+# Tabla sintética y casos de orden: contratos/prioridades_casos.json, el mismo archivo que lee la prueba de Web
+CASOS_ARCHIVO = Path(__file__).resolve().parents[2] / "contratos" / "prioridades_casos.json"
+_CASOS = json.loads(CASOS_ARCHIVO.read_text(encoding="utf-8"))
+TABLA_PRUEBA = _CASOS["tabla"]
+CASOS_PRUEBA = _CASOS["casos"]
 
 
 def bloque(valores: dict[str, dict[str, float]]) -> dict:
@@ -121,5 +112,5 @@ def bloque(valores: dict[str, dict[str, float]]) -> dict:
         "pesos_iguales": {"pesos": PESOS_IGUALES, "puntajes": {i: round(s, 6) for i, s in
                                                                puntajes(norm, PESOS_IGUALES).items()},
                           "orden": ordenar(norm, PESOS_IGUALES)},
-        "casos_prueba": {"tabla": TABLA_PRUEBA, "casos": CASOS_PRUEBA},
+        "casos_prueba": {"tabla": TABLA_PRUEBA, "casos": CASOS_PRUEBA, "archivo": "contratos/prioridades_casos.json"},
     }

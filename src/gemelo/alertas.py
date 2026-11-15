@@ -135,7 +135,7 @@ def _por_climatologia(programa, sens, umbrales, clim_por_umbral) -> dict:
     return {"dias_helada_esperados_temporada": {"valor": float(e[0]), "cota_baja": float(e[1]), "cota_alta": float(e[2])},
             "probabilidad_al_menos_una_temporada": {"valor": float(q[0]), "cota_baja": float(q[1]),
                                                     "cota_alta": float(q[2]),
-                                                    "etiqueta": "INFERENCIA (días independientes)"},
+                                                    "etiqueta": "INFERENCIA (días independientes; probablemente sobrestimada)"},
             "meses_sensibles_con_helada_observada": sorted(meses)}
 
 

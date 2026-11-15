@@ -83,7 +83,7 @@ optimizacion:
   # sin esta exigencia el frente tiende a soya continua.
   exigidos: [maiz]
   min_cosechas_por_anio: 1
-  objetivos: [produccion, riesgo_produccion, carbono, lluvia_intensa_suelo_desnudo, lixiviacion]
+  objetivos: [produccion, riesgo_produccion, carbono, exposicion_erosiva, lixiviacion]
   busqueda: {poblacion: 24, generaciones: 12, miembros_clima: 4, muestras_parametros: 3, miembros_final: 8,
              muestras_final: 6, max_soluciones: 8}
 

@@ -37,6 +37,7 @@ class ClimaDiario:
     huecos_rellenos: dict[str, int] = field(default_factory=dict)
     naturaleza: str = "observado"
     avisos: list[str] = field(default_factory=list)
+    erosion: dict | None = None      # pendiente y K del lote (exposicion_erosiva_lotes.json de Datos)
 
     @property
     def n_anios(self) -> int:
@@ -123,7 +124,7 @@ def con_precip_alterna(clima: ClimaDiario, ruta: str | Path) -> ClimaDiario:
     if "precip" in alt.huecos_rellenos:
         huecos["precip_alterna"] = alt.huecos_rellenos["precip"]
     return ClimaDiario(clima.anios, datos, clima.lat, clima.elevacion_m, clima.fuente + "; lluvia de " + alt.fuente,
-                       huecos, clima.naturaleza, list(clima.avisos))
+                       huecos, clima.naturaleza, list(clima.avisos), clima.erosion)
 
 
 def cargar_forzantes(ruta: str | Path, lat: float, elevacion_m: float) -> ClimaDiario:

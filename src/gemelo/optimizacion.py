@@ -1,4 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Claude Code (Opus 5.5), v1.2: exposicion_erosiva de Datos como objetivo del deslizador suelo
 """Búsqueda multiobjetivo de rotaciones con NSGA-II (Deb et al., 2002) sobre el gemelo (pymoo; Blank y Deb, 2020).
 
 Codificación: el horizonte se divide en campañas (p. ej. "principal" el 1 de mayo e "invierno" el 20 de octubre
@@ -45,8 +46,9 @@ OBJETIVOS = {
                           "texto": "Producción en el peor 10 % de los casos (CVaR 90 %): robustez ante años malos"},
     "carbono": {"indicador": "cambio_carbono_t_ha_anio", "sentido": "max",
                 "texto": "Cambio del carbono del suelo (media del ensamble)"},
-    "lluvia_intensa_suelo_desnudo": {"indicador": "lluvia_intensa_sobre_suelo_desnudo_mm_anio", "sentido": "min",
-                                     "texto": "Lluvia intensa sobre suelo desprotegido (media del ensamble)"},
+    "exposicion_erosiva": {"indicador": "indice_exposicion_erosiva", "sentido": "min",
+                           "texto": "Exposición erosiva: tormentas sobre suelo desprotegido según pendiente y "
+                                    "erodabilidad (media del ensamble)"},
     "lixiviacion": {"indicador": "lixiviacion_n_kg_ha_anio", "sentido": "min",
                     "texto": "Nitrógeno lavado (media del ensamble)"},
     "riego": {"indicador": "riego_mm_anio", "sentido": "min", "texto": "Agua de riego (media del ensamble)"},
@@ -56,9 +58,9 @@ OBJETIVOS = {
     "fertilizante": {"indicador": "fertilizante_n_kg_ha_anio", "sentido": "min",
                      "texto": "Nitrógeno de fertilizante aplicado (media del ensamble)"},
 }
-OBJETIVOS_BASE = ("produccion", "riesgo_produccion", "carbono", "lluvia_intensa_suelo_desnudo", "lixiviacion")
-# Ids de objetivo de la v1 que se aceptan en la entrada y se traducen al id vigente
-ALIAS_OBJETIVOS = {"exposicion_erosiva": "lluvia_intensa_suelo_desnudo"}
+OBJETIVOS_BASE = ("produccion", "riesgo_produccion", "carbono", "exposicion_erosiva", "lixiviacion")
+# Ids de objetivo obsoletos que se aceptan en la entrada y se traducen al id vigente
+ALIAS_OBJETIVOS = {"lluvia_intensa_suelo_desnudo": "exposicion_erosiva"}
 RESTRICCIONES = ("solape_dias", "sucesion_dias", "cultivos_exigidos_faltantes", "cosechas_faltantes",
                  "riego_exceso_mm_anio")
 PENALIDAD = 1e6
@@ -268,7 +270,7 @@ class _Evaluador:
         fijos = None
         if self.costos is not None:
             fijos = np.repeat([ind.costos_fijos_estrategia(e, self.costos) for e in estrategias], ens.K * ens.P)
-        h = ind.por_miembro(ens.reg, ens.prog, ens.H, ens.p_intensa, ens.umbral_cobertura, fijos, self.costos)
+        h = ind.por_miembro(ens.reg, ens.prog, ens.H, ens.p_intensa, ens.umbral_cobertura, fijos, self.costos, erosion=ens.erosion)
         self.simuladas += len(estrategias)
         return [(valores_objetivo(h, ens.bloque(s), self.p.objetivos), float(h["riego_mm_anio"][ens.bloque(s)].mean()))
                 for s in range(len(estrategias))]
@@ -425,7 +427,7 @@ def optimizar(clima: ClimaDiario, escenario: EscenarioClimatico, suelo: PerfilSu
     if costos is not None:
         fijos = np.repeat([ind.costos_fijos_estrategia(e, costos) for e in [linea_base] + candidatas],
                           ens.K * ens.P)
-    h = ind.por_miembro(ens.reg, ens.prog, ens.H, ens.p_intensa, ens.umbral_cobertura, fijos, costos)
+    h = ind.por_miembro(ens.reg, ens.prog, ens.H, ens.p_intensa, ens.umbral_cobertura, fijos, costos, erosion=ens.erosion)
     F_fin = np.stack([valores_objetivo(h, ens.bloque(s), problema.objetivos) for s in range(ens.S)])
     resumen = resumir_estrategias(ens, costos)
     f_base, F_cand = F_fin[0], F_fin[1:]

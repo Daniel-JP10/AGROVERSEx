@@ -36,7 +36,7 @@ def test_documento_con_claves_y_rotulo():
     cat = catalogo()
     assert len(doc["avisos_claves"]) == len(doc["avisos"])
     assert all(a["clave"] in cat["en"] and a["clave"] != "warning.untranslated" for a in doc["avisos_claves"])
-    assert doc["metadatos"]["version_contrato_completa"] == "1.1"
+    assert doc["metadatos"]["version_contrato_completa"] == "1.2"
     assert doc["metadatos"]["naturaleza"] == "simulado"
     assert doc["metadatos"]["rotulo"]["parametros"]["fuentes"] == ["source.nasa_power", "source.soilgrids"]
     e = doc["estrategias"][0]

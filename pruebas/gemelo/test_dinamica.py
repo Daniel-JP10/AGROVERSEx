@@ -135,7 +135,11 @@ def test_cobertura_reduce_lluvia_intensa_sobre_suelo_desnudo(clima_ames, suelo_a
     k = "lluvia_intensa_sobre_suelo_desnudo_mm_anio"
     assert b[k]["p50"] <= a[k]["p50"]
     assert a["exposicion_erosiva_mm_anio"]["p50"] == a[k]["p50"]
-    assert a["exposicion_erosiva_mm_anio"]["obsoleto"] and a["exposicion_erosiva_mm_anio"]["reemplazado_por"] == k
+    nuevo = "indice_exposicion_erosiva"
+    assert a["exposicion_erosiva_mm_anio"]["obsoleto"] and a["exposicion_erosiva_mm_anio"]["reemplazado_por"] == nuevo
+    assert a[k]["obsoleto"] and a[k]["reemplazado_por"] == nuevo
+    # Índice de la función de Datos con la cobertura simulada: la avena de cobertura lo baja
+    assert b[nuevo]["p50"] <= a[nuevo]["p50"]
     assert b["dias_suelo_desnudo_anio"]["p50"] <= a["dias_suelo_desnudo_anio"]["p50"]
 
 

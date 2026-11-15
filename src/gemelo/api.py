@@ -1,4 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Claude Code (Opus 5.5), v1.2: exposicion_erosiva de Datos como objetivo del deslizador suelo
 """Puntos de entrada de alto nivel: escenario (YAML o dict) -> documento JSON del contrato gemelo_api.md."""
 from pathlib import Path
 
@@ -33,7 +34,7 @@ def por_fase_enso(entrada: Entrada, ens: Ensamble, ids: list[str]) -> dict:
     fases, meta = fases_por_anio(entrada.origen.get("enso_archivo"))
     anios = entrada.clima.anios
     fase_k = [fases.get(int(anios[m[0]])) for m in entrada.escenario.miembros]
-    h = ind.por_miembro(ens.reg, ens.prog, ens.H, ens.p_intensa, ens.umbral_cobertura)
+    h = ind.por_miembro(ens.reg, ens.prog, ens.H, ens.p_intensa, ens.umbral_cobertura, erosion=ens.erosion)
     claves = ["produccion_relativa_anio", *SENTIDO_INDICADOR]
     estrategias = {}
     for s, id_ in enumerate(ids):

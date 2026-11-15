@@ -67,7 +67,7 @@ def exportar_textos(salida: Path) -> dict[str, str]:
 
 
 INDICADORES_ALTERNA = ("produccion_relativa_anio", "deficit_relativo", "lixiviacion_n_kg_ha_anio",
-                       "lluvia_intensa_sobre_suelo_desnudo_mm_anio", "cambio_carbono_t_ha_anio")
+                       "indice_exposicion_erosiva", "cambio_carbono_t_ha_anio")
 
 
 def sensibilidad_lluvia_alterna(ent, doc: dict) -> dict | None:

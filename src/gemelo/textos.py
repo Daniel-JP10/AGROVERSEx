@@ -241,6 +241,12 @@ _BASE: dict[str, tuple[str, str]] = {
                                       "Heladas: la mínima corregida queda {sesgo:+.2f} °C más cálida que la estación "
                                       "{estacion} (IC 95 % {lo:+.2f} a {hi:+.2f}); el riesgo de helada está algo "
                                       "subestimado."),
+    "card.gap.frost_independence": ("Frost probability assumes independent days; cold days usually come in runs, so "
+                                    "the probability of at least one frost is probably overestimated (the expected "
+                                    "number of frost days is not affected).",
+                                    "La probabilidad de helada supone días independientes; los días fríos suelen venir "
+                                    "seguidos, así que la probabilidad de al menos una helada probablemente está "
+                                    "sobrestimada (el número esperado de días de helada no se ve afectado)."),
     "card.gap.rain_alt_source": ("Rain source: with GPM IMERG instead of NASA POWER (technical mode only; not an "
                                  "equivalent scenario) the position changes {central} -> {alterna}. IMERG "
                                  "overestimates against station {estacion} ({sesgo_imerg:+.0%}; POWER "
@@ -282,7 +288,10 @@ EN_INDICADORES = {
     "dias_suelo_desnudo_anio": ("Bare-soil days", "Days with unprotected soil"),
     "lluvia_intensa_sobre_suelo_desnudo_mm_anio": ("Heavy rain on bare soil", "Heavy rain falling on unprotected soil"),
     "exposicion_erosiva_mm_anio": ("Heavy rain on bare soil (obsolete name)",
-                                   "Obsolete alias of lluvia_intensa_sobre_suelo_desnudo_mm_anio"),
+                                   "Obsolete name; use indice_exposicion_erosiva"),
+    "indice_exposicion_erosiva": ("Erosive exposure index",
+                                  "Soil exposure to erosion: storms on unprotected soil, weighted by slope and "
+                                  "erodibility (Datos function, own combination)"),
     "rendimiento_relativo": ("Relative yield", "Harvest achieved against the possible one without water or N limits"),
     "indice_productivo": ("Productive index", "Harvest achieved against what the site's sunlight would allow; "
                                               "includes cold or heat effects"),
@@ -297,8 +306,7 @@ EN_OBJETIVOS = {
     "produccion": "Harvested production (ensemble mean)",
     "riesgo_produccion": "Production in the worst 10 % of cases (CVaR 90 %): robustness to bad years",
     "carbono": "Soil carbon change (ensemble mean)",
-    "lluvia_intensa_suelo_desnudo": "Heavy rain on unprotected soil (ensemble mean)",
-    "exposicion_erosiva": "Heavy rain on unprotected soil (obsolete name)",
+    "exposicion_erosiva": "Erosive exposure: storms on unprotected soil by slope and erodibility (ensemble mean)",
     "lixiviacion": "Leached nitrogen (ensemble mean)",
     "riego": "Irrigation water (ensemble mean)",
     "costo": "Direct cost (ensemble mean)",

@@ -78,6 +78,8 @@ def test_umbral_supuesto_declarado_en_la_tarjeta_y_avena_sin_fuente(ipiales):
     doc, _ = simular_con_ensamble(replace(ipiales, estrategias=ipiales.estrategias[:2]))
     gaps = [g for g in doc["tarjetas"]["B"]["vacios"] if g["clave"] == "card.gap.frost_threshold_assumed"]
     assert gaps and "avena" in gaps[0]["valores"]["cultivos"]
+    claves = [g["clave"] for g in doc["tarjetas"]["B"]["vacios"]]
+    assert "card.gap.frost_independence" in claves     # climatología de estación: independencia declarada
 
 
 def test_lote_se_lee_de_lotes_demo_y_no_admite_contradicciones(ipiales, tmp_path):

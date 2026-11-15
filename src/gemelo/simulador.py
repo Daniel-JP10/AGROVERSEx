@@ -15,6 +15,7 @@ from gemelo.clima import ClimaDiario
 from gemelo.dinamica import Estado0, THETA_CULTIVO, equilibrio_carbono, simular
 from gemelo.escenarios import EscenarioClimatico, series, umbral_lluvia_intensa
 from gemelo.incertidumbre import muestrear, resumir
+from lotes_demo import umbral_p90_semanal
 from gemelo.manejo import Programa, apilar, compilar
 from gemelo.modelos import EstadoGemelo, Estrategia, Lote
 from gemelo.parametros import Cultivo, cargar_catalogo
@@ -144,6 +145,7 @@ class Ensamble:
     carbono_inicial: dict | None = None   # y0, yn0, res0, k2 por miembro K x P (equilibrio de la referencia)
     referencia: str | None = None
     equilibrio: str = "completo"
+    erosion: dict | None = None           # pendiente, K y umbrales P90 semanales para lotes_demo.exposicion_erosiva
 
     def bloque(self, s: int) -> slice:
         n = self.K * self.P
@@ -217,7 +219,18 @@ def ejecutar(clima: ClimaDiario, escenario: EscenarioClimatico, suelo: PerfilSue
     p_int = umbral_lluvia_intensa(clima, float(theta.parametros["agua.percentil_lluvia_intensa"].exigir()))
     umbral = float(theta.parametros["agua.umbral_cobertura_protectora"].exigir())
     return Ensamble(reg, prog, programas, S, K, P, H, theta, metodo, p_int, umbral, carbono_inicial, nombre_ref,
-                    equilibrio)
+                    equilibrio, contexto_erosion(clima))
+
+
+def contexto_erosion(clima: ClimaDiario) -> dict:
+    """Umbrales P90 semanales (función de Datos) sobre todo el registro de lluvia; pendiente y K del lote. Sin
+    datos del lote quedan los valores por defecto de la función de Datos (SUPUESTO)."""
+    p = clima.datos["precip"].reshape(-1)
+    ctx = dict(clima.erosion) if clima.erosion else {"etiqueta": "SUPUESTO",
+                                                     "fuente": "valores por defecto de lotes_demo.exposicion_erosiva"}
+    ctx["umbrales_p90"] = umbral_p90_semanal(p, ind.fechas_nominales(len(p)))
+    ctx["fuente_lluvia"] = clima.fuente
+    return ctx
 
 
 def resumir_estrategias(ens: Ensamble, costos: dict | None = None) -> list[dict]:
@@ -231,7 +244,7 @@ def resumir_estrategias(ens: Ensamble, costos: dict | None = None) -> list[dict]
         except KeyError as e:
             avisos_costo.append(str(e))
             costos = None
-    h = ind.por_miembro(ens.reg, ens.prog, ens.H, ens.p_intensa, ens.umbral_cobertura, fijos, costos)
+    h = ind.por_miembro(ens.reg, ens.prog, ens.H, ens.p_intensa, ens.umbral_cobertura, fijos, costos, erosion=ens.erosion)
     men = ind.mensual(ens.reg, ens.H)
     salida = []
     for s, prog in enumerate(ens.programas):

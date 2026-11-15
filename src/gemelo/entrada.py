@@ -14,7 +14,7 @@ from gemelo.modelos import Estrategia, Fertilizacion, Lote, Riego, Temporada, di
 from gemelo.suelo import PerfilSuelo, perfil_desde_parametros_datos, perfil_desde_soilgrids, perfil_manual
 
 VERSION_CONTRATO = 1
-VERSION_CONTRATO_COMPLETA = "1.1"
+VERSION_CONTRATO_COMPLETA = "1.2"
 LOTE_DEMO = re.compile(r"^DEMO-[A-Z]{3}-\d{2}$")
 
 
@@ -38,6 +38,18 @@ def lote_desde_catalogo(lo: dict, ruta: Path) -> dict:
     if choques:
         raise ValueError(f"lote {lo['id']}: {choques} contradicen {Path(ruta).name}")
     return {**lo, **{k: fila[k] for k in CAMPOS_CATALOGO if k in fila}}
+
+
+def erosion_del_lote(ruta: Path, lote_id: str) -> dict:
+    """Pendiente media NASADEM y K de Williams del lote, leídas de exposicion_erosiva_lotes.json de Datos (T-D6)."""
+    lotes = json.loads(Path(ruta).read_text(encoding="utf-8"))["lotes"]
+    if lote_id not in lotes:
+        raise ValueError(f"lote {lote_id!r} no está en {Path(ruta).name}")
+    x = lotes[lote_id]
+    k = x["erodabilidad_k_williams_0_30cm"]
+    return {"pendiente_m_m": float(x["relieve_nasadem_30m"]["pendiente_media_m_m"]),
+            "k_erodabilidad": float(k["valor"]), "k_etiqueta": k["etiqueta"],
+            "fuente": Path(ruta).name, "etiqueta": "FUENTE"}
 
 
 @dataclass
@@ -135,6 +147,8 @@ def leer_entrada(fuente: str | Path | dict, base: Path | None = None) -> Entrada
     sim = {"n_parametros": 8, "semilla": 42, "n_sub": 1, "equilibrio": "completo", "referencia": None,
            **(d.get("simulacion") or {})}
     clima = _clima(d["clima"], base, int(sim["semilla"]))
+    if d.get("erosion"):
+        clima.erosion = erosion_del_lote(_ruta(d["erosion"]["archivo"], base), str(lo.get("id")))
     e = d.get("escenario", {})
     esc = construir(clima, e.get("tipo", "historico"), int(e.get("anios", 3)), int(e.get("semilla", 0)),
                     e.get("n_miembros"), e.get("anio_inicio"), float(e.get("delta_precip_pct", 0.0)),

@@ -48,6 +48,10 @@ alertas:
     estacion_max_km: 5
     estacion_max_desnivel_m: 100
 
+# Pendiente NASADEM y K de Williams del lote para exposicion_erosiva de Datos (T-D6, una sola definición)
+erosion:
+  archivo: ../datos/referencia/lotes/exposicion_erosiva_lotes.json
+
 escenario:
   tipo: historico
   anios: 3

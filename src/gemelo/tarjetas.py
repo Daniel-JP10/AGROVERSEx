@@ -26,7 +26,7 @@ SECCIONES = ("por_que", "evidencia", "beneficios", "vacios", "riesgos")
 SENTIDO_INDICADOR = {
     "produccion_relativa_anio": "max", "rendimiento_relativo": "max", "riego_mm_anio": "min",
     "deficit_relativo": "min", "lixiviacion_n_kg_ha_anio": "min", "fertilizante_n_kg_ha_anio": "min",
-    "cambio_carbono_t_ha_anio": "max", "lluvia_intensa_sobre_suelo_desnudo_mm_anio": "min",
+    "cambio_carbono_t_ha_anio": "max", "indice_exposicion_erosiva": "min",
     "dias_suelo_desnudo_anio": "min", "cobertura_media": "max",
 }
 _FICHA = re.compile(r"EV-[A-Z]+-\d+")
@@ -144,6 +144,8 @@ def _vacios(e: dict, doc: dict, sens: dict | None) -> list[dict]:
     if sup:
         out.append(_e("card.gap.frost_threshold_assumed", {"cultivos": ", ".join(sup), "umbral": u[sup[0]]["valor"]},
                       {"cultivos": sup}))
+    if hel.get("metodo") == "climatologia_estacion":
+        out.append(_e("card.gap.frost_independence", {}, {"metodo": hel["metodo"]}))
     v = hel.get("validacion")
     if v and v["sesgo_c"] > 0:
         out.append(_e("card.gap.frost_underestimated", {"estacion": v["estacion"], "sesgo": v["sesgo_c"],
@@ -205,7 +207,7 @@ def construir(doc: dict, sensibilidad: dict | None = None) -> dict:
 
 def _valores_por_muestra(ens, ids: list[str]) -> list[dict[str, dict[str, float]]]:
     """[{estrategia: {objetivo: valor natural}} por muestra p de theta], con las K series climáticas de cada p."""
-    h = ind.por_miembro(ens.reg, ens.prog, ens.H, ens.p_intensa, ens.umbral_cobertura)
+    h = ind.por_miembro(ens.reg, ens.prog, ens.H, ens.p_intensa, ens.umbral_cobertura, erosion=ens.erosion)
     out = []
     for p in range(ens.P):
         vals = {}
