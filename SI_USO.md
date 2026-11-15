@@ -407,6 +407,15 @@ Notas de procedencia sin generación nueva por este equipo de Gemelo:
 | Claude Code (Anthropic) | `src/web/playwright.estatico.config.ts` | Configuración del E2E sobre el build estático (S2) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/pruebas/e2e/build_tierra.spec.ts` | E2E del build estático: búsqueda, ruta y cero llamadas a /api/ (S2) | 2026-11-15 |
 | Claude Code (Anthropic) | `pruebas/mapa/test_despliegue.py` | Prueba de que el despliegue falla claro sin AGROVERSEX_DATOS, teselas o índice (S2) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/textos/cifras.ts` | Cifras de datos de los textos como huecos (S3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/ordenPrioridades.ts` | Puntaje, orden e incompletas por prioridades (gemelo_api §4 v1.2, D-039.4) (S3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/Deslizadores.tsx` | Deslizadores de prioridades (S3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/textos_idioma.test.ts` | Pruebas de idioma por defecto, paridad de claves y glosario (S3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/textos_cifras.test.ts` | Prueba de cifras escritas a mano y excepciones atadas a su fuente (S3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/rotaciones_prioridades.test.ts` | Casos del contrato y objetivo sin valor (S3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/idioma_es.ts` | Ayudante que fija el español en vitest (S3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/idioma.ts` | Ayudante de idioma guardado en E2E (S3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/idiomas.spec.ts` | E2E de idiomas, inglés por defecto y prioridades (S3) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registros.ts` | Filtro de filas en uso de los registros de Fuentes | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registrosPlugin.ts` | Plugin de Vite que filtra los registros al compilar | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/AlertaHelada.tsx` | Alerta de helada del gemelo con sus avisos | 2026-11-14 |
