@@ -78,7 +78,7 @@ describe('excepciones atadas a su fuente', () => {
   })
   it('0-30 cm es la capa que declaran los parámetros de suelo y la que suman las tres capas de SoilGrids', () => {
     for (const lote of ['DEMO-COL-01', 'DEMO-USA-01']) {
-      const j = JSON.parse(readFileSync(new URL(`../../../datos/referencia/lotes/parametros_suelo_${lote}.json`, import.meta.url), 'utf8')) as { parametros: Record<string, { profundidad_cm: [number, number] }> }
+      const j = JSON.parse(readFileSync(new URL(`../../../datos/lotes/parametros_suelo_${lote}.json`, import.meta.url), 'utf8')) as { parametros: Record<string, { profundidad_cm: [number, number] }> }
       expect(j.parametros.cos_t_ha.profundidad_cm, lote).toEqual([0, 30])
     }
     const zonal = readFileSync(new URL('../../../src/simulacion/geo/zonal.py', import.meta.url), 'utf8')
