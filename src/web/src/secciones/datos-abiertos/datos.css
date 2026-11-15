@@ -1,8 +1,9 @@
-/* asistido por SI: Claude Code (Anthropic), estilos de la sección Datos abiertos, tema oscuro con los tokens de tema.css */
-.datos h2 { margin: 22px 0 6px; font-size: 18px; }
-.datos dl > div { display: grid; grid-template-columns: minmax(140px, 220px) 1fr; gap: 12px; padding: 5px 0; border-top: 1px solid var(--borde); }
-.datos dt { color: var(--suave); }
-.datos dd { margin: 0; }
-.datos .boton, .datos button { display: inline-block; margin: 0 8px 8px 0; padding: 6px 14px; color: var(--texto); background: var(--realce); border: 1px solid var(--borde); border-radius: 8px; font: inherit; text-decoration: none; cursor: pointer; }
-.datos .boton:focus-visible, .datos button:focus-visible { outline: 2px solid var(--agua); outline-offset: 2px; }
-.datos pre { margin: 0 0 8px; padding: 10px; overflow-x: auto; background: var(--panel-base); border: 1px solid var(--borde); border-radius: 8px; }
+/* asistido por SI: Claude Code (Anthropic), estilos de Datos abiertos con los tokens de hoja de tema.css */
+.datos > p { max-width: 70ch; }
+.datos .subtitulo { margin: 24px 0 4px; font-size: 18px; }
+.datos .generado { color: var(--suave); font-size: 13px; margin: 0; }
+.datos .tarjeta-hoja h2 code { font-size: 14px; color: var(--texto); }
+.datos .tarjeta-hoja p { margin: 6px 0; font-size: 14px; }
+.datos .sha { font-size: 11px; word-break: break-all; }
+.datos .boton { display: inline-block; margin-top: 10px; padding: 6px 14px; color: var(--acento); background: var(--fondo); border: 1px solid var(--acento); border-radius: 8px; text-decoration: none; font-size: 13px; }
+.datos .boton:focus-visible, .datos a:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
