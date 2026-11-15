@@ -107,12 +107,13 @@ describe('tarjeta de cinco secciones y partes que esperan al gemelo', () => {
     for (const b of ['porque', 'evidencia', 'beneficios', 'vacios', 'riesgos']) expect(cuenta(s, new RegExp(`data-bloque="${b}"`, 'g'))).toBe(n)
     expect(cuenta(s, new RegExp(t('rotaciones.pendiente_gemelo'), 'g'))).toBeGreaterThanOrEqual(5 * n)
   })
-  it('prioridades (con sus cuatro deslizadores), escenarios, alertas y calibración aparecen con su título', () => {
+  it('prioridades (con sus cuatro deslizadores) y alertas aparecen; la calibración local y los pendientes ya no', () => {
     const s = conEjemplo()
-    for (const k of ['rotaciones.prioridades', 'rotaciones.escenarios', 'rotaciones.alertas', 'rotaciones.calibracion'] as const) expect(s).toContain(t(k))
-    // decisión e: las prioridades ya no esperan al gemelo; los escenarios y la calibración siguen pendientes
+    for (const k of ['rotaciones.prioridades', 'rotaciones.alertas'] as const) expect(s).toContain(t(k))
+    // plan fase 3 v2 §5: "Calibración local" queda excluida y los escenarios pasan al comparador del tablero
+    expect(s).not.toContain(t('rotaciones.calibracion'))
     expect(cuenta(s, /type="range"/g)).toBe(4)
-    expect(cuenta(s, /class="pendiente"/g)).toBe(2)
+    expect(cuenta(s, /class="pendiente"/g)).toBe(0)
   })
   it('una estrategia sin algún objetivo de prioridad lo dice con «sin dato» y se marca incompleta, sin valor inventado', () => {
     const s = conEjemplo()
