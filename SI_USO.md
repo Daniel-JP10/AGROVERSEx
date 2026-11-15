@@ -568,3 +568,6 @@ Filas generadas de la cabecera "asistido por SI" de cada archivo nuevo o tocado 
 | Claude Code (Anthropic) | `src/web/src/textos/secciones/ciencia.ts` | textos de la sección ciencia (plan fase 3 v2 §10) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/src/textos/secciones/tierra.ts` | textos de la sección tierra (plan fase 3 v2 §10) y ponderación con PI-D1 (S1w) | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/src/tiempo/LineaTiempo.tsx` | escritura y revisión de código; base del prototipo migrada en el hackatón | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/lote_sin_scroll.spec.ts` | #/lote sin scroll de página ni desborde y con las 4 cifras del bloque enteras | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/textos_indice.test.ts` | prueba del índice de textos por sección: sin choques, con prefijo y paridad EN/ES | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/textos/indice.ts` | índice que une los textos por sección con en.ts y es.ts | 2026-11-15 |
