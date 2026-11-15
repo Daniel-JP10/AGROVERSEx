@@ -426,3 +426,106 @@ Notas de procedencia sin generación nueva por este equipo de Gemelo:
 | Claude Code (Anthropic) | `src/web/pruebas/registros.test.ts` | Pruebas del filtro de registros y del plugin | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/prohibidos.ts` | Detector de textos prohibidos compartido | 2026-11-14 |
 | Claude Code (Anthropic) | `src/web/pruebas/alerta_helada.test.ts` | Pruebas de la alerta de helada | 2026-11-14 |
+
+## Fase 3 · construcción (W1, W2, W3 y orquestador)
+
+Filas generadas de la cabecera "asistido por SI" de cada archivo nuevo o tocado entre 9ae0ebb y la integración. Las 4 imágenes de referencia de diseño no se generaron con IA: el diseño lo dibujó a mano el equipo (director, 15:27).
+
+| Herramienta | Archivo | Propósito | Fecha |
+|-|-|-|-|
+| Claude Code (Anthropic) | `pruebas/lotes/test_bloque_iso.py` | pruebas del bloque isométrico del lote (reproducible y georreferenciado) | 2026-11-15 |
+| Claude Code (Anthropic) | `pruebas/mapa/test_fugas.py` | pruebas de que el despliegue falla si dist o los metadatos de un .pmtiles llevan rutas locales o el usuario de la máquina | 2026-11-15 |
+| Claude Code (Anthropic) | `src/lotes_demo/bloque_iso.py` | bloque isométrico y perfil del lote DEMO desde NASADEM (plan fase 3 v2 §4) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/herramientas/copiar_gemelo.mjs` | copia reproducible de los paquetes del gemelo y del relieve de los lotes a public | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/herramientas/poster_globo.mjs` | póster del globo para la entrada: captura del globo en reposo sobre el build estático (plan v1 §a) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/playwright.lote.config.ts` | E2E de El lote y Rotaciones sobre el build estático en Chromium, Firefox y WebKit | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/playwright.marco.config.ts` | E2E del marco y las pantallas de W1 sobre el build estático en Chromium, Firefox y WebKit | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/playwright.tierra.config.ts` | E2E de Earth sobre el build estático en Chromium, Firefox y WebKit (fase 3, W2) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/build_servidor.mjs` | servidor estático mínimo con Range para probar dist/ sin Vite ni API; fase 3: gzip de texto como el alojamiento | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/ciencia_tarjetas.test.ts` | pruebas de Ciencia y validación (plan v2 §6): cifras leídas de los archivos, campos completos, PI-D1 mundial oculto | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/datos_abiertos_manifiesto.test.ts` | pruebas de Datos abiertos (plan v2 §6): una tarjeta por archivo del manifiesto, licencia por archivo y notas D-038 y D-040 | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/build_tierra_fase3.spec.ts` | E2E de Earth en fase 3 sobre el build estático: Soil sin base simulada, lotes DEMO, leyenda, reduced-motion y presupuesto (plan v2 §3 y §7.5) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/ciencia_seccion.spec.ts` | E2E de Ciencia y validación sobre el build estático, en los tres motores | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/datos_abiertos_seccion.spec.ts` | E2E de Datos abiertos sobre el build estático: tarjetas del manifiesto, enlaces y contraste | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/fuentes_seccion.spec.ts` | E2E de Fuentes sobre el build estático: tres columnas, créditos, sin rutas locales y contraste | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/lote_rotaciones.spec.ts` | E2E de El lote y Rotaciones: inglés por defecto, español, interacción, contraste AA y movimiento reducido | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/marco_ayuda.ts` | ayudas de los E2E de W1: idioma sembrado, contraste medido sobre el fondo real y textos prohibidos | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/marco_portada.spec.ts` | E2E del marco común y la entrada sobre el build estático, en los tres motores | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/portada_rendimiento.spec.ts` | presupuesto de la entrada (plan v2 §2): LCP con red lenta y bytes transferidos, sin MapLibre | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/rotaciones_seccion.spec.ts` | e2e de #/rotaciones con y sin lote; el ejemplo solo con VITE_EJEMPLOS=1 (fase 3: lote por defecto) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/frontera.test.ts` | prueba de la frontera entre el código de Web y el de Daniel | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/fuentes.test.ts` | pruebas de la sección Fuentes: glosario, modos, créditos y declaración de SI | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/fuentes_fugas.test.ts` | prueba de fugas de rutas locales en el texto de dist y en las filas que muestra Fuentes | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/gemelo_publico.test.ts` | prueba de lo que se publica en public/gemelo y public/lotes: archivos permitidos, sin rutas locales ni textos prohibidos | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/gemelo_unidades.test.ts` | prueba que fija unidades de trayectoria_mensual y el mes 0 contra contrato, código y paquetes | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/globo_fondo_inicial.test.ts` | prueba: la vista inicial no pide teselas GIBS del fondo de detalle (plan v1 §a, presupuesto) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/globo_poster.test.ts` | prueba: el póster del globo coincide con su manifiesto y cabe en 400 px (plan v1 §a) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/lote_seccion.test.ts` | pruebas de la sección El lote con los paquetes reales de public/gemelo y public/lotes | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/marco_cabecera.test.ts` | pruebas del marco común de la fase 3: cabecera hoja, decoración, pie, tokens y respaldo de #/lote | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/portada_entrada.test.ts` | pruebas de la entrada #/ (plan v2 §2): frase, raíces, seis nodos navegables y Start | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/recorrido.test.ts` | pruebas del recorrido guiado, los huecos de datos y la portada | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/rotaciones.test.ts` | pruebas de la sección Rotaciones: bandas, ejemplo, estructura de la tarjeta y estado sin lote | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/rotaciones_lector.test.ts` | pruebas de la lectura del paquete estático del gemelo v1.1 con un fetch falso | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/rotaciones_tablero.test.ts` | pruebas del tablero de Rotaciones y de la puerta del carbono con los paquetes reales | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/ruta.test.ts` | pruebas de las rutas por hash y de la navegación del universo | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/textos.test.ts` | escritura y revisión de código; base del prototipo migrada en el hackatón | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/textos_prohibidos.test.ts` | prueba de textos prohibidos en los textos visibles de Web y Datos y, con PROHIBIDOS_DIST, en una compilación; ampliada en la fase 3 (W1) con la lista del director y la prueba de insignias | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/app/App.tsx` | escritura y revisión de código; marco común y carga diferida de secciones (fase 3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/app/Cabecera.tsx` | la cabecera es la hoja del marco común de la fase 3 | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/app/Navegacion.tsx` | navegación entre las seis secciones del universo (fase 3: el gemelo se fusiona en #/lote) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/app/marco/CabeceraHoja.tsx` | cabecera hoja del marco común: marca, seis secciones, idioma, modo y ayuda | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/app/marco/Decoracion.tsx` | hojas decorativas de las esquinas del marco común (SVG propio) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/app/marco/Marcador.tsx` | respaldo de #/lote mientras la sección de W3 no exista o carga | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/app/marco/Pie.tsx` | pie del marco común: aviso de herramienta de apoyo y atribución del mapa | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/app/marco/marco.css` | marco común de la fase 3: retícula, cabecera hoja, hojas de esquina y pie | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/app/ruta.ts` | rutas por hash del universo (contrato web_componentes §3); #/lote y redirección de #/gemelo en la fase 3 | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/app/tema.css` | escritura y revisión de código; tokens de hoja de la fase 3 | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/comparar/comparar.css` | escritura y revisión de código; base del prototipo migrada en el hackatón | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/datos/primerRelleno.ts` | espera a la marca del primer relleno del globo para diferir descargas grandes (presupuesto, plan v1 §a) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/estilos.css` | escritura y revisión de código; base del prototipo migrada en el hackatón | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/globo/Controles.tsx` | escritura y revisión de código; fase 3 sin lectura de coordenadas en vivo (plan v2 §3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/globo/Globo.tsx` | escritura y revisión de código; base del prototipo migrada en el hackatón; fase 3 sin coordenadas en vivo | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/globo/atmosfera.ts` | escritura y revisión de código; halo verde y aro del globo en fase 3 (plan v2 §3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/globo/config.ts` | escritura y revisión de código; base del prototipo migrada en el hackatón; fase 3: detalle con minzoom y atmósfera verde | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/globo/leyenda.tsx` | leyenda en hoja: variable, unidad, producto, versión y estado de meta.json, y trama sin dato (plan v2 §3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/globo/recoloreo.ts` | escritura y revisión de código; base del prototipo migrada en el hackatón; fase 3 sin esperar al índice | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/paneles/Busqueda.tsx` | escritura y revisión de código; base del prototipo migrada en el hackatón; fase 3: índice tras el primer relleno | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/paneles/Suelo.tsx` | pestaña Soil: T-D4 no corre hoy, nunca se muestra la base simulada (plan v2 §7.5) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/ciencia/Ciencia.tsx` | sección Ciencia y validación: una tarjeta por afirmación con cifra, intervalo, periodo, fuente y etiqueta (plan v2 §6) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/ciencia/ciencia.css` | estilos de Ciencia y validación con los tokens de hoja de tema.css | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/ciencia/datos.ts` | cifras de Ciencia y validación leídas en el build de los archivos de datos (plan v2 §6) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/datos-abiertos/DatosAbiertos.tsx` | sección Datos abiertos: una tarjeta por archivo del manifiesto, licencia por archivo y notas D-038 y D-040 (plan v2 §6) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/datos-abiertos/datos.css` | estilos de Datos abiertos con los tokens de hoja de tema.css | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/datos-abiertos/manifiesto.ts` | tarjetas de Datos abiertos leídas de datos/manifiesto.json (web_datos v0) en tiempo de ejecución | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/fuentes/Fuentes.tsx` | sección Fuentes: glosario por modo, créditos generados y declaración de uso de SI; tres columnas de hoja y créditos de la fase 3 | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/fuentes/registros.ts` | filtro de los registros que publica Fuentes: solo filas "en uso", sin prosa | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/fuentes/rutasLocales.ts` | detector de rutas locales: Fuentes filtra las celdas y la prueba de dist lo reutiliza | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/lote/GraficoBanda.tsx` | gráfico SVG de una variable mensual con banda p10 a p90 y eje en años | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/lote/Lote.tsx` | sección El lote (#/lote): bloque, terreno, reloj de suelo desnudo, gemelo, escenario y 3 estrategias | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/lote/datos.ts` | lectura de los paquetes del gemelo en public/gemelo y del relieve en public/lotes | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/lote/index.tsx` | entrada de la sección El lote para React.lazy (W1 la monta en #/lote) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/lote/lote.css` | estilos de El lote y del gráfico con banda, con los tokens de tema.css | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/lote/unidades.ts` | unidades de trayectoria_mensual y significado del mes 0 (condición 3 del director) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/portada/Portada.tsx` | entrada #/: marca, frase del universo, raíces hacia las seis secciones y Start (plan v2 §2) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/portada/iconos.tsx` | íconos SVG propios de los nodos de la entrada (sin recursos de terceros) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/portada/portada.css` | entrada: lienzo con raíces, nodos y botón Start (main.portada gana a la regla vieja de estilos.css) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/Banda.tsx` | componente que muestra un valor siempre con su rango p10 a p90 | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/ComparadorEstrategias.tsx` | comparador de la línea base y el frente con indicadores en banda y tarjeta de cinco secciones v1.1 | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/Rotaciones.tsx` | sección Rotaciones: lote por la ruta, tablero de la fase 3 y salida del gemelo v1.2 con sus textos por clave | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/Tablero.tsx` | tablero de Rotaciones (plan fase 3 v2 §5): fichas, gráfico con bandas, comparador de escenarios y panel N y C | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/carbono.ts` | puerta del carbono: ninguna cifra de carbono en pantalla mientras MOSTRAR_CARBONO sea false | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/rotaciones/lector.ts` | lectura del paquete estático del gemelo v1.2 (copiado a public/gemelo/) y de lotes_demo.json | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/tierra/SeleccionLote.tsx` | llamada "Select a lot" con línea fina a cada lote DEMO y vuelo al lote (plan v2 §3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/tierra/Tierra.tsx` | sección Tierra: globo en círculo, hojas de búsqueda, leyenda y tiempo, y llamada a los lotes (plan v2 §3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/tierra/interfaz.ts` | interfaz del globo para el resto del universo (contrato web_componentes §4); fase 3: atribución para el pie | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/secciones/tierra/tierra.css` | Earth dentro del marco: hojas, órbitas y llamada a los lotes (plan v2 §3) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/textos/en.ts` | escritura y revisión de código; base del prototipo migrada en el hackatón | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/textos/es.ts` | escritura y revisión de código; base del prototipo migrada en el hackatón | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/textos/secciones/ciencia.ts` | textos de la sección ciencia (plan fase 3 v2 §10) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/textos/secciones/datos.ts` | textos de la sección datos (plan fase 3 v2 §10) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/textos/secciones/fuentes.ts` | textos de la sección fuentes (plan fase 3 v2 §10) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/textos/secciones/lote.ts` | textos de la sección lote (plan fase 3 v2 §4 y §10) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/textos/secciones/marco.ts` | textos de la sección marco (plan fase 3 v2 §10) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/textos/secciones/portada.ts` | textos de la sección portada (plan fase 3 v2 §10) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/textos/secciones/rotaciones.ts` | textos de la sección rotaciones (plan fase 3 v2 §5 y §10) | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/src/textos/secciones/tierra.ts` | textos de la sección tierra (plan fase 3 v2 §10) | 2026-11-15 |
