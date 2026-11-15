@@ -1,5 +1,5 @@
 /* asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón */
-.mapa-dividido { position: absolute; inset: 0; z-index: 1; clip-path: inset(0 0 0 50%); }
+.zona-mapa .mapa-dividido { position: absolute; inset: 0; z-index: 1; clip-path: inset(0 0 0 50%); }
 .barra-dividida { position: absolute; left: 50%; transform: translateX(-50%); bottom: 56px; z-index: 5; display: flex; gap: 16px; align-items: center; padding: 8px 12px; background: var(--panel); border: 1px solid var(--borde); border-radius: var(--radio); font-size: 12px; }
 .esc-motivo { color: var(--suave); font-size: 12px; margin: 4px 0 0; }
 .divisor { position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; margin-left: -1px; background: #fff; box-shadow: 0 0 0 1px #000a; z-index: 3; pointer-events: none; }
