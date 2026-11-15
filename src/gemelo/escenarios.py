@@ -1,4 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Claude Code (Opus 5.5), bloque 2: alerta de helada D-032, lluvia alterna IMERG y avisos del suelo calibrado
 """Escenarios climáticos e(t) construidos con años reales del registro histórico.
 
 - historico: ventanas consecutivas de H años del registro (una por año de inicio) o un año de inicio fijo.
@@ -105,7 +106,7 @@ def series(clima: ClimaDiario, esc: EscenarioClimatico, viento_respaldo: float =
     if esc.delta_precip_pct:
         datos["precip"] = datos["precip"] * (1 + esc.delta_precip_pct / 100.0)
     if esc.delta_temp_c:
-        for v in ("t2m", "t2m_max", "t2m_min"):
+        for v in ("t2m", "t2m_max", "t2m_min", "t2m_min_corr"):
             if v in datos:
                 datos[v] = datos[v] + esc.delta_temp_c
     if "t2m" not in datos:

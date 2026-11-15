@@ -1,4 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Claude Code (Opus 5.5), sensibilidad a la lluvia alterna IMERG (bloque 2)
 """Paquete estático por lote para la app pública sin servidor (contrato v1.1).
 
     <salida>/indice.json                      lista de lotes y archivos (rutas relativas a esta carpeta)
@@ -23,6 +24,7 @@ import yaml
 
 from gemelo import tarjetas, textos
 from gemelo.api import optimizar_con_ensamble, simular_con_ensamble
+from gemelo.clima import con_precip_alterna
 from gemelo.entrada import VERSION_CONTRATO, VERSION_CONTRATO_COMPLETA, leer_entrada, validar_lote_demo
 from gemelo.salida import commit_git, limpiar
 
@@ -62,6 +64,41 @@ def exportar_textos(salida: Path) -> dict[str, str]:
         r.write_text(json.dumps(tabla, ensure_ascii=False, indent=1), encoding="utf-8")
         rutas[idioma] = _rel(r, salida)
     return rutas
+
+
+INDICADORES_ALTERNA = ("produccion_relativa_anio", "deficit_relativo", "lixiviacion_n_kg_ha_anio",
+                       "lluvia_intensa_sobre_suelo_desnudo_mm_anio", "cambio_carbono_t_ha_anio")
+
+
+def sensibilidad_lluvia_alterna(ent, doc: dict) -> dict | None:
+    """Mismo histórico con la lluvia de IMERG: sensibilidad visible solo en modo técnico, nunca escenario equivalente.
+    El contraste con la estación sale de comparacion_power_imerg.json de Datos."""
+    alt = ent.precip_alterna
+    if not alt:
+        return None
+    doc_alt, _ = simular_con_ensamble(replace(ent, clima=con_precip_alterna(ent.clima, alt["archivo"])))
+    comp = next(x for x in json.loads(Path(alt["comparacion"]).read_text(encoding="utf-8"))
+                if x["lote_id"] == ent.lote.id)
+    c = next(v for k, v in comp.items() if k.startswith("contraste_estacion"))
+    orden = {"power": doc["prioridades"]["pesos_iguales"]["orden"],
+             "alterna": doc_alt["prioridades"]["pesos_iguales"]["orden"]}
+    ind = {e["id"]: e["indicadores"] for e in doc["estrategias"]}
+    return {"modo": "tecnico", "escenario_equivalente": False, "fuente_principal": "NASA POWER (PRECTOTCORR)",
+            "fuente_alterna": doc_alt["clima"]["fuente"],
+            "alineacion": "día UTC de IMERG sin realinear al día solar de POWER (desfase de hasta un día)",
+            "precip_anual_media_mm": {"power": doc["clima"]["precip_anual_media_mm"],
+                                      "alterna": doc_alt["clima"]["precip_anual_media_mm"]},
+            "contraste_estacion": {"estacion": c["estacion"], "n_dias_comunes": c["n_dias_comunes_con_pluviometro"],
+                                   "anual_equiv_mm": c["anual_equiv_en_dias_comunes_mm"],
+                                   "sesgo_relativo_power": c["sesgo_relativo_power_vs_ghcn"],
+                                   "sesgo_relativo_imerg": c["sesgo_relativo_imerg_vs_ghcn"]},
+            "fuente_contraste": Path(alt["comparacion"]).name,
+            "orden_pesos_iguales": orden,
+            "posiciones": {i: {"central": orden["power"].index(i) + 1, "alterna": orden["alterna"].index(i) + 1}
+                           for i in orden["power"]},
+            "indicadores_p50": {e["id"]: {k: {"power": ind[e["id"]][k]["p50"], "alterna": e["indicadores"][k]["p50"]}
+                                          for k in INDICADORES_ALTERNA if k in e["indicadores"]}
+                                for e in doc_alt["estrategias"]}}
 
 
 def _nombre_grilla(dp: float, dt: float) -> str:
@@ -132,6 +169,9 @@ def construir_lote(escenario_yaml: str | Path, lote_id: str, salida: str | Path,
         ent = ent_hist if tipo == "historico" else entrada(tipo)
         doc, _ = simular_con_ensamble(ent)
         if tipo == "historico":
+            alt = sensibilidad_lluvia_alterna(ent, doc)
+            if alt:
+                doc["sensibilidad_precipitacion_alterna"] = limpiar(alt)
             lote["huella_parametros"] = doc["metadatos"]["huella_parametros"]
             lote["rotulo"] = doc["metadatos"]["rotulo"]
         archivos = {"simulacion": escribir(doc, sens_sim, carpeta / f"simulacion_{tipo}.json")}

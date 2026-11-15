@@ -106,3 +106,18 @@ def test_perfil_demo_col_soilgrids_actual_no_avisa_dominio_y_declara_limitacion(
     calibrado = p.calibrar(theta_cc=0.48)
     assert calibrado["theta_cc"].naturaleza == "observado"
     assert not any("SoilGrids 2.0 en Andisoles" in a for a in calibrado.avisos)
+
+
+def test_reunir_parametros_quita_aviso_andisol_al_calibrar_theta_cc():
+    # El aviso de Andisol se despeja al calibrar theta_cc; reunir_parametros debe tomar los avisos del suelo calibrado
+    from gemelo.parametros import cargar_catalogo
+    from gemelo.simulador import reunir_parametros
+    from gemelo.suelo import perfil_desde_soilgrids
+    from conftest import REF
+    p = perfil_desde_soilgrids(REF / "suelo" / "soilgrids_ipiales.json")
+    cultivos = [cargar_catalogo()["papa"]]
+    _, sin_cal, _ = reunir_parametros(p, cultivos, {})
+    assert any("SoilGrids 2.0 en Andisoles" in a for a in sin_cal)
+    _, avisos, suelo = reunir_parametros(p, cultivos, {"suelo.theta_cc": 0.48})
+    assert suelo["theta_cc"].naturaleza == "observado"
+    assert not any("SoilGrids 2.0 en Andisoles" in a for a in avisos)

@@ -1,4 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Claude Code (Opus 5.5), bloque 2: alerta de helada D-032, lluvia alterna IMERG y avisos del suelo calibrado
 """Lectura del escenario de entrada (YAML o dict con el esquema de contratos/gemelo_api.md) a objetos del gemelo."""
 import re
 from dataclasses import dataclass, field
@@ -35,6 +36,8 @@ class Entrada:
     costos: dict | None
     optimizacion: dict | None
     origen: dict = field(default_factory=dict)
+    alertas: dict = field(default_factory=dict)          # {"helada": {umbral_c, provisional, validacion}} (D-032)
+    precip_alterna: dict | None = None                   # {"archivo", "comparacion"}: sensibilidad, no escenario
 
 
 def _ruta(valor: str, base: Path) -> Path:
@@ -118,6 +121,11 @@ def leer_entrada(fuente: str | Path | dict, base: Path | None = None) -> Entrada
                     e.get("n_miembros"), e.get("anio_inicio"), float(e.get("delta_precip_pct", 0.0)),
                     float(e.get("delta_temp_c", 0.0)), e.get("max_miembros"),
                     str(_ruta(e["enso_archivo"], base)) if e.get("enso_archivo") else None)
+    alertas = {k: dict(v) for k, v in (d.get("alertas") or {}).items()}
+    if alertas.get("helada", {}).get("validacion"):
+        alertas["helada"]["validacion"] = str(_ruta(alertas["helada"]["validacion"], base))
+    alt = d["clima"].get("precipitacion_alterna")
+    alt = {k: str(_ruta(v, base)) for k, v in alt.items()} if alt else None
     estrategias = [estrategia_desde_dict(x) for x in d.get("estrategias", [])]
     ids = [x.id for x in estrategias]
     if len(set(ids)) != len(ids):
@@ -125,4 +133,5 @@ def leer_entrada(fuente: str | Path | dict, base: Path | None = None) -> Entrada
     return Entrada(lote, lo.get("clima_tipo", "templado"), clima, _suelo(d["suelo"], base), esc, estrategias, sim,
                    dict(d.get("calibracion") or {}), d.get("costos"), d.get("optimizacion"),
                    {"archivo": str(fuente) if not isinstance(fuente, dict) else None,
-                    "enso_archivo": str(_ruta(e["enso_archivo"], base)) if e.get("enso_archivo") else None})
+                    "enso_archivo": str(_ruta(e["enso_archivo"], base)) if e.get("enso_archivo") else None},
+                   alertas, alt)

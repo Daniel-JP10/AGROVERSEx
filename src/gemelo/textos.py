@@ -179,6 +179,53 @@ _BASE: dict[str, tuple[str, str]] = {
                                "cultivo pueden verse mejor de lo que son."),
     "card.risk.local_review": ("Review with a local agronomist before applying.",
                                "Revisar con un agrónomo local antes de aplicar."),
+    # Alerta de helada en etapa sensible (D-032); no es pronóstico
+    "alert.frost.name": ("Frost in a sensitive stage (past climate, not a forecast)",
+                         "Helada en etapa sensible (clima pasado, no pronóstico)"),
+    "alert.frost.activa": ("In {fraccion:.0%} to {fraccion_alta:.0%} of past seasons the minimum fell to {umbral} °C "
+                           "or below in a sensitive stage (p10 of the stage minimum: {tmin_p10} °C).",
+                           "En {fraccion:.0%} a {fraccion_alta:.0%} de las temporadas pasadas la mínima bajó a "
+                           "{umbral} °C o menos en etapa sensible (p10 de la mínima de la etapa: {tmin_p10} °C)."),
+    "alert.frost.vigilancia": ("Watch: no past season reached {umbral} °C in the data, but with the known warm bias "
+                               "up to {fraccion_alta:.0%} could have (p10 of the stage minimum: {tmin_p10} °C).",
+                               "Vigilancia: ninguna temporada pasada llegó a {umbral} °C en los datos, pero con el "
+                               "sesgo cálido conocido hasta {fraccion_alta:.0%} pudo llegar (p10 de la mínima de la "
+                               "etapa: {tmin_p10} °C)."),
+    "alert.frost.unresolved": ("Watch: the temperature series never reaches {umbral} °C, while the reference station "
+                               "did record frosts; the data cannot rule out frost in a sensitive stage (p10 of the "
+                               "stage minimum: {tmin_p10} °C, {fraccion:.0%} of seasons in the data).",
+                               "Vigilancia: la serie de temperatura nunca llega a {umbral} °C, mientras la estación de "
+                               "referencia sí registró heladas; los datos no permiten descartar heladas en etapa "
+                               "sensible (p10 de la mínima de la etapa: {tmin_p10} °C, {fraccion:.0%} de las "
+                               "temporadas en los datos)."),
+    "alert.frost.sin_alerta": ("No past season reached {umbral} °C in a sensitive stage, even allowing for the known "
+                               "bias (p10 of the stage minimum: {tmin_p10} °C).",
+                               "Ninguna temporada pasada llegó a {umbral} °C en etapa sensible, aun contando el sesgo "
+                               "conocido (p10 de la mínima de la etapa: {tmin_p10} °C)."),
+    "alert.frost.warm_bias": ("Even altitude-corrected, the NASA POWER minimum is warmer than station {estacion} "
+                              "(bias {sesgo:+.2f} °C, 95 % CI {lo:+.2f} to {hi:+.2f}): frosts are still somewhat "
+                              "underestimated. The station recorded {dias_estacion} days at or below 0 °C (lowest "
+                              "{tmin_estacion} °C); the corrected series never went below {tmin_power} °C.",
+                              "Aun corregida por altura, la mínima de NASA POWER queda más cálida que la estación "
+                              "{estacion} (sesgo {sesgo:+.2f} °C, IC 95 % {lo:+.2f} a {hi:+.2f}): las heladas siguen "
+                              "algo subestimadas. La estación registró {dias_estacion} días con 0 °C o menos (mínima "
+                              "{tmin_estacion} °C); la serie corregida nunca bajó de {tmin_power} °C."),
+    "alert.frost.provisional": ("Provisional alert for this plot: threshold and sensitive stage are SUPUESTO and the "
+                                "temperature source has a known bias.",
+                                "Alerta provisional en este lote: el umbral y la etapa sensible son SUPUESTO y la "
+                                "fuente de temperatura tiene un sesgo conocido."),
+    "card.gap.frost_underestimated": ("Frost: the corrected minimum is {sesgo:+.2f} °C warmer than station {estacion} "
+                                      "(95 % CI {lo:+.2f} to {hi:+.2f}); frost risk is somewhat underestimated.",
+                                      "Heladas: la mínima corregida queda {sesgo:+.2f} °C más cálida que la estación "
+                                      "{estacion} (IC 95 % {lo:+.2f} a {hi:+.2f}); el riesgo de helada está algo "
+                                      "subestimado."),
+    "card.gap.rain_alt_source": ("Rain source: with GPM IMERG instead of NASA POWER (technical mode only; not an "
+                                 "equivalent scenario) the position changes {central} -> {alterna}. IMERG "
+                                 "overestimates against station {estacion} ({sesgo_imerg:+.0%}; POWER "
+                                 "{sesgo_power:+.0%}).",
+                                 "Fuente de lluvia: con GPM IMERG en lugar de NASA POWER (solo modo técnico; no es un "
+                                 "escenario equivalente) la posición cambia {central} -> {alterna}. IMERG sobrestima "
+                                 "frente a la estación {estacion} ({sesgo_imerg:+.0%}; POWER {sesgo_power:+.0%})."),
 }
 
 

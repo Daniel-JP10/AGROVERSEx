@@ -1,5 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
-# Escenario de ejemplo: lote papero en Ipiales, Nariño (Andes de Colombia, ~2550 m). Esquema: contratos/gemelo_api.md.
+# Escenario de ejemplo: lote papero en Ipiales, Nariño (Andes de Colombia, lote a 2934 m; celda POWER a 2553 m). Esquema: contratos/gemelo_api.md.
 # Ejecutar:  python -m gemelo simular   ejemplos/escenario_ipiales.yaml -o salidas/ipiales_simulacion.json
 #            python -m gemelo optimizar ejemplos/escenario_ipiales.yaml -o salidas/ipiales_optimizacion.json
 version_contrato: 1
@@ -13,9 +13,14 @@ lote:
   clima_tipo: tropical            # trópico: sin reglas de sucesión con intervalo numérico (INV-ROT §5.2)
 
 clima:
-  # NASA POWER del punto hasta que lleguen los forzantes de Datos (power_csv, mismo lector): cambiar solo `archivo`.
+  # Forzantes de Datos (T-D5, forzantes_gemelo.md v1, SHA256 en datos/referencia/lotes/SHA256SUMS.txt).
+  # La física usa T2M crudo (media y ET0); T2M_MIN_CORR solo para heladas (§4.3).
   fuente: power_csv
-  archivo: ../datos/referencia/clima/power_ipiales_diario.csv
+  archivo: ../datos/referencia/lotes/power_DEMO-COL-01_diario.csv
+  # Lluvia IMERG: sensibilidad solo en modo técnico, nunca escenario equivalente (sobrestima frente a la estación)
+  precipitacion_alterna:
+    archivo: ../datos/referencia/lotes/imerg_DEMO-COL-01_diario.csv
+    comparacion: ../datos/referencia/lotes/comparacion_power_imerg.json
   # Alternativa con la base de la rama datos (mensual desagregado a diario):
   # fuente: sqlite_mensual
   # ruta: ../datos/agroversex.sqlite
@@ -23,8 +28,8 @@ clima:
   # elevacion_m: 2900
 
 suelo:
-  fuente: soilgrids_json
-  archivo: ../datos/referencia/suelo/soilgrids_ipiales.json
+  fuente: parametros_suelo_json
+  archivo: ../datos/referencia/lotes/parametros_suelo_DEMO-COL-01.json
   # Suelo volcánico (MO ~8 %): fuera del dominio de Saxton y Rawls; con un análisis local:
   # fuente: manual
   # arena: 0.45
@@ -32,6 +37,14 @@ suelo:
   # mo_pct: 7.5
   # cos_t_ha: 180
   # cn_suelo: 12
+
+# Alerta de helada en etapa sensible (D-032), provisional en este lote: la mínima corregida sigue más cálida que la
+# estación COM00080370 (sesgo leído de la validación de Datos)
+alertas:
+  helada:
+    umbral_c: 0.0
+    provisional: true
+    validacion: ../datos/referencia/lotes/validacion_temperatura_ipiales.json
 
 escenario:
   tipo: historico

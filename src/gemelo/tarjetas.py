@@ -1,5 +1,6 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
 # asistido por SI: Antigravity (agente), exposición de limitación SoilGrids Andisol en riesgos (D-030)
+# asistido por SI: Claude Code (Opus 5.5), vacíos de helada subestimada y de fuente de lluvia alterna (bloque 2)
 """Tarjeta de cinco secciones por estrategia (contrato v1.1): por_que, evidencia, beneficios, vacios y riesgos.
 
 Contenido estructurado: cada entrada es {clave, parametros, valores, referencias}; Web redacta con el catálogo de
@@ -137,6 +138,19 @@ def _vacios(e: dict, doc: dict, sens: dict | None) -> list[dict]:
                               [p["referencia"]] if p.get("referencia") else []))
         if not out:
             out.append(_e("card.gap.none_changes"))
+    v = ((doc.get("alertas") or {}).get("helada_etapa_sensible") or {}).get("validacion")
+    if v and v["sesgo_c"] > 0:
+        out.append(_e("card.gap.frost_underestimated", {"estacion": v["estacion"], "sesgo": v["sesgo_c"],
+                                                         "lo": v["sesgo_c_ic95"][0], "hi": v["sesgo_c_ic95"][1]},
+                      {"sesgo_c": v["sesgo_c"], "sesgo_c_ic95": v["sesgo_c_ic95"]}, [v["fuente"]]))
+    alt = doc.get("sensibilidad_precipitacion_alterna")
+    if alt and e["id"] in alt["posiciones"]:
+        c = alt["contraste_estacion"]
+        pos = alt["posiciones"][e["id"]]
+        out.append(_e("card.gap.rain_alt_source", {"central": pos["central"], "alterna": pos["alterna"],
+                                                   "estacion": c["estacion"], "sesgo_imerg": c["sesgo_relativo_imerg"],
+                                                   "sesgo_power": c["sesgo_relativo_power"]},
+                      {"posiciones": pos, "modo": alt["modo"]}, [alt["fuente_contraste"]]))
     if e["indicadores"].get("costo_anio", {}).get("etiqueta") == "PENDIENTE":
         out.append(_e("card.gap.cost_pending"))
     return out

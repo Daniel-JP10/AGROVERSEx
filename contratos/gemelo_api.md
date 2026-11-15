@@ -166,10 +166,10 @@ La app pública no tiene servidor: lee archivos precalculados. Carpeta fija: `da
 
 | `lote_id` | YAML | Punto | `unidad_id` | `clima_tipo` |
 |-|-|-|-|-|
-| `DEMO-USA-01` | `ejemplos/escenario_mead.yaml` (Mead, Nebraska) | 41,165, −96,477 | `USA-ADM2-52423323B480079355264` | templado |
+| `DEMO-USA-01` | `ejemplos/escenario_mead.yaml` (Saunders, Nebraska) | 41,165, −96,477 | `USA-ADM2-52423323B480079355264` | templado |
 | `DEMO-COL-01` | `ejemplos/escenario_ipiales.yaml` (Ipiales, Nariño) | 0,842, −77,661 | `COL-ADM2-7082276B52108893597118` | tropical |
 
-  Hasta que lleguen los forzantes de Datos, el clima es NASA POWER del mismo punto y el suelo SoilGrids del punto; se regenera al recibirlos.
+  Clima y suelo: forzantes de Datos (T-D5, `forzantes_gemelo.md` v1), copiados con sus SHA256 en `datos/referencia/lotes/`.
 - **Rótulo**. `metadatos.naturaleza = "simulado"` significa salida del modelo, no SIMULADO (dato ficticio) en el sentido del proyecto. Web muestra `metadatos.rotulo`: `{clave: "label.model_simulation", parametros: {fuentes: [claves source.*]}, en, es}`, p. ej. «Model simulation with NASA POWER and SoilGrids 2.0 data».
 
 ### 2. Tarjeta de cinco secciones
@@ -261,12 +261,23 @@ Casos de prueba (`prioridades.casos_prueba` y `pruebas/gemelo/test_prioridades.p
 - `escenario.enso_archivo` (opcional): la clasificación de Datos, `{anio: "nino" | "nina" | "neutra"}` en YAML o JSON. Mientras Datos no la entrega, la fase se deriva del ONI de NOAA CPC (copia en `src/gemelo/referencias/enso.yaml`): media anual ≥ +0,5 °C El Niño, ≤ −0,5 °C La Niña, resto neutra; `clasificacion_enso.etiqueta = INFERENCIA`, `interina: true` y aviso `warning.enso_interim`.
 - En el escenario histórico, `indicadores_por_fase_enso`: indicadores p10/p50/p90 por estrategia y fase, agrupando las ventanas por la fase de su primer año, con `n_miembros` y `ventanas_por_fase`.
 
-### 9. Alertas: propuesta de recorte
+### 9. Alertas: solo helada en etapa sensible (D-032)
 
-Propuesta del Gemelo, pendiente de la firma de Daniel: las alertas de T-G5 quedan **fuera** de la v1.1.
+Bloque aditivo `alertas` en todos los documentos. En la v1.1 entra solo `alertas.helada_etapa_sensible`; las otras dos alertas de T-G5 quedan fuera (`nota_alcance`). No es pronóstico (`es_pronostico: false`): cuenta lo ocurrido en las ventanas de clima real del escenario.
 
-- Motivo: el gemelo compara estrategias en escenarios de varios años; no tiene datos en tiempo casi real del lote ni pronóstico, así que una alerta («riego ya», «helada mañana») sería un dato que el modelo no puede respaldar.
-- Lo que cubre el lugar de las alertas: `avisos_claves`, la sección `riesgos` de cada tarjeta (años malos p10, dominio del suelo, clima mensual) y los escenarios seco y ENSO.
-- Si se firma lo contrario, las alertas entrarían como bloque aditivo `alertas` en una v1.2.
+| Campo | Contenido |
+|-|-|
+| `serie_temperatura` | `T2M_MIN_CORR` si el CSV la trae (`forzantes_gemelo.md` §4.3); si no, `T2M_MIN`. La media, la ET0 y la suma térmica siguen con `T2M` crudo |
+| `umbral_c`, `etapa_sensible` | 0 °C y etapas des y med de FAO-56 de los cultivos que se cosechan; ambos `SUPUESTO` (`umbral_etiqueta`, `etapa_etiqueta`) |
+| `validacion` | Sesgo de la mínima frente a la estación, leído del JSON de Datos (`alertas.helada.validacion` en el YAML); `null` sin validación |
+| `margen_sesgo_c` | Cota superior del IC 95 % del sesgo; `0` sin validación |
+| `estrategias.<id>.fraccion_temporadas_con_helada` | `{valor, cota_baja, cota_alta}`: temporadas cosechadas con al menos un día con mínima ≤ umbral en etapa sensible; la cota alta resta `margen_sesgo_c` a la mínima |
+| `estrategias.<id>.dias_helada_etapa_sensible_anio`, `tmin_minima_etapa_sensible_c` | p10, p50, p90 sobre las ventanas |
+| `estrategias.<id>.estado`, `clave`, `parametros` | `activa` (cota baja > 0), `vigilancia` (cota alta > 0, o `serie_no_resuelve_heladas`: la serie nunca baja del umbral y la estación sí registró días ≤ 0 °C; clave `alert.frost.unresolved`), `sin_alerta` |
+| `provisional`, `avisos` | `provisional: true` en `DEMO-COL-01`; `avisos` lleva `alert.frost.warm_bias` (sesgo e IC de Datos) y `alert.frost.provisional` |
 
-Firma de Daniel: pendiente.
+La tarjeta lleva en `vacios` la entrada `card.gap.frost_underestimated` cuando el sesgo es cálido.
+
+### 10. Lluvia alterna: sensibilidad, no escenario
+
+`clima.precipitacion_alterna: {archivo, comparacion}` (solo `DEMO-COL-01`): el gemelo repite el histórico con la lluvia diaria de GPM IMERG en lugar de la de POWER y guarda `sensibilidad_precipitacion_alterna` en `simulacion_historico.json`, con `modo: "tecnico"` y `escenario_equivalente: false`. Web la muestra solo en modo Técnico y en `vacios` (`card.gap.rain_alt_source`), rotulada como fuente que sobrestima frente a la estación (`contraste_estacion`, leído de `comparacion_power_imerg.json` de Datos). No entra en `indice.json` como escenario.

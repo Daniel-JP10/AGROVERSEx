@@ -1,4 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Claude Code (Opus 5.5), bloque 2: alerta de helada D-032, lluvia alterna IMERG y avisos del suelo calibrado
 """Orquestador: lote + suelo + clima + estrategias -> ensamble simulado -> indicadores con p10/p50/p90.
 
 Miembros del ensamble: M = S estrategias x K miembros climáticos x P muestras de parámetros. Las S estrategias
@@ -53,10 +54,11 @@ def reunir_parametros(suelo: PerfilSuelo, cultivos: list[Cultivo],
                       calibracion: dict | None = None) -> tuple[dict[str, Parametro], list[str], PerfilSuelo]:
     """Parámetros planos con procedencia (calibración aplicada), avisos y suelo calibrado."""
     calibracion = calibracion or {}
-    avisos = list(suelo.avisos)
     sv = {k.split(".", 1)[1]: v for k, v in calibracion.items() if k.startswith("suelo.") and v is not None}
     if sv:
         suelo = suelo.calibrar(**sv)
+    # Avisos del suelo ya calibrado: la calibración puede despejar avisos de dominio
+    avisos = list(suelo.avisos)
     t_agua = _calibrar_tabla(cargar_tabla("agua_suelo.yaml"), "agua", calibracion)
     t_cn = _calibrar_tabla(cargar_tabla("carbono_nitrogeno.yaml"), "cn", calibracion)
     planos: dict[str, Parametro] = {}

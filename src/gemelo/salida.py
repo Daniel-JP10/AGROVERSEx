@@ -1,4 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Claude Code (Opus 5.5), bloque 2: alerta de helada D-032, lluvia alterna IMERG y avisos del suelo calibrado
 """Documento de salida del gemelo (JSON y, opcionalmente, SQLite) según contratos/gemelo_api.md."""
 import dataclasses
 import hashlib
@@ -11,7 +12,7 @@ from pathlib import Path
 
 import numpy as np
 
-from gemelo import prioridades, tarjetas, textos
+from gemelo import alertas, prioridades, tarjetas, textos
 from gemelo.entrada import VERSION_CONTRATO, VERSION_CONTRATO_COMPLETA, Entrada
 from gemelo.simulador import VERSION_MODELO, Ensamble
 
@@ -143,6 +144,7 @@ def _comun(entrada: Entrada, ens: Ensamble, semilla: int, tipo: str) -> dict:
         "clima": entrada.clima.resumen(),
         "escenario": entrada.escenario.a_dict(entrada.clima),
         "suelo": entrada.suelo.a_dict(),
+        "alertas": alertas.bloque(entrada, ens.programas),
         "parametros": [{"clave": k, **p.a_dict()} for k, p in sorted(ens.theta.parametros.items())],
     }
 

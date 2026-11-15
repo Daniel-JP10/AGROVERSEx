@@ -1,4 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Claude Code (Opus 5.5), bloque 2: alerta de helada D-032, lluvia alterna IMERG y avisos del suelo calibrado
 """Forzamiento ambiental e(t): lectura de NASA POWER, calendario nominal, ET0 FAO-56 y desagregación mensual a diaria.
 
 Unidades: precip mm/día; temperaturas °C; rh2m %; rad_sw MJ/m²/día; ws2m m/s; et0 mm/día.
@@ -13,9 +14,11 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-VARIABLES = ("precip", "t2m", "t2m_max", "t2m_min", "rh2m", "rad_sw", "ws2m")
+# t2m_min_corr: mínima corregida por altura de Datos (forzantes_gemelo.md §4.3); solo para heladas, no entra en la
+# física (la media, la ET0 y la suma térmica siguen con las columnas crudas, de menor sesgo frente a la estación)
+VARIABLES = ("precip", "t2m", "t2m_max", "t2m_min", "rh2m", "rad_sw", "ws2m", "t2m_min_corr")
 POWER_A_GEMELO = {"PRECTOTCORR": "precip", "T2M": "t2m", "T2M_MAX": "t2m_max", "T2M_MIN": "t2m_min",
-                  "RH2M": "rh2m", "ALLSKY_SFC_SW_DWN": "rad_sw", "WS2M": "ws2m"}
+                  "RH2M": "rh2m", "ALLSKY_SFC_SW_DWN": "rad_sw", "WS2M": "ws2m", "T2M_MIN_CORR": "t2m_min_corr"}
 DIAS_MES = np.array([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
 INICIO_MES = np.concatenate([[0], np.cumsum(DIAS_MES)[:-1]])
 MES_DE_DIA = np.repeat(np.arange(12), DIAS_MES)  # mes (0-11) de cada día nominal 0-364
@@ -101,6 +104,26 @@ def cargar_power(ruta: str | Path) -> ClimaDiario:
     df, meta = leer_power_csv(ruta)
     return a_calendario_nominal(df, meta.get("lat", 0.0), meta["elevacion_m"],
                                 meta["fuente"] + "; MERRA-2 y CERES, celda 0,5° x 0,625°", naturaleza="estimado")
+
+
+def con_precip_alterna(clima: ClimaDiario, ruta: str | Path) -> ClimaDiario:
+    """Copia de `clima` con la lluvia de IMERG diario de Datos (FECHA_UTC, IMERG_PRECIP_MM_DIA) en lugar de la de
+    POWER. Día UTC sin realinear a la hora solar de POWER (desfase de hasta un día, forzantes_gemelo.md §5).
+    Solo para la sensibilidad a la fuente de lluvia: el resto de variables queda igual."""
+    df = pd.read_csv(Path(ruta), parse_dates=["FECHA_UTC"])
+    df = df.rename(columns={"FECHA_UTC": "fecha", "IMERG_PRECIP_MM_DIA": "precip"})[["fecha", "precip"]]
+    alt = a_calendario_nominal(df, clima.lat, clima.elevacion_m, f"GPM IMERG Final V07 diario ({Path(ruta).name})",
+                               naturaleza="estimado")
+    comunes = np.intersect1d(clima.anios, alt.anios)
+    if len(comunes) < len(clima.anios):
+        raise ValueError(f"lluvia alterna {Path(ruta).name}: faltan años {sorted(set(clima.anios) - set(comunes))}")
+    filas = np.searchsorted(alt.anios, clima.anios)
+    datos = {**clima.datos, "precip": alt.datos["precip"][filas]}
+    huecos = dict(clima.huecos_rellenos)
+    if "precip" in alt.huecos_rellenos:
+        huecos["precip_alterna"] = alt.huecos_rellenos["precip"]
+    return ClimaDiario(clima.anios, datos, clima.lat, clima.elevacion_m, clima.fuente + "; lluvia de " + alt.fuente,
+                       huecos, clima.naturaleza, list(clima.avisos))
 
 
 def cargar_forzantes(ruta: str | Path, lat: float, elevacion_m: float) -> ClimaDiario:

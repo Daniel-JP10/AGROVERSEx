@@ -5,25 +5,30 @@ version_contrato: 1
 
 lote:
   id: DEMO-USA-01
-  nombre: Lote demostrativo Mead (Nebraska)
+  nombre: Lote DEMO Saunders (Nebraska)
   lat: 41.165
   lon: -96.477
   unidad_id: USA-ADM2-52423323B480079355264
   clima_tipo: templado            # activa las reglas de sucesión de clima templado
 
 clima:
-  # NASA POWER del punto hasta que lleguen los forzantes de Datos (power_csv, mismo lector): cambiar solo `archivo`.
+  # Forzantes de Datos (T-D5, forzantes_gemelo.md v1, SHA256 en datos/referencia/lotes/SHA256SUMS.txt)
   fuente: power_csv
-  archivo: ../datos/referencia/clima/power_mead_diario.csv
+  archivo: ../datos/referencia/lotes/power_DEMO-USA-01_diario.csv
 
 suelo:
-  fuente: soilgrids_json
-  archivo: ../datos/referencia/suelo/soilgrids_mead.json
+  fuente: parametros_suelo_json
+  archivo: ../datos/referencia/lotes/parametros_suelo_DEMO-USA-01.json
+
+# Alerta de helada en etapa sensible (D-032); sin validación de temperatura contra estación para este lote
+alertas:
+  helada:
+    umbral_c: 0.0
 
 escenario:
   tipo: historico                 # historico | seco | normal | humedo | personalizado
   anios: 3
-  max_miembros: 8                 # ventanas de 3 años repartidas en 2005-2024
+  max_miembros: 8                 # ventanas de 3 años repartidas en 2001-2024
 
 simulacion:
   n_parametros: 8                 # muestras LHS de theta (la 0 es la central)
