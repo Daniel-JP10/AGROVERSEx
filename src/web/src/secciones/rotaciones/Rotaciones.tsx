@@ -38,6 +38,7 @@ export function VistaRotaciones({ fuente: cruda, lote, escenario = 'historico', 
   const [pesos, setPesos] = useState<Pesos>(PESOS_IGUALES)
   // Ninguna cifra de carbono en pantalla mientras MOSTRAR_CARBONO sea false (director, 13:27)
   const fuente: Fuente = cruda.estado === 'listo' ? { ...cruda, doc: sinCarbono(cruda.doc) } : cruda
+  const deslizadores = <Deslizadores pesos={pesos} alCambiar={(k, v) => setPesos((p) => ({ ...p, [k]: v }))} />
   return (
     <main className="seccion rotaciones">
       <h1>{t('seccion.rotaciones')}</h1>
@@ -55,9 +56,11 @@ export function VistaRotaciones({ fuente: cruda, lote, escenario = 'historico', 
         <>
           {/* El rótulo lo decide el origen de los datos, no metadatos.naturaleza (en el gemelo siempre vale simulado) */}
           <p className="rotulo" data-testid="rotulo"><strong data-texto-gemelo="">{rotulo(fuente)}</strong></p>
+          {/* Con la simulación del lote, el tablero va arriba y lleva los deslizadores en su columna derecha */}
+          {lote?.estado === 'listo'
+            ? <Tablero d={lote} pesos={pesos} escenario={escenario} setEscenario={setEscenario} prioridades={deslizadores} />
+            : deslizadores}
           <Avisos avisos={textos(fuente.doc, fuente.catalogo).avisos} />
-          {lote?.estado === 'listo' && <Tablero d={lote} pesos={pesos} escenario={escenario} setEscenario={setEscenario} />}
-          <Deslizadores pesos={pesos} alCambiar={(k, v) => setPesos((p) => ({ ...p, [k]: v }))} />
           <ComparadorEstrategias linea_base={fuente.doc.linea_base} frente={fuente.doc.frente} tarjetas={fuente.doc.tarjetas} catalogo={fuente.catalogo} orden={ordenDelDocumento(fuente.doc, pesos)} faltantes={faltantesDelDocumento(fuente.doc)} />
           {lote?.estado === 'listo' && !lote.lote.escenarios[escenario]?.optimizacion && <p className="sin-dato" role="note">{t('rotaciones.pareto_no_esc')}</p>}
           <FrentePareto objetivos={textos(fuente.doc, fuente.catalogo).objetivos} linea_base={fuente.doc.linea_base} frente={fuente.doc.frente} />

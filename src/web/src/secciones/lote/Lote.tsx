@@ -62,7 +62,7 @@ function PerfilSvg({ perfil }: { perfil: Perfil }) {
       <svg viewBox={`0 0 ${A} ${H}`} role="img" aria-label={t('lote.perfil_alt')}>
         <polygon className="relleno" points={`${x(ds[0])},${H - 12} ${linea} ${x(ds[ds.length - 1])},${H - 12}`} />
         <polyline className="linea" fill="none" points={linea} />
-        <circle className="centro" cx={x(ds[c])} cy={y(zs[c])} r={3} />
+        <circle className="p-centro" cx={x(ds[c])} cy={y(zs[c])} r={3} />
         <text className="marca" x={I} y={H - 2}>{`${fmt(lo)}–${fmt(hi)} m`}</text>
       </svg>
     </figure>
@@ -128,8 +128,8 @@ function Bloque({ loteId, perfil, e, anio, mes, setMes }: { loteId: string; perf
   return (
     <section className="bloque" aria-labelledby="h-bloque">
       <h2 id="h-bloque" className="sr">{t('lote.capas')}</h2>
-      <div className="controles">
-        <fieldset className="capas">
+      <div className="l-controles">
+        <fieldset className="l-capas">
           <legend>{t('lote.capas')}</legend>
           {(['relieve', 'pendiente'] as const).map((c) => (
             <label key={c}><input type="radio" name="capa" value={c} checked={capa === c} onChange={() => setCapa(c)} /> {t(c === 'relieve' ? 'lote.capa_relieve' : 'lote.capa_pendiente')}</label>
@@ -141,7 +141,7 @@ function Bloque({ loteId, perfil, e, anio, mes, setMes }: { loteId: string; perf
           </select>
         </label>
       </div>
-      <div className="lienzo">
+      <div className="l-lienzo">
         {falla || !perfil ? <p className="sin-dato">{t('lote.no_disponible')}</p> : (
           <img src={src} alt={t('lote.bloque_alt')} onError={() => setFalla(true)} />
         )}
@@ -149,7 +149,7 @@ function Bloque({ loteId, perfil, e, anio, mes, setMes }: { loteId: string; perf
           const x = valorMes(e, v, i)
           const u = unidadVariable(v)
           return (
-            <p key={v} className={`etiqueta ${pos}`} data-variable={v}>
+            <p key={v} className={`l-etiqueta ${pos}`} data-variable={v}>
               <strong>{t(clave)}</strong> <small>{nombreMes(mes)}, {llenar(t('lote.anio_n'), { n: String(anio) })}</small><br />
               <Banda p10={x.p10} p50={x.p50} p90={x.p90} unidad={u} />
             </p>
@@ -256,7 +256,7 @@ export function VistaLote({ estado, loteId, escenario, setEscenario }: { estado:
     <main className="seccion lote">
       <h1>{t('lote.titulo')} <small className="demo">{t('lote.demo')} · {estado.lote.lote_id}</small></h1>
       <p className="aviso-apoyo" role="note">{t('aviso.apoyo')}</p>
-      <div role="tablist" aria-label={t('lote.pestanas')} className="pestanas">
+      <div role="tablist" aria-label={t('lote.pestanas')} className="l-pestanas">
         {(['campo', 'tiempo'] as const).map((p) => (
           <button key={p} type="button" role="tab" id={`tab-${p}`} aria-controls={`panel-${p}`} aria-selected={pestana === p} onClick={() => setPestana(p)}>
             {t(p === 'campo' ? 'lote.pestana_campo' : 'lote.pestana_tiempo')}
@@ -265,13 +265,13 @@ export function VistaLote({ estado, loteId, escenario, setEscenario }: { estado:
       </div>
       {avisos.map((a) => <p key={a} className="aviso-principal" role="note" data-texto-gemelo="">{a}</p>)}
       <div className="rejilla-lote">
-        <div className="izquierda">
+        <div className="l-izq">
           <Terreno relieve={estado.relieve} perfil={estado.perfil} />
           <Reloj e={e} anio={anio} anios={anios} setAnio={setAnio} />
         </div>
-        <div className="centro" role="tabpanel" id={`panel-${pestana}`} aria-labelledby={`tab-${pestana}`}>
+        <div className="l-centro" role="tabpanel" id={`panel-${pestana}`} aria-labelledby={`tab-${pestana}`}>
           {pestana === 'campo' ? <Bloque loteId={loteId} perfil={estado.perfil} e={e} anio={anio} mes={mes} setMes={setMes} /> : (
-            <section className="tiempo">
+            <section className="l-tiempo">
               <p><small>{llenar(t('lote.tiempo_nota'), { n: String(anios) })}</small></p>
               {(Object.keys(UNIDADES_TRAYECTORIA) as VariableTrayectoria[]).map((v) => (
                 <GraficoBanda key={v} titulo={t(`lote.var_${v}` as ClaveTodo)} unidad={unidadVariable(v)} anios={anios}
@@ -280,7 +280,7 @@ export function VistaLote({ estado, loteId, escenario, setEscenario }: { estado:
             </section>
           )}
         </div>
-        <div className="derecha">
+        <div className="l-der">
           <Gemelo d={estado} e={e} />
           <section className="tarjeta escenario" aria-labelledby="h-escenario">
             <h2 id="h-escenario">{t('lote.escenario')}</h2>

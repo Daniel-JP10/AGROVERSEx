@@ -88,7 +88,8 @@ export function useLote(lote: string, escenario: string): EstadoLote {
     void cargarLote(lote, escenario, lang).then((e) => { if (vivo) setHecho({ clave, e }) })
     return () => { vivo = false }
   }, [lote, escenario, lang, clave])
-  return hecho?.clave === clave ? hecho.e : { estado: 'cargando' }
+  // Al cambiar de escenario o idioma se sigue mostrando lo anterior hasta que llega lo nuevo (sin parpadeo)
+  return hecho ? hecho.e : { estado: 'cargando' }
 }
 
 /** Lote de ?lote= en el hash (cualquier sección); por defecto el lote DEMO de Colombia. */

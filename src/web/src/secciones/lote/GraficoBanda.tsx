@@ -42,7 +42,7 @@ export function GraficoBanda({ titulo, unidad, series, anios }: { titulo: string
           </g>
         ))}
       </svg>
-      <ul className="leyenda">
+      <ul className="gb-leyenda">
         {validas.map((s, k) => <li key={s.id} className={`s${k}`}><span className="muestra" aria-hidden="true" /> {s.nombre}</li>)}
       </ul>
     </figure>

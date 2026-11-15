@@ -1,5 +1,5 @@
 // asistido por SI: Claude Code (Anthropic), tablero de Rotaciones (plan fase 3 v2 §5): fichas, gráfico con bandas, comparador de escenarios y panel N y C
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { t, type ClaveTodo } from '../../textos/i18n'
 import { useModo } from '../../textos/modos'
 import { GraficoBanda } from '../lote/GraficoBanda'
@@ -145,7 +145,7 @@ export function PanelNC({ sim, e, mostrar = MOSTRAR_CARBONO }: { sim: Simulacion
   )
 }
 
-export function Tablero({ d, pesos, escenario, setEscenario }: { d: Listo; pesos: Pesos; escenario: string; setEscenario: (e: string) => void }) {
+export function Tablero({ d, pesos, escenario, setEscenario, prioridades }: { d: Listo; pesos: Pesos; escenario: string; setEscenario: (e: string) => void; prioridades?: ReactNode }) {
   const orden = ordenSimulacion(d.sim, pesos)
   const primera = d.sim.estrategias.find((e) => e.id === orden[0])
   return (
@@ -155,7 +155,7 @@ export function Tablero({ d, pesos, escenario, setEscenario }: { d: Listo; pesos
         <PanelNC sim={d.sim} e={primera} />
       </div>
       <div className="t-centro"><GraficoCentral key={orden.slice(0, MAX).join()} sim={d.sim} orden={orden} /></div>
-      <div className="t-der"><ComparadorEscenarios d={d} orden={orden} escenario={escenario} setEscenario={setEscenario} /></div>
+      <div className="t-der">{prioridades}<ComparadorEscenarios d={d} orden={orden} escenario={escenario} setEscenario={setEscenario} /></div>
       {d.sim.metadatos.metodo_eto === 'penman_monteith_fao56' && <p className="metodo" data-testid="metodo">{t('rotaciones.metodo')}</p>}
     </div>
   )

@@ -1,5 +1,6 @@
 // asistido por SI: Claude Code (Anthropic), comparador de la línea base y el frente con indicadores en banda y tarjeta de cinco secciones v1.1
-import { t } from '../../textos/i18n'
+import { idioma, t } from '../../textos/i18n'
+import { nombreCultivo, nombreEstrategia } from '../lote/datos'
 import type { ClaveTexto } from '../../textos/en'
 import { Banda } from './Banda'
 import { SECCIONES_TARJETA, type EstrategiaGemelo, type SeccionTarjeta, type Tarjeta as TTarjeta } from './gemelo'
@@ -16,9 +17,9 @@ function Tarjeta({ e, base, tarjeta, catalogo, faltan }: P) {
   const tr = (clave: string | undefined, plano: string) => (catalogo && clave ? traducir(catalogo, clave) : plano)
   return (
     <article className="estrategia" data-testid="estrategia">
-      <h3>{e.nombre} <span className="etiqueta">{e.etiqueta}</span></h3>
+      <h3>{nombreEstrategia(e)} <span className="etiqueta">{e.etiqueta}</span></h3>
       <p className="insignia">{base ? <span data-testid="linea-base">{t('rotaciones.linea_base')}</span> : t('rotaciones.alternativa')}</p>
-      <p><strong>{t('rotaciones.secuencia')}:</strong> {e.secuencia.replace(/\s*->\s*/g, ' → ')}</p>
+      <p><strong>{t('rotaciones.secuencia')}:</strong> {idioma() === 'es' ? e.secuencia.replace(/\s*->\s*/g, ' → ') : e.secuencia.split(/\s*->\s*/).map(nombreCultivo).join(' → ')}</p>
       <p className="juicio" role="note">{t('aviso.juicio')}</p>
       {faltan?.length ? (
         <div className="incompleta" data-testid="incompleta" role="note">
