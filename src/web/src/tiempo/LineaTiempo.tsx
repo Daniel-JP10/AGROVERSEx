@@ -26,6 +26,9 @@ async function pintar(m: number) {
   if (m >= N_MESES - 1) s.setReproduciendo(false)
 }
 
+
+// Sin reproducción automática en la versión pública: se traba con las series del mundo (ver alTeclado)
+export const REPRODUCCION_AUTOMATICA = false
 export function LineaTiempo() {
   const mes = useEstado((s) => s.mes)
   const reproduciendo = useEstado((s) => s.reproduciendo)
@@ -56,6 +59,8 @@ export function LineaTiempo() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reproduciendo])
 
+  // Director 16:54: Play automático fuera de la versión pública. Medido sobre el dist del mundo (prueba_reproduccion_tiempo.json):
+  // 5 a 8 cuadros/s, tareas de más de 1 s y Pause tarda hasta 3 s. El mes se elige a mano (deslizador, pasos de mes y año)
   const alTeclado = (e: KeyboardEvent) => {
     const t = e.target as HTMLElement
     if (t.tagName === 'SELECT') return
@@ -64,7 +69,7 @@ export function LineaTiempo() {
       ArrowRight: () => setMes(mes + d), ArrowUp: () => setMes(mes + d),
       ArrowLeft: () => setMes(mes - d), ArrowDown: () => setMes(mes - d),
       Home: () => setMes(0), End: () => setMes(N_MESES - 1),
-      ' ': () => setReproduciendo(!reproduciendo),
+      ...(REPRODUCCION_AUTOMATICA && { ' ': () => setReproduciendo(!reproduciendo) }),
     }
     if (e.key === ' ' && t.tagName === 'BUTTON') return // el botón ya reacciona al espacio
     if (acciones[e.key]) { e.preventDefault(); acciones[e.key]() }
@@ -76,7 +81,7 @@ export function LineaTiempo() {
     <div className="tiempo" onKeyDown={alTeclado}>
       <div className="fila">
         <button onClick={() => setMes(mes - paso)} aria-label={t('tiempo.anterior')}>◀</button>
-        <button onClick={() => setReproduciendo(!reproduciendo)} aria-label={reproduciendo ? t('tiempo.pausar') : t('tiempo.reproducir')}>{reproduciendo ? '❚❚' : '▶'}</button>
+        {REPRODUCCION_AUTOMATICA && <button onClick={() => setReproduciendo(!reproduciendo)} aria-label={reproduciendo ? t('tiempo.pausar') : t('tiempo.reproducir')}>{reproduciendo ? '❚❚' : '▶'}</button>}
         <button onClick={() => setMes(mes + paso)} aria-label={t('tiempo.siguiente')}>▶|</button>
         <span className="ext">{mesIdAEtiqueta(0)}</span>
         <input type="range" min={0} max={N_MESES - 1} value={mes} onChange={(e) => setMes(+e.target.value)} aria-label={t('tiempo.mesEtiqueta')} aria-valuetext={mesIdAEtiqueta(mes)} />
