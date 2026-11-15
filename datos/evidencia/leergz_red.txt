@@ -1,0 +1,23 @@
+RED leerGz con src/web/src/datos/estatico.ts de b2ed6bc^ (código viejo), 2026-11-14 20:5x
+Casos: servidor que manda el .json.gz ya descomprimido (Content-Encoding: gzip) y servidor que lo manda comprimido
+
+  stack: 'TypeError: \n' +
+    '    at handleKnownInternalErrors (node:internal/webstreams/adapters:142:21)\n' +
+    '    at Gunzip.onerror (node:internal/streams/end-of-stream:256:14)\n' +
+    '    at emitErrorNT (node:internal/streams/destroy:170:8)\n' +
+    '    at emitErrorCloseNT (node:internal/streams/destroy:129:3)\n' +
+    stack: 'Error: incorrect header check\n' +
+      '    at genericNodeError (node:internal/errors:986:15)\n' +
+      '    at wrappedFn (node:internal/errors:540:14)\n' +
+      '    at Zlib.zlibOnError [as onerror] (node:zlib:197:13)',
+    code: 'Z_DATA_ERROR',
+    constructor: 'Function<Error>',
+    name: 'Error',
+  code: 'Z_DATA_ERROR',
+  constructor: 'Function<TypeError>',
+  name: 'TypeError',
+Caused by: Error: incorrect header check
+Serialized Error: { errno: -3, code: 'Z_DATA_ERROR' }
+      Tests  1 failed | 1 passed | 22 skipped (24)
+
+
