@@ -1,0 +1,31 @@
+// asistido por SI: Claude Code (Anthropic), cifras de datos de los textos visibles: salen de constantes del código de datos, nunca de en.ts ni es.ts
+import { MES_INICIO, N_MESES } from '../tiempo/valor'
+
+// Índice (desde MES_INICIO) del último mes de la línea base: mismo 0..191 que usa paneles/Series.tsx (2000-01 a 2015-12)
+const BASE_ULTIMO_INDICE = 191
+// Fracción válida mínima para publicar un valor (contratos/web_datos.md: null si frac_valida < 0,5)
+const FRACCION_MINIMA = 0.5
+// Error de la esfera de radio medio frente al elipsoide, en % (herramientas/geodesia.ts, shortcut declarado)
+const ERROR_ESFERA_PCT = 0.5
+// Fecha del mosaico Blue Marble del fondo (NASA GIBS, mes y año)
+const FONDO = { anio: 2004, mes: 8 }
+
+const anioDe = (indice: number) => MES_INICIO.anio + Math.floor((MES_INICIO.mes - 1 + indice) / 12)
+const dosDig = (n: number) => String(n).padStart(2, '0')
+const numero = (n: number, lang: string) => new Intl.NumberFormat(lang, { maximumFractionDigits: 2 }).format(n)
+
+/** Valor de cada hueco de cifra de datos para el idioma dado; undefined si el nombre no es una cifra conocida. */
+export function cifra(nombre: string, lang: string): string | undefined {
+  switch (nombre) {
+    case 'anios_serie': return `${anioDe(0)}-${anioDe(N_MESES - 1)}`
+    case 'anios_base': return `${anioDe(0)}-${anioDe(BASE_ULTIMO_INDICE)}`
+    case 'fecha_inicio_serie': return `${MES_INICIO.anio}-${dosDig(MES_INICIO.mes)}-01`
+    case 'fraccion_minima': return numero(FRACCION_MINIMA, lang)
+    case 'error_esfera': return numero(ERROR_ESFERA_PCT, lang)
+    case 'fondo_fecha': return new Intl.DateTimeFormat(lang, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(Date.UTC(FONDO.anio, FONDO.mes - 1, 1))
+    default: return undefined
+  }
+}
+
+/** Sustituye en el texto los huecos que son cifras de datos; los demás quedan intactos para rellenar() del recorrido. */
+export const conCifras = (texto: string, lang: string): string => texto.replace(/\{(\w+)\}/g, (m, n: string) => cifra(n, lang) ?? m)

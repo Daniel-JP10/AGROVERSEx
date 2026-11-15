@@ -2,6 +2,7 @@
 import { create } from 'zustand'
 import { en } from './en'
 import { es, type ClaveTexto } from './es'
+import { conCifras } from './cifras'
 
 export type Idioma = 'es' | 'en'
 const LLAVE = 'agroversex-idioma'
@@ -20,4 +21,4 @@ export function alternar() {
   try { localStorage.setItem(LLAVE, nuevo) } catch { /* sin persistencia */ }
 }
 // Al español le pueden faltar claves (FALTANTES_ES): cae al inglés
-export const t = (clave: ClaveTexto): string => (idioma() === 'en' ? en[clave] : (es[clave] ?? en[clave]))
+export const t = (clave: ClaveTexto): string => conCifras(idioma() === 'en' ? en[clave] : (es[clave] ?? en[clave]), idioma())
