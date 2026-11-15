@@ -54,6 +54,8 @@ for (const L of IDIOMAS) {
       // Technical: aparece la elección y la línea PI-D1
       await page.getByRole('button', { name: L.tecnico, exact: true }).click()
       const ley = page.getByRole('group', { name: /legend|leyenda/i })
+      // La leyenda arranca plegada: el usuario abre los detalles para ver PI-D1 y elegir la ponderación
+      await ley.locator('details > summary').first().click()
       await expect(ley.locator('p.pid1')).toHaveText(new RegExp(L.pid1.source))
       await ley.getByRole('radio', { name: L.area }).check()
       await expect.poll(() => valor(page, 1, adm1), { timeout: 60_000 }).not.toBe(antes)

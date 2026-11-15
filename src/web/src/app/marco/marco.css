@@ -94,7 +94,7 @@ main.seccion.ciencia > h1, main.seccion.datos > h1, main.seccion.fuentes > h1 { 
 main.seccion.ciencia > h1::after, main.seccion.datos > h1::after, main.seccion.fuentes > h1::after { content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--acento), #6fe39a 40%, transparent); box-shadow: 0 0 10px rgba(111, 227, 154, 0.5); }
 
 /* Tarjetas con relieve: degradado interior, borde con brillo, hoja junto al título y nervadura en la esquina */
-.tarjeta-hoja { overflow: hidden; background: linear-gradient(160deg, color-mix(in srgb, var(--hoja) 88%, #6fe39a 12%) 0%, var(--hoja) 38%, color-mix(in srgb, var(--hoja) 92%, #000 8%) 100%);
+.tarjeta-hoja { overflow: hidden; background: linear-gradient(160deg, color-mix(in srgb, var(--hoja) 95%, #6fe39a 5%) 0%, var(--hoja) 30%, color-mix(in srgb, var(--hoja) 90%, #000 10%) 100%);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(201, 255, 216, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   animation: tarjeta-entra 0.6s ease-out both; }
 .tarjetas > .tarjeta-hoja:nth-child(2), .columnas-fuentes > .tarjeta-hoja:nth-child(2) { animation-delay: 0.08s; }
@@ -110,3 +110,5 @@ main.seccion.ciencia > h1::after, main.seccion.datos > h1::after, main.seccion.f
 @keyframes tarjeta-entra { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .tarjeta-hoja { animation: none; transition: none; } .tarjeta-hoja:hover { transform: none; } }
 @media (max-width: 760px) { main.seccion.ciencia::after, main.seccion.datos::after, main.seccion.fuentes::after { width: 130px; height: 70px; opacity: 0.35; } }
+/* AA sobre el degradado de la tarjeta: rótulos un poco más claros que --suave */
+.tarjeta-hoja dt { color: color-mix(in srgb, var(--suave) 80%, #ffffff 20%); }
