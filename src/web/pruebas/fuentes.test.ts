@@ -172,6 +172,6 @@ describe('el modo cambia el texto, nunca los datos', () => {
   it('créditos: dirección visual de Jostin Colon Ramos y las referencias de diseño declaradas como IA fuera del producto', () => {
     const html = renderToStaticMarkup(createElement(Fuentes))
     expect(html).toContain('Dirección visual: Jostin Colon Ramos')
-    expect(html).toContain('Las imágenes de referencia de diseño se generaron con IA y no se usan en el producto')
+    expect(html).toContain('El diseño visual lo dibujó a mano el equipo')
   })
 })

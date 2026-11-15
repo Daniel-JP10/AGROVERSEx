@@ -7,7 +7,7 @@ test('fuentes: tres columnas, créditos de dirección visual e IA, ninguna ruta 
   await page.goto('/#/fuentes')
   await expect(page.locator('.columnas-fuentes > section')).toHaveCount(3)
   await expect(page.locator('[data-credito-visual]')).toHaveText('Visual direction: Jostin Colon Ramos')
-  await expect(page.locator('[data-referencias-ia]')).toContainText('generated with AI and are not used in the product')
+  await expect(page.locator('[data-referencias-ia]')).toContainText('drawn by hand by the team')
   await page.locator('details[data-credito]').evaluateAll((ds) => ds.forEach((d) => d.setAttribute('open', '')))
   const texto = await page.locator('main').innerText()
   expect(texto).not.toMatch(/[A-Za-z]:[\/][A-Za-z]|herramientas-despliegue|\/tmp\/|\/Users\//)

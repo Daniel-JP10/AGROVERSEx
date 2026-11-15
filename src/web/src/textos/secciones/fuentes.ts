@@ -7,7 +7,7 @@ export const en = {
   'fuentes.f.glosario': 'Glossary',
   'fuentes.f.creditos': 'Credits',
   'fuentes.f.direccion_visual': 'Visual direction: Jostin Colon Ramos',
-  'fuentes.f.referencias_ia': 'The design reference images were generated with AI and are not used in the product: every chart, icon and illustration on screen is our own SVG or our own rendering of our data.',
+  'fuentes.f.referencias_ia': 'The visual design was drawn by hand by the team: every chart, icon and illustration on screen is our own SVG or our own rendering of our data.',
 } as const
 export const es: Record<keyof typeof en, string> = {
   'fuentes.f.intro': 'De dónde viene cada dato, qué significa cada palabra y quién hizo qué.',
@@ -15,5 +15,5 @@ export const es: Record<keyof typeof en, string> = {
   'fuentes.f.glosario': 'Glosario',
   'fuentes.f.creditos': 'Créditos',
   'fuentes.f.direccion_visual': 'Dirección visual: Jostin Colon Ramos',
-  'fuentes.f.referencias_ia': 'Las imágenes de referencia de diseño se generaron con IA y no se usan en el producto: cada gráfico, ícono e ilustración en pantalla es un SVG nuestro o una representación nuestra de nuestros datos.',
+  'fuentes.f.referencias_ia': 'El diseño visual lo dibujó a mano el equipo: cada gráfico, ícono e ilustración en pantalla es un SVG nuestro o una representación nuestra de nuestros datos.',
 }
