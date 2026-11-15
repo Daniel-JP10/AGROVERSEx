@@ -62,6 +62,10 @@ def test_el_despliegue_falla_si_hay_fugas(tmp_path, monkeypatch):
     'const c = "c:\\NASA\\datos"',
     r'r=\\ab\compartido',
     '{"r": "/var/folders/xy/T/a"}',
+    'const u="file:///C:/NASA/x"',
+    '{"sources": ["../../C:/NASA/x.ts"]}',
+    'const d="D:/wt/x"',
+    r'const d="c:\\wt\\x"',
 ])
 def test_detecta_rutas_de_v5(tmp_path, texto):
     (tmp_path / "a.js").write_text(texto, encoding="utf-8")
@@ -74,6 +78,8 @@ def test_detecta_rutas_de_v5(tmp_path, texto):
     "https://gibs.earthdata.nasa.gov/wmts",
     'new RegExp("\\s*\\d")',
     r'"N:\n"',
+    r'"Total N:\nkg"',
+    r'"T:\tab"',
     r'"P:\u00e9"',
     "{B:/xy/}",
 ])

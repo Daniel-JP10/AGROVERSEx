@@ -230,9 +230,9 @@ def _metadatos_pmtiles(contenido: bytes) -> bytes:
 TEXTO = {".js", ".mjs", ".css", ".html", ".json", ".txt", ".md", ".svg", ".map", ".xml", ".csv", ".webmanifest"}
 # Rutas locales sin re.I (V5): Unix, carpetas de usuario, rutas de red y la carpeta de herramientas del despliegue
 _COMUNES = r"""/home/|/Users/|/mnt/|/tmp/|/root/|/var/folders/|/opt/|\\{1,2}Users\\{1,2}|(?<=["'`\s(=])\\{2,4}[A-Za-z][A-Za-z0-9._-]+\\{1,2}[A-Za-z][A-Za-z0-9._$-]|herramientas-despliegue"""
-# Letra de unidad mayúscula o minúscula (V6.2) con / o \, solo tras inicio, comilla, espacio, ( = o >,
-# y un segmento de 3 o más caracteres que no sea un escape \uXXXX: así no se confunde con código minificado
-_UNIDAD = r"""(?<![^\s"'`(=>])[A-Za-z]:(?:/|\\{1,2})(?!u[0-9A-Fa-f]{4})[A-Za-z][A-Za-z0-9._-]{2,}"""
+# Letra de unidad mayúscula o minúscula (V6.2) tras inicio, comilla, espacio, ( = > o / (file:///C:/, ../C:/, V6.5),
+# con /, \\ o una \ que no abra un escape \n \r \t \u (V6.6), y una carpeta de 2 o más caracteres
+_UNIDAD = r"""(?<![^\s"'`(=>/])[A-Za-z]:(?:/|\\{2}|\\(?![nrtu]))[A-Za-z][A-Za-z0-9._-]+"""
 
 
 def buscar_fugas(dist: Path) -> list[str]:
