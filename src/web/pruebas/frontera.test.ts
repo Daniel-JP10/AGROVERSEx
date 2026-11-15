@@ -30,7 +30,9 @@ function importsProhibidos(archivo: string, fuente: string): string[] {
   for (const m of fuente.matchAll(/(?:from|import)\s*\(?\s*['"]([^'"]+)['"]/g)) {
     if (!m[1].startsWith('.')) continue
     const partes = [...dir]
-    for (const s of m[1].split('/')) { if (s === '..') partes.pop(); else if (s !== '.') partes.push(s) }
+    let fuera = false // sube más allá de src/: es un archivo del repo (datos/ de la raíz), no una carpeta de src
+    for (const s of m[1].split('/')) { if (s === '..') { if (!partes.length) fuera = true; partes.pop() } else if (s !== '.') partes.push(s) }
+    if (fuera) continue
     const destino = partes.join('/')
     const otraDeTierra = destino.startsWith('secciones/tierra/') && !/^secciones\/tierra\/(Tierra|interfaz)$/.test(destino)
     if (PROHIBIDOS.test(destino) || otraDeTierra) malos.push(m[1])
@@ -43,6 +45,8 @@ describe('frontera con las carpetas de Daniel', () => {
     expect(importsProhibidos('app/X.tsx', `import { u } from './estado'`)).toHaveLength(1)
     expect(importsProhibidos('secciones/gemelo/G.tsx', `import { u } from '../../app/estado'`)).toHaveLength(1)
     expect(importsProhibidos('app/X.tsx', `const m = await import('../globo/Globo')`)).toHaveLength(1)
+    expect(importsProhibidos('secciones/ciencia/d.ts', `import x from '../../../../../datos/lotes/a.json'`)).toHaveLength(0)
+    expect(importsProhibidos('secciones/ciencia/d.ts', `import x from '../../datos/series'`)).toHaveLength(1)
     expect(importsProhibidos('secciones/gemelo/G.tsx', `export { a } from '../../datos/series'`)).toHaveLength(1)
     expect(importsProhibidos('secciones/gemelo/G.tsx', `import { a } from '../tierra/Riel'`)).toHaveLength(1)
     expect(importsProhibidos('app/App.tsx', `import { Tierra } from '../secciones/tierra/Tierra'\nimport { t } from '../textos/i18n'\nimport { n } from './ruta'`)).toHaveLength(0)

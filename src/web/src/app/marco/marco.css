@@ -56,3 +56,19 @@
   .cabecera-hoja .nav a { padding: 3px 8px; }
   .hoja-esquina { width: 120px; }
 }
+
+/* Tarjeta hoja: lenguaje común de Ciencia, Datos abiertos y Fuentes */
+.tarjetas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 16px; margin-top: 12px; }
+.tarjeta-hoja { position: relative; padding: 14px 16px; background: var(--hoja); border: 1px solid var(--hoja-borde); border-radius: 22px 4px 22px 4px; color: var(--texto); min-width: 0; }
+.tarjeta-hoja h2 { margin: 0 0 8px; font-size: 16px; line-height: 1.3; color: var(--texto); }
+.tarjeta-hoja dl { margin: 0; }
+.tarjeta-hoja dl > div { display: grid; grid-template-columns: 9em 1fr; gap: 8px; padding: 5px 0; border-top: 1px solid var(--hoja-borde); }
+.tarjeta-hoja dt { color: var(--suave); font-size: 13px; }
+.tarjeta-hoja dd { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.tarjeta-hoja code { font-size: 12px; color: var(--suave); }
+.tarjeta-hoja .linea { display: block; }
+.tarjeta-hoja .nota { margin: 8px 0 0; font-size: 12px; color: var(--suave); }
+.tarjeta-hoja .sin-dato { color: var(--suave); }
+.etiqueta-evidencia { display: inline-block; padding: 0 8px; border: 1px solid var(--acento); border-radius: 10px; color: var(--acento); font-size: 12px; }
+.tarjeta-hoja a { color: var(--agua); }
+@media (max-width: 480px) { .tarjeta-hoja dl > div { grid-template-columns: 1fr; gap: 2px; } }
