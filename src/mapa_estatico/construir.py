@@ -412,26 +412,35 @@ _COMUNES = r"""/home/|/Users/|/mnt/|/tmp/|/root/|/var/folders/|/opt/|\\{1,2}User
 _UNIDAD = r"""(?<![^\s"'`(=>/])[A-Za-z]:(?:/|\\{2}|\\(?![nrtu]))[A-Za-z][A-Za-z0-9._-]+"""
 
 
-def buscar_fugas(dist: Path) -> list[str]:
+def _fuga_en(args) -> str | None:
+    """Primera fuga de un archivo de dist, o None (una tarea por archivo para repartir el mundo entre procesos)."""
+    ruta, dist, usuario = args
+    p = Path(ruta)
+    comun = re.compile(rf"{_COMUNES}|[/\\]{re.escape(usuario)}[/\\]")
+    contenido, es_texto = p.read_bytes(), p.suffix.lower() in TEXTO
+    if p.suffix == ".pmtiles":
+        contenido, es_texto = _metadatos_pmtiles(contenido), True
+    elif p.suffix == ".gz":
+        try:
+            contenido, es_texto = gzip.decompress(contenido), True
+        except OSError:
+            pass
+    texto = contenido.decode("utf-8", errors="replace")
+    m = comun.search(texto) or (re.search(_UNIDAD, texto) if es_texto else None)
+    return f"{p.relative_to(dist).as_posix()}: {m.group(0)}" if m else None
+
+
+def buscar_fugas(dist: Path, procesos: int = 8) -> list[str]:
     """Archivos de dist con rutas locales, de red, la carpeta de herramientas o el usuario de la máquina como segmento de ruta."""
-    usuario = re.escape(getpass.getuser())
-    comun = re.compile(rf"{_COMUNES}|[/\\]{usuario}[/\\]")
-    unidad = re.compile(_UNIDAD)
-    hallazgos = []
-    for p in sorted(x for x in dist.rglob("*") if x.is_file()):
-        contenido, es_texto = p.read_bytes(), p.suffix.lower() in TEXTO
-        if p.suffix == ".pmtiles":
-            contenido, es_texto = _metadatos_pmtiles(contenido), True
-        elif p.suffix == ".gz":
-            try:
-                contenido, es_texto = gzip.decompress(contenido), True
-            except OSError:
-                pass
-        texto = contenido.decode("utf-8", errors="replace")
-        m = comun.search(texto) or (unidad.search(texto) if es_texto else None)
-        if m:
-            hallazgos.append(f"{p.relative_to(dist).as_posix()}: {m.group(0)}")
-    return hallazgos
+    tareas = [(str(x), dist, getpass.getuser()) for x in sorted(x for x in dist.rglob("*") if x.is_file())]
+    if len(tareas) > 200 and procesos > 1:
+        # el mundo son unos 1 800 archivos y 1 GB comprimido: en un solo proceso tardaba más de 6 min
+        from concurrent.futures import ProcessPoolExecutor
+        with ProcessPoolExecutor(max_workers=procesos) as ex:
+            res = list(ex.map(_fuga_en, tareas, chunksize=8))
+    else:
+        res = [_fuga_en(t) for t in tareas]
+    return [h for h in res if h]
 
 
 # Límites de Cloudflare Pages, plan Free (developers.cloudflare.com/pages/platform/limits/, leída 2026-11-15):
