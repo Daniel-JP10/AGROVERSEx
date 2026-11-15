@@ -61,7 +61,7 @@ export const es: Partial<Record<ClaveTexto, string>> = {
   'enso.nota': '· eventos de la tabla evento (marcador en el año de inicio) · gris: sin dato de',
   'enso.real': 'RONI (°C) real',
   'enso.sinDato': 'RONI: sin dato',
-  'escenario.aviso': 'Referencia de escenario: el deslizador se queda entre los percentiles 25 y 75 de esta unidad en 2000-2026. No cambia los resultados del gemelo ni recalcula el clima.',
+  'escenario.aviso': 'Referencia de escenario: el deslizador se queda entre los cuartiles inferior y superior de toda la serie de esta unidad. No cambia los resultados del gemelo ni recalcula el clima.',
   'escenario.calculando': 'Calculando p25-p75…',
   'escenario.inferencia': '(INFERENCIA, serie mensual {anios_serie})',
   'escenario.limite': 'El escenario se limita al rango p25-p75 de esta unidad: fuera de él no hay respaldo en sus datos.',
