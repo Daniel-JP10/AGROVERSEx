@@ -56,7 +56,7 @@ def construido(tmp_path_factory):
 @pytest.mark.lento
 def test_indice_lista_todos_los_archivos(construido):
     salida, indice = construido
-    assert indice["version_contrato"] == 1 and indice["version_contrato_completa"] == "1.1"
+    assert indice["version_contrato"] == 1 and indice["version_contrato_completa"] == "1.2"
     (lote,) = indice["lotes"]
     assert lote["lote_id"] == "DEMO-USA-99" and lote["provisional"] is True
     rutas = [a for e in lote["escenarios"].values() for a in e.values()]

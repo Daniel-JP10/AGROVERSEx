@@ -142,7 +142,9 @@ Tablas `corrida` (documento completo en `documento`), `indicador (corrida_id, es
 - En optimización, presentar el frente como compromisos con `frente_a_linea_base`, no como recomendación única.
 - Los cambios de carbono son diferencias frente al equilibrio con la estrategia de referencia (ver `metadatos.carbono`).
 
-## v1.1: cambios aditivos
+## v1.1 y v1.2: cambios aditivos
+
+`version_contrato_completa = "1.2"`: v1.2 cambia el objetivo del deslizador `suelo` (§4, §6) y publica los casos de orden en `contratos/prioridades_casos.json`; el resto es v1.1.
 
 Todo lo de esta sección se agrega sin quitar ni cambiar el tipo de nada de la v1. Los textos en español de la v1 (`avisos`, `explicacion`, `texto`, `frente_a_linea_base`, `compromisos.explicacion`) siguen saliendo; la v1.1 añade al lado sus claves de texto.
 
@@ -201,7 +203,7 @@ Bloque `prioridades` en todos los documentos y `metricas` (valores naturales de 
 | Deslizador de Web | Objetivos del gemelo | Indicador | Sentido |
 |-|-|-|-|
 | `agua` | `riego`, `deficit` | `riego_mm_anio`, `deficit_relativo` | min, min |
-| `suelo` | `carbono`, `lluvia_intensa_suelo_desnudo` | `cambio_carbono_t_ha_anio`, `lluvia_intensa_sobre_suelo_desnudo_mm_anio` | max, min |
+| `suelo` | `carbono`, `exposicion_erosiva` (v1.2; antes `lluvia_intensa_suelo_desnudo`) | `cambio_carbono_t_ha_anio`, `indice_exposicion_erosiva` | max, min |
 | `insumos` | `fertilizante` | `fertilizante_n_kg_ha_anio` (D-007, mientras `costo` siga PENDIENTE) | min |
 | `estabilidad_climatica` | `riesgo_produccion` | `produccion_relativa_anio`, CVaR 90 % (media del peor 10 %) | max |
 
@@ -217,7 +219,7 @@ S_s = \frac{\sum_k w_k\, \bar n_{k,s}}{\sum_k w_k},\qquad \bar n_{k,s} = \text{m
 
 Orden: \(S\) descendente; empate, posición original en el documento. Pesos \(w_k \ge 0\) (Web usa 0 a 5). El documento trae `normalizados`, `por_deslizador` y el orden con pesos iguales.
 
-Casos de prueba (`prioridades.casos_prueba` y `pruebas/gemelo/test_prioridades.py`), sobre esta tabla sintética:
+Casos de prueba (`prioridades.casos_prueba`, `pruebas/gemelo/test_prioridades.py` y **`contratos/prioridades_casos.json`**, el archivo que leen las dos pruebas, la del gemelo y la de Web), sobre esta tabla sintética (en v1.2 la columna `lluvia_intensa` se llama `exposicion_erosiva`; valores, puntajes y órdenes no cambian):
 
 | Estrategia | riego | deficit | carbono | lluvia_intensa | fertilizante | riesgo_produccion |
 |-|-|-|-|-|-|-|
@@ -234,14 +236,14 @@ Casos de prueba (`prioridades.casos_prueba` y `pruebas/gemelo/test_prioridades.p
 
 ### 5. Identificador del lote
 
-`lote.id` de un lote DEMO = `DEMO-{iso3}-{nn}` (regex `^DEMO-[A-Z]{3}-\d{2}$`). Se valida cuando el id empieza por `DEMO`, cuando hay `zona_demo` y siempre en el paquete; otro formato es error.
+`lote.id` de un lote DEMO = `DEMO-{iso3}-{nn}` (regex `^DEMO-[A-Z]{3}-\d{2}$`). Con `lote.catalogo` (ruta a `lotes_demo.json` de Datos), `nombre`, `lat`, `lon`, `unidad_id`, `clima_tipo` y `area_ha` se leen de ese archivo; un valor del YAML que lo contradiga es error. Se valida cuando el id empieza por `DEMO`, cuando hay `zona_demo` y siempre en el paquete; otro formato es error.
 
-### 6. Erosión: una sola definición
+### 6. Erosión: una sola definición (v1.2)
 
-- `exposicion_erosiva` es la función de Datos (T-D6: percentil 90 semanal, pendiente y erodabilidad K). El gemelo no usa ese nombre para lo suyo.
-- El indicador del gemelo se llama `lluvia_intensa_sobre_suelo_desnudo_mm_anio` (misma fórmula de la v1) y el objetivo `lluvia_intensa_suelo_desnudo`.
-- Por la regla aditiva, `exposicion_erosiva_mm_anio` sigue saliendo como alias con el mismo valor y `obsoleto: true, reemplazado_por`; el objetivo `exposicion_erosiva` se acepta en la entrada y se traduce. Web usa solo los nombres nuevos. Ambos alias se quitan en la v2.
-- Cuando T-D6 exista, el gemelo leerá `exposicion_erosiva` de Datos como entrada (contexto del lote) en lugar de calcular otro índice con ese nombre.
+- `exposicion_erosiva` es la función de Datos (`src/lotes_demo/erosion.py`, D-019/T-D6, copia byte a byte de `origin/datos` hasta que `integracion` esté publicada). El gemelo la llama por miembro del ensamble con su **fracción de suelo desprotegido simulada** `(1 - V)(1 - f_res)` diaria, la lluvia de la simulación (**NASA POWER**, la base) y los umbrales P90 semanales calculados con la misma función sobre todo el registro de POWER del lote. Pendiente media NASADEM y K de Williams salen de `exposicion_erosiva_lotes.json` de Datos (sección `erosion.archivo` del YAML); sin ella quedan los valores por defecto de la función, `SUPUESTO`.
+- Indicador nuevo `indice_exposicion_erosiva` (índice, `combinacion_propia`); objetivo nuevo `exposicion_erosiva` en el deslizador `suelo` y en los objetivos base de la optimización.
+- Obsoletos hasta la v2: el objetivo `lluvia_intensa_suelo_desnudo` es alias de `exposicion_erosiva` (se acepta en la entrada; `metricas` lo trae con el mismo valor); los indicadores `lluvia_intensa_sobre_suelo_desnudo_mm_anio` y `exposicion_erosiva_mm_anio` siguen saliendo con `obsoleto: true, reemplazado_por: indice_exposicion_erosiva`.
+- Diferencia declarada con los valores publicados por Datos: Datos calculó el índice del lote con IMERG y suelo 100 % desnudo o acotado por HLS; el gemelo usa POWER y la cobertura de cada estrategia, así que los números no coinciden y no deben compararse uno a uno.
 
 ### 7. Entradas de Datos
 
@@ -268,13 +270,14 @@ Bloque aditivo `alertas` en todos los documentos. En la v1.1 entra solo `alertas
 | Campo | Contenido |
 |-|-|
 | `serie_temperatura` | `T2M_MIN_CORR` si el CSV la trae (`forzantes_gemelo.md` §4.3); si no, `T2M_MIN`. La media, la ET0 y la suma térmica siguen con `T2M` crudo |
-| `umbral_c`, `etapa_sensible` | 0 °C y etapas des y med de FAO-56 de los cultivos que se cosechan; ambos `SUPUESTO` (`umbral_etiqueta`, `etapa_etiqueta`) |
+| `umbral_c`, `umbrales_cultivo`, `etapa_sensible` | Umbral por cultivo (`t_helada` del catálogo) donde tenga fuente; si no, `umbral_c` = 0 °C `SUPUESTO`, listado en `cultivos_umbral_supuesto` y declarado en la tarjeta (`card.gap.frost_threshold_assumed`). Etapa: des y med de FAO-56 de los cultivos cosechados, `SUPUESTO` |
 | `validacion` | Sesgo de la mínima frente a la estación, leído del JSON de Datos (`alertas.helada.validacion` en el YAML); `null` sin validación |
 | `margen_sesgo_c` | Cota superior del IC 95 % del sesgo; `0` sin validación |
 | `estrategias.<id>.fraccion_temporadas_con_helada` | `{valor, cota_baja, cota_alta}`: temporadas cosechadas con al menos un día con mínima ≤ umbral en etapa sensible; la cota alta resta `margen_sesgo_c` a la mínima |
 | `estrategias.<id>.dias_helada_etapa_sensible_anio`, `tmin_minima_etapa_sensible_c` | p10, p50, p90 sobre las ventanas |
 | `estrategias.<id>.estado`, `clave`, `parametros` | `activa` (cota baja > 0), `vigilancia` (cota alta > 0, o `serie_no_resuelve_heladas`: la serie nunca baja del umbral y la estación sí registró días ≤ 0 °C; clave `alert.frost.unresolved`), `sin_alerta` |
-| `provisional`, `avisos` | `provisional: true` en `DEMO-COL-01`; `avisos` lleva `alert.frost.warm_bias` (sesgo e IC de Datos) y `alert.frost.provisional` |
+| `metodo`, `metodo_etiqueta`, `estacion_cercana` | `serie_power` (lo anterior) o `climatologia_estacion` (`combinacion_propia`): si la serie no resuelve heladas y hay estación a ≤ `estacion_max_km` (5) y ≤ `estacion_max_desnivel_m` (100 m) del lote, se usa la frecuencia mensual de días con TMIN ≤ umbral de la estación (`climatologia_mensual`: días con dato, días de helada, frecuencia con IC de Wilson al 95 %, cobertura), cruzada con los días de etapa sensible. Por estrategia: `dias_helada_esperados_temporada` y `probabilidad_al_menos_una_temporada` (`{valor, cota_baja, cota_alta}`), `meses_sensibles_con_helada_observada`, claves `alert.frost.station_activa` o `alert.frost.station_sin_alerta`. Sin estación cercana queda `vigilancia` |
+| `provisional`, `avisos` | `provisional: true` en `DEMO-COL-01`; `avisos` lleva `alert.frost.station_climatology` (estación, distancia, desnivel, días de helada, días con dato y cobertura, leídos del CSV de la estación), `alert.frost.warm_bias` (sesgo e IC de Datos) y `alert.frost.provisional` |
 
 La tarjeta lleva en `vacios` la entrada `card.gap.frost_underestimated` cuando el sesgo es cálido.
 

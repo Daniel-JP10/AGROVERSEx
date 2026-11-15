@@ -6,11 +6,8 @@ version_contrato: 1
 
 lote:
   id: DEMO-COL-01
-  nombre: Lote demostrativo Ipiales (Nariño)
-  lat: 0.842
-  lon: -77.661
-  unidad_id: COL-ADM2-7082276B52108893597118
-  clima_tipo: tropical            # trópico: sin reglas de sucesión con intervalo numérico (INV-ROT §5.2)
+  # Nombre, punto, unidad y clima se leen de lotes_demo.json de Datos (no se escriben a mano)
+  catalogo: ../datos/referencia/lotes/lotes_demo.json
 
 clima:
   # Forzantes de Datos (T-D5, forzantes_gemelo.md v1, SHA256 en datos/referencia/lotes/SHA256SUMS.txt).
@@ -45,6 +42,15 @@ alertas:
     umbral_c: 0.0
     provisional: true
     validacion: ../datos/referencia/lotes/validacion_temperatura_ipiales.json
+    # Estación cercana (criterio del director: <= 5 km y <= 100 m de desnivel): si la serie no genera heladas,
+    # la alerta usa su climatología observada (combinación propia)
+    estacion: ../datos/referencia/lotes/COM00080370.csv
+    estacion_max_km: 5
+    estacion_max_desnivel_m: 100
+
+# Pendiente NASADEM y K de Williams del lote para exposicion_erosiva de Datos (T-D6, una sola definición)
+erosion:
+  archivo: ../datos/referencia/lotes/exposicion_erosiva_lotes.json
 
 escenario:
   tipo: historico

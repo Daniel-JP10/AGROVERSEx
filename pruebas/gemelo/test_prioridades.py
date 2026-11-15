@@ -13,6 +13,17 @@ def test_deslizadores_cubren_los_cuatro_de_web():
     assert all(o in OBJETIVOS for objs in pr.DESLIZADORES.values() for o in objs)
 
 
+def test_mapeo_v12_igual_al_archivo_compartido_con_web():
+    import json
+    d = json.loads(pr.CASOS_ARCHIVO.read_text(encoding="utf-8"))
+    assert d["version_contrato"] == "1.2"
+    assert {k: tuple(v) for k, v in d["deslizadores"].items()} == pr.DESLIZADORES
+    assert pr.DESLIZADORES["suelo"] == ("carbono", "exposicion_erosiva")
+    assert d["alias_obsoletos"] == {"lluvia_intensa_suelo_desnudo": "exposicion_erosiva"}
+    for o, x in d["objetivos"].items():
+        assert OBJETIVOS[o]["indicador"] == x["indicador"] and OBJETIVOS[o]["sentido"] == x["sentido"]
+
+
 @pytest.mark.parametrize("caso", pr.CASOS_PRUEBA, ids=lambda c: c["nombre"])
 def test_casos_de_prueba(caso):
     norm = pr.normalizar(pr.TABLA_PRUEBA)

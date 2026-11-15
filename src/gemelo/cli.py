@@ -1,4 +1,5 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Claude Code (Opus 5.5), v1.2: exposicion_erosiva de Datos como objetivo del deslizador suelo
 """Línea de comandos: python -m gemelo {simular, optimizar, cultivos, definiciones} ..."""
 import argparse
 import json
@@ -12,7 +13,7 @@ from gemelo.procedencia import ParametroPendiente
 from gemelo.salida import guardar_json, guardar_sqlite
 
 RESUMEN = ("produccion_relativa_anio", "rendimiento_relativo", "riego_mm_anio", "deficit_relativo",
-           "lixiviacion_n_kg_ha_anio", "cambio_carbono_t_ha_anio", "lluvia_intensa_sobre_suelo_desnudo_mm_anio")
+           "lixiviacion_n_kg_ha_anio", "cambio_carbono_t_ha_anio", "indice_exposicion_erosiva")
 
 
 def _tabla(estrategias: list[dict]) -> str:

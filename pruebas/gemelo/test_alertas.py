@@ -1,4 +1,4 @@
-# asistido por SI: Claude Code (Opus 5.5), pruebas de la alerta de helada D-032 y de la lluvia alterna IMERG
+# asistido por SI: Claude Code (Opus 5.5), pruebas de la alerta de helada D-032, climatología de estación y lluvia alterna
 import json
 from dataclasses import replace
 from pathlib import Path
@@ -38,20 +38,57 @@ def test_ipiales_lee_minima_corregida_sin_tocar_la_media(ipiales):
                                                     abs=0.01)
 
 
-def test_alerta_ipiales_provisional_con_sesgo_de_datos_y_vigilancia(ipiales):
+def test_alerta_ipiales_usa_climatologia_de_estacion_con_cifras_de_datos(ipiales):
     b = alertas.bloque(ipiales, _programas(ipiales))["helada_etapa_sensible"]
     v = json.loads((LOTES / "validacion_temperatura_ipiales.json").read_text(encoding="utf-8"))
     c = v["comparaciones"]["T2M_MIN_vs_TMIN"]["corregida_lote_2934m"]
     assert b["provisional"] and b["serie_temperatura"] == "T2M_MIN_CORR" and not b["es_pronostico"]
     assert b["validacion"]["sesgo_c"] == c["sesgo_c"]
-    assert b["margen_sesgo_c"] == c["sesgo_c_ic95_bootstrap_anual"][1]
-    assert [a["clave"] for a in b["avisos"]] == ["alert.frost.warm_bias", "alert.frost.provisional"]
-    # La serie nunca baja de 0 °C y la estación sí: no se puede decir "sin alerta"
-    assert b["serie_no_resuelve_heladas"]
-    for e in b["estrategias"].values():
-        assert e["estado"] == "vigilancia" and e["clave"] == "alert.frost.unresolved"
-        r = e["tmin_minima_etapa_sensible_c"]
-        assert r["p10"] <= r["p50"] <= r["p90"]
+    # La serie no genera heladas y la estación está cerca: climatología observada, combinación propia
+    assert b["serie_no_resuelve_heladas"] and b["metodo"] == "climatologia_estacion"
+    assert b["metodo_etiqueta"] == "combinacion_propia"
+    e = b["estacion_cercana"]
+    assert e["cercana"] and e["distancia_km"] < 5 and e["desnivel_m"] < 100
+    # Ejecución propia sobre el CSV de la estación = cifras independientes de Datos
+    clim = e["climatologia_mensual"]
+    assert sum(f["dias_helada"] for f in clim) == v["analisis_extremos_frios_tmin"]["ghcn_dias_le_0c"]
+    assert sum(f["dias_con_dato"] for f in clim) == v["analisis_extremos_frios_tmin"]["ghcn_tmin_n_validos"]
+    aviso = b["avisos"][0]
+    assert aviso["clave"] == "alert.frost.station_climatology"
+    assert aviso["parametros"]["dias"] == 17 and aviso["parametros"]["cobertura"] == pytest.approx(c["fraccion_valida"],
+                                                                                                    abs=1e-3)
+    for x in b["estrategias"].values():
+        d = x["dias_helada_esperados_temporada"]
+        assert x["clave"].startswith("alert.frost.station_") and 0 <= d["cota_baja"] <= d["valor"] <= d["cota_alta"]
+
+
+def test_sin_estacion_cercana_queda_vigilancia(ipiales):
+    val = alertas.leer_validacion(LOTES / "validacion_temperatura_ipiales.json", "t2m_min_corr")
+    est = alertas.leer_estacion(LOTES / "COM00080370.csv", val["periodo"])
+    b = alertas.helada_etapa_sensible(ipiales.clima, ipiales.escenario, _programas(ipiales), 0.0, True, val, est,
+                                      max_km=1.0, lote=ipiales.lote)
+    assert b["metodo"] == "serie_power" and not b["estacion_cercana"]["cercana"]
+    assert {x["clave"] for x in b["estrategias"].values()} == {"alert.frost.unresolved"}
+
+
+def test_umbral_supuesto_declarado_en_la_tarjeta_y_avena_sin_fuente(ipiales):
+    u = alertas.umbrales_cultivo(["avena", "papa"])
+    assert u["avena"] == {"valor": 0.0, "etiqueta": "SUPUESTO", "referencia": None}
+    from gemelo.api import simular_con_ensamble
+    doc, _ = simular_con_ensamble(replace(ipiales, estrategias=ipiales.estrategias[:2]))
+    gaps = [g for g in doc["tarjetas"]["B"]["vacios"] if g["clave"] == "card.gap.frost_threshold_assumed"]
+    assert gaps and "avena" in gaps[0]["valores"]["cultivos"]
+    claves = [g["clave"] for g in doc["tarjetas"]["B"]["vacios"]]
+    assert "card.gap.frost_independence" in claves     # climatología de estación: independencia declarada
+
+
+def test_lote_se_lee_de_lotes_demo_y_no_admite_contradicciones(ipiales, tmp_path):
+    cat = json.loads((LOTES / "lotes_demo.json").read_text(encoding="utf-8"))
+    fila = next(x for x in cat["lotes"] if x["lote_id"] == "DEMO-COL-01")
+    assert ipiales.lote.nombre == fila["nombre"] and ipiales.lote.lat == fila["lat"]
+    from gemelo.entrada import lote_desde_catalogo
+    with pytest.raises(ValueError, match="contradicen"):
+        lote_desde_catalogo({"id": "DEMO-COL-01", "nombre": "Lote demostrativo"}, LOTES / "lotes_demo.json")
 
 
 def test_alerta_activa_y_rango_ordenado_con_frio_desplazado(ipiales):

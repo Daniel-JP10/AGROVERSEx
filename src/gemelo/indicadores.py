@@ -1,11 +1,14 @@
 # asistido por SI: Cursor (agente), escritura y revisión de código; núcleo del gemelo digital en el hackatón
+# asistido por SI: Claude Code (Opus 5.5), v1.2: exposicion_erosiva de Datos como objetivo del deslizador suelo
 """Indicadores del gemelo: definición matemática, unidad y cálculo por miembro del ensamble.
 
 H = años del horizonte; las sumas son sobre todos los días salvo que se indique "días de cultivo".
 """
 import numpy as np
+import pandas as pd
 
 from gemelo.clima import MES_DE_DIA
+from lotes_demo import exposicion_erosiva
 
 DEFINICIONES = {
     "riego_mm_anio": ("mm/año", "sum(I_bruto) / H", "Agua de riego aplicada (bruta, incluye pérdidas de aplicación)"),
@@ -29,8 +32,11 @@ DEFINICIONES = {
     "lluvia_intensa_sobre_suelo_desnudo_mm_anio": ("mm/año", "sum(P * 1[P >= P_int] * (1 - V)(1 - f_res)) / H",
                                                    "Lluvia intensa que cae sobre suelo desprotegido"),
     "exposicion_erosiva_mm_anio": ("mm/año", "alias de lluvia_intensa_sobre_suelo_desnudo_mm_anio",
-                                   "Nombre obsoleto (v1); usar lluvia_intensa_sobre_suelo_desnudo_mm_anio. "
-                                   "exposicion_erosiva es la función de Datos (T-D6)"),
+                                   "Nombre obsoleto (v1); usar indice_exposicion_erosiva"),
+    "indice_exposicion_erosiva": ("índice", "lotes_demo.exposicion_erosiva: (lluvia de días >= P90 semanal sobre "
+                                  "suelo desprotegido / años) * S_McCool(pendiente) * K_Williams",
+                                  "Exposición del suelo a la erosión: tormentas sobre suelo desprotegido, según "
+                                  "pendiente y erodabilidad (función de Datos, combinación propia)"),
     "rendimiento_relativo": ("adimensional", "media por temporada de Y / Y_pot",
                              "Cosecha lograda frente a la posible sin falta de agua ni nitrógeno"),
     "indice_productivo": ("adimensional", "media por temporada de Y / Y_max (Y_max: solo radiación)",
@@ -46,7 +52,21 @@ DEFINICIONES = {
                                "Error numérico del balance de agua (debe ser ~0)"),
 }
 
-OBSOLETOS = {"exposicion_erosiva_mm_anio": "lluvia_intensa_sobre_suelo_desnudo_mm_anio"}
+OBSOLETOS = {"exposicion_erosiva_mm_anio": "indice_exposicion_erosiva",
+             "lluvia_intensa_sobre_suelo_desnudo_mm_anio": "indice_exposicion_erosiva"}
+
+
+def fechas_nominales(n: int) -> pd.DatetimeIndex:
+    """Fechas de un año no bisiesto repetido: el día nominal t cae en la semana del año de Datos que le toca."""
+    return pd.DatetimeIndex(pd.Timestamp("2001-01-01") + pd.to_timedelta(np.arange(n) % 365, unit="D"))
+
+
+def indice_erosion(P: np.ndarray, desnudo: np.ndarray, erosion: dict) -> np.ndarray:
+    """(M,) índice de lotes_demo.exposicion_erosiva por miembro, con la fracción desprotegida simulada."""
+    f = fechas_nominales(P.shape[1])
+    kw = {k: erosion[k] for k in ("pendiente_m_m", "k_erodabilidad") if k in erosion}
+    return np.array([exposicion_erosiva(P[m], f, desnudo=desnudo[m], umbrales_p90=erosion["umbrales_p90"],
+                                        **kw)["indice_exposicion_erosiva"] for m in range(P.shape[0])])
 
 DEFINICIONES_TEMPORADA = {
     "rendimiento_kg_ha": ("kg MS/ha", "IC * B a la cosecha (0 si es cobertura)"),
@@ -67,7 +87,8 @@ DEFINICIONES_TEMPORADA = {
 
 
 def por_miembro(reg: dict, prog: dict, H: int, p_intensa: float, umbral_cobertura: float,
-                costos_fijos: np.ndarray | None = None, costos: dict | None = None) -> dict[str, np.ndarray]:
+                costos_fijos: np.ndarray | None = None, costos: dict | None = None,
+                erosion: dict | None = None) -> dict[str, np.ndarray]:
     """Indicadores de horizonte (M,) para cada miembro."""
     cultivo = prog["cult"] >= 0
     etc_c = np.where(cultivo, reg["ETc"], 0).sum(1)
@@ -102,6 +123,8 @@ def por_miembro(reg: dict, prog: dict, H: int, p_intensa: float, umbral_cobertur
         "cierre_balance_agua_mm": np.abs(cierre).max(1),
     }
     out["exposicion_erosiva_mm_anio"] = out["lluvia_intensa_sobre_suelo_desnudo_mm_anio"]
+    if erosion is not None:
+        out["indice_exposicion_erosiva"] = indice_erosion(reg["P"], reg["desnudo"], erosion)
     if costos is not None and costos_fijos is not None:
         out["costo_anio"] = (reg["I_bruto"].sum(1) * float(costos.get("riego_por_mm", 0.0)) + costos_fijos) / H
     return out

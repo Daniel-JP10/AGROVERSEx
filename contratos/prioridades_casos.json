@@ -1,0 +1,163 @@
+{
+ "version_contrato": "1.2",
+ "descripcion": "Mapeo de deslizadores a objetivos y casos de orden por pesos. Lo leen la prueba del gemelo (pruebas/gemelo/test_prioridades.py) y la de Web. Tabla sintética: no son resultados del modelo.",
+ "deslizadores": {
+  "agua": [
+   "riego",
+   "deficit"
+  ],
+  "suelo": [
+   "carbono",
+   "exposicion_erosiva"
+  ],
+  "insumos": [
+   "fertilizante"
+  ],
+  "estabilidad_climatica": [
+   "riesgo_produccion"
+  ]
+ },
+ "objetivos": {
+  "riego": {
+   "indicador": "riego_mm_anio",
+   "sentido": "min"
+  },
+  "deficit": {
+   "indicador": "deficit_relativo",
+   "sentido": "min"
+  },
+  "carbono": {
+   "indicador": "cambio_carbono_t_ha_anio",
+   "sentido": "max"
+  },
+  "exposicion_erosiva": {
+   "indicador": "indice_exposicion_erosiva",
+   "sentido": "min"
+  },
+  "fertilizante": {
+   "indicador": "fertilizante_n_kg_ha_anio",
+   "sentido": "min"
+  },
+  "riesgo_produccion": {
+   "indicador": "produccion_relativa_anio",
+   "sentido": "max"
+  }
+ },
+ "alias_obsoletos": {
+  "lluvia_intensa_suelo_desnudo": "exposicion_erosiva"
+ },
+ "nota_alias": "metricas trae lluvia_intensa_suelo_desnudo con el mismo valor que exposicion_erosiva hasta la v2",
+ "formula": {
+  "normalizado_max": "n = (x - min) / (max - min)",
+  "normalizado_min": "n = (max - x) / (max - min)",
+  "empate_en_objetivo": "n = 0.5 si max = min",
+  "puntaje": "S = sum_k w_k * media_{o en k} n_o / sum_k w_k; S = 0 si sum_k w_k = 0",
+  "orden": "S descendente; empate: posición original en el documento",
+  "pesos": "w_k >= 0 (Web usa 0 a 5)",
+  "conjunto": "estrategias del mismo documento (linea_base + frente, o estrategias)"
+ },
+ "tabla": {
+  "X": {
+   "riego": 0.0,
+   "deficit": 0.3,
+   "carbono": -0.1,
+   "exposicion_erosiva": 30.0,
+   "fertilizante": 150.0,
+   "riesgo_produccion": 0.3
+  },
+  "Y": {
+   "riego": 0.0,
+   "deficit": 0.2,
+   "carbono": 0.05,
+   "exposicion_erosiva": 20.0,
+   "fertilizante": 100.0,
+   "riesgo_produccion": 0.25
+  },
+  "Z": {
+   "riego": 0.0,
+   "deficit": 0.25,
+   "carbono": -0.3,
+   "exposicion_erosiva": 35.0,
+   "fertilizante": 50.0,
+   "riesgo_produccion": 0.4
+  }
+ },
+ "casos": [
+  {
+   "nombre": "pesos iguales",
+   "pesos": {
+    "agua": 1,
+    "suelo": 1,
+    "insumos": 1,
+    "estabilidad_climatica": 1
+   },
+   "puntajes": {
+    "X": 0.258929,
+    "Y": 0.5625,
+    "Z": 0.625
+   },
+   "orden": [
+    "Z",
+    "Y",
+    "X"
+   ]
+  },
+  {
+   "nombre": "solo suelo",
+   "pesos": {
+    "agua": 0,
+    "suelo": 5,
+    "insumos": 0,
+    "estabilidad_climatica": 0
+   },
+   "puntajes": {
+    "X": 0.452381,
+    "Y": 1.0,
+    "Z": 0.0
+   },
+   "orden": [
+    "Y",
+    "X",
+    "Z"
+   ]
+  },
+  {
+   "nombre": "agua alta y algo de estabilidad",
+   "pesos": {
+    "agua": 5,
+    "suelo": 0,
+    "insumos": 0,
+    "estabilidad_climatica": 1
+   },
+   "puntajes": {
+    "X": 0.263889,
+    "Y": 0.625,
+    "Z": 0.583333
+   },
+   "orden": [
+    "Y",
+    "Z",
+    "X"
+   ]
+  },
+  {
+   "nombre": "todos los pesos en cero",
+   "pesos": {
+    "agua": 0,
+    "suelo": 0,
+    "insumos": 0,
+    "estabilidad_climatica": 0
+   },
+   "puntajes": {
+    "X": 0.0,
+    "Y": 0.0,
+    "Z": 0.0
+   },
+   "orden": [
+    "X",
+    "Y",
+    "Z"
+   ]
+  }
+ ]
+}

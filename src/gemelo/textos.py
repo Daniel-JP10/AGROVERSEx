@@ -198,6 +198,28 @@ _BASE: dict[str, tuple[str, str]] = {
                                "referencia sí registró heladas; los datos no permiten descartar heladas en etapa "
                                "sensible (p10 de la mínima de la etapa: {tmin_p10} °C, {fraccion:.0%} de las "
                                "temporadas en los datos)."),
+    "alert.frost.station_activa": ("Station frost climatology: about {dias} frost days per season in sensitive stages "
+                                   "(95 % range {dias_lo} to {dias_hi}); months with observed frost in those stages: "
+                                   "{meses}. Probability of at least one: {prob:.0%}.",
+                                   "Climatología de heladas de la estación: unos {dias} días de helada por temporada "
+                                   "en etapas sensibles (rango 95 % {dias_lo} a {dias_hi}); meses con helada observada "
+                                   "en esas etapas: {meses}. Probabilidad de al menos una: {prob:.0%}."),
+    "alert.frost.station_sin_alerta": ("Station frost climatology: no frost observed in the months of the sensitive "
+                                       "stages (95 % upper range {dias_hi} days per season).",
+                                       "Climatología de heladas de la estación: sin heladas observadas en los meses de "
+                                       "las etapas sensibles (rango 95 % superior {dias_hi} días por temporada)."),
+    "alert.frost.station_climatology": ("Own combination: the frost alert uses station {estacion} ({km} km, {dz} m "
+                                        "height difference), which recorded {dias} days at or below {umbral} °C in "
+                                        "{dias_dato} days with data ({cobertura:.0%} coverage, {desde}-{hasta}), "
+                                        "because the NASA POWER series cannot produce the frosts.",
+                                        "Combinación propia: la alerta de helada usa la estación {estacion} ({km} km, "
+                                        "{dz} m de desnivel), que registró {dias} días con {umbral} °C o menos en "
+                                        "{dias_dato} días con dato (cobertura {cobertura:.0%}, {desde}-{hasta}), porque "
+                                        "la serie de NASA POWER no puede generar las heladas."),
+    "card.gap.frost_threshold_assumed": ("Frost threshold of {cultivos}: {umbral} °C SUPUESTO (the crop catalogue has "
+                                         "no frost tolerance with a source).",
+                                         "Umbral de helada de {cultivos}: {umbral} °C SUPUESTO (el catálogo de cultivos "
+                                         "no tiene la tolerancia a helada con fuente)."),
     "alert.frost.sin_alerta": ("No past season reached {umbral} °C in a sensitive stage, even allowing for the known "
                                "bias (p10 of the stage minimum: {tmin_p10} °C).",
                                "Ninguna temporada pasada llegó a {umbral} °C en etapa sensible, aun contando el sesgo "
@@ -219,6 +241,12 @@ _BASE: dict[str, tuple[str, str]] = {
                                       "Heladas: la mínima corregida queda {sesgo:+.2f} °C más cálida que la estación "
                                       "{estacion} (IC 95 % {lo:+.2f} a {hi:+.2f}); el riesgo de helada está algo "
                                       "subestimado."),
+    "card.gap.frost_independence": ("Frost probability assumes independent days; cold days usually come in runs, so "
+                                    "the probability of at least one frost is probably overestimated (the expected "
+                                    "number of frost days is not affected).",
+                                    "La probabilidad de helada supone días independientes; los días fríos suelen venir "
+                                    "seguidos, así que la probabilidad de al menos una helada probablemente está "
+                                    "sobrestimada (el número esperado de días de helada no se ve afectado)."),
     "card.gap.rain_alt_source": ("Rain source: with GPM IMERG instead of NASA POWER (technical mode only; not an "
                                  "equivalent scenario) the position changes {central} -> {alterna}. IMERG "
                                  "overestimates against station {estacion} ({sesgo_imerg:+.0%}; POWER "
@@ -260,7 +288,10 @@ EN_INDICADORES = {
     "dias_suelo_desnudo_anio": ("Bare-soil days", "Days with unprotected soil"),
     "lluvia_intensa_sobre_suelo_desnudo_mm_anio": ("Heavy rain on bare soil", "Heavy rain falling on unprotected soil"),
     "exposicion_erosiva_mm_anio": ("Heavy rain on bare soil (obsolete name)",
-                                   "Obsolete alias of lluvia_intensa_sobre_suelo_desnudo_mm_anio"),
+                                   "Obsolete name; use indice_exposicion_erosiva"),
+    "indice_exposicion_erosiva": ("Erosive exposure index",
+                                  "Soil exposure to erosion: storms on unprotected soil, weighted by slope and "
+                                  "erodibility (Datos function, own combination)"),
     "rendimiento_relativo": ("Relative yield", "Harvest achieved against the possible one without water or N limits"),
     "indice_productivo": ("Productive index", "Harvest achieved against what the site's sunlight would allow; "
                                               "includes cold or heat effects"),
@@ -275,8 +306,7 @@ EN_OBJETIVOS = {
     "produccion": "Harvested production (ensemble mean)",
     "riesgo_produccion": "Production in the worst 10 % of cases (CVaR 90 %): robustness to bad years",
     "carbono": "Soil carbon change (ensemble mean)",
-    "lluvia_intensa_suelo_desnudo": "Heavy rain on unprotected soil (ensemble mean)",
-    "exposicion_erosiva": "Heavy rain on unprotected soil (obsolete name)",
+    "exposicion_erosiva": "Erosive exposure: storms on unprotected soil by slope and erodibility (ensemble mean)",
     "lixiviacion": "Leached nitrogen (ensemble mean)",
     "riego": "Irrigation water (ensemble mean)",
     "costo": "Direct cost (ensemble mean)",
