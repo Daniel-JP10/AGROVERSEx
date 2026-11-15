@@ -9,7 +9,6 @@ import { Busqueda } from '../../paneles/Busqueda'
 import { PanelRegion } from '../../paneles/PanelRegion'
 import { LineaTiempo } from '../../tiempo/LineaTiempo'
 import { PanelCapas } from '../../paneles/PanelCapas'
-import { Orbitas } from './Orbitas'
 import { SeleccionLote } from './SeleccionLote'
 import './tierra.css'
 import { Riel } from './Riel'
@@ -35,7 +34,6 @@ export function Tierra() {
     <>
       <div className="centro tierra">
         <main className="zona-mapa">
-          <Orbitas />
           <Globo onMapa={setMapa} />
           <Busqueda />
           <Riel activa={activa} onElegir={(id) => setActiva(activa === id ? '' : id)} />
