@@ -4,7 +4,7 @@ import http from 'node:http'
 import path from 'node:path'
 
 const [raiz = 'dist', puerto = '5198'] = process.argv.slice(2)
-const TIPOS = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.woff2': 'font/woff2', '.svg': 'image/svg+xml' }
+const TIPOS = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.woff2': 'font/woff2', '.svg': 'image/svg+xml', '.webp': 'image/webp' }
 const base = path.resolve(raiz)
 
 http.createServer((req, res) => {

@@ -25,7 +25,12 @@ export async function medirContraste(page: Page, selectores: string[]): Promise<
     for (const s of sels) for (const el of Array.from(document.querySelectorAll<HTMLElement>(s))) {
       const r = el.getBoundingClientRect()
       const cs = getComputedStyle(el)
+      // Solo lo que está entero en la ventana: lo de fuera no se puede muestrear contra su fondo real
       if (!r.width || !r.height || cs.visibility === 'hidden' || !el.innerText.trim()) continue
+      if (r.top < 0 || r.left < 0 || r.bottom > window.innerHeight || r.right > window.innerWidth) continue
+      // Dentro de un contenedor con desplazamiento, solo si se ve en él
+      const caja = el.closest('.tabla-scroll, main')?.getBoundingClientRect()
+      if (caja && (r.top < caja.top || r.bottom > caja.bottom || r.left < caja.left || r.right > caja.right)) continue
       const px = parseFloat(cs.fontSize), peso = Number(cs.fontWeight) || 400
       out.push({ selector: s, texto: el.innerText.trim().slice(0, 40), color: cs.color, grande: px >= 24 || (px >= 18.66 && peso >= 700), x: r.x, y: r.y, w: r.width, h: r.height })
     }

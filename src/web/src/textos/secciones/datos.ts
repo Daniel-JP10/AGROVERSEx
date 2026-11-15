@@ -30,7 +30,7 @@ export const en = {
   'datos.a.ghcn.titulo': 'Station data outside the open dataset',
   'datos.a.ghcn.texto': 'Results derived from GHCN-Daily stations outside the United States are non-commercial (WMO Resolution 40): they appear only as aggregates in Science and validation and are not part of this open dataset (decision D-038).',
   'datos.a.teselas.titulo': 'Map tiles',
-  'datos.a.teselas.texto': 'The boundary tiles live in their own public repository, under ODbL with attribution to geoBoundaries (decision D-040).',
+  'datos.a.teselas.texto': 'The boundary tiles are kept in their own public repository, under ODbL with attribution to geoBoundaries (decision D-040).',
   'datos.a.teselas.enlace': 'Open the tiles repository',
   'datos.a.gemelo.titulo': 'Digital twin packages',
   'datos.a.gemelo.rotulo': 'Model simulation',

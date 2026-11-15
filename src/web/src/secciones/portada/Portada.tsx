@@ -61,7 +61,7 @@ export function Portada() {
     <main className="portada">
       <div className="lienzo">
         <Raices />
-        <div className="centro">
+        <div className="p-centro">
           <h1>AGROVERSEx</h1>
           <p>{t('portada.universo')}</p>
           <p>{t('portada.universo_2')}</p>

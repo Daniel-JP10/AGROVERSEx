@@ -5,7 +5,7 @@ import { ES, medirContraste, prohibidosEnTexto } from './marco_ayuda'
 const NODOS_EN = ['Earth from space', "Your field's twin", 'Rotations', 'Science and validation', 'Open data', 'Sources, glossary and credits']
 const NAV_EN = ['Earth', 'Your field', 'Rotations', 'Science and validation', 'Open data', 'Sources']
 const RUTAS = ['', 'tierra', 'lote', 'rotaciones', 'ciencia', 'datos', 'fuentes']
-const TEXTOS = ['.cabecera-hoja .marca', '.cabecera-hoja .nav a', '.cabecera-hoja .acciones button', '.pie p', '.portada h1', '.portada .centro p', '.portada .nodo span', '.portada .comenzar']
+const TEXTOS = ['.cabecera-hoja .marca', '.cabecera-hoja .nav a', '.cabecera-hoja .acciones button', '.pie p', '.portada h1', '.portada .p-centro p', '.portada .nodo span', '.portada .comenzar']
 
 test.describe('entrada en inglés (sin idioma guardado)', () => {
   test('frase, seis nodos navegables en orden del reloj y Start a #/tierra', async ({ page, browserName }) => {

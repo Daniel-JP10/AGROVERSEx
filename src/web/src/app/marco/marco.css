@@ -72,3 +72,5 @@
 .etiqueta-evidencia { display: inline-block; padding: 0 8px; border: 1px solid var(--acento); border-radius: 10px; color: var(--acento); font-size: 12px; }
 .tarjeta-hoja a { color: var(--agua); }
 @media (max-width: 480px) { .tarjeta-hoja dl > div { grid-template-columns: 1fr; gap: 2px; } }
+.columnas-fuentes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 16px; align-items: start; margin-top: 12px; }
+.columnas-fuentes .tarjeta-hoja h3 { margin: 14px 0 6px; font-size: 15px; }
