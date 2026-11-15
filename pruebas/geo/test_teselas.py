@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from simulacion.config import PROCESADOS
-from simulacion.geo.teselas import (comando_mapshaper, comando_tippecanoe, contar_ids,
+from simulacion.geo.teselas import (ZOOMS, asegurar_es_disputa, comando_mapshaper, comando_tippecanoe, contar_ids,
                                     ruta_wsl, partir_por_pais, simplificado_vigente, unir_geojson, completar_perdidos, SIMPLIFICADOS, TESELAS, HERRAMIENTAS)
 
 
@@ -17,15 +17,36 @@ def test_ruta_wsl():
 
 
 def test_comando_tippecanoe_flags():
-    c = comando_tippecanoe("/in", "/out", "adm2", 5, 12)
-    for f in ("--no-simplification-of-shared-nodes", "--no-tiny-polygon-reduction",
-              "--no-feature-limit"):
+    assert ZOOMS[2] == (5, 10)
+    c = comando_tippecanoe("/in", "/out", "adm2", *ZOOMS[2])
+    for f in ("--detect-shared-borders", "--low-detail=10", "--no-tiny-polygon-reduction",
+              "--no-feature-limit", "--no-tile-size-limit"):
         assert f in c
+    assert "--no-simplification-of-shared-nodes" not in c
+    c1 = comando_tippecanoe("/in", "/out", "adm1", *ZOOMS[1])
+    assert "--no-simplification-of-shared-nodes" in c1
     # /usr/bin/time -v deja en el registro el tiempo y el pico de RAM de tippecanoe
     assert c[c.index("--") + 1:c.index("--") + 4] == ["/usr/bin/time", "-v", "tippecanoe"]
     assert "--drop-densest-as-needed" not in c
     assert "--coalesce-densest-as-needed" not in c
-    assert c[-1] == "/in" and c[c.index("-Z") + 1] == "5" and c[c.index("-z") + 1] == "12"
+    assert c[-1] == "/in" and c[c.index("-Z") + 1] == "5" and c[c.index("-z") + 1] == "10"
+
+
+def test_asegurar_es_disputa_en_streaming(tmp_path):
+    import json
+    f = tmp_path / "adm0.geojson"
+    f.write_text(
+        '{"type":"FeatureCollection","features":[\n'
+        '{"type":"Feature","properties":{"unidad_id":"COL-ADM0","nombre":"Colombia","nivel":0,"iso3":"COL","padre_id":null},"geometry":null},\n'
+        '{"type":"Feature","properties":{"unidad_id":"111-ADM0","nombre":"Abyei","nivel":0,"iso3":"111","padre_id":null},"geometry":null},\n'
+        '{"type":"Feature","properties":{"unidad_id":"ESH-ADM0","nombre":"Western Sahara","nivel":0,"iso3":"ESH","padre_id":null},"geometry":null}\n'
+        ']}\n',
+        encoding="utf-8",
+    )
+    assert asegurar_es_disputa(f) == 3
+    feats = json.loads(f.read_text(encoding="utf-8"))["features"]
+    assert [x["properties"]["es_disputa"] for x in feats] == [0, 1, 1]
+    assert asegurar_es_disputa(f) == 0
 
 
 def test_comando_mapshaper_keep_shapes():
@@ -39,6 +60,14 @@ def test_contar_ids(tmp_path):
     f.write_text('{"features": [{"properties": {"unidad_id": "A.1_1", "padre_id": "A"}},\n'
                  '{"properties": {"unidad_id": "A.2_1", "padre_id": "A"}}]}', encoding="utf-8")
     assert contar_ids(f) == {"A.1_1", "A.2_1"}
+
+
+def test_contar_ids_en_corte_de_bloque(tmp_path):
+    # un unidad_id que cruza exactamente el corte len(datos) - 200 no debe perderse
+    f = tmp_path / "borde.geojson"
+    prefijo = b" " * ((1 << 24) - 205)
+    f.write_bytes(prefijo + b'"unidad_id": "COL-ADM2-BORDE"' + b" " * 300)
+    assert contar_ids(f) == {"COL-ADM2-BORDE"}
 
 
 def test_partir_y_unir_conserva_ids(tmp_path):
@@ -94,11 +123,13 @@ def test_simplificacion_conserva_ids(nivel):
 
 @pytest.mark.datos_reales
 @pytest.mark.skipif(not (TESELAS / "adm2.pmtiles").exists(), reason="falta construir")
-def test_pmtiles_adm2_capa_y_zoom():
-    cmd = f"tippecanoe-decode '{ruta_wsl(TESELAS / 'adm2.pmtiles')}' 2>&1 | head -c 3000 | grep -a -o 'generator_options[^,]*'"
+def test_pmtiles_adm2_capa_zoom_y_tamano():
+    pm = TESELAS / "adm2.pmtiles"
+    assert pm.stat().st_size < 100_000_000
+    cmd = f"tippecanoe-decode '{ruta_wsl(pm)}' 2>&1 | head -c 3000 | grep -a -o 'generator_options[^,]*'"
     out = subprocess.run(["wsl", "-d", "Ubuntu-24.04", "--", "bash", "-c", cmd], capture_output=True, text=True,
                          encoding="utf-8").stdout
-    assert "-l adm2" in out and "-z 12" in out and "-Z 5" in out
+    assert "-l adm2" in out and "-z 10" in out and "-Z 5" in out
 
 
 def test_completar_perdidos_con_cierre_sin_salto_final(tmp_path):
@@ -145,10 +176,10 @@ def test_ids_de_teselas_son_los_ids_de_las_unidades(nivel):
 
 @pytest.mark.datos_reales
 @pytest.mark.skipif(not (TESELAS / "adm1.pmtiles").exists(), reason="falta construir")
-def test_teselas_llevan_solo_cinco_propiedades():
+def test_teselas_llevan_solo_seis_propiedades():
     cmd = (f"tippecanoe-decode '{ruta_wsl(TESELAS / 'adm1.pmtiles')}' 3 2 4 2>/dev/null | "
            "grep -a -m1 -o '\"properties\": { \"unidad_id\"[^}]*}'")
     linea = subprocess.run(["wsl", "-d", "Ubuntu-24.04", "--", "bash", "-c", cmd], capture_output=True, text=True,
                            encoding="utf-8").stdout
     import re
-    assert set(re.findall(r'"(\w+)":', linea)) - {"properties"} == {"unidad_id", "nombre", "nivel", "iso3", "padre_id"}
+    assert set(re.findall(r'"(\w+)":', linea)) - {"properties"} == {"unidad_id", "nombre", "nivel", "iso3", "padre_id", "es_disputa"}

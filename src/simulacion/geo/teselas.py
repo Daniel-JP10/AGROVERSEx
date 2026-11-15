@@ -13,10 +13,11 @@ HERRAMIENTAS = Path(os.environ.get("AGRO_HERRAMIENTAS", RAIZ / "herramientas"))
 CRUDOS_GEOJSON = PROCESADOS / "limites_crudos"
 SIMPLIFICADOS = PROCESADOS / "limites_simplificados"
 TESELAS = PROCESADOS / "teselas"
-# SUPUESTO: medidos en la tarea 3, paso 8
+# SUPUESTO: medidos en la tarea 3, paso 8; zoom máximo de adm2 en 10 por D-016 (< 100 MB)
 PORCENTAJE = 10
-ZOOMS = {0: (0, 6), 1: (2, 9), 2: (5, 12)}
+ZOOMS = {0: (0, 6), 1: (2, 9), 2: (5, 10)}
 WSL_TMP = "~/tmp/agroversex/t-d1"
+CODIGOS_DISPUTA = frozenset({*(str(i) for i in range(111, 130)), "ESH"})
 # por encima de este tamaño mapshaper necesita ~5x en RAM (medido con ADM0): se parte por país
 MAX_ENTRADA = 1_400_000_000
 MAX_PARTE = 1_000_000_000
@@ -32,10 +33,35 @@ def comando_mapshaper(entradas: list[Path], dir_salida: Path, porcentaje: float)
 
 
 def comando_tippecanoe(entrada_wsl: str, salida_wsl: str, capa: str, zmin: int, zmax: int) -> list[str]:
+    # D-016: en adm2 --detect-shared-borders y --low-detail=10 bajan de 100 MB; adm0/adm1 fijan nodos para Kaafu (1e-5°)
+    bordes = ["--detect-shared-borders", "--low-detail=10"] if capa == "adm2" else ["--no-simplification-of-shared-nodes"]
     return ["wsl", "-d", "Ubuntu-24.04", "--", "/usr/bin/time", "-v", "tippecanoe", "-o", salida_wsl, "--force",
             "-l", capa, "-Z", str(zmin), "-z", str(zmax),
-            "--no-simplification-of-shared-nodes", "--no-tiny-polygon-reduction",
+            *bordes, "--no-tiny-polygon-reduction",
             "--no-feature-limit", "--no-tile-size-limit", entrada_wsl]
+
+
+def asegurar_es_disputa(ruta_geojson: Path) -> int:
+    # D-017: inyecta es_disputa (0 o 1) en streaming cuando el GeoJSON aún no lo trae
+    ruta_geojson = Path(ruta_geojson)
+    tmp = ruta_geojson.with_name(ruta_geojson.name + ".parcial")
+    cambios = 0
+    with open(ruta_geojson, "rb") as f_in, open(tmp, "wb") as f_out:
+        for linea in f_in:
+            if b'"Feature"' in linea and b'"es_disputa"' not in linea:
+                m = _ISO.search(linea)
+                if m:
+                    iso = m.group(1).decode()
+                    disp = 1 if iso in CODIGOS_DISPUTA else 0
+                    ins = f',"es_disputa":{disp}'.encode()
+                    linea = linea[:m.end()] + ins + linea[m.end():]
+                    cambios += 1
+            f_out.write(linea)
+    if cambios:
+        tmp.replace(ruta_geojson)
+    else:
+        tmp.unlink(missing_ok=True)
+    return cambios
 
 
 def ruta_wsl(p: Path) -> str:
@@ -49,12 +75,10 @@ def contar_ids(ruta_geojson: Path) -> set[str]:
     with open(ruta_geojson, "rb") as f:
         while bloque := f.read(1 << 24):
             datos = resto + bloque
-            # la cola sin procesar cubre un id partido entre bloques
-            corte = max(len(datos) - 200, 0)
-            for m in _ID.finditer(datos[:corte]):
+            for m in _ID.finditer(datos):
                 ids.add(m.group(1).decode())
-            resto = datos[corte:]
-    ids.update(m.group(1).decode() for m in _ID.finditer(resto))
+            # solape de 200 bytes para cubrir un unidad_id partido entre dos bloques
+            resto = datos[-200:] if len(datos) > 200 else datos
     return ids
 
 
@@ -140,6 +164,7 @@ def _simplificar(capa: str, log) -> Path:
     final = SIMPLIFICADOS / f"{capa}.geojson"
     if simplificado_vigente(crudo, final):
         completar_perdidos(crudo, final)
+        asegurar_es_disputa(final)
         return final
     final.unlink(missing_ok=True)
     if crudo.stat().st_size <= MAX_ENTRADA:
@@ -161,6 +186,7 @@ def _simplificar(capa: str, log) -> Path:
     else:
         salidas[0].replace(final)
     completar_perdidos(crudo, final)
+    asegurar_es_disputa(final)
     return final
 
 

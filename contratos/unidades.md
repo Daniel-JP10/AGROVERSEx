@@ -35,7 +35,7 @@ Texto, estable mientras no cambie el archivo fuente, único en todo el conjunto 
 | `es_disputa` | 0 o 1 | Zona en disputa según CGAZ |
 | `fuente` | texto | Archivo de origen y versión |
 
-Las teselas llevan solo `unidad_id`, `nombre`, `nivel`, `iso3` y `padre_id`. Web usa `unidad_id` como `promoteId`.
+Las teselas llevan solo `unidad_id`, `nombre`, `nivel`, `iso3`, `padre_id` y `es_disputa` (D-017). Web usa `unidad_id` como `promoteId`.
 
 ## Conteo por nivel (v0, leído de los archivos)
 
@@ -49,18 +49,18 @@ Las teselas llevan solo `unidad_id`, `nombre`, `nivel`, `iso3` y `padre_id`. Web
 
 Son 42 unidades de país o zona. Códigos de país (23): AND, ARE, ATA, ATG, BHR, BRB, DMA, ESH, GRD, GRL, KNA, LBY, LIE, MDA, MHL, MLT, MNE, MUS, NRU, SMR, TTO, VAT, VCT. Códigos de zona en disputa (19): 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129. En todos la capa ADM2 repite la geometría de nivel 1 (o de nivel 0 en ATA y VAT; `nivel_real` lo dice): Web no debe mostrar "municipio" ahí. ESH figura aquí como zona en disputa de CGAZ (`es_disputa = 1`). La lista sale de `paises_sin_nivel2` sobre la capa ADM2 y una prueba comprueba que cada código esté en este párrafo; no se escribe a mano.
 
-## Teselas e índice de búsqueda (generados el 2026-11-14)
+## Teselas e índice de búsqueda (regenerados el 2026-11-14 por D-016 y D-017)
 
-| Archivo | Capa | Zoom de las teselas | Tamaño | Unidades |
-|-|-|-|-|-|
-| `adm0.pmtiles` | `adm0` | 0 a 6 | 4,3 MB | 218 (incluye las 20 zonas en disputa) |
-| `adm1.pmtiles` | `adm1` | 2 a 9 | 26,3 MB | 3.224 |
-| `adm2.pmtiles` | `adm2` | 5 a 12 | 399 MB | 49.349 |
+| Archivo | Capa | Zoom de las teselas | Tamaño | sha256 | Unidades |
+|-|-|-|-|-|-|
+| `adm0.pmtiles` | `adm0` | 0 a 6 | 4,36 MB (`4.359.484` bytes) | `49410c0138194db2109cdf62b6d892e6c3c53d0ed90ef43c14f47d3b677e87ee` | 218 (incluye las 20 zonas en disputa) |
+| `adm1.pmtiles` | `adm1` | 2 a 9 | 27,10 MB (`27.097.844` bytes) | `a50df7eb4e9f73b4a732a7879aa1c40e91410bc00527399e0e33c59d3988d69a` | 3.224 |
+| `adm2.pmtiles` | `adm2` | 5 a 10 | 92,91 MB (`92.905.976` bytes, 88,60 MiB) | `3b2fa556fc6a738dc45bd7861851c9dcd7ef33094e27097b6b5cea7a121a2de1` | 49.349 |
 
-- Propiedades de cada polígono: `unidad_id`, `nombre`, `nivel`, `iso3`, `padre_id` y nada más. Web usa `promoteId: 'unidad_id'`.
+- Propiedades de cada polígono: `unidad_id`, `nombre`, `nivel`, `iso3`, `padre_id`, `es_disputa` (`0` o `1`, D-017) y nada más. Web usa `promoteId: 'unidad_id'`.
 - Los ids de las teselas son exactamente los de las unidades de la capa del mismo nivel (prueba con `tippecanoe-decode`).
-- `adm2.pmtiles` pesa 399 MB: es demasiado para un alojamiento con tope de 100 MB por archivo. Decisión pendiente del director (opciones en el traspaso).
-- `indice_busqueda.json.gz`: lista de `{id, nivel, n, a, ctx}` con `es` y `en` solo en el nivel 0 (nombres de Natural Earth) y `d: 1` en las zonas en disputa. `id` es el `unidad_id`. No incluye las filas de la capa ADM2 que repiten el nivel 1 ni las disputas de ADM1 y ADM2. Es reproducible: dos corridas dan el mismo sha256.
+- `adm2.pmtiles` cumple el tope de menos de 100 MB por archivo (D-016): se redujo de 399,22 MB (`399.216.225` bytes) a 92,91 MB (`92.905.976` bytes, `-76,73 %`) usando `--detect-shared-borders`, `--low-detail=10` y zoom máximo nativo `10` (MapLibre hace sobrezoom vectorial en `z > 10`), sin perder ninguna de las 49.349 unidades y verificado en `z=10` sobre Ipiales y Cartagena de Indias (`datos/evidencia/D016_ipiales_zmax.png`, `datos/evidencia/D016_cartagena_zmax.png`, `datos/evidencia/T-D1_teselas_d016.json`).
+- `indice_busqueda.json.gz`: lista de `{id, nivel, n, a, ctx}` con `es` y `en` solo en el nivel 0 (nombres de Natural Earth) y `d: 1` en las zonas en disputa. `id` es el `unidad_id`. No incluye las filas de la capa ADM2 que repiten el nivel 1 ni las disputas de ADM1 y ADM2. Es reproducible: dos corridas dan el mismo sha256 (`0f415aa25512117c1be3cbf59a6a1fdeaa72498667ea57e0fc13e88c91defa61`).
 
 ## Avisos para Web
 

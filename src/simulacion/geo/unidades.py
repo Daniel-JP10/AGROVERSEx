@@ -36,6 +36,7 @@ CRS_AREA_UNIDADES = "EPSG:6933"
 # ancho (grados, ~1 m) del polígono mínimo que reemplaza a un degenerado de área cero
 DEGENERADO_GRADOS = 1e-5
 INVALIDOS = {"", "na", "n.a.", "?"}
+CODIGOS_DISPUTA = frozenset({*(str(i) for i in range(111, 130)), "ESH"})
 COLUMNAS = ["unidad_id", "nivel", "nivel_real", "iso3", "padre_id", "nombre", "nombre_ascii", "area_km2",
             "es_disputa", "punto_lat", "punto_lon", "cruce_ambiguo", "bbox_oeste", "bbox_sur", "bbox_este",
             "bbox_norte", "fuente"]
@@ -243,10 +244,14 @@ def exportar_niveles(unidades: gpd.GeoDataFrame, dir_salida: Path) -> dict[int, 
     # GeoJSON de entrada para mapshaper y tippecanoe; solo los atributos que van a las teselas
     dir_salida = Path(dir_salida)
     dir_salida.mkdir(parents=True, exist_ok=True)
+    if "es_disputa" not in unidades.columns:
+        unidades = unidades.assign(es_disputa=unidades["iso3"].astype(str).isin(CODIGOS_DISPUTA).astype(int))
     rutas = {}
     for nivel in (0, 1, 2):
         ruta = dir_salida / f"adm{nivel}.geojson"
-        sub = unidades[unidades["nivel"] == nivel][["unidad_id", "nombre", "nivel", "iso3", "padre_id", "geometry"]]
+        sub = unidades[unidades["nivel"] == nivel][
+            ["unidad_id", "nombre", "nivel", "iso3", "padre_id", "es_disputa", "geometry"]
+        ]
         sub.to_file(ruta, driver="GeoJSON")
         rutas[nivel] = ruta
     return rutas

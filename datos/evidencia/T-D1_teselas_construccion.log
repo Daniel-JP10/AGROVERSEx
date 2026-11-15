@@ -1,24 +1,27 @@
 $ wsl -d Ubuntu-24.04 -- bash -c mkdir -p ~/tmp/agroversex/t-d1 && cp '/mnt/c/NASA/AGROVERSEx/datos/procesados/limites_simplificados/adm0.geojson' ~/tmp/agroversex/t-d1/adm0.geojson
 # 1 s
 $ wsl -d Ubuntu-24.04 -- /usr/bin/time -v tippecanoe -o ~/tmp/agroversex/t-d1/adm0.pmtiles --force -l adm0 -Z 0 -z 6 --no-simplification-of-shared-nodes --no-tiny-polygon-reduction --no-feature-limit --no-tile-size-limit ~/tmp/agroversex/t-d1/adm0.geojson
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:06.74
-	Maximum resident set size (kbytes): 324360
+218 features, 5425485 bytes of geometry and attributes, 5659 bytes of string pool, 37270752 bytes of vertices, 91952 bytes of nodes
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:05.18
+	Maximum resident set size (kbytes): 325468
 # 6 s
 $ wsl -d Ubuntu-24.04 -- bash -c cp ~/tmp/agroversex/t-d1/adm0.pmtiles '/mnt/c/NASA/AGROVERSEx/datos/procesados/teselas/adm0.pmtiles' && rm ~/tmp/agroversex/t-d1/adm0.geojson ~/tmp/agroversex/t-d1/adm0.pmtiles
 # 0 s
 $ wsl -d Ubuntu-24.04 -- bash -c mkdir -p ~/tmp/agroversex/t-d1 && cp '/mnt/c/NASA/AGROVERSEx/datos/procesados/limites_simplificados/adm1.geojson' ~/tmp/agroversex/t-d1/adm1.geojson
 # 1 s
 $ wsl -d Ubuntu-24.04 -- /usr/bin/time -v tippecanoe -o ~/tmp/agroversex/t-d1/adm1.pmtiles --force -l adm1 -Z 2 -z 9 --no-simplification-of-shared-nodes --no-tiny-polygon-reduction --no-feature-limit --no-tile-size-limit ~/tmp/agroversex/t-d1/adm1.geojson
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:30.69
-	Maximum resident set size (kbytes): 274900
-# 29 s
+3224 features, 7030521 bytes of geometry and attributes, 153348 bytes of string pool, 46972032 bytes of vertices, 202224 bytes of nodes
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:27.28
+	Maximum resident set size (kbytes): 280460
+# 27 s
 $ wsl -d Ubuntu-24.04 -- bash -c cp ~/tmp/agroversex/t-d1/adm1.pmtiles '/mnt/c/NASA/AGROVERSEx/datos/procesados/teselas/adm1.pmtiles' && rm ~/tmp/agroversex/t-d1/adm1.geojson ~/tmp/agroversex/t-d1/adm1.pmtiles
 # 1 s
 $ wsl -d Ubuntu-24.04 -- bash -c mkdir -p ~/tmp/agroversex/t-d1 && cp '/mnt/c/NASA/AGROVERSEx/datos/procesados/limites_simplificados/adm2.geojson' ~/tmp/agroversex/t-d1/adm2.geojson
 # 1 s
-$ wsl -d Ubuntu-24.04 -- /usr/bin/time -v tippecanoe -o ~/tmp/agroversex/t-d1/adm2.pmtiles --force -l adm2 -Z 5 -z 12 --no-simplification-of-shared-nodes --no-tiny-polygon-reduction --no-feature-limit --no-tile-size-limit ~/tmp/agroversex/t-d1/adm2.geojson
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 22:11.21
-	Maximum resident set size (kbytes): 527596
-# 1332 s
+$ wsl -d Ubuntu-24.04 -- /usr/bin/time -v tippecanoe -o ~/tmp/agroversex/t-d1/adm2.pmtiles --force -l adm2 -Z 5 -z 10 --detect-shared-borders --low-detail=10 --no-tiny-polygon-reduction --no-feature-limit --no-tile-size-limit ~/tmp/agroversex/t-d1/adm2.geojson
+49349 features, 10392855 bytes of geometry and attributes, 2362963 bytes of string pool, 0 bytes of vertices, 0 bytes of nodes
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:26.63
+	Maximum resident set size (kbytes): 268912
+# 89 s
 $ wsl -d Ubuntu-24.04 -- bash -c cp ~/tmp/agroversex/t-d1/adm2.pmtiles '/mnt/c/NASA/AGROVERSEx/datos/procesados/teselas/adm2.pmtiles' && rm ~/tmp/agroversex/t-d1/adm2.geojson ~/tmp/agroversex/t-d1/adm2.pmtiles
-# 5 s
+# 1 s

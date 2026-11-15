@@ -106,7 +106,9 @@ def test_exportar_niveles_geojson(tmp_path):
              iso3=["A", "111", "A"], padre_id=None, nombre=["a", "z", "b"])
     rutas = u.exportar_niveles(g, tmp_path)
     assert set(rutas) == {0, 1, 2}
-    assert gpd.read_file(rutas[0]).unidad_id.tolist() == ["A-ADM0", "111-ADM0"]
+    adm0 = gpd.read_file(rutas[0])
+    assert adm0.unidad_id.tolist() == ["A-ADM0", "111-ADM0"]
+    assert adm0.es_disputa.tolist() == [0, 1]
 
 
 def test_area_geodesica_con_hueco_y_orientacion():
