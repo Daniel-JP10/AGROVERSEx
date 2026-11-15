@@ -77,6 +77,16 @@ test.describe('capturas', () => {
       await expect.poll(() => pintadas(page, 1), { timeout: 60_000 }).toBeGreaterThan(0)
       await page.getByRole('button', { name: 'Technical', exact: true }).click()
       await page.waitForTimeout(1500)
+      if (ancho <= 760) {
+        // Plegada al arrancar, no tapa más del 15 % del mapa (director 16:54)
+        expect(await page.locator('.leyenda > details').evaluate((e) => (e as HTMLDetailsElement).open)).toBe(false)
+        const parte = await page.evaluate(() => {
+          const a = (s: string) => { const r = document.querySelector(s)!.getBoundingClientRect(); return r.width * r.height }
+          return a('.leyenda') / a('.mapa')
+        })
+        console.log(`leyenda plegada / mapa a ${ancho}: ${(parte * 100).toFixed(1)} %`)
+        expect(parte).toBeLessThanOrEqual(0.15)
+      }
       await page.screenshot({ path: join(VERIF!, `f3_S1w_tierra_${ancho}.png`) })
       // contraste AA de los textos nuevos de la leyenda sobre su fondo real
       const c = await page.evaluate(() => {
@@ -90,6 +100,12 @@ test.describe('capturas', () => {
       })
       console.log(`contraste ${ancho}: ${c.map((x) => x.toFixed(2)).join(', ')}`)
       for (const x of c) expect(x).toBeGreaterThanOrEqual(4.5)
+      // Desplegada en móvil: todo lo de hoy sigue ahí
+      if (ancho <= 760) {
+        await page.locator('.leyenda > details > summary').click()
+        await expect(page.locator('.leyenda p.pid1')).toBeVisible()
+        await page.screenshot({ path: join(VERIF!, `f3_S1w_tierra_${ancho}_desplegada.png`) })
+      }
     })
   }
 })

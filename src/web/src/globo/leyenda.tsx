@@ -32,6 +32,7 @@ export function Leyenda() {
   const modo = useModo((s) => s.modo)
   const { ponderacion, set } = usePonderacion()
   const [, setMeta] = useState(0)
+  const [movil] = useState(() => typeof matchMedia === 'function' && matchMedia('(max-width: 760px)').matches)
   useEffect(() => { cargarMeta().then(() => setMeta((n) => n + 1)).catch(() => undefined) }, [])
   // Una línea por producto y estado: las versiones del mismo producto (en meta.json) van juntas, separadas por /
   const productos = Object.values(productosDe(capa.id).reduce<Record<string, ProductoMeta>>((acc, p) => {
@@ -48,6 +49,9 @@ export function Leyenda() {
       <b>{capa.nombre}</b>
       <div className="barra" style={{ background: grad }} />
       <div className="extremos"><span>{capa.rango[0]}</span><span>{capa.unidad}</span><span>{capa.rango[1]}+</span></div>
+      {/* Plegable (director 16:54): la escala queda siempre; lo demás, dentro. A 760 px o menos arranca plegada */}
+      <details open={!movil}>
+      <summary>{t('tierra.leyenda.detalles')}</summary>
       <dl>
         <dt>{t('tierra.leyenda.unidad')}</dt><dd>{capa.unidad}</dd>
         <dt>{t('tierra.leyenda.producto')}</dt>
@@ -63,8 +67,9 @@ export function Leyenda() {
         </div>
       )}
       {modo === 'tecnico' && linea && <p className="pid1" data-fuente={CAMPO_PI_D1}>{linea} <small>{t('tierra.pond.fuente')}</small></p>}
-      {modo === 'tecnico' && <p className="limites">{t('tierra.limites')}</p>}
+      {modo === 'tecnico' && <details className="limites"><summary>{t('tierra.limites.titulo')}</summary><p>{t('tierra.limites')}</p></details>}
       <div className="hueco"><span className={`muestra ${ID_PATRON}`} aria-hidden="true" /> {t('leyenda.sinDato')}</div>
+      </details>
     </div>
   )
 }
