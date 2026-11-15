@@ -133,8 +133,8 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       centro.current.textContent = `${nombreUnidad(String(f.properties.nombre ?? id), esDisputa(f.properties))}: ${t}`
     }
     m.on('idle', etiqueta) // tras mover y tras cargar teselas/valores
-    // Al acercarse a otro país, su adm2 se carga
-    m.on('moveend', () => { if (hayMundo() && nivelParaZoom(m.getZoom()) >= 1 && paisesAdm2().join() !== paises2.join()) void cargarDatos(true) })
+    // Al acercarse a otro país, su adm2 se carga; en idle, porque al terminar el movimiento sus teselas aún no han llegado
+    m.on('idle', () => { if (hayMundo() && nivelParaZoom(m.getZoom()) >= 1 && paisesAdm2().join() !== paises2.join()) void cargarDatos(true) })
     const dejarPond = usePonderacion.subscribe(() => { void cargarDatos() })
     const parar = iniciarEstrellas(lienzo.current!, m)
     const pararHalo = iniciarHalo(halo.current!, m)
