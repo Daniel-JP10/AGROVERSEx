@@ -116,9 +116,9 @@ No product is taken directly from ESA or another partner agency. HLSS30 is a NAS
 
 ## Use of AI
 
-AI tools helped write code and documents; the team decided the idea and the approach. Every AI-assisted code file carries an `asistido por SI` header and a row in `SI_USO.md` (tool, file, purpose, date). `SI_USO.md` has 549 rows:
+AI tools helped write code and documents; the team decided the idea and the approach. Every AI-assisted code file carries an `asistido por SI` header and a row in `SI_USO.md` (tool, file, purpose, date). `SI_USO.md` has 550 rows:
 
-- Claude Code (Anthropic): 488 rows.
+- Claude Code (Anthropic): 489 rows.
 - Cursor (agent): 51 rows.
 - Antigravity (Google DeepMind): 8 rows.
 - Shared rows: 1 Claude Code with Cursor and 1 Claude Code with Antigravity.

@@ -582,3 +582,4 @@ Filas generadas de la cabecera "asistido por SI" de cada archivo nuevo o tocado 
 | Claude Code (Anthropic) | `herramientas/dataset_lista.json` | lista de archivos del dataset abierto con tamaños y sha256 | 2026-11-15 |
 | Claude Code (Anthropic) | `README.md`, `LICENSE-DATA.md`, `DATASET.md` | redacción de README, licencias de datos y ficha del dataset | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/pruebas/textos_sin_pendiente.test.ts` | ningún texto visible lleva el marcador PENDING o PENDIENTE | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/titulo_pagina.test.ts` | el título de la pestaña va en inglés | 2026-11-15 |
