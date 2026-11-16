@@ -1,6 +1,6 @@
 # Data and documentation licenses
 
-This file applies decision D-042 of `decisiones/registro.md`. The source code is under the Apache License 2.0 (`LICENSE`). Third-party data and software keep their own licenses, listed in `LICENCIAS_TERCEROS.md`.
+This file sets out the team's data and documentation licensing. The source code is under the Apache License 2.0 (`LICENSE`). Third-party data and software keep their own licenses, listed in `LICENCIAS_TERCEROS.md`.
 
 ## CC BY 4.0
 
@@ -11,7 +11,7 @@ Applies to data produced by the team that do not depend on administrative bounda
 - digital twin packages (`src/web/public/gemelo/`), except the files listed under "Excluded";
 - sheets and outputs of the DEMO plots (`datos/lotes/`), except the files listed under "Excluded";
 - the NASADEM block and profile images of the DEMO plots (`src/web/public/lotes/`) and the team's own figures;
-- documentation (`README.md`, `DATASET.md`, `contratos/`, `decisiones/` and the other team documents).
+- documentation (`README.md`, `DATASET.md`, `contratos/` and the other team documents).
 
 Maps, images and charts made from the series organized by administrative unit are Produced Works under ODbL 1.0 §4.5: they are released under CC BY 4.0 and carry the ODbL and geoBoundaries notice next to each one.
 
