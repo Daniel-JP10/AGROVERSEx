@@ -572,3 +572,12 @@ Filas generadas de la cabecera "asistido por SI" de cada archivo nuevo o tocado 
 | Claude Code (Anthropic) | `src/web/pruebas/textos_indice.test.ts` | prueba del índice de textos por sección: sin choques, con prefijo y paridad EN/ES | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/src/textos/indice.ts` | índice que une los textos por sección con en.ts y es.ts | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/pruebas/e2e/portada_sin_solapes.spec.ts` | la entrada se adapta a la pantalla y al zoom sin solapes y con Start legible | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/marco_modo_ayuda.spec.ts` | la ayuda explica qué agrega Technical frente a Farmer, en EN y ES | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/lote_rotaciones_cifra_entera.spec.ts` | la cifra con su rango queda entera en la comparación de escenarios | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/registros_en.test.ts` | paridad del registro inglés (D-043) y barrido de "pendiente" en Fuentes y la ayuda | 2026-11-15 |
+| Claude Code (Anthropic) | `LICENCIAS_TERCEROS.en.md` | traducción de títulos, encabezados, prosa y columnas descriptivas (D-043) | 2026-11-15 |
+| Claude Code (Anthropic) | `CITAS.en.md` | traducción de títulos, encabezados, prosa y columnas descriptivas (D-043) | 2026-11-15 |
+| Claude Code (Anthropic) | `herramientas/armar_release_dataset.py` | arma la carpeta del release del dataset abierto y verifica sha256 (D-044) | 2026-11-15 |
+| Claude Code (Anthropic) | `pruebas/test_armar_release_dataset.py` | prueba del armado del release y de la lista sin GHCN | 2026-11-15 |
+| Claude Code (Anthropic) | `herramientas/dataset_lista.json` | lista de archivos del dataset abierto con tamaños y sha256 | 2026-11-15 |
+| Claude Code (Anthropic) | `README.md`, `LICENSE-DATA.md`, `DATASET.md` | redacción de README, licencias de datos y ficha del dataset | 2026-11-15 |
