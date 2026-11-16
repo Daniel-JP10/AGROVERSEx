@@ -9,12 +9,12 @@ type Nodo = { seccion: Seccion; x: number; y: number; icono: ComponentType; imag
 
 // Orden del reloj desde arriba a la izquierda: es el orden de tabulación. x, y en el lienzo 1000 × 600
 export const NODOS: Nodo[] = [
-  { seccion: 'tierra', x: 190, y: 120, icono: IconoGlobo, imagen: 'portada/globo.webp' },
-  { seccion: 'lote', x: 810, y: 120, icono: IconoLote, imagen: 'lotes/bloque_DEMO-COL-01.webp' },
-  { seccion: 'rotaciones', x: 880, y: 305, icono: IlustracionRotaciones },
-  { seccion: 'ciencia', x: 810, y: 490, icono: IlustracionCiencia },
-  { seccion: 'datos', x: 190, y: 490, icono: IlustracionDatos },
-  { seccion: 'fuentes', x: 120, y: 305, icono: IlustracionFuentes },
+  { seccion: 'tierra', x: 155, y: 115, icono: IconoGlobo, imagen: 'portada/globo.webp' },
+  { seccion: 'lote', x: 845, y: 115, icono: IconoLote, imagen: 'lotes/bloque_DEMO-COL-01.webp' },
+  { seccion: 'rotaciones', x: 915, y: 305, icono: IlustracionRotaciones },
+  { seccion: 'ciencia', x: 845, y: 495, icono: IlustracionCiencia },
+  { seccion: 'datos', x: 155, y: 495, icono: IlustracionDatos },
+  { seccion: 'fuentes', x: 85, y: 305, icono: IlustracionFuentes },
 ]
 const CX = 500, CY = 300
 

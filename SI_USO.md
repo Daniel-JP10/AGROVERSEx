@@ -571,3 +571,4 @@ Filas generadas de la cabecera "asistido por SI" de cada archivo nuevo o tocado 
 | Claude Code (Anthropic) | `src/web/pruebas/e2e/lote_sin_scroll.spec.ts` | #/lote sin scroll de página ni desborde y con las 4 cifras del bloque enteras | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/pruebas/textos_indice.test.ts` | prueba del índice de textos por sección: sin choques, con prefijo y paridad EN/ES | 2026-11-15 |
 | Claude Code (Anthropic) | `src/web/src/textos/indice.ts` | índice que une los textos por sección con en.ts y es.ts | 2026-11-15 |
+| Claude Code (Anthropic) | `src/web/pruebas/e2e/portada_sin_solapes.spec.ts` | la entrada se adapta a la pantalla y al zoom sin solapes y con Start legible | 2026-11-15 |
