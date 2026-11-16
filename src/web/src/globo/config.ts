@@ -167,6 +167,9 @@ export function capasNivel(c: NivelConfig) {
   ]
 }
 
+// Una ruta relativa se une al origen; una URL absoluta (teselas en GitHub Pages, D-040) queda igual
+export const urlFuentePmtiles = (origen: string, archivo: string) => `pmtiles://${new URL(archivo, origen).href}`
+
 export function construirEstilo(origen: string, enLinea = true): unknown {
   const det = fondoDetalle(enLinea)
   const fuentes: Record<string, unknown> = {
@@ -174,7 +177,7 @@ export function construirEstilo(origen: string, enLinea = true): unknown {
     ...(det ? { detalle: { type: 'raster', tileSize: 256, tiles: det.tiles, maxzoom: det.maxzoom } } : {}),
     truecolor: { type: 'raster', tileSize: 256, tiles: [urlTrueColor(FECHA_TRUECOLOR)], maxzoom: 9 },
   }
-  for (const c of NIVELES) fuentes[c.fuente] = { type: 'vector', url: `pmtiles://${origen}${c.archivo}`, promoteId: c.propId }
+  for (const c of NIVELES) fuentes[c.fuente] = { type: 'vector', url: urlFuentePmtiles(origen, c.archivo), promoteId: c.propId }
   return {
     version: 8,
     projection: { type: 'globe' },

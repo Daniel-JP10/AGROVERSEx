@@ -1,6 +1,15 @@
 // asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
 import { describe, expect, it } from 'vitest'
-import { NIVELES, capasNivel, construirEstilo, nivelParaZoom, SIN_ADM2, SIN_ADM1 } from '../src/globo/config'
+import { NIVELES, capasNivel, construirEstilo, nivelParaZoom, SIN_ADM2, SIN_ADM1, urlFuentePmtiles } from '../src/globo/config'
+
+// Fallo medido en el despliegue público: el origen se anteponía también a la URL absoluta de GitHub Pages
+describe('URL pmtiles de cada nivel', () => {
+  it('una ruta relativa se une al origen y una URL absoluta queda igual', () => {
+    expect(urlFuentePmtiles('https://agroversex.pages.dev', '/teselas/adm0.pmtiles')).toBe('pmtiles://https://agroversex.pages.dev/teselas/adm0.pmtiles')
+    expect(urlFuentePmtiles('https://agroversex.pages.dev', 'https://daniel-jp10.github.io/agroversex-teselas/adm0.pmtiles')).toBe('pmtiles://https://daniel-jp10.github.io/agroversex-teselas/adm0.pmtiles')
+    expect(urlFuentePmtiles('http://localhost:5199', '/AGROVERSEx/teselas/adm2.pmtiles')).toBe('pmtiles://http://localhost:5199/AGROVERSEx/teselas/adm2.pmtiles')
+  })
+})
 
 describe('tres niveles reales', () => {
   it('hay tres niveles con capa igual a la fuente y propId unidad_id', () => {
