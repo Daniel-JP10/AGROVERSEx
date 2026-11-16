@@ -169,9 +169,10 @@ describe('el modo cambia el texto, nunca los datos', () => {
     expect((html.match(/<section class="tarjeta-hoja"/g) ?? []).length).toBe(3)
     for (const marca of ['class="glosario"', 'id="creditos"', 'data-testid="declaracion-si"', 'data-credito=""']) expect(html).toContain(marca)
   })
-  it('créditos: dirección visual de Jostin Andres Colon Ramos y las referencias de diseño declaradas como IA fuera del producto', () => {
+  it('créditos: director, diseño y gemelo (director 21:35), y el diseño a mano declarado', () => {
     const html = renderToStaticMarkup(createElement(Fuentes))
-    expect(html).toContain('Dirección visual: Jostin Andres Colon Ramos')
+    for (const c of ['Director: Daniel Andres Jimenez Povea', 'Diseño: Jostin Andres Colon Ramos', 'Gemelo digital: Emmanuel Ascendra Perez']) expect(html).toContain(c)
+    expect(html).not.toContain('Dirección visual')
     expect(html).toContain('El diseño visual lo dibujó a mano el equipo')
   })
 })

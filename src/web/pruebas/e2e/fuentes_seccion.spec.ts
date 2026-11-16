@@ -6,7 +6,7 @@ test('fuentes: tres columnas, créditos de dirección visual e IA, ninguna ruta 
   await page.setViewportSize({ width: 1440, height: 2400 })
   await page.goto('/#/fuentes')
   await expect(page.locator('.columnas-fuentes > section')).toHaveCount(3)
-  await expect(page.locator('[data-credito-visual]')).toHaveText('Visual direction: Jostin Andres Colon Ramos')
+  await expect(page.locator('[data-credito-equipo]')).toHaveText(['Director: Daniel Andres Jimenez Povea', 'Design: Jostin Andres Colon Ramos', 'Digital twin: Emmanuel Ascendra Perez'])
   await expect(page.locator('[data-referencias-ia]')).toContainText('drawn by hand by the team')
   await page.locator('details[data-credito]').evaluateAll((ds) => ds.forEach((d) => d.setAttribute('open', '')))
   const texto = await page.locator('main').innerText()
@@ -20,6 +20,6 @@ test.describe('español', () => {
   test.use({ storageState: ES })
   test('fuentes en español', async ({ page }) => {
     await page.goto('/#/fuentes')
-    await expect(page.locator('[data-credito-visual]')).toHaveText('Dirección visual: Jostin Andres Colon Ramos')
+    await expect(page.locator('[data-credito-equipo]')).toHaveText(['Director: Daniel Andres Jimenez Povea', 'Diseño: Jostin Andres Colon Ramos', 'Gemelo digital: Emmanuel Ascendra Perez'])
   })
 })

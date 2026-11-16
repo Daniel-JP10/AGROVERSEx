@@ -98,7 +98,7 @@ export function Fuentes() {
         </section>
         <section className="tarjeta-hoja" aria-labelledby="creditos">
           <h2 id="creditos">{t('fuentes.f.creditos')}</h2>
-          <p data-credito-visual="">{t('fuentes.f.direccion_visual')}</p>
+          {(['fuentes.f.credito_director', 'fuentes.f.credito_diseno', 'fuentes.f.credito_gemelo'] as const).map((k) => <p key={k} data-credito-equipo="">{t(k)}</p>)}
           <p data-referencias-ia="">{t('fuentes.f.referencias_ia')}</p>
           <h3>{t('fuentes.si_titulo')}</h3>
           <DeclaracionSI />
