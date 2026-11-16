@@ -16,7 +16,7 @@ export const en = {
   'tierra.pond.area': 'Total area mean',
   'tierra.pond.pid1': 'Between {min} and {max} % of unit-month pairs change with the definition (PI-D1)',
   'tierra.pond.fuente': 'Source: pi_d1_mundo.json, registered threshold, without IMERG Late',
-  'tierra.limites': 'Limitations: radiation and crop sensitivity 1 to 5 are PENDING; the IMERG precipitationQualityIndex is not used.',
+  'tierra.limites': 'Limitations: the sensitivity analyses for radiation and for crop 1 to 5 were not run; the IMERG precipitationQualityIndex is not used.',
 } as const
 export const es: Record<keyof typeof en, string> = {
   'tierra.lotes.titulo': 'Elige un lote',
@@ -34,5 +34,5 @@ export const es: Record<keyof typeof en, string> = {
   'tierra.pond.area': 'Media sobre el área total',
   'tierra.pond.pid1': 'Entre {min} y {max} % de los pares unidad-mes cambian con la definición (PI-D1)',
   'tierra.pond.fuente': 'Fuente: pi_d1_mundo.json, umbral registrado, sin IMERG Late',
-  'tierra.limites': 'Limitaciones: la radiación y la sensibilidad de cultivo 1 a 5 están PENDIENTES; no se usa el precipitationQualityIndex de IMERG.',
+  'tierra.limites': 'Limitaciones: no se corrieron los análisis de sensibilidad de radiación ni de cultivo 1 a 5; no se usa el precipitationQualityIndex de IMERG.',
 }
