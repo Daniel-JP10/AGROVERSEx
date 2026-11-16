@@ -1,31 +1,30 @@
-// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón; término y fuente en inglés y fuente de helada (cierre)
 import type { ClaveTexto } from './en'
 
 // Cada término cita su fuente; ninguna cifra escrita a mano: la resolución y la versión de cada producto salen de los datos de Fuentes
-export interface Termino { termino: string; es: string; en: string; tecnico: string; tecnico_en: string; fuente: string }
+export interface Termino { termino: string; termino_en?: string; fuente_en?: string; es: string; en: string; tecnico: string; tecnico_en: string; fuente: string }
 export const GLOSARIO: Termino[] = [
   { termino: 'SMAP', es: 'Satélite que mide la humedad del suelo.', en: 'Satellite that measures soil moisture.', tecnico: 'Producto modelado de humedad superficial y de la zona de raíces; en el modo simulado de AGROVERSEx se imita (SIMULADO).', tecnico_en: 'Modeled product of surface and root-zone moisture; AGROVERSEx mimics it in its simulated mode (SIMULATED).', fuente: 'NASA SMAP' },
   { termino: 'IMERG', es: 'Estimación de lluvia combinando varios satélites.', en: 'Rainfall estimate merging several satellites.', tecnico: 'Final publica mm/hr y Late mm/day; la interfaz muestra mm/mes.', tecnico_en: 'Final publishes mm/hr and Late mm/day; the interface shows mm/month.', fuente: 'NASA GPM IMERG' },
   { termino: 'GRACE', es: 'Misión que detecta cambios en el agua almacenada bajo tierra.', en: 'Mission that detects changes in stored water underground.', tecnico: 'Resolución gruesa: capa de contexto regional.', tecnico_en: 'Coarse resolution: a regional context layer.', fuente: 'NASA GRACE-FO' },
   { termino: 'NDVI', es: 'Índice del verdor de la vegetación.', en: 'Index of vegetation greenness.', tecnico: 'Razón normalizada rojo e infrarrojo cercano.', tecnico_en: 'Normalized ratio of red and near-infrared.', fuente: 'NASA MODIS' },
-  { termino: 'Condición de la tierra', es: 'Clase que resume el estado de la tierra de una unidad en un periodo.', en: "Class summarizing the state of a unit's land over a period.", tecnico: 'Combinación propia de componentes; cada uno con rango y confianza.', tecnico_en: 'Own combination of components; each with a range and a confidence.', fuente: 'Definición propia de AGROVERSEx (INFERENCIA)' },
+  { termino: 'Condición de la tierra', termino_en: 'Land condition', fuente_en: 'AGROVERSEx own definition (inference from its components)', es: 'Clase que resume el estado de la tierra de una unidad en un periodo.', en: "Class summarizing the state of a unit's land over a period.", tecnico: 'Combinación propia de componentes; cada uno con rango y confianza.', tecnico_en: 'Own combination of components; each with a range and a confidence.', fuente: 'Definición propia de AGROVERSEx (inferencia a partir de sus componentes)' },
   { termino: 'RONI', es: 'Medida de El Niño y La Niña.', en: 'Measure of El Niño and La Niña.', tecnico: 'ONI relativo; serie real mostrada bajo la línea de tiempo.', tecnico_en: 'Relative ONI; the real series is shown under the timeline.', fuente: 'NOAA CPC' },
   { termino: 'SoilGrids', es: 'Mapa mundial de propiedades del suelo.', en: 'Global map of soil properties.', tecnico: 'Solo media agregada, sin intervalo, sin fecha.', tecnico_en: 'Aggregated mean only, no interval, no date.', fuente: 'ISRIC SoilGrids' },
   { termino: 'ADM1 / ADM2', es: 'Primer y segundo nivel administrativo (departamento y municipio).', en: 'First and second administrative level (state and county).', tecnico: 'Límites de geoBoundaries CGAZ.', tecnico_en: 'Boundaries from geoBoundaries CGAZ.', fuente: 'geoBoundaries CGAZ' },
 ]
 
 // Glosario de la sección Fuentes (F4, F5, F7): los textos viven en en.ts y es.ts, bloque fuentes.
-// fuente es la clave del texto de la fuente y url su fuente primaria; null se muestra "source pending"
+// fuente es la clave del texto de la fuente y url su fuente primaria; un término sin fuente primaria leída se quita
 // FAO-56 y Tucker comprobados en fao.org y Crossref; SMAP L4 en CITAS.md y doi.org (2026-11-14)
 const FAO56 = 'https://www.fao.org/4/x0490e/x0490e00.htm'
-export interface TerminoClave { id: 'et' | 'humedad' | 'ndvi' | 'helada' | 'balance' | 'satelite' | 'incertidumbre' | 'confianza'; fuente: ClaveTexto | null; url?: string }
+export interface TerminoClave { id: 'et' | 'humedad' | 'ndvi' | 'helada' | 'balance' | 'incertidumbre' | 'confianza'; fuente: ClaveTexto; url?: string }
 export const TERMINOS: readonly TerminoClave[] = [
   { id: 'et', fuente: 'glosario.et.fuente', url: FAO56 },
   { id: 'humedad', fuente: 'glosario.humedad.fuente', url: 'https://doi.org/10.5067/T5RUATAQREF8' },
   { id: 'ndvi', fuente: 'glosario.ndvi.fuente', url: 'https://doi.org/10.1016/0034-4257(79)90013-0' },
-  { id: 'helada', fuente: null },
+  { id: 'helada', fuente: 'glosario.helada.fuente', url: 'https://www.fao.org/4/y7223e/y7223e07.htm' },
   { id: 'balance', fuente: 'glosario.balance.fuente', url: FAO56 },
-  { id: 'satelite', fuente: null },
   { id: 'incertidumbre', fuente: 'glosario.incertidumbre.fuente' },
   { id: 'confianza', fuente: 'glosario.confianza.fuente' },
 ]

@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), pruebas de la sección Fuentes: glosario, modos, créditos y declaración de SI
+// asistido por SI: Claude Code (Anthropic), pruebas de la sección Fuentes: glosario, modos, créditos y declaración de SI; sin fuente pendiente (cierre)
 import { readFileSync } from 'node:fs'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
@@ -104,7 +104,7 @@ describe('declaración de uso de SI generada desde SI_USO.md', () => {
 describe('glosario de ocho términos', () => {
   const claves = (id: string, campos: string[]) => campos.map((c) => `glosario.${id}.${c}` as ClaveTexto)
   it('son ocho, y cada uno tiene nombre y texto de agricultor y técnico en los dos idiomas', () => {
-    expect(TERMINOS.map((x) => x.id)).toEqual(['et', 'humedad', 'ndvi', 'helada', 'balance', 'satelite', 'incertidumbre', 'confianza'])
+    expect(TERMINOS.map((x) => x.id)).toEqual(['et', 'humedad', 'ndvi', 'helada', 'balance', 'incertidumbre', 'confianza'])
     for (const { id } of TERMINOS) for (const k of claves(id, ['nombre', 'agricultor', 'tecnico'])) {
       expect(en[k], k).toBeTruthy()
       expect(es[k], k).toBeTruthy()
@@ -116,15 +116,13 @@ describe('glosario de ocho términos', () => {
       expect(es[k] ?? '', k).not.toMatch(NUMERO)
     }
   })
-  it('la fuente pendiente de Datos se ve como "Source pending" y la que existe se cita', () => {
+  it('cada término cita su fuente y ninguno queda como "Source pending" (orden del director, cierre)', () => {
     alternar()
     try {
       expect(idioma()).toBe('en')
       const html = renderToStaticMarkup(createElement(Glosario))
-      const pendientes = TERMINOS.filter((x) => x.fuente === null).length
-      expect(pendientes).toBeGreaterThan(0)
-      expect(html.split('Source pending').length - 1).toBe(pendientes)
-      for (const x of TERMINOS) if (x.fuente) expect(html).toContain(escapar(en[x.fuente]))
+      expect(html).not.toContain('Source pending')
+      for (const x of TERMINOS) expect(html).toContain(escapar(en[x.fuente]))
     } finally { alternar() }
   })
   it('cada fuente con url enlaza a su fuente primaria por https', () => {
@@ -136,8 +134,8 @@ describe('glosario de ocho términos', () => {
       expect(html).toContain(`href="${escapar(x.url!)}"`)
     }
   })
-  it('en español dice "Fuente pendiente"', () => {
-    expect(renderToStaticMarkup(createElement(Glosario))).toContain('Fuente pendiente')
+  it('en español no dice "Fuente pendiente"', () => {
+    expect(renderToStaticMarkup(createElement(Glosario))).not.toContain('Fuente pendiente')
   })
 })
 

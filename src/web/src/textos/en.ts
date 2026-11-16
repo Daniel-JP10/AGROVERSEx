@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón; fuente de helada y sin aviso de fuente pendiente (cierre)
 // Las claves salen del inglés (contrato web_componentes §6)
 export const en = {
   'ayuda.titulo': 'Help and glossary',
@@ -374,7 +374,6 @@ export const en = {
   'datos.huella': 'Checksum',
   // seccion: fuentes
   'fuentes.fuente': 'Source',
-  'fuentes.fuente_pendiente': 'Source pending',
   'fuentes.creditos': 'Credits',
   'fuentes.creditos_nota': 'Generated from the license and citation registers of the project. The tables keep the language of those files.',
   'fuentes.si_titulo': 'Use of AI',
@@ -395,6 +394,7 @@ export const en = {
   'glosario.helada.nombre': 'Frost risk',
   'glosario.helada.agricultor': 'How likely it is that a night gets cold enough to damage the crop in this season.',
   'glosario.helada.tecnico': 'Frequency of days with minimum temperature below {umbral_helada} in the historical record {periodo_helada}, from {producto_temperatura}.',
+  'glosario.helada.fuente': 'Snyder and de Melo-Abreu, Frost Protection: fundamentals, practice, and economics, FAO Environment and Natural Resources Series',
   'glosario.balance.nombre': 'Water balance',
   'glosario.balance.agricultor': 'Water that comes in (rain, irrigation) minus water that goes out (plants, evaporation, runoff). If it stays negative, the soil dries out.',
   'glosario.balance.tecnico': 'Change in root-zone water storage as inputs minus losses, computed by the twin for each strategy as an interval.',

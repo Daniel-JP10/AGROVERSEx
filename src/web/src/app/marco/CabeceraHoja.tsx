@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), cabecera hoja del marco común: marca, seis secciones, idioma, modo y ayuda
+// asistido por SI: Claude Code (Anthropic), cabecera hoja del marco común: marca, seis secciones, idioma, modo y ayuda; término y fuente del glosario en inglés en modo EN
 import { useEffect, useRef, useState } from 'react'
 import { GLOSARIO } from '../../textos/glosario'
 import { alternar, t, useIdioma } from '../../textos/i18n'
@@ -52,8 +52,8 @@ export function CabeceraHoja() {
           <dl>
             {GLOSARIO.map((g) => (
               <div key={g.termino}>
-                <dt>{g.termino}</dt>
-                <dd>{detalle(modo, g[lang], lang === 'en' ? g.tecnico_en : g.tecnico)} <small>({g.fuente})</small></dd>
+                <dt>{lang === 'en' ? g.termino_en ?? g.termino : g.termino}</dt>
+                <dd>{detalle(modo, g[lang], lang === 'en' ? g.tecnico_en : g.tecnico)} <small>({lang === 'en' ? g.fuente_en ?? g.fuente : g.fuente})</small></dd>
               </div>
             ))}
           </dl>

@@ -1,5 +1,7 @@
-// asistido por SI: Claude Code (Anthropic), lee en compilación LICENCIAS_TERCEROS.md, CITAS.md y SI_USO.md y los parsea a filas
+// asistido por SI: Claude Code (Anthropic), lee en compilación LICENCIAS_TERCEROS.md, CITAS.md y SI_USO.md, y sus versiones .en.md (D-043), y los parsea a filas
 import citasMd from '../../../../../CITAS.md?raw'
+import citasEnMd from '../../../../../CITAS.en.md?raw'
+import licenciasEnMd from '../../../../../LICENCIAS_TERCEROS.en.md?raw'
 import licenciasMd from '../../../../../LICENCIAS_TERCEROS.md?raw'
 import usoSiMd from '../../../../../SI_USO.md?raw'
 import { soloEnUso } from './registros'
@@ -37,4 +39,7 @@ export function resumenSI(md: string): { herramienta: string; archivos: number }
 // Créditos: solo filas en uso; el filtro corre también al compilar si vite.config registra registrosPlugin
 export const LICENCIAS = leerTablas(soloEnUso(licenciasMd))
 export const CITAS = leerTablas(soloEnUso(citasMd))
+// Versión inglesa para el modo EN (D-043); su columna Status dice "in use"
+export const LICENCIAS_EN = leerTablas(soloEnUso(licenciasEnMd))
+export const CITAS_EN = leerTablas(soloEnUso(citasEnMd))
 export const USO_SI = resumenSI(usoSiMd)

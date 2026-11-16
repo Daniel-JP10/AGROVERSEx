@@ -1,13 +1,13 @@
-// asistido por SI: Claude Code (Anthropic), sección Fuentes: glosario por modo, créditos generados y declaración de uso de SI; tres columnas de hoja y créditos de la fase 3
+// asistido por SI: Claude Code (Anthropic), sección Fuentes: glosario por modo, créditos generados y declaración de uso de SI; tres columnas de hoja y créditos de la fase 3; registros en inglés en modo EN (D-043)
 import { Relleno } from '../../app/Relleno'
 import { TERMINOS } from '../../textos/glosario'
 import { dato, rellenar, type Resolver } from '../../textos/huecos'
 import { t, useIdioma } from '../../textos/i18n'
 import { useModo, type Modo } from '../../textos/modos'
-import { CITAS, LICENCIAS, USO_SI, type Tabla } from './tablas'
+import { CITAS, CITAS_EN, LICENCIAS, LICENCIAS_EN, USO_SI, type Tabla } from './tablas'
 
 // Columnas de los registros que no aportan al crédito público
-const OMITIR = new Set(['Quién lo agregó', 'Fecha'])
+const OMITIR = new Set(['Quién lo agregó', 'Fecha', 'Added by', 'Date'])
 const ES_URL = /^https?:\/\/\S+$/
 
 // `modo` solo se pasa en pruebas: el render de servidor no ve los cambios del almacén
@@ -27,7 +27,7 @@ export function Glosario({ resolver = dato, modo: forzado }: { resolver?: Resolv
               <p>{t(`glosario.${id}.agricultor`)}</p>
               {modo === 'tecnico' && <p className="tecnico"><Relleno texto={tecnico} resolver={resolver} /></p>}
               {pendiente && <p className="sin-dato">{t('aviso.sin_dato')}</p>}
-              <small>{t('fuentes.fuente')}: <cite>{!fuente ? t('fuentes.fuente_pendiente') : url ? <a href={url} rel="noreferrer">{t(fuente)}</a> : t(fuente)}</cite></small>
+              <small>{t('fuentes.fuente')}: <cite>{url ? <a href={url} rel="noreferrer">{t(fuente)}</a> : t(fuente)}</cite></small>
             </dd>
           </div>
         )
@@ -56,12 +56,13 @@ function TablaCredito({ tabla, abierta }: { tabla: Tabla; abierta: boolean }) {
 }
 
 export function Creditos() {
-  useIdioma()
+  // D-043: el registro inglés en modo EN, el canónico en español en modo ES
+  const [lic, cit] = useIdioma() === 'en' ? [LICENCIAS_EN, CITAS_EN] : [LICENCIAS, CITAS]
   return (
     <div>
       <p>{t('fuentes.creditos_nota')}</p>
-      {LICENCIAS.map((tb, i) => <TablaCredito key={tb.titulo} tabla={tb} abierta={i === 0} />)}
-      {CITAS.map((tb) => <TablaCredito key={tb.titulo} tabla={tb} abierta />)}
+      {lic.map((tb, i) => <TablaCredito key={tb.titulo} tabla={tb} abierta={i === 0} />)}
+      {cit.map((tb) => <TablaCredito key={tb.titulo} tabla={tb} abierta />)}
     </div>
   )
 }

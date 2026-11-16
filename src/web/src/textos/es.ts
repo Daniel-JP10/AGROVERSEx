@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón
+// asistido por SI: Claude Code (Anthropic), escritura y revisión de código; base del prototipo migrada en el hackatón; fuente de helada y sin aviso de fuente pendiente (cierre)
 import type { ClaveTexto } from './en'
 
 // ClaveTexto vive en en.ts; se reexporta porque otros archivos la importan de aquí
@@ -381,7 +381,6 @@ export const es: Partial<Record<ClaveTexto, string>> = {
   'datos.huella': 'Suma de control',
   // seccion: fuentes
   'fuentes.fuente': 'Fuente',
-  'fuentes.fuente_pendiente': 'Fuente pendiente',
   'fuentes.creditos': 'Créditos',
   'fuentes.creditos_nota': 'Generado desde los registros de licencias y citas del proyecto. Las tablas conservan el idioma de esos archivos.',
   'fuentes.si_titulo': 'Uso de SI',
@@ -402,6 +401,7 @@ export const es: Partial<Record<ClaveTexto, string>> = {
   'glosario.helada.nombre': 'Riesgo de helada',
   'glosario.helada.agricultor': 'Qué tan probable es que una noche haga tanto frío que dañe el cultivo en esta temporada.',
   'glosario.helada.tecnico': 'Frecuencia de días con temperatura mínima bajo {umbral_helada} en el registro histórico {periodo_helada}, de {producto_temperatura}.',
+  'glosario.helada.fuente': 'Snyder y de Melo-Abreu, Frost Protection: fundamentals, practice, and economics (protección contra heladas), FAO Environment and Natural Resources Series',
   'glosario.balance.nombre': 'Balance hídrico',
   'glosario.balance.agricultor': 'El agua que entra (lluvia, riego) menos el agua que sale (plantas, evaporación, escorrentía). Si queda negativo, el suelo se seca.',
   'glosario.balance.tecnico': 'Cambio del agua almacenada en la zona de raíces como entradas menos pérdidas, calculado por el gemelo para cada estrategia como intervalo.',

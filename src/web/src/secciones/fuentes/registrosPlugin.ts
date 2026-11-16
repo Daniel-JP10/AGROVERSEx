@@ -1,4 +1,4 @@
-// asistido por SI: Claude Code (Anthropic), plugin de Vite que filtra los registros al compilar; lo registra el integrador en vite.config.ts
+// asistido por SI: Claude Code (Anthropic), plugin de Vite que filtra los registros al compilar, también las versiones .en.md; lo registra el integrador en vite.config.ts
 import { readFileSync } from 'node:fs'
 import { soloEnUso, soloHerramientaArchivo } from './registros'
 
@@ -9,7 +9,7 @@ export function registrosEnUso(): { name: string; enforce: 'pre'; load(id: strin
     name: 'agroversex-registros-en-uso',
     enforce: 'pre',
     load(id: string) {
-      const m = /[\\/](LICENCIAS_TERCEROS|CITAS|SI_USO)\.md\?raw$/.exec(id)
+      const m = /[\\/](LICENCIAS_TERCEROS|CITAS|SI_USO)(?:\.en)?\.md\?raw$/.exec(id)
       if (!m) return null
       const md = readFileSync(id.slice(0, -'?raw'.length), 'utf8')
       return `export default ${JSON.stringify(m[1] === 'SI_USO' ? soloHerramientaArchivo(md) : soloEnUso(md))}`
