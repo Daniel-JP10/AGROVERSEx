@@ -108,7 +108,8 @@
 .tablero .comparador-esc table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .tablero .comparador-esc th, .tablero .comparador-esc td { padding: 4px 6px; text-align: left; border-bottom: 1px solid var(--borde); vertical-align: top; }
 .rotaciones .tablero .banda, .tablero .banda { white-space: normal; }
-.tablero .comparador-esc table { table-layout: fixed; }
+/* H-F3-9: diseño automático; con fixed las columnas iguales no dejaban sitio a la cifra entera (medido: fuera de celda) */
+.tablero .comparador-esc table { table-layout: auto; }
 .tablero .limitaciones { font-size: 13px; color: var(--suave); }
 .tablero .metodo { font-size: 13px; color: var(--suave); }
 .tablero .tarjeta { padding: 12px; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--panel); }

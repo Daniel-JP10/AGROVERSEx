@@ -105,7 +105,7 @@ function ComparadorEscenarios({ d, orden, escenario, setEscenario }: { d: Listo;
                 <th scope="row">{nombreEstrategia(e)} <small>({id})</small></th>
                 {ks.map((k) => {
                   const i = e.indicadores[k]
-                  return <td key={k}>{i ? <Banda p10={i.p10} p50={i.p50} p90={i.p90} unidad={unidadIndicador(d.cat, i.unidad)} /> : <span className="sin-dato">{t('lote.no_disponible')}</span>}</td>
+                  return <td key={k}>{i ? <Banda p10={i.p10} p50={i.p50} p90={i.p90} unidad={unidadIndicador(d.cat, i.unidad)} entera /> : <span className="sin-dato">{t('lote.no_disponible')}</span>}</td>
                 })}
               </tr>
             )
