@@ -59,7 +59,7 @@ NASA Earthdata credentials live in `~/.netrc` (set up with `earthaccess.login(pe
 ```bash
 cd src/web
 npm ci
-npx vite build
+VITE_TESELAS_URL=https://daniel-jp10.github.io/agroversex-teselas/ npx vite build
 cd ../..
 AGROVERSEX_DATOS=<folder with teselas/, indice_busqueda.json.gz, unidades.gpkg and series_mundo/consolidados/> \
 AGROVERSEX_TESELAS=<folder with the clean adm0, adm1 and adm2 .pmtiles> \
@@ -68,13 +68,17 @@ PYTHONPATH=src python -m mapa_estatico.construir --desplegar src/web/dist
 
 The last step copies the boundary tiles and the search index into `dist/teselas/`, builds `dist/datos/unidades_geo.json.gz` and the world series in `dist/datos/`, and fails if a local path is left anywhere in `dist`. `AGROVERSEX_DATOS` is required; `AGROVERSEX_TESELAS` points to the tile copies without internal paths. Details: `contratos/web_datos.md`, sections 6 and 7.
 
+In the public deployment the `.pmtiles` boundary tiles are read from GitHub Pages ([agroversex-teselas](https://github.com/Daniel-JP10/agroversex-teselas)) through `VITE_TESELAS_URL`, because two of them exceed the 25 MiB per-file limit of Cloudflare Pages; without that variable the app reads them from `dist/teselas/`. The search index is always served by the app itself.
+
+Some data scripts assume the local root `C:/NASA/`; adjust it with their environment variable (`AGROVERSEX_DATOS`, `AGROVERSEX_TESELAS`) or by editing the path.
+
 ### Tests
 
 ```bash
 .venv/Scripts/python -m pytest -m "not datos_reales" -q
 ```
 
-Web unit tests (vitest) must be run from PowerShell (`cd src\web; npx vitest run`); under Git Bash they fail with "Vitest failed to find the runner".
+Web unit tests: `cd src/web && npx vitest run`.
 
 ### Open dataset
 
@@ -112,9 +116,9 @@ No product is taken directly from ESA or another partner agency. HLSS30 is a NAS
 
 ## Use of AI
 
-AI tools helped write code and documents; the team decided the idea and the approach. Every AI-assisted code file carries an `asistido por SI` header and a row in `SI_USO.md` (tool, file, purpose, date). At commit 4709f2b, `SI_USO.md` has 539 rows:
+AI tools helped write code and documents; the team decided the idea and the approach. Every AI-assisted code file carries an `asistido por SI` header and a row in `SI_USO.md` (tool, file, purpose, date). `SI_USO.md` has 548 rows:
 
-- Claude Code (Anthropic): 478 rows.
+- Claude Code (Anthropic): 487 rows.
 - Cursor (agent): 51 rows.
 - Antigravity (Google DeepMind): 8 rows.
 - Shared rows: 1 Claude Code with Cursor and 1 Claude Code with Antigravity.
