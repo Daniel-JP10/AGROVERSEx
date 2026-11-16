@@ -110,6 +110,8 @@ test.describe('movimiento reducido', () => {
   test.use({ reducedMotion: 'reduce' })
   test('las raíces se pintan ya crecidas, sin animación', async ({ page }) => {
     await page.goto('/')
+    // Espera a que la entrada monte sus 6 raíces antes de leer su estilo (evaluar antes daba 0 raíces con la CPU cargada)
+    await expect(page.locator('.raiz')).toHaveCount(6, { timeout: 20_000 })
     const raices = await page.locator('.raiz').evaluateAll((els) => els.map((el) => ({ a: getComputedStyle(el).animationName, d: parseFloat(getComputedStyle(el).strokeDashoffset) })))
     expect(raices).toHaveLength(6)
     for (const r of raices) { expect(r.a).toBe('none'); expect(r.d).toBe(0) }
