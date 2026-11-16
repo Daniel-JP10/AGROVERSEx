@@ -44,6 +44,10 @@ export function CabeceraHoja() {
           <button type="button" ref={cerrar} onClick={() => setAbierta(false)}>{t('ayuda.cerrar')}</button>
           <h2>{t('ayuda.titulo')}</h2>
           <p>{t('ayuda.intro')}</p>
+          <div className="modo-ayuda">
+            <h3>{t('marco.modo.ayuda.titulo')}</h3>
+            <p>{t('marco.modo.ayuda.texto')}</p>
+          </div>
           <h3>{t('ayuda.glosario')}</h3>
           <dl>
             {GLOSARIO.map((g) => (

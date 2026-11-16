@@ -16,6 +16,9 @@ export const en = {
   'marco.modo.grupo': 'Reading mode',
   'marco.modo.agricultor': 'Farmer',
   'marco.modo.tecnico': 'Technical',
+  // P-C: qué agrega Technical, medido en leyenda.tsx, Compromisos.tsx, Tablero.tsx, Fuentes.tsx y la ayuda
+  'marco.modo.ayuda.titulo': 'Farmer and Technical',
+  'marco.modo.ayuda.texto': 'Farmer keeps to what you need to decide. Technical adds detail for advisors and analysts: on Earth, the choice between averaging over cropland or over total area, the PI-D1 sensitivity line and the limitations; in Rotations, the trade-offs between strategies, which come without a range; in the glossary, the technical definitions. The data are the same in both modes.',
   'marco.pie.atribucion': 'Map data',
   'marco.lote.cargando': 'Loading your field…',
   'marco.lote.pronto': 'Your field: this view is not available yet.',
@@ -36,6 +39,8 @@ export const es: Record<keyof typeof en, string> = {
   'marco.modo.grupo': 'Modo de lectura',
   'marco.modo.agricultor': 'Agricultor',
   'marco.modo.tecnico': 'Técnico',
+  'marco.modo.ayuda.titulo': 'Agricultor y Técnico',
+  'marco.modo.ayuda.texto': 'Agricultor se queda con lo necesario para decidir. Técnico suma el detalle que buscan asesores e investigadores: en Tierra, elegir si el promedio se hace sobre el área cultivada o sobre toda el área, la línea de sensibilidad PI-D1 y las limitaciones; en Rotaciones, los compromisos entre estrategias, que no traen rango; en el glosario, la definición técnica de cada término. Los datos no cambian de un modo a otro.',
   'marco.pie.atribucion': 'Datos del mapa',
   'marco.lote.cargando': 'Cargando tu lote…',
   'marco.lote.pronto': 'Tu lote: esta vista todavía no está disponible.',
