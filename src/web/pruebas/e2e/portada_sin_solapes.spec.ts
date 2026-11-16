@@ -2,7 +2,7 @@
 import { expect, test } from '@playwright/test'
 
 // Ventana CSS que resulta de pantallas reales y del zoom del navegador (1920×860 al 125 % y al 200 %)
-const CASOS = [{ width: 1920, height: 860 }, { width: 1536, height: 730 }, { width: 1366, height: 650 }, { width: 1280, height: 680 }, { width: 1536, height: 688 }, { width: 960, height: 430 }, { width: 390, height: 844 }]
+const CASOS = [{ width: 1920, height: 860 }, { width: 1536, height: 730 }, { width: 1366, height: 650 }, { width: 1280, height: 680 }, { width: 1536, height: 688 }, { width: 960, height: 430 }, { width: 390, height: 844 }, { width: 400, height: 608 }]
 
 for (const vp of CASOS) {
   test(`entrada a ${vp.width}×${vp.height}: sin solapes entre nodos ni con el título, sin desborde y con Start legible`, async ({ page }) => {
@@ -24,9 +24,15 @@ for (const vp of CASOS) {
     })
     expect(r.solapes).toEqual([])
     expect(r.desborde).toBeLessThanOrEqual(0)
-    // Start se puede ver entero (con scroll si la entrada va en columna)
-    const start = page.locator('.portada .comenzar')
-    await start.scrollIntoViewIfNeeded()
-    await expect(start).toBeInViewport({ ratio: 1 })
+    // Start entero a la vista tal como carga, SIN desplazar (director 20:32: en el teléfono quedaba cortado)
+    const visible = await page.evaluate(() => {
+      const s = document.querySelector('.portada .comenzar')!.getBoundingClientRect()
+      const m = document.querySelector('main.portada')!.getBoundingClientRect()
+      return s.top >= Math.max(0, m.top) - 0.5 && s.bottom <= Math.min(innerHeight, m.bottom) + 0.5 && s.left >= 0 && s.right <= innerWidth
+    })
+    expect(visible, 'Comenzar entero sin desplazar').toBe(true)
+    // El texto cabe dentro del botón: con overflow: hidden la grilla lo aplastaba a 26 px y el texto quedaba cortado
+    const cabe = await page.locator('.portada .comenzar').evaluate((e) => e.scrollHeight <= e.clientHeight + 1)
+    expect(cabe, 'texto de Comenzar entero dentro del botón').toBe(true)
   })
 }

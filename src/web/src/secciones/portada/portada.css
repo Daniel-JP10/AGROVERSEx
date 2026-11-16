@@ -66,7 +66,7 @@ main.portada { position: relative; isolation: isolate; max-width: none; margin: 
 @keyframes disco-pulso { 0%, 100% { opacity: 0.7; transform: scale(0.96); } 50% { opacity: 1; transform: scale(1.05); } }
 
 /* Start con presencia: marco luminoso y un destello que lo recorre */
-.portada .comenzar { position: relative; overflow: hidden; display: inline-block; margin-top: 0; padding: 12px 52px; text-decoration: none; letter-spacing: 0.12em; font-weight: 600;
+.portada .comenzar { position: relative; overflow: clip; /* clip y no hidden: hidden lo volvía contenedor con scroll y la grilla lo aplastaba a 26 px */ display: inline-block; margin-top: 0; padding: 12px 52px; text-decoration: none; letter-spacing: 0.12em; font-weight: 600;
   border: 1px solid var(--acento); box-shadow: 0 0 0 1px rgba(255, 184, 77, 0.25), 0 0 22px rgba(255, 184, 77, 0.28), inset 0 0 18px rgba(255, 184, 77, 0.12); animation: comenzar-brilla 3.5s ease-in-out infinite; }
 .portada .comenzar::after { content: ''; position: absolute; top: 0; bottom: 0; left: -40%; width: 30%; pointer-events: none; background: linear-gradient(100deg, transparent, rgba(255, 236, 200, 0.35), transparent); animation: comenzar-destello 4s ease-in-out 1.5s infinite; }
 @keyframes comenzar-brilla { 0%, 100% { box-shadow: 0 0 0 1px rgba(255, 184, 77, 0.25), 0 0 16px rgba(255, 184, 77, 0.22), inset 0 0 14px rgba(255, 184, 77, 0.1); } 50% { box-shadow: 0 0 0 1px rgba(255, 184, 77, 0.45), 0 0 30px rgba(255, 184, 77, 0.4), inset 0 0 22px rgba(255, 184, 77, 0.18); } }
@@ -93,8 +93,14 @@ main.portada { position: relative; isolation: isolate; max-width: none; margin: 
 
 /* A 390 px, o con poco alto útil (zoom fuerte), una columna sin raíces y con los nodos en rejilla: el diseño radial necesita un lienzo de unos 500 px */
 @media (max-width: 760px), (max-height: 600px) {
+  /* P-A: en la rejilla, Comenzar va justo bajo la frase (en el flujo, sin tapar nada) y se ve sin desplazar */
+  .portada .p-centro { order: 1; }
+  .portada .comenzar { order: 2; }
+  .portada .nodos { order: 3; }
   .portada .mapa-puntos { background-size: 260% auto; background-position: center 30%; }
-  .portada .lienzo { width: 100%; aspect-ratio: auto; display: grid; gap: 16px; padding: 0 8px; }
+  /* display: contents: frase, Comenzar y nodos pasan a ser hijos de main y se ordenan con order */
+  .portada .lienzo { display: contents; }
+  .portada .p-centro, .portada .nodos { width: 100%; padding-left: 8px; padding-right: 8px; box-sizing: border-box; }
   .portada .raices { display: none; }
   .portada .racimo { width: 38vw; opacity: 0.4; }
   .portada .p-centro { position: static; transform: none; width: auto; border-radius: 0; background: none; }
