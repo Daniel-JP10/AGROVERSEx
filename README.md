@@ -15,18 +15,18 @@ NASA Space Apps Challenge 2026 · Challenge **Field Shift: Adapting Farms with N
 
 ---
 
-## 🌱 The story
+## The story
 
 A farmer looks at a field and asks a simple question: *what should I plant next, now that the weather no longer behaves like it used to?*
 
 AGROVERSEx answers that question as a journey, the same one the app follows:
 
-1. **🌍 Earth from space.** It starts on a 3D globe. Monthly rainfall (GPM IMERG), air temperature (MERRA-2), root-zone soil moisture (GLDAS) and vegetation (MODIS NDVI) are mapped for countries and for first- and second-level administrative regions, with the product and version behind every map.
-2. **🌾 Averaged where crops grow.** Each region can be averaged over its cropland or over its whole area. That choice matters: worldwide, 13% to 35% of monthly values for administrative regions with cropland change by more than 5% (or 0.5 °C for temperature) depending on it. That is why AGROVERSEx shows both.
-3. **🧭 Your field's twin.** From space, the camera flies down to a DEMO field. Its digital twin shows the terrain from NASADEM, the water in the root zone, the months of bare soil and the climate the field lives in.
-4. **🔄 Rotations.** The twin compares crop-rotation strategies under historical, dry, normal and wet scenarios and the three ENSO phases. Every figure shown to the farmer comes as a range, from the 10th to the 90th percentile.
-5. **🔬 Science and validation.** Each claim gets its own card: its figure, its interval, its period, its source and its evidence label, including comparisons with ground stations.
-6. **📂 Open data and sources.** Every file behind the maps is listed with its size, checksum and license, and every data source, tool and citation is credited.
+1. **Earth from space.** It starts on a 3D globe. Monthly rainfall (GPM IMERG), air temperature (MERRA-2), root-zone soil moisture (GLDAS) and vegetation (MODIS NDVI) are mapped for countries and for first- and second-level administrative regions, with the product and version behind every map.
+2. **Averaged where crops grow.** Each region can be averaged over its cropland or over its whole area. That choice matters: worldwide, 13% to 35% of monthly values for administrative regions with cropland change by more than 5% (or 0.5 °C for temperature) depending on it. That is why AGROVERSEx shows both.
+3. **Your field's twin.** From space, the camera flies down to a DEMO field. Its digital twin shows the terrain from NASADEM, the water in the root zone, the months of bare soil and the climate the field lives in.
+4. **Rotations.** The twin compares crop-rotation strategies under historical, dry, normal and wet scenarios and the three ENSO phases. Every figure shown to the farmer comes as a range, from the 10th to the 90th percentile.
+5. **Science and validation.** Each claim gets its own card: its figure, its interval, its period, its source and its evidence label, including comparisons with ground stations.
+6. **Open data and sources.** Every file behind the maps is listed with its size, checksum and license, and every data source, tool and citation is credited.
 
 > AGROVERSEx is a decision-support tool; it does not replace the judgment of the farmer or the local advisor.
 
