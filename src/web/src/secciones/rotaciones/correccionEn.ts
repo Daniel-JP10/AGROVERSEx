@@ -30,6 +30,8 @@ const EXACTAS: Record<string, string> = {
 }
 // Parámetros de cultivo del catálogo del gemelo (cultivo.<cultivo>.<parámetro>)
 const PARAMETROS: Record<string, string> = { n_biomasa: 'biomass N concentration', t_base: 'base temperature', t_max: 'maximum temperature', t_opt: 'optimum temperature', rue: 'radiation use efficiency', indice_cosecha: 'harvest index', indice_cosecha_n: 'N harvest index', ndfa: 'share of N fixed from the air (Ndfa)' }
+// Parámetros de suelo, agua y C-N: solo los que el propio catálogo inglés ya nombra (warning.soil_cn_fallback, warning.initial_moisture, warning.initial_n); el resto queda como identificador
+const OTROS_PARAMETROS: Record<string, string> = { 'suelo.cn_suelo': 'soil C:N ratio', 'agua.fraccion_humedad_inicial': 'initial soil moisture fraction', 'cn.n_mineral_inicial_kg_ha': 'initial mineral N' }
 // Unidades de los paquetes que no pasan por el catálogo
 const UNIDADES: Record<string, string> = { 'índice': 'index', 'temporadas equivalentes/año': 'equivalent seasons/yr', 'kg N/ha/año': 'kg N/ha/yr', 't C/ha/año': 't C/ha/yr', 'mm/año': 'mm/yr', 'días/año': 'days/yr', 'fracción': 'fraction', adimensional: 'dimensionless' }
 
@@ -37,6 +39,7 @@ const UNIDADES: Record<string, string> = { 'índice': 'index', 'temporadas equiv
 export function aIngles(s: string): string {
   if (s in EXACTAS) return EXACTAS[s]
   if (s in UNIDADES) return UNIDADES[s]
+  if (s in OTROS_PARAMETROS) return OTROS_PARAMETROS[s]
   const p = /^cultivo\.([a-z_]+)\.([a-z_]+)$/.exec(s)
   if (p && p[1] in CULTIVOS && p[2] in PARAMETROS) return `${CULTIVOS[p[1]]} ${PARAMETROS[p[2]]}`
   let r = s.replace(/NASA POWER diario \((power_[\w-]+_diario\.csv)\); MERRA-2 y CERES, celda 0,5° x 0,625°/, 'NASA POWER daily ($1); MERRA-2 and CERES, 0.5° x 0.625° cell')
@@ -45,6 +48,8 @@ export function aIngles(s: string): string {
     r = r.replace(RE_CULTIVO, (c) => CULTIVOS[c]).replace(/semestre ([AB])/g, 'season $1').replace(/\bprincipal\b/g, 'main season').replace(/\botono\b/g, 'autumn').replace(/año (\d)/g, 'year $1')
   }
   for (const [re, en] of EVIDENCIA) r = r.replace(re, en)
+  // Naturaleza citada entre comillas dentro del catálogo inglés (warning.simulated)
+  r = r.replace(/'simulado'/g, "'simulated'").replace(/'estimado'/g, "'estimated'")
   return r
 }
 

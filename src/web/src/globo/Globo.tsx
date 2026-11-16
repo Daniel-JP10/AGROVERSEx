@@ -5,7 +5,7 @@ import type { Map as MapaGL } from 'maplibre-gl'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import { Protocol } from 'pmtiles'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { NIVELES, construirEstilo, nivelParaZoom, capasInteractivas, OPACIDAD, opacidadRelleno, ATRIBUCION, avisoDisputa, esDisputa, nombreUnidad } from './config'
+import { NIVELES, construirEstilo, nivelParaZoom, capasInteractivas, OPACIDAD, opacidadRelleno, avisoDisputa, esDisputa, nombreUnidad } from './config'
 import { crearRecoloreo } from './recoloreo'
 import { iniciarEstrellas } from './estrellas'
 import { iniciarHalo } from './atmosfera'
@@ -61,13 +61,13 @@ export function Globo({ onMapa }: { onMapa?: (m: MapaGL) => void }) {
       container: contenedor.current!,
       style: construirEstilo(location.origin, navigator.onLine) as maplibregl.StyleSpecification,
       center: [-60, 10], zoom: 1.6, maxPitch: 70, minZoom: 0.8,
-      attributionControl: { compact: true, customAttribution: ATRIBUCION },
+      // Sin control de atribución de MapLibre: la atribución completa (GIBS y geoBoundaries) va siempre en el pie del marco.
+      // El control se volvía a abrir en WebKit al llegar datos tarde (hallazgo de V9, intermitente)
+      attributionControl: false,
       canvasContextAttributes: { antialias: true },
     })
     ;(window as unknown as { __mapa: MapaGL }).__mapa = m
     // Atribución cerrada al cargar (botón i); el texto completo va en el pie del marco
-    // idle: MapLibre abre la atribución al llegar sus datos, que en WebKit llegan después de load
-    m.once('idle', () => contenedor.current?.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show'))
     m.on('styleimagemissing', (e) => { if (e.id === 'trama' && !m.hasImage('trama')) m.addImage('trama', trama()) })
     const motores: (MotorCoropleta | undefined)[] = []
     let version = 0

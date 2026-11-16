@@ -26,6 +26,12 @@ describe('restos en español del gemelo en la interfaz inglesa', () => {
     expect(planos.size).toBeGreaterThan(5)
     expect([...planos].map(aIngles).filter((s) => ES.test(s))).toEqual([])
   })
+  it('H-V9-2: la naturaleza citada y el parámetro de suelo salen en inglés', () => {
+    const cat = corregirCatalogoEn(JSON.parse(readFileSync(join(GEMELO, 'textos', 'en.json'), 'utf8')))
+    expect(Object.values(cat).filter((v) => /'simulado'|'estimado'/.test(v))).toEqual([])
+    expect(aIngles('suelo.cn_suelo')).toBe('soil C:N ratio')
+    expect(aIngles('agua.am_residuo')).toBe('agua.am_residuo')
+  })
   it('lo que no reconoce queda igual: no inventa texto', () => {
     expect(aIngles('NASA POWER')).toBe('NASA POWER')
   })

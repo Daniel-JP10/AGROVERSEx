@@ -117,12 +117,21 @@ for (const vp of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
     })
     expect(fuera).toEqual([])
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
-    // Atribución con el tema (no la caja blanca de MapLibre) y cerrada al cargar
-    const at = page.locator('.maplibregl-ctrl-attrib')
-    expect(await at.evaluate((e) => getComputedStyle(e).backgroundColor)).not.toBe('rgb(255, 255, 255)')
-    await expect(at).not.toHaveClass(/maplibregl-compact-show/, { timeout: 30_000 })
+    // La atribución completa va en el pie (GIBS y geoBoundaries) y el mapa no lleva el control de MapLibre, que se reabría en WebKit
+    await expect(page.locator('.maplibregl-ctrl-attrib')).toHaveCount(0)
+    await expect(page.locator('footer .atribucion')).toContainText('GIBS')
+    await expect(page.locator('footer .atribucion')).toContainText('geoBoundaries')
   })
 }
+
+// V9 (P3): el canvas del mapa ocupa todo su contenedor; sin la regla .globo > .mapa medía 300 px y el globo no se pintaba
+test('el canvas del mapa tiene la altura de su contenedor', async ({ page }) => {
+  await page.goto('/#/tierra')
+  await page.waitForFunction(() => !!(window as any).__mapa?.loaded?.(), null, { timeout: 60_000 })
+  const r = await page.evaluate(() => ({ canvas: document.querySelector('.maplibregl-canvas')!.getBoundingClientRect().height, globo: document.querySelector('.globo')!.getBoundingClientRect().height }))
+  expect(r.globo).toBeGreaterThan(300)
+  expect(Math.abs(r.canvas - r.globo)).toBeLessThanOrEqual(2)
+})
 
 test('presupuesto: primer relleno pintado del globo ≤ 6 s con red lenta (9 Mbit/s, 150 ms)', async ({ page, browserName }) => {
   test.skip(browserName !== 'chromium', 'la limitación de red por CDP solo existe en Chromium')

@@ -134,3 +134,5 @@
 .lote .bloque, .lote .l-controles { min-width: 0; }
 @media (max-width: 640px) { main.seccion.lote { padding: 12px; } }
 @media (max-width: 640px) { .lote .l-etiqueta { overflow-wrap: anywhere; } .lote .l-etiqueta .banda { white-space: normal; display: inline-block; max-width: 100%; } }
+/* H-V9-1: la pastilla de la etiqueta del bloque parte su línea en todo tamaño y nunca sobresale de su caja */
+.lote .l-etiqueta { overflow-wrap: anywhere; } .lote .l-etiqueta .banda { white-space: normal; display: inline-block; max-width: 100%; }

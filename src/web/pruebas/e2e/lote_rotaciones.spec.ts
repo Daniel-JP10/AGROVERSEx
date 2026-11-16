@@ -2,7 +2,8 @@
 import { resolve } from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 
-const ORIGEN = 'http://localhost:5213'
+// El origen sigue al puerto del config (E2E_ORIGEN); por defecto 5213 como antes
+const ORIGEN = process.env.E2E_ORIGEN ?? 'http://localhost:5213'
 const ES = { cookies: [], origins: [{ origin: ORIGEN, localStorage: [{ name: 'agroversex-idioma', value: 'es' }] }] }
 const CAPTURAS = resolve(process.cwd(), '../../../../AGROVERSEx/repo/Docu/verificacion')
 
