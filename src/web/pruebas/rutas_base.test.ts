@@ -11,10 +11,10 @@ const BASE = '/base-de-prueba/'
 const ABSOLUTA = /[`'"]\/teselas\//
 
 // Compila de verdad con una base de publicación y devuelve el JS de la salida
-function compilarConBase(): string {
+function compilarConBase(extra: Record<string, string> = {}): string {
   const salida = mkdtempSync(join(tmpdir(), 'agro-base-'))
   try {
-    const env = { ...process.env, NODE_ENV: 'production', VITE_CONFIG_NATIVE_IGNORE_WARNING: 'true' }
+    const env = { ...process.env, NODE_ENV: 'production', VITE_CONFIG_NATIVE_IGNORE_WARNING: 'true', ...extra }
     execSync(`npx vite build --logLevel silent --base=${BASE} --outDir "${salida}" --emptyOutDir`, { cwd: RAIZ, env, stdio: 'pipe' })
     const leer = (d: string): string => readdirSync(d, { withFileTypes: true })
       .map((e) => (e.isDirectory() ? leer(join(d, e.name)) : /\.(js|mjs)$/.test(e.name) ? readFileSync(join(d, e.name), 'utf8') : '')).join('\n')
@@ -33,5 +33,15 @@ describe('rutas de teselas e índice con BASE_URL', () => {
     // El minificador puede dejar el prefijo en una constante y unirlo con plantilla: se comprueban por separado
     expect(js).toContain(`${BASE}teselas/`)
     for (const f of ['adm0.pmtiles', 'adm1.pmtiles', 'adm2.pmtiles', 'indice_busqueda.json.gz']) expect(js).toContain(f)
+  }, 180_000)
+  // D-040: en el despliegue público las .pmtiles se leen de GitHub Pages (Cloudflare limita a 25 MiB por archivo)
+  it('con VITE_TESELAS_URL las teselas salen de esa URL y no de la base', () => {
+    const URL_TESELAS = 'https://daniel-jp10.github.io/agroversex-teselas/'
+    const js = compilarConBase({ VITE_TESELAS_URL: URL_TESELAS })
+    expect(js).toContain(URL_TESELAS)
+    // El índice de búsqueda no está en el repo de teselas: sigue saliendo del sitio, con la base
+    expect(js).toContain(`${BASE}teselas/`)
+    expect(js).toContain('indice_busqueda.json.gz')
+    expect(js).not.toMatch(ABSOLUTA)
   }, 180_000)
 })

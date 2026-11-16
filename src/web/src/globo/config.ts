@@ -31,7 +31,10 @@ export const SIN_ADM2: readonly string[] = ['AND', 'ARE', 'ATA', 'ATG', 'BHR', '
 // Países cuya capa ADM1 repite el nivel 0 (nivel_real = ADM0), medido sobre unidades.gpkg el 2026-11-14; el contrato aún no los lista
 export const SIN_ADM1: readonly string[] = ['ATA', 'VAT']
 // Teselas e índice cuelgan de la base de publicación (en Pages el sitio vive en /AGROVERSEx/, no en la raíz)
-const TESELAS = `${import.meta.env.BASE_URL}teselas/`
+// D-040: en el despliegue público las .pmtiles vienen de GitHub Pages (Cloudflare limita a 25 MiB por archivo); VITE_TESELAS_URL fija esa base
+// Las dos variables se resuelven al compilar (Vite las escribe como texto), así la ruta queda literal en el bundle
+const LOCAL = `${import.meta.env.BASE_URL}teselas/`
+const TESELAS: string = (import.meta.env.VITE_TESELAS_URL as string | undefined) || LOCAL
 
 export const NIVELES: NivelConfig[] = [
   { nivel: 0, fuente: 'adm0', archivo: `${TESELAS}adm0.pmtiles`, capaFuente: 'adm0', propId: 'unidad_id', zoomDesde: 0, zoomHasta: 6, fundido: 0, sinHijo: SIN_ADM1 },
@@ -49,7 +52,8 @@ const exprDisputa = ['any', ['==', ['get', 'es_disputa'], 1], ['in', ['get', 'is
 export const nombreUnidad = (nombre: string, disputa: boolean) => (disputa ? t('unidad.disputa') : nombre)
 export const avisoDisputa = () => t('globo.disputa')
 
-export const INDICE_BUSQUEDA = `${TESELAS}indice_busqueda.json.gz`
+// El índice no está en el repo de teselas: siempre sale del propio sitio
+export const INDICE_BUSQUEDA = `${LOCAL}indice_busqueda.json.gz`
 
 /** Nivel con el que se interactúa a un zoom dado (el más profundo ya entrado a pleno). */
 export function nivelParaZoom(zoom: number): number {
