@@ -1,0 +1,265 @@
+{
+ "version": 1,
+ "descripcion": "AGROVERSEx open dataset release file list (DATASET.md). raiz=datos: relative to AGROVERSEX_DATOS/series_mundo; raiz=repo: relative to the repository root.",
+ "archivos": [
+  {
+   "raiz": "datos",
+   "ruta": "consolidados/serie_mensual_humedad_radicular_area.csv.gz",
+   "nombre": "serie_mensual_humedad_radicular_area.csv.gz",
+   "bytes": 376499761,
+   "sha256": "9b129797a15ae40b608637a7f89c81f7d917c21a331f2e3defb70c11f00b26ac"
+  },
+  {
+   "raiz": "datos",
+   "ruta": "consolidados/serie_mensual_humedad_radicular_cultivo.csv.gz",
+   "nombre": "serie_mensual_humedad_radicular_cultivo.csv.gz",
+   "bytes": 361508329,
+   "sha256": "9a5e52659d5b50c8b95b2cd689c019bc2567413471f1638cb72cc814df87769a"
+  },
+  {
+   "raiz": "datos",
+   "ruta": "consolidados/serie_mensual_ndvi_area.csv.gz",
+   "nombre": "serie_mensual_ndvi_area.csv.gz",
+   "bytes": 380437948,
+   "sha256": "1d42c0019b14e0a7227ee78c218d4bd2a705646c75bf3ca6bfc3c7dff47ce153"
+  },
+  {
+   "raiz": "datos",
+   "ruta": "consolidados/serie_mensual_ndvi_cultivo.csv.gz",
+   "nombre": "serie_mensual_ndvi_cultivo.csv.gz",
+   "bytes": 347470642,
+   "sha256": "145c436df585abb815be70fd87b2a899f5d9133f639091f54feff9314039cd49"
+  },
+  {
+   "raiz": "datos",
+   "ruta": "consolidados/serie_mensual_precipitacion_final_area.csv.gz",
+   "nombre": "serie_mensual_precipitacion_final_area.csv.gz",
+   "bytes": 329197469,
+   "sha256": "96e1f3fa8c3e0a238bf6c4d736d1bb378c75d42b9c419cbd34779c688ce39f8e"
+  },
+  {
+   "raiz": "datos",
+   "ruta": "consolidados/serie_mensual_precipitacion_final_cultivo.csv.gz",
+   "nombre": "serie_mensual_precipitacion_final_cultivo.csv.gz",
+   "bytes": 311928834,
+   "sha256": "34c667fd1c01177ed790c7cdca5afead43b460b4d495029104a60fa8d98e8c7d"
+  },
+  {
+   "raiz": "datos",
+   "ruta": "consolidados/serie_mensual_precipitacion_late_area.csv.gz",
+   "nombre": "serie_mensual_precipitacion_late_area.csv.gz",
+   "bytes": 15346542,
+   "sha256": "4bb01625035c12231ca8c6d321ac89cc17478deeef4bd0a650feb873a7b2d49a"
+  },
+  {
+   "raiz": "datos",
+   "ruta": "consolidados/serie_mensual_precipitacion_late_cultivo.csv.gz",
+   "nombre": "serie_mensual_precipitacion_late_cultivo.csv.gz",
+   "bytes": 14511003,
+   "sha256": "fd82476f3177faf59a8c638e72ad269677816bb88477c5b6031072eb7ffc1e85"
+  },
+  {
+   "raiz": "datos",
+   "ruta": "consolidados/serie_mensual_t2m_area.csv.gz",
+   "nombre": "serie_mensual_t2m_area.csv.gz",
+   "bytes": 293697754,
+   "sha256": "53ab2ac0428dfa0915f55ba35fb336bbd03cbd7730535f631b2f2db546e17c7a"
+  },
+  {
+   "raiz": "datos",
+   "ruta": "consolidados/serie_mensual_t2m_cultivo.csv.gz",
+   "nombre": "serie_mensual_t2m_cultivo.csv.gz",
+   "bytes": 289462715,
+   "sha256": "88e8a862483222c98fb5c4eebd2622c3d6711d176c99e27e282fb9ad114df3b3"
+  },
+  {
+   "raiz": "datos",
+   "ruta": "pi_d1_mundo.json",
+   "nombre": "pi_d1_mundo.json",
+   "bytes": 9666,
+   "sha256": "c53ea1af276cca9773c7254cb8de047cc903f39dcb80eeb8ae629d55f64351b8"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/indice.json",
+   "nombre": "gemelo_indice.json",
+   "bytes": 16451,
+   "sha256": "c90e300f4975743809716a2373cb7028058d04ae5d6d259dbefb4cf5df923f55"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/textos/en.json",
+   "nombre": "gemelo_textos_en.json",
+   "bytes": 15076,
+   "sha256": "793a303bdf204a7f7d2840ae944fe13e640538235e5471ccae774031bc8e8d66"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/textos/es.json",
+   "nombre": "gemelo_textos_es.json",
+   "bytes": 16001,
+   "sha256": "2af8f27f800490bc2bb93bb1ae8937b6120d2fbbed97723b761ae36267e1694e"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/DEMO-COL-01/lote.json",
+   "nombre": "gemelo_DEMO-COL-01_lote.json",
+   "bytes": 7420,
+   "sha256": "5838da8aeca5c8cd78b3def820b5d248043c9eab8be5fc7e863b653758c2984e"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/DEMO-USA-01/lote.json",
+   "nombre": "gemelo_DEMO-USA-01_lote.json",
+   "bytes": 7401,
+   "sha256": "c1a83f2d9ca8f28599d8068c739889199799797fb0b390821483d0dc4411baee"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/DEMO-USA-01/optimizacion_historico.json",
+   "nombre": "gemelo_DEMO-USA-01_optimizacion_historico.json",
+   "bytes": 427894,
+   "sha256": "92f3f6d436646db6c1eec994395beb57da4f33bd8502f1038024ba5ee3f508cc"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/DEMO-USA-01/optimizacion_humedo.json",
+   "nombre": "gemelo_DEMO-USA-01_optimizacion_humedo.json",
+   "bytes": 333716,
+   "sha256": "3966d3418376c4d5686637a8771dd48d6a93a9e236766d31485d470c0cc67ccb"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/DEMO-USA-01/optimizacion_normal.json",
+   "nombre": "gemelo_DEMO-USA-01_optimizacion_normal.json",
+   "bytes": 422013,
+   "sha256": "7432d4b48d9188fc5be175f2431e678e7a9ac5484c6f09d6833974cae6ae4321"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/DEMO-USA-01/optimizacion_seco.json",
+   "nombre": "gemelo_DEMO-USA-01_optimizacion_seco.json",
+   "bytes": 423004,
+   "sha256": "2d726341a5caaa96e9a38591a5fcc56f55403ea48309bf19b21f0e90028de6f5"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/DEMO-USA-01/simulacion_enso_neutra.json",
+   "nombre": "gemelo_DEMO-USA-01_simulacion_enso_neutra.json",
+   "bytes": 188788,
+   "sha256": "4b949013a3b7fa470bf13692f55f2b44e8d4f3a2ee2dc657c7cf5a3396772070"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/DEMO-USA-01/simulacion_enso_nina.json",
+   "nombre": "gemelo_DEMO-USA-01_simulacion_enso_nina.json",
+   "bytes": 188627,
+   "sha256": "e645cdfc6e0b9c1fefe8882f9127f3649bc8cbda99c337d9d8a721c59a530257"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/DEMO-USA-01/simulacion_enso_nino.json",
+   "nombre": "gemelo_DEMO-USA-01_simulacion_enso_nino.json",
+   "bytes": 188080,
+   "sha256": "d1a4e5d7a5146a406c80c84b2e8a633df20a049e6920236f6fe6f045a214e58f"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/DEMO-USA-01/simulacion_historico.json",
+   "nombre": "gemelo_DEMO-USA-01_simulacion_historico.json",
+   "bytes": 199386,
+   "sha256": "79c097faa71f6c931aaab6cfc2064b06a40ac67590539c8a3c791504b3552638"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/DEMO-USA-01/simulacion_humedo.json",
+   "nombre": "gemelo_DEMO-USA-01_simulacion_humedo.json",
+   "bytes": 189289,
+   "sha256": "89919b7d774a9b622f9463a990f2a88375dadda383e9413f453d60176ca94c73"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/DEMO-USA-01/simulacion_normal.json",
+   "nombre": "gemelo_DEMO-USA-01_simulacion_normal.json",
+   "bytes": 188114,
+   "sha256": "11d2c71f6304e72665a8dd08f34405c5c0280d02dc8b87fae85820508240512a"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "src/web/public/gemelo/DEMO-USA-01/simulacion_seco.json",
+   "nombre": "gemelo_DEMO-USA-01_simulacion_seco.json",
+   "bytes": 186105,
+   "sha256": "8c8c8f48dd803196da2e68b9faa44bb8cfe8726e97e76127c193cfbd3a7ec94a"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "datos/lotes/exposicion_erosiva_lotes.json",
+   "nombre": "exposicion_erosiva_lotes.json",
+   "bytes": 13811,
+   "sha256": "0a9c682da97e9cbee88180e92a721b1c2dbca7332542d974bdb69918f5e29902"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "datos/lotes/hls_validez_DEMO-COL-01.json",
+   "nombre": "hls_validez_DEMO-COL-01.json",
+   "bytes": 5047,
+   "sha256": "7acd5b2b1054041102504ca7e95a59d4e62b62267ea29a327d79b952e285185f"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "datos/lotes/hls_validez_DEMO-USA-01.json",
+   "nombre": "hls_validez_DEMO-USA-01.json",
+   "bytes": 5495,
+   "sha256": "d4157334a910d8890e3ffbef005a2d4ee34445efc17f4bfe8a654d875436226b"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "datos/lotes/hls_validez_resumen.md",
+   "nombre": "hls_validez_resumen.md",
+   "bytes": 1685,
+   "sha256": "73b4e0a019d6d0331ec977f2a68c2315ef5c6d40a633ba5f099aa6812dece980"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "datos/lotes/imerg_DEMO-COL-01_diario.csv",
+   "nombre": "imerg_DEMO-COL-01_diario.csv",
+   "bytes": 261786,
+   "sha256": "86868ece0a9a5ef4e88ce83ea95d2725182ac9da74d11496b19f5c74b7248309"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "datos/lotes/imerg_DEMO-USA-01_diario.csv",
+   "nombre": "imerg_DEMO-USA-01_diario.csv",
+   "bytes": 258547,
+   "sha256": "5fab55bd6d06223914fc8c63e3f03645223e8a22d1a33a68c8bb1fecf79d10a8"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "datos/lotes/parametros_suelo_DEMO-COL-01.json",
+   "nombre": "parametros_suelo_DEMO-COL-01.json",
+   "bytes": 2292,
+   "sha256": "3f2747ef61d67632918606c315b43526de8b80815a1dda99eda2651aa3e61400"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "datos/lotes/parametros_suelo_DEMO-USA-01.json",
+   "nombre": "parametros_suelo_DEMO-USA-01.json",
+   "bytes": 2252,
+   "sha256": "8c391c7086fc69c3c29b5b2afc9d8c6064998c41d9f3d73b4976445aabda9e78"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "datos/lotes/power_DEMO-COL-01_diario.csv",
+   "nombre": "power_DEMO-COL-01_diario.csv",
+   "bytes": 615766,
+   "sha256": "aadf7a326467759f703e3aabdf3f93cd84522ba3f1c3d92f0c255fd0ad11d222"
+  },
+  {
+   "raiz": "repo",
+   "ruta": "datos/lotes/power_DEMO-USA-01_diario.csv",
+   "nombre": "power_DEMO-USA-01_diario.csv",
+   "bytes": 617097,
+   "sha256": "315a5ae63e2bd4c9c99cfd980180520310c4122db869780ac9deb505b4862fac"
+  }
+ ]
+}
